@@ -1,0 +1,312 @@
+\subsection{The Process Hitting framework}
+\label{ssec:PH}
+
+\towrite{Transition.}
+
+\towrite{Reformuler (actuellement trop proche de CMSB)}
+A PH (\pref{def:PH}) gathers a finite number of concurrent \emph{processes} grouped into a finite set of \emph{sorts}.
+A process belongs to a unique sort and is noted $a_i$ where $a$ is the sort and $i$ the identifier of the process within the sort $a$.
+At any time, one and only one process of each sort is present; a state of the PH thus corresponds to the set of such processes.
+
+The concurrent interactions between processes are defined by a set of \emph{actions} divided into classes of priorities.
+Actions describe the replacement of a process by another of the same sort conditioned by the presence of at most one other process and by the fact that no other action of higher priority is playable in the current state of the PH.
+An action is denoted by $\PHhit{a_i}{b_j}{b_k}$ where $a_i,b_j,b_k$ are processes of sorts $a$ and $b$.
+It is required that $b_j \neq b_k$ and that $a=b\Rightarrow a_i=b_j$.
+An action $h=\PHfrappe{a_i}{b_j}{b_k}$ is read as ``$a_i$ \emph{hits} $b_j$ to make it bounce to $b_k$'', and $a_i,b_j,b_k$ are called respectively \emph{hitter}, \emph{target} and \emph{bounce} of the action, and can be referred to as $\PHhitter(h), \PHtarget(h), \PHbounce(h)$, respectively.
+
+\begin{comment}
+\begin{definition}[Process Hitting]\label{def:PH}
+A \emph{Process Hitting} is a triple $(\PHs,\PHl,\PHa)$:
+\begin{itemize}
+\item $\PHs \DEF \{a,b,\dots\}$ is the finite set of \emph{sorts};
+\item $\PHl \DEF \prod_{a\in\PHs} \PHl_a$ is the set of states with $\PHl_a = \{a_0,\dots,a_{l_a}\}$
+the finite set of \emph{processes} of sort $a\in\Sigma$ and $l_a$ a positive integer with
+	$a\neq b\Rightarrow \forall(a_i,b_j)\in\PHl_a\times\PHl_b,a_i\neq b_j$;
+\item $\PHa \DEF \{ \PHfrappe{a_i}{b_j}{b_k}, \dots \mid
+					(a,b)\in\PHs^2 \wedge (a_i,b_j,b_k)\in \PHl_a\times\PHl_b\times\PHl_b$ \\
+	\hspace*{2cm} $\wedge b_j\neq b_k \wedge a=b\Rightarrow a_i=b_j\}$
+			is the finite set of \emph{actions}.
+\end{itemize}
+$\PHproc$ denotes the set of all processes ($\PHproc \DEF \{ a_i\mid a\in\PHs \wedge a_i\in\PHl_a\}$).
+\end{definition}
+\end{comment}
+
+\begin{definition}[Process Hitting with $k$ priorities] \towrite{Revoir terminologie}
+  A \emph{Process Hitting with $k$ priorities}, where $k \in \sN^*$, is a triplet $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$, with $\PHa^{\langle k \rangle} = (\PHa^{(1)}; \dots; \PHa^{(k)})$ a $k$-uplet, where:
+  \begin{itemize}
+    \item $\PHs \DEF \{a,b,\dots\}$ is the finite set of \emph{sorts}.
+    \item $\PHl \DEF \prod_{a \in \PHs} \PHl_a$ is the finite set of states, where $\PHl_a = \{a_0 ; \ldots ; a_{l_a}\}$ is the finite set of \emph{processes} of sort $a \in \PHs$ and $l_a \in \sN^*$. Each process belongs to a unique sort: $\forall (a_i; b_j) \in \PHl_a \times \PHl_b, a \neq b \Rightarrow a_i \neq b_j$.
+    \item $\forall n \in \llbracket 1; k \rrbracket, \PHa^{(n)} \DEF \{\PHfrappe{a_i}{b_j}{b_k} \mid (a; b) \in \PHs^2 \wedge (a_i; b_j; b_k) \in \PHl_a \times \PHl_b \times \PHl_b \wedge b_j \neq b_k \wedge a = b \Rightarrow a_i = b_j \}$ is the finite set of \emph{actions of priority $n$}.
+  \end{itemize}
+  We call $\PHproc \DEF \bigcup_{a \in \PHs} \PHl_a$ the set of all processes, and $\PHh \DEF \bigcup_{n \in \segm{1}{k}} \PHh^{(n)}$ the set of all actions.
+\end{definition}
+
+\noindent
+The sort of a process $a_i$ is referred to as $\PHsort(a_i)=a$ and the set of sorts present in an action $h\in\PHa$ as $\PHsort(h) = \{\PHsort(\PHhitter(h)),\PHsort(\PHtarget(h))\}$.
+Given a state $s\in \PHl$, the process of sort $a\in\PHs$ present in $s$ is denoted by $\PHget{s}{a}$, that is the $a$-coordinate of the state $s$.
+If $a_i\in \PHl_a$, we define the notation $a_i\in s \EQDEF \PHget{s}{a}=a_i$.
+
+An action $h = \PHhit{a_i}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$ is \emph{playable} in $s \in \PHl$ iff $\PHget{s}{a} = a_i$, $\PHget{s}{b} = b_j$ and $\forall m < n, \forall g \in \PHa^{(m)}$, $g$ is not playable in $s$.
+%Dans un tel cas, l'état résultant du jeu de l'action $h$ dans $\etat$ est dénoté $(\etat \PHjoue h)$, où $\PHget{(\etat \PHjoue h)}{b} = b_k$ et $\forall c \in \PHs, c \neq b \Rightarrow \PHget{(\etat \PHjoue h)}{c} = \PHget{\etat}{c}$.
+%
+%An action $h=\PHhit{a_i}{b_j}{b_k} \in\PHa$ is \emph{playable} in $s \in L$ if and only if $\PHget{s}{a} = a_i$ and $\PHget{s}{b} = b_j$.
+In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$, that is $\PHget{(s \PHplay h)}{b} = b_k$ and $\forall c\in\PHs, c\neq b, \PHget{(s\PHplay h)}{c} = \PHget{s}{c}$.
+For the sake of clarity, for all $h, h'\in\PHa$, $((s\PHplay h)\PHplay h')$ is abbreviated as $(s\PHplay h\PHplay h')$.
+
+\begin{comment} %example*
+\pref{fig:runningPH-1} represents a PH $(\PHs,\PHl,\PHa)$ with
+$\PHs = \{a,b,c\}$,
+$\PHl_a = \{a_0,a_1,a_2\}$,
+$\PHl_b = \{b_0, b_1\}$,
+$\PHl_c = \{c_0, c_1\}$, and
+\begin{align*}
+\PHa & = \{
+	\PHfrappe{a_2}{b_1}{b_0},
+&&  \PHfrappe{b_0}{a_2}{a_1},
+&&	\PHfrappe{c_0}{a_2}{a_1},\\
+&&& \PHfrappe{b_0}{a_1}{a_0},
+&&	\PHfrappe{c_0}{a_1}{a_0},\\
+&&& \PHfrappe{b_1}{a_0}{a_1},
+&&	\PHfrappe{c_1}{a_0}{a_1},\\
+&&& \PHfrappe{b_1}{a_1}{a_2},
+&&	\PHfrappe{c_1}{a_1}{a_2} \}\enspace.
+\end{align*}
+The action $h=\PHfrappe{b_1}{a_1}{a_2}$ is playable in the state
+$s = \PHstate{b_1,a_1,c_0}$; and $s\PHplay h=\PHstate{b_1,a_2,c_0}$.
+%
+\begin{figure}[t]
+\centering
+\scalebox{1.3}{
+\begin{tikzpicture}
+\TSort{(0,0)}{a}{3}{r}
+\TSort{(-3,0.5)}{b}{2}{l}
+\TSort{(3,0.5)}{c}{2}{r}
+%
+\THit{b_1}{very thick}{a_0}{.west}{a_1}
+\THit{b_1}{very thick}{a_1}{.north west}{a_2}
+\THit{b_0}{}{a_2}{.west}{a_1}
+\THit{b_0}{}{a_1}{.west}{a_0}
+%
+\path[bounce, bend left=60]
+\TBounce{a_1}{very thick}{a_2}{.south}
+\TBounce{a_0}{very thick}{a_1}{.south}
+;
+\path[bounce, bend right=60]
+\TBounce{a_2}{}{a_1}{.north}
+\TBounce{a_1}{}{a_0}{.north}
+;
+%
+\THit{c_1}{very thick}{a_0}{.east}{a_1}
+\THit{c_1}{very thick}{a_1}{.north east}{a_2}
+\THit{c_0}{}{a_2}{.east}{a_1}
+\THit{c_0}{}{a_1}{.east}{a_0}
+%
+\path[bounce, bend right=60]
+\TBounce{a_1}{very thick}{a_2}{.south east}
+\TBounce{a_0}{very thick}{a_1}{.south east}
+;
+\path[bounce, bend left=60]
+\TBounce{a_2}{}{a_1}{.north}
+\TBounce{a_1}{}{a_0}{.north east}
+;
+%
+\THit{a_2}{bend right}{b_1}{.north east}{b_0}
+\path[bounce, bend left=80]
+\TBounce{b_1}{out=100,in=140}{b_0}{.north}
+;
+\end{tikzpicture}
+}
+\caption{\label{fig:runningPH-1}
+A Process Hitting (PH) example.
+Sorts are represented by labeled boxes, and processes by circles (ticks are
+the identifiers of the processes within the sort, for instance, $a_0$ is the
+process ticked $0$ in the box $a$).
+An action (for instance $\PHfrappe{b_1}{a_1}{a_2}$) is represented by a pair of
+directed arcs, having the hit part ($b_1$ to $a_1$) in plain line and the bounce
+part ($a_1$ to $a_2$) in dotted line.
+Actions involving $b_1$ or $c_1$ are in thick lines.
+%The current state is represented by the grayed processes:
+%$\PHstate{a_0,b_1,c_0,d_0}$.
+}
+\end{figure}
+
+This PH example actually models a BRN where the component $a$ has three qualitative
+levels and components $b$ and $c$ are boolean.
+In this BRN, $b$ and $c$ activate $a$, while $a$ inhibits $b$.
+The inhibition of $b$ by $a$ is only effective when $a$ is at level $2$;
+in the other cases, $b$ cannot evolve in any direction.
+The activation of $a$ by $b$ ($c$) is encoded by the actions making the level of $a$ increase (resp.
+decrease) when $b$ ($c$) is present (resp. absent).
+It is worth noticing that the activation of $a$ by $b$ ($c$) is independent from $c$ ($b$).
+This may express a lack of knowledge on the cooperation between these two regulators:
+we thus model an over-approximation of the possible actions.
+\end{example*}
+\end{comment}
+
+\paragraph{Modeling cooperation.}
+\towrite{Sortes coopératives avec mise à jour prioritaire (pas de décalage temporel)}
+As described in \cite{PMR10-TCSB}, the cooperation between processes to make another bounce can be
+expressed in PH by building a \emph{cooperative sort}.
+\pref{fig:PH-cooperativity} shows an example of cooperation between processes $b_1$ and $c_1$ to
+make $a_1$ bounce to $a_2$:
+a cooperative sort $bc$ is defined with 4 processes (one for each sub-state of the presence of
+processes $b_1$ and $c_1$).
+For the sake of clarity, the $bc$ processes are indexed using the sub-state they represent.
+Hence, $bc_{01}$ represents the sub-state $\PHstate{b_0,c_1}$, and so on.
+Each process of sort $b$ and $c$ hit $bc$ to make it bounce to the process reflecting the status of the sorts $b$
+and $c$ (e.g., $\PHfrappe{b_1}{bc_{00}}{bc_{10}}$ and $\PHfrappe{b_1}{bc_{01}}{bc_{11}}$).
+Then, it is the process $bc_{11}$ which hits $a_1$ to make it bounce to $a_2$ instead of the
+independent hits from $b_1$ and $c_1$.
+
+\begin{figure}[p]
+\centering
+\scalebox{1.3}{
+\begin{tikzpicture}
+\TSort{(0,0)}{b}{2}{t}
+\TSort{(0,-3.8)}{c}{2}{b}
+\TSort{(4.5,-3)}{a}{3}{r}
+
+\TSetTick{bc}{0}{00}
+\TSetTick{bc}{1}{01}
+\TSetTick{bc}{2}{10}
+\TSetTick{bc}{3}{11}
+% \TSetSortLbcel{bc}{$\neg a\wedge b$}
+\TSort{(-0.5,-2)}{bc}{4}{b}
+
+\THit{b_1}{very thick,bend right}{bc_0}{.north}{bc_2}
+\THit{b_1}{very thick,bend right}{bc_1}{.north}{bc_3}
+\THit{b_0}{}{bc_2}{.north west}{bc_0}
+\THit{b_0}{}{bc_3}{.north west}{bc_1}
+
+\THit{c_0}{}{bc_1}{.south}{bc_0}
+\THit{c_0}{}{bc_3}{.south}{bc_2}
+\THit{c_1}{very thick}{bc_0}{.south}{bc_1}
+\THit{c_1}{very thick}{bc_2}{.south}{bc_3}
+
+\path[bounce, bend right=25]
+\TBounce{bc_2}{}{bc_0}{.north east}
+\TBounce{bc_3}{}{bc_1}{.north east}
+;
+\path[bounce, bend left=80, distance=30]
+\TBounce{bc_0}{very thick}{bc_2}{.north}
+\TBounce{bc_1}{very thick}{bc_3}{.north}
+;
+\path[bounce, bend right]
+\TBounce{bc_0}{very thick}{bc_1}{.west}
+\TBounce{bc_2}{very thick}{bc_3}{.west}
+;
+\path[bounce, bend left]
+\TBounce{bc_3}{}{bc_2}{.east}
+\TBounce{bc_1}{}{bc_0}{.east}
+;
+
+\THit{bc_3}{}{a_1}{.west}{a_2}
+\path[bounce, bend left=40]
+\TBounce{a_1}{}{a_2}{.south west}
+;
+
+\end{tikzpicture}
+}
+
+\caption{\label{fig:PH-cooperativity}
+\towrite{Ajouter priorités}
+A PH modeling a cooperativity between $b_1$ and $c_1$ to make
+$a_1$ bounce to $a_2$.
+Actions involving $b_1$ or $c_1$ are in thick lines.
+}
+\end{figure}
+
+\begin{comment}
+\begin{figure}[p]
+\centering
+\scalebox{1.3}{
+\begin{tikzpicture}
+\path[use as bounding box] (-4,-1.9) rectangle (4.5,3.9);
+%
+\TSort{(0,0)}{a}{3}{l}
+\TSort{(3, 3)}{b}{2}{t}
+\TSort{(3,-1)}{c}{2}{b}
+%
+\TSetTick{bc}{0}{00}
+\TSetTick{bc}{1}{01}
+\TSetTick{bc}{2}{10}
+\TSetTick{bc}{3}{11}
+% \TSetSortLbcel{bc}{$\neg a\wedge b$}
+\TSort{(-3,-0.5)}{bc}{4}{l}
+%
+\THit{bc_3}{}{a_1}{.north west}{a_2}
+\THit{bc_0}{}{a_1}{.south west}{a_0}
+\path[bounce]
+\TBounce{a_1}{bend left}{a_2}{.south west}
+\TBounce{a_1}{bend right}{a_0}{.north west}
+;
+%
+\THit{b_0}{}{a_2}{.east}{a_1}
+\THit{b_1}{}{a_0}{.north east}{a_1}
+\path[bounce]
+\TBounce{a_2}{bend left}{a_1}{.north east}
+\TBounce{a_0}{bend right=20}{a_1}{.south}
+;
+%
+\THit{c_0}{bend right}{a_2}{.south east}{a_1}
+\THit{c_1}{bend right}{a_0}{.east}{a_1}
+\path[bounce]
+\TBounce{a_2}{bend left=20}{a_1}{.north}
+\TBounce{a_0}{bend right=30}{a_1}{.south east}
+;
+%
+\path[dashed,hit]
+	(2,-1.3) edge[bend left=10] (-2.3,-0.7)
+	(2.2, 3.3) edge[bend right=10] (-2.3,3)
+;
+%
+\THit{a_2}{bend left,out=40,in=80}{b_1}{.north west}{b_0}
+\path[bounce, bend right]
+\TBounce{b_1}{}{b_0}{.east}
+;
+%
+\end{tikzpicture}
+}
+%
+\caption{\label{fig:runningPH-2}
+PH resulting from the refinement of the one in \pref{fig:runningPH-1} by the
+specification of several cooperations.
+The actions from $b$ and $c$ to the cooperative sort $bc$ are identical to those defined in
+\pref{fig:PH-cooperativity} and are represented here by a single dashed arc.
+}
+\end{figure}
+\end{comment}
+
+We note that cooperative sorts are standard PH sorts and do not involve any
+special treatment regarding the semantics of related actions.
+
+When the number of cooperating processes is large, it is possible to chain several cooperative sorts
+to prevent the combinatoric explosion of the number of processes created within cooperative sorts.
+For instance, if $b_1$, $c_1$, and $d_1$ cooperate, one can create a cooperative sort $bc$ with 4
+processes reflecting the presence of $b_1$ and $c_1$, and a cooperative sort $bcd$ with 4 processes
+reflecting the presence of $bc_{11}$ and $d_1$.  Such constructions are helpful in PH
+as the static analysis of dynamics developed in \cite{PMR12-MSCS} does not suffer from the number of
+sorts, but on the number of processes within a single sort.
+
+While the construction of cooperation in PH allows to encode any boolean functions
+between cooperating processes \cite{PMR10-TCSB}, it is worth noticing they introduce a temporal
+shift in their application.
+This allows the existence of interleaving of actions leading to a cooperative sort representing a
+past sub-state of the presence of the cooperative processes.
+The resulting behavior is then an over-approximation
+of the realization of an instantaneous cooperation.
+
+\begin{example*}
+The PH in \pref{fig:runningPH-2} results from the refinement of the PH in \pref{fig:runningPH-1}
+where several cooperations have been specified.
+In particular, the bounce to $a_2$ is the result of a cooperation between $b_1$ and $c_1$; and the
+bounce to $a_0$ of a cooperation between $b_0$ and $c_0$.
+Hence, this PH expresses a BRN where $a$ requires both $b$ and $c$ active to reach its
+highest level, and $a$ does not become inactive unless both $b$ and $c$ are inactive.
+\end{example*}
+
+
+\todo{Modèles non-Zeno (OU : sans domaines-pièges)}
+
+
+

@@ -1,0 +1,39 @@
+
+\towrite{Idée : prise en compte des actions perturbatrices, ou des réactions en chaîne pouvant rendre de telles actions jouables}
+
+\newcommand{\abstr}[1]{#1^\wedge}%\text{\textasciicircum}}
+\def\BS{\mathbf{BS}}
+\def\prio{\mathbf{prio}}
+
+Séquences de bonds abstraites :
+$$\BS^\wedge(P) = \{ \zeta^\wedge \mid \zeta \in \BS(P), \nexists \zeta' \in \BS(P), \zeta'^\wedge \subsetneq \zeta^\wedge \}$$
+where $\zeta^\wedge = (\zeta^\wedge_A, \zeta^\wedge_B, \zeta^\wedge_{max})$ with:
+\begin{itemize}
+  \item $\zeta^\wedge_A = \{ \PHhitter(\zeta_n) \mid n \in \indexes{\zeta} \wedge \PHsort(\PHhitter(\zeta_n)) \neq \PHsort(P) \}$ : ens. des requis d'autres sortes (frappeurs)
+  \item $\zeta^\wedge_B = \{ \PHhitter(\zeta_n) \mid n \in \indexes{\zeta} \} \cup \{ \PHtarget(\zeta_n) \mid n \in \indexes{\zeta} \}$ : ens. des processus nécessaires (à ne pas perturber)
+  \item $\zeta^\wedge_{max} = \max_{n \in \indexes{\zeta}}(\prio(\zeta_n))$ : plus faible priorité
+\end{itemize}
+
+Voisinage :
+\begin{equation*}
+\begin{split}
+    V: \wp(\PHproc) \times \segm{1}{k} &\rightarrow \wp(\PHh) \\
+    (ps; m) &\mapsto \sfp{\PHh^{(m)+}_{cibles}(ps)}{hs}{\PHh^{(m)+)}_{bonds}(\widehat{B}(hs)) \cup hs)}
+  \end{split}
+\end{equation*}
+where:
+\begin{equation*}
+\begin{split}
+    \widehat{B}: \wp(\PHh) &\rightarrow \wp(\PHproc) \\
+    hs &\mapsto \{ \PHhitter(h) \mid h \in hs \} \cup \{ \PHtarget(h) \mid h \in hs \}
+  \end{split}
+\end{equation*}
+\begin{equation*}
+\begin{split}
+    \PHh^{(m)+}_{\mathsf{ref}}: \wp(\PHproc) &\rightarrow \wp(\PHh) \quad,\quad m \in \segm{0}{k} \text{ and } \mathsf{ref} \in \{ \PHhitter, \PHtarget, \PHbounce \} \\
+    ps &\mapsto \{ h \in \PHh \mid \mathsf{ref}(h) \in ps \wedge \prio(h) \leq m \}
+  \end{split}
+\end{equation*}
+
+
+

@@ -1,0 +1,124 @@
+\documentclass{article}
+
+%\usepackage{hyperref}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{amsmath}  % Maths
+\usepackage{amsfonts} % Maths
+\usepackage{amssymb}  % Maths
+\usepackage{stmaryrd} % Maths (crochets doubles)
+
+\usepackage{url}     % Mise en forme + liens pour URLs
+\usepackage{array}   % Tableaux évolués
+
+\usepackage{comment}
+
+
+\usepackage{prettyref}
+\newrefformat{def}{Def.~\ref{#1}}
+\newrefformat{fig}{Fig.~\ref{#1}}
+\newrefformat{pro}{Property~\ref{#1}}
+\newrefformat{pps}{Proposition~\ref{#1}}
+\newrefformat{lem}{Lemma~\ref{#1}}
+\newrefformat{thm}{Theorem~\ref{#1}}
+\newrefformat{sec}{Sect.~\ref{#1}}
+\newrefformat{ssec}{Subsect.~\ref{#1}}
+\newrefformat{suppl}{Appendix~\ref{#1}}
+\newrefformat{eq}{Eq.~\eqref{#1}}
+\def\pref{\prettyref}
+
+\usepackage{ntheorem}
+\theorembodyfont{\upshape}
+\newtheorem{definition}{Definition}{}{}
+\newtheorem*{example}{Example}{}{}
+%\newtheorem{property}{Property}{}{}
+%\newtheorem{proposition}{Proposition}{}{}
+
+\usepackage{tikz}
+\newdimen\pgfex
+\newdimen\pgfem
+\usetikzlibrary{arrows,shapes,shadows,scopes}
+\usetikzlibrary{positioning}
+\usetikzlibrary{matrix}
+\usetikzlibrary{decorations.text}
+\usetikzlibrary{decorations.pathmorphing}
+
+\input{macros/macros}
+\input{macros/macros-ph}
+%\input{macros/macros-grn}
+
+% Macros
+\newcommand{\sN}{\mathbb{N}}
+\def\DEF{\stackrel{\Delta}=}
+\def\EQDEF{\stackrel{\Delta}\Leftrightarrow}
+\newcommand{\segm}[2]{\llbracket #1; #2 \rrbracket}
+\def\indexes#1{\mathbb{I}^{#1}}
+\newcommand{\sfp}[3]{\mathbf{sfp}\{#1\}\left(#2\mapsto#3\right)}
+%\def\lfp{\f{pppf}\;}
+
+
+
+% Commandes À FAIRE
+\usepackage{color} % Couleurs du texte
+\newcommand{\towrite}[1]{\textcolor{blue}{#1}}
+\newcommand{\todo}[1]{\textcolor{red}{[#1]}}
+
+
+% Id est
+\newcommand{\ie}{i.e. }
+
+% Césures
+\hyphenation{pa-ra-me-tri-za-tion}
+\hyphenation{pa-ra-me-tri-za-tions}
+
+
+
+\title{\todo{Le titre}}
+
+\author{\todo{Les auteurs}}
+
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\todo{L'abstract}
+\end{abstract}
+
+
+
+\section{Introduction}\label{sec:intro}
+\towrite{Intro}
+
+\section{The PH Framework}\label{sec:def-ph}
+\todo{Définir les priorités fixes}
+\input{parts/def-ph}
+
+\section{Static analysis}\label{sec:sa}
+\towrite{Reprendre définitions de l'analyse statique}
+\todo{Ajouts pour les priorités fixes}
+\input{parts/sa}
+
+\section{Example}\label{sec:example}
+\todo{Trouver un exemple représentatif (comportement différent avec / sans priorités)}
+\towrite{Exemple}
+
+\section{Discussion \& Conclusion}\label{sec:ccl}
+\towrite{Pistes :
+\begin{itemize}
+  \item Modèles Zeno (système de précédences et prise en compte des états globaux)
+\end{itemize}
+}
+
+
+\bibliographystyle{plain}
+\bibliography{biblio}
+
+%\input{parts/contributions}
+
+\end{document}

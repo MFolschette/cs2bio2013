@@ -1,0 +1,51 @@
+% Macros relatives à la traduction de PH avec arcs neutralisants vers PH à k-priorités fixes
+
+% Macros générales
+%\newcommand{\ie}{\textit{i.e.} }
+
+% Notations générales pour PH
+\newcommand{\PH}{\mathcal{PH}}
+\newcommand{\PHs}{\mathcal{S}}
+%\newcommand{\PHp}{\mathcal{P}}
+\newcommand{\PHp}{\textcolor{red}{\mathcal{P}}}
+\newcommand{\PHproc}{\mathcal{P}}
+\newcommand{\PHh}{\mathcal{H}}
+\newcommand{\PHa}{\PHh}
+%\newcommand{\PHa}{\mathcal{A}}
+\newcommand{\PHl}{\mathcal{L}}
+\newcommand{\PHn}{\mathcal{N}}
+
+\newcommand{\PHhitter}{\mathsf{hitter}}
+\newcommand{\PHtarget}{\mathsf{target}}
+\newcommand{\PHbounce}{\mathsf{bounce}}
+%\newcommand{\PHsort}{\Sigma}
+\newcommand{\PHsort}{\PHs}
+
+%\newcommand{\PHfrappeur}{\mathsf{frappeur}}
+%\newcommand{\PHcible}{\mathsf{cible}}
+%\newcommand{\PHbond}{\mathsf{bond}}
+%\newcommand{\PHsorte}{\mathsf{sorte}}
+%\newcommand{\PHbloquant}{\mathsf{bloquante}}
+%\newcommand{\PHbloque}{\mathsf{bloquee}}
+
+%\newcommand{\PHfrappeR}{\textcolor{red}{\rightarrow}}
+%\newcommand{\PHmonte}{\textcolor{red}{\Rsh}}
+
+\newcommand{\PHhitA}{\rightarrow}
+\newcommand{\PHhitB}{\Rsh}
+%\newcommand{\PHfrappe}[3]{\mbox{$#1\PHhitA#2\PHhitB#3$}}
+%\newcommand{\PHfrappebond}[2]{\mbox{$#1\PHhitB#2$}}
+\newcommand{\PHhit}[3]{#1\PHhitA#2\PHhitB#3}
+\newcommand{\PHfrappe}{\PHhit}
+\newcommand{\PHhbounce}[2]{#1\PHhitB#2}
+\newcommand{\PHobj}[2]{\mbox{$#1\PHhitB^*\!#2$}}
+\newcommand{\PHconcat}{::}
+%\newcommand{\PHneutralise}{\rtimes}
+
+\def\PHget#1#2{{#1[#2]}}
+%\newcommand{\PHchange}[2]{#1\langle #2 \rangle}
+%\newcommand{\PHchange}[2]{(#1 \Lleftarrow #2)}
+%\newcommand{\PHarcn}[2]{\mbox{$#1\PHneutralise#2$}}
+\newcommand{\PHplay}{\cdot}
+
+\newcommand{\PHstate}[1]{\mbox{$\langle #1 \rangle$}}
