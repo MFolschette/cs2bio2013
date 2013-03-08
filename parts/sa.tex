@@ -3,8 +3,94 @@
 
 \newcommand{\abstr}[1]{#1^\wedge}%\text{\textasciicircum}}
 \def\BS{\mathbf{BS}}
-\def\prio{\mathbf{prio}}
+%\def\priomax{\mathsf{prio}_{max}}
+\def\procs{\mathsf{procs}}
+\def\allprocs{\mathsf{allProcs}}
+\def\pfp{\mathsf{pfp}}
 
+\def\ctx{\varsigma}
+\def\w{\omega}
+\def\aBS{\abstr{\BS}}
+
+\def\Req{\mathrm{Req}}
+\def\Sol{\mathrm{Sol}}
+\def\Cont{\mathrm{Cont}}
+\def\A{\mathcal{A}}
+\def\cwA{\A_\ctx^\w}
+\def\cwReq{\Req_\ctx^\w}
+\def\cwSol{\Sol_\ctx^\w}
+\def\cwCont{\Cont_\ctx^\w}
+
+\def\aB{\mathcal{B}}
+\def\sat#1{\lceil #1\rceil}
+\def\cwB{\sat{\aB_\ctx^\w}}
+\def\mycwB#1#2{\sat{\aB_{#1}^{#2}}}
+\def\Bsol{\sat{\Sol^\w_\ctx}}
+\def\Breq{\sat{\Req^\w_\ctx}}
+\def\Bcont{\sat{\Cont^\w_\ctx}}
+
+\def\myB{\aB^\w_\ctx}
+\def\mysol{\overline{\Sol^\w_\ctx}}
+\def\myreq{\overline{\Req^\w_\ctx}}
+\def\mycont{\overline{\Cont^\w_\ctx}}
+
+%\def\mlfp#1{\f{pppf}\{#1\}}
+
+\def\PHobjp#1#2#3{\PHobj{{#1}_{#2}}{{#1}_{#3}}}
+\def\Obj{\mathbf{Obj}}
+\def\powerset{\wp}
+\def\gCont{\f{maxCont}}
+\def\w{\omega}
+
+Approximation : pour qu'une séquence de bonds soit jouable, il faut pouvoir atteindre tous les processus nécessaires depuis tous les points fixes possibles locaux, uniquement à l'aide d'actions de priorité maximale pour la sorte considérée.
+
+
+
+%Plus haute priorité :
+%$$\forall a \in \PHs, \priomax(a) = \max_{h \in \PHh, \PHtarget(h) = a}(\prio(h))$$
+
+Processus possibles :
+\begin{align*}
+\procs((\cwSol,\cwReq,\cwCont)) = \{ p \in \PHproc \mid & \exists (P,ps) \in \cwSol, p \in ps
+\\ & \vee p = \PHtarget(P)
+\\ & \vee (P \neq \omega \Rightarrow p = \PHbounce(P)) \}
+%\\ & \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \}
+\end{align*}
+
+Processus rencontrés :
+\begin{align*}
+\allprocs((\cwSol,\cwReq,\cwCont)) = \{ p \in \PHproc \mid & \exists (P,ps) \in \cwSol, p \in ps
+\\ & \vee p = \PHtarget(P)
+%\\ & \vee (P \neq \omega \Rightarrow p = \PHbounce(P)) \}
+\\ & \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \}
+\end{align*}
+
+\subsection{Local fixed points}
+Actions chaînées :
+\begin{align*}
+\PHh(a, b) = \{ (h_i)_{i \in \segm{0}{s}} \in \PHh^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_0)) = a \wedge \PHsort(\PHtarget(h_n)) = b \\
+  & \wedge \prio(h_{s-1}) \leq n \wedge \forall i \in \segm{0}{s-1}, \\
+  & (\prio(h_i) \leq n \wedge \PHsort(\PHhitter(h_i)) = \PHsort(\PHtarget(h_{i+1}))) \}
+\end{align*}
+
+Voisinage :
+$$
+V(a) = \{ b \in \PHs \mid \PHh^n(a, b) \neq \emptyset \}
+$$
+
+Points fixes possibles : pour toute sorte $a$ et tout contexte partiel $\ctx$ sur $V^n(a)$:
+\begin{align*}
+  \pfp_\ctx: \PHs &\rightarrow \wp(\PHproc) \\
+  a &\mapsto \{ s \in \times_{b \in V^n(a)} \PHl_b \mid \text{$s$ est accessible depuis $\ctx$ et aucune action n'y est jouable} \}
+\end{align*}
+
+Points fixes possibles sur un ensemble de sortes :
+\begin{align*}
+  \pfp: \mathbb{A} &\rightarrow \wp(\PHproc) \\
+  \myB &\mapsto \bigcup_{a \in A} \pfp_{\allprocs(\myB)}(a)
+\end{align*}
+
+\begin{comment}
 Séquences de bonds abstraites :
 $$\BS^\wedge(P) = \{ \zeta^\wedge \mid \zeta \in \BS(P), \nexists \zeta' \in \BS(P), \zeta'^\wedge \subsetneq \zeta^\wedge \}$$
 where $\zeta^\wedge = (\zeta^\wedge_A, \zeta^\wedge_B, \zeta^\wedge_{max})$ with:
@@ -13,7 +99,35 @@ where $\zeta^\wedge = (\zeta^\wedge_A, \zeta^\wedge_B, \zeta^\wedge_{max})$ with
   \item $\zeta^\wedge_B = \{ \PHhitter(\zeta_n) \mid n \in \indexes{\zeta} \} \cup \{ \PHtarget(\zeta_n) \mid n \in \indexes{\zeta} \}$ : ens. des processus nécessaires (à ne pas perturber)
   \item $\zeta^\wedge_{max} = \max_{n \in \indexes{\zeta}}(\prio(\zeta_n))$ : plus faible priorité
 \end{itemize}
+\end{comment}
 
+\subsection{Abstract structure}
+Séquences de bonds abstraites :
+$$\BS^\wedge(P) = \{ \zeta^\wedge \mid \zeta \in \BS(P), \nexists \zeta' \in \BS(P), \zeta'^\wedge \subsetneq \zeta^\wedge \}$$
+where:
+$$\zeta^\wedge = \{ \PHhitter(\zeta_n) \mid n \in \indexes{\zeta} \wedge \PHsort(\PHhitter(\zeta_n)) \neq \PHsort(P) \}$$
+
+The abstract structure $\cwB=(\Breq,\Bsol,\Bcont)$ is defined as
+$
+ \cwB = \sfp{\myB}{\myB}{\aB^\w_{\ctx \Cap (\procs(\myB) \cup \pfp(\myB))}}
+$,
+with $\myB=(\myreq,\mysol,\mycont)$:
+\begin{align*}
+\myreq = &\{ (a_i,\PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid a_j \in \PHget{\ctx}{a}
+  \wedge (\exists (P,ps) \in \mysol, a_i \in ps \\
+& \qquad\qquad
+          \vee \exists n \in \indexes{\w}, \PHbounce(\w)=a_i\}
+\\
+\mysol \subseteq & \{ (P,ps) \in \Obj \times \powerset(\PHproc) \mid
+        \exists (a_i,P)\in \myreq \wedge ps \in \aBS(P)  \}
+\\
+\mycont = & \{ (P,\PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid 
+        \exists (P,ps)\in \mysol \\
+&\qquad\qquad
+        \wedge q \in \gCont_\ctx(\PHs(P),P)\}
+\end{align*}
+
+\begin{comment}
 Voisinage :
 \begin{equation*}
 \begin{split}
@@ -34,6 +148,7 @@ where:
     ps &\mapsto \{ h \in \PHh \mid \mathsf{ref}(h) \in ps \wedge \prio(h) \leq m \}
   \end{split}
 \end{equation*}
+\end{comment}
 
 
 
