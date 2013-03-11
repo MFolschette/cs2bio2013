@@ -7,6 +7,7 @@
 \def\procs{\mathsf{procs}}
 \def\allprocs{\mathsf{allProcs}}
 \def\pfp{\mathsf{pfp}}
+\def\pfpprocs{\mathsf{pfpProcs}}
 
 \def\ctx{\varsigma}
 \def\w{\omega}
@@ -46,12 +47,13 @@ Approximation : pour qu'une séquence de bonds soit jouable, il faut pouvoir att
 
 
 
+%%% N'est plus utile (?)
 %Plus haute priorité :
 %$$\forall a \in \PHs, \priomax(a) = \max_{h \in \PHh, \PHtarget(h) = a}(\prio(h))$$
 
 Processus possibles :
 \begin{align*}
-\procs((\cwSol,\cwReq,\cwCont)) = \{ p \in \PHproc \mid & \exists (P,ps) \in \cwSol, p \in ps
+\procs((\cwSol,\cwReq,\cwCont)) = \{ p \in \PHproc &\mid \exists (P,ps) \in \cwSol, p \in ps
 \\ & \vee p = \PHtarget(P)
 \\ & \vee (P \neq \omega \Rightarrow p = \PHbounce(P)) \}
 %\\ & \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \}
@@ -59,7 +61,7 @@ Processus possibles :
 
 Processus rencontrés :
 \begin{align*}
-\allprocs((\cwSol,\cwReq,\cwCont)) = \{ p \in \PHproc \mid & \exists (P,ps) \in \cwSol, p \in ps
+\allprocs((\cwSol,\cwReq,\cwCont)) = \{ p \in \PHproc &\mid \exists (P,ps) \in \cwSol, p \in ps
 \\ & \vee p = \PHtarget(P)
 %\\ & \vee (P \neq \omega \Rightarrow p = \PHbounce(P)) \}
 \\ & \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \}
@@ -78,17 +80,33 @@ $$
 V(a) = \{ b \in \PHs \mid \PHh^n(a, b) \neq \emptyset \}
 $$
 
-Points fixes possibles : pour toute sorte $a$ et tout contexte partiel $\ctx$ sur $V^n(a)$:
+\towrite{Formaliser}
+
+%%% Pas utile
+%Points fixes possibles : pour toute sorte $a$ et tout contexte partiel $\ctx$ sur $V^n(a)$:
+%\begin{align*}
+%  \pfp_\ctx: \PHs &\rightarrow \wp(\PHproc) \\
+%  a &\mapsto \{ s \in \underset{b \in V^n(a)}{\times} \PHl_b \mid \text{$s$ est accessible depuis $\ctx$ et aucune action n'y est jouable} \}
+%\end{align*}
+
+Points fixes possibles : pour toute sorte $a$ et tout contexte $\ctx$:
 \begin{align*}
   \pfp_\ctx: \PHs &\rightarrow \wp(\PHproc) \\
-  a &\mapsto \{ s \in \times_{b \in V^n(a)} \PHl_b \mid \text{$s$ est accessible depuis $\ctx$ et aucune action n'y est jouable} \}
+  a &\mapsto \{ s \in \underset{b \in V^n(a)}{\times} \PHl_b \mid \text{$s$ est (localement) accessible dans $\restriction{\PH}{\prio(a)}$ depuis $\ctx$}\\
+  &\qquad\qquad\qquad\qquad \text{et aucune action n'y est jouable} \}
 \end{align*}
 
-Points fixes possibles sur un ensemble de sortes :
+Processus rencontrés comme résultats d'un point fixe :
 \begin{align*}
-  \pfp: \mathbb{A} &\rightarrow \wp(\PHproc) \\
-  \myB &\mapsto \bigcup_{a \in A} \pfp_{\allprocs(\myB)}(a)
+\pfpprocs_\ctx(a) = \{ \PHget{s}{a} \mid s \in \pfp_\ctx(a) \}
 \end{align*}
+
+%%% N'est plus adapté
+%Points fixes possibles sur un ensemble de sortes :
+%\begin{align*}
+%  \pfp: \mathbb{A} &\rightarrow \wp(\PHproc) \\
+%  \myB &\mapsto \bigcup_{a \in A} \pfp_{\allprocs(\myB)}(a)
+%\end{align*}
 
 \begin{comment}
 Séquences de bonds abstraites :
@@ -102,26 +120,25 @@ where $\zeta^\wedge = (\zeta^\wedge_A, \zeta^\wedge_B, \zeta^\wedge_{max})$ with
 \end{comment}
 
 \subsection{Abstract structure}
-Séquences de bonds abstraites :
-$$\BS^\wedge(P) = \{ \zeta^\wedge \mid \zeta \in \BS(P), \nexists \zeta' \in \BS(P), \zeta'^\wedge \subsetneq \zeta^\wedge \}$$
-where:
-$$\zeta^\wedge = \{ \PHhitter(\zeta_n) \mid n \in \indexes{\zeta} \wedge \PHsort(\PHhitter(\zeta_n)) \neq \PHsort(P) \}$$
+%Séquences de bonds abstraites :
+%$$\BS^\wedge(P) = \{ \zeta^\wedge \mid \zeta \in \BS(P), \nexists \zeta' \in \BS(P), \zeta'^\wedge \subsetneq \zeta^\wedge \}$$
+%where:
+%$$\zeta^\wedge = \{ \PHhitter(\zeta_n) \mid n \in \indexes{\zeta} \wedge \PHsort(\PHhitter(\zeta_n)) \neq \PHsort(P) \}$$
 
 The abstract structure $\cwB=(\Breq,\Bsol,\Bcont)$ is defined as
 $
- \cwB = \sfp{\myB}{\myB}{\aB^\w_{\ctx \Cap (\procs(\myB) \cup \pfp(\myB))}}
+ \cwB = \sfp{\myB}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}
 $,
 with $\myB=(\myreq,\mysol,\mycont)$:
 \begin{align*}
-\myreq = &\{ (a_i,\PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid a_j \in \PHget{\ctx}{a}
-  \wedge (\exists (P,ps) \in \mysol, a_i \in ps \\
-& \qquad\qquad
-          \vee \exists n \in \indexes{\w}, \PHbounce(\w)=a_i\}
+\myreq &= \{ (a_i,\PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid
+  (a_j \in \PHget{\ctx}{a} \vee a_j \in \pfpprocs_\ctx(a)) \\
+  & \qquad \wedge (\exists (P,ps) \in \mysol, a_i \in ps \vee \exists n \in \indexes{\w}, \PHbounce(\w_n)=a_i) \}
 \\
-\mysol \subseteq & \{ (P,ps) \in \Obj \times \powerset(\PHproc) \mid
-        \exists (a_i,P)\in \myreq \wedge ps \in \aBS(P)  \}
+\mysol &\subseteq \{ (P,ps) \in \Obj \times \powerset(\PHproc) \mid
+        \exists (a_i,P)\in \myreq \wedge ps \in \aBS(P) \}
 \\
-\mycont = & \{ (P,\PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid 
+\mycont & = \{ (P,\PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid 
         \exists (P,ps)\in \mysol \\
 &\qquad\qquad
         \wedge q \in \gCont_\ctx(\PHs(P),P)\}

@@ -3,6 +3,7 @@
 
 \towrite{Transition.}
 
+\subsection{Definition of the Process Hitting with $k$ priorities}
 \towrite{Reformuler (actuellement trop proche de CMSB)}
 A PH (\pref{def:PH}) gathers a finite number of concurrent \emph{processes} grouped into a finite set of \emph{sorts}.
 A process belongs to a unique sort and is noted $a_i$ where $a$ is the sort and $i$ the identifier of the process within the sort $a$.
@@ -14,6 +15,7 @@ An action is denoted by $\PHhit{a_i}{b_j}{b_k}$ where $a_i,b_j,b_k$ are processe
 It is required that $b_j \neq b_k$ and that $a=b\Rightarrow a_i=b_j$.
 An action $h=\PHfrappe{a_i}{b_j}{b_k}$ is read as ``$a_i$ \emph{hits} $b_j$ to make it bounce to $b_k$'', and $a_i,b_j,b_k$ are called respectively \emph{hitter}, \emph{target} and \emph{bounce} of the action, and can be referred to as $\PHhitter(h), \PHtarget(h), \PHbounce(h)$, respectively.
 
+% Process Hitting sans priorités
 \begin{comment}
 \begin{definition}[Process Hitting]\label{def:PH}
 A \emph{Process Hitting} is a triple $(\PHs,\PHl,\PHa)$:
@@ -52,6 +54,13 @@ An action $h = \PHhit{a_i}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$ is \emph{pl
 %An action $h=\PHhit{a_i}{b_j}{b_k} \in\PHa$ is \emph{playable} in $s \in L$ if and only if $\PHget{s}{a} = a_i$ and $\PHget{s}{b} = b_j$.
 In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$, that is $\PHget{(s \PHplay h)}{b} = b_k$ and $\forall c\in\PHs, c\neq b, \PHget{(s\PHplay h)}{c} = \PHget{s}{c}$.
 For the sake of clarity, for all $h, h'\in\PHa$, $((s\PHplay h)\PHplay h')$ is abbreviated as $(s\PHplay h\PHplay h')$.
+
+\begin{definition}[Process Hitting $n$-reduction] \towrite{Revoir terminologie}
+  If $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ is a Process Hitting with $k$ priorities and $n \in \segm{1}{k}$, we denote $\restriction{\PH}{n}$ \towrite{$\PH_{|n}$ $\PH'$} the $n$-reduction of $\PH$ the following Process Hitting with $n$ priorities, where:
+  $$\restriction{\PH}{n} = (\PHs; \PHl; \PHa^{\langle n \rangle})$$
+  and:
+  $$\PHa^{\langle n \rangle} = (\PHa^{(1)}; \dots; \PHa^{(n)})$$
+\end{definition}
 
 \begin{comment} %example*
 \pref{fig:runningPH-1} represents a PH $(\PHs,\PHl,\PHa)$ with
@@ -143,7 +152,7 @@ we thus model an over-approximation of the possible actions.
 \end{example*}
 \end{comment}
 
-\paragraph{Modeling cooperation.}
+\subsection{Modeling cooperation.}
 \towrite{Sortes coopératives avec mise à jour prioritaire (pas de décalage temporel)}
 As described in \cite{PMR10-TCSB}, the cooperation between processes to make another bounce can be
 expressed in PH by building a \emph{cooperative sort}.
@@ -290,7 +299,7 @@ sorts, but on the number of processes within a single sort.
 
 While the construction of cooperation in PH allows to encode any boolean functions
 between cooperating processes \cite{PMR10-TCSB}, it is worth noticing they introduce a temporal
-shift in their application.
+shift in their application. \towrite{Adapter avec priorités}
 This allows the existence of interleaving of actions leading to a cooperative sort representing a
 past sub-state of the presence of the cooperative processes.
 The resulting behavior is then an over-approximation
@@ -305,9 +314,22 @@ Hence, this PH expresses a BRN where $a$ requires both $b$ and $c$ active to rea
 highest level, and $a$ does not become inactive unless both $b$ and $c$ are inactive.
 \end{example*}
 
+\subsection{Restrictions} \towrite{Reformuler}
 
-\todo{Modèles non-Zeno / sans cycles (OU : sans domaines-pièges)}
+In this section, we describe several restrictions.
+Although the definition of a Process Hitting with $k$ priorities allows a wide range of models, the method given in the next section only applies to Process Hitting models that regard these restrictions.
 
-\todo{+ Restriction : toutes les actions frappant une sorte ont la même priorité :}
-$$\forall h_1, h_2 \in \PHh, \PHtarget(h_1) = \PHtarget(h_2) \Rightarrow \prio(h_1) = \prio(h_2) = \prio(\PHsort(\PHtarget(h_1)))$$
+Let $\PH$ be a PH model on which we want to apply the static analysis. This PH has to regard the two restrictions below.
+
+\paragraph{Cycle-freeness of $\restriction{\PH}{k-1}$}
+\towrite{Définition formelle ? + justification}
+The model $\restriction{\PH}{k-1}$ contains no cycles. Cycles are still allowed in $\PH$ however.
+
+\paragraph{Local priorities}
+\towrite{Justification}
+All actions hitting the same sort belong to the same class of priority:
+$$\forall h_1, h_2 \in \PHh, \PHtarget(h_1) = \PHtarget(h_2) \Rightarrow \prio(h_1) = \prio(h_2)$$
+Furthermore, for all sort $a$, we denote $\prio(a)$ the priority of the actions hitting $a$, if any:
+$$\forall a \in \PHs, \exists h \in \PHh, \PHtarget(h) = a \Rightarrow \prio(a) = \prio(h)$$
+\towrite{Ou : $\nexists h \Rightarrow \prio(a) = 0$}
 
