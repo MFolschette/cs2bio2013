@@ -51,13 +51,14 @@ Approximation : pour qu'une séquence de bonds soit jouable, il faut pouvoir att
 %Plus haute priorité :
 %$$\forall a \in \PHs, \priomax(a) = \max_{h \in \PHh, \PHtarget(h) = a}(\prio(h))$$
 
-Processus possibles :
-\begin{align*}
-\procs((\cwSol,\cwReq,\cwCont)) = \{ p \in \PHproc &\mid \exists (P,ps) \in \cwSol, p \in ps
-\\ & \vee p = \PHtarget(P)
-\\ & \vee (P \neq \omega \Rightarrow p = \PHbounce(P)) \}
-%\\ & \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \}
-\end{align*}
+%%% N'est plus utile (?)
+%Processus possibles :
+%\begin{align*}
+%\procs((\cwSol,\cwReq,\cwCont)) = \{ p \in \PHproc &\mid \exists (P,ps) \in \cwSol, p \in ps
+%\\ & \vee p = \PHtarget(P)
+%\\ & \vee (P \neq \omega \Rightarrow p = \PHbounce(P)) \}
+%%\\ & \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \}
+%\end{align*}
 
 Processus rencontrés :
 \begin{align*}
