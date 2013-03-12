@@ -1,6 +1,6 @@
-\documentclass{article}
+\documentclass{entcs}
 
-%\usepackage{hyperref}
+\usepackage{entcsmacro}
 
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
@@ -12,6 +12,7 @@
 \usepackage{stmaryrd} % Maths (crochets doubles)
 
 \usepackage{url}     % Mise en forme + liens pour URLs
+\usepackage{hyperref}
 \usepackage{array}   % Tableaux évolués
 
 \usepackage{comment}
@@ -30,10 +31,10 @@
 \newrefformat{eq}{Eq.~\eqref{#1}}
 \def\pref{\prettyref}
 
-\usepackage{ntheorem}
-\theorembodyfont{\upshape}
-\newtheorem{definition}{Definition}{}{}
-\newtheorem*{example}{Example}{}{}
+%\usepackage{ntheorem}
+%\theorembodyfont{\upshape}
+%\newtheorem{definition}{Definition}{}{}
+%\newtheorem*{example}{Example}{}{}
 %\newtheorem{property}{Property}{}{}
 %\newtheorem{proposition}{Proposition}{}{}
 
@@ -88,19 +89,22 @@
 
 
 
-\title{\todo{Le titre}}
-
-\author{\todo{Les auteurs}}
-
-
+\def\lastname{Folschette \todo{Noms}}
 
 \begin{document}
+\begin{frontmatter}
+\title{XXXXX \todo{Le titre !} XXXXX}
 
-\maketitle
+\author{Folschette, Maxime \todo{Les noms}}
+\address{My Department\\ My University\\}
 
 \begin{abstract}
 \todo{L'abstract}
 \end{abstract}
+\begin{keyword}
+  \todo{Mots-clefs}
+\end{keyword}
+\end{frontmatter}
 
 
 
