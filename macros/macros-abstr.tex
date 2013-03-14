@@ -1,5 +1,6 @@
 % procedure, abstractions and dependencies
 \newcommand{\abstr}[1]{#1^\wedge}%\text{\textasciicircum}}
+\def\BS{\mathbf{BS}}
 \def\aBS{\abstr{\BS}}
 \def\abeta{\abstr{\beta}}
 \def\aZ{\abstr{\zeta}}
@@ -49,6 +50,7 @@
 
 \def\join{\oplus}
 \def\concat{\!::\!}
+\def\emptyseq{\varepsilon}
 \def\ltw{\preccurlyeq_{\OS}}
 \def\indexes#1{\mathbb{I}^{#1}}
 %\def\indexes#1{\{1..|#1|\}}
@@ -84,6 +86,64 @@
 \def\join{\concat}
 
 \tikzstyle{aS}=[every edge/.style={draw,->,>=stealth}]
-\tikzstyle{Asol}=[draw,circle,minimum size=5pt,inner sep=0]
+\tikzstyle{Asol}=[draw,circle,minimum size=5pt,inner sep=0,node distance=1.7cm]
 \tikzstyle{Aproc}=[draw]
-\tikzstyle{Aobj}=[]
+\tikzstyle{Aobj}=[node distance=2cm]
+\tikzstyle{Anos}=[node distance=1cm,font=\Large]
+
+
+
+\def\procs{\mathsf{procs}}
+\def\allprocs{\mathsf{allProcs}}
+\def\pfp{\mathsf{pfp}}
+\def\pfpprocs{\mathsf{pfpProcs}}
+
+\def\aB{\mathcal{B}}
+\def\sat#1{\lceil #1\rceil}
+\def\cwB{\sat{\aB_\ctx^\w}}
+\def\mycwB#1#2{\sat{\aB_{#1}^{#2}}}
+\def\Bsol{\sat{\Sol^\w_\ctx}}
+\def\Breq{\sat{\Req^\w_\ctx}}
+\def\Bcont{\sat{\Cont^\w_\ctx}}
+
+\def\myB{\aB^\w_\ctx}
+\def\mysol{\overline{\Sol^\w_\ctx}}
+\def\myreq{\overline{\Req^\w_\ctx}}
+\def\mycont{\overline{\Cont^\w_\ctx}}
+
+\def\Sat{\mathrm{Sat}}
+\def\mysat{\overline{\Sat^\w_\ctx}}
+\def\cwSat{\Sat_\ctx^\w}
+\def\Bsat{\sat{\Sat^\w_\ctx}}
+
+%\def\mlfp#1{\f{pppf}\{#1\}}
+
+\def\PHobjp#1#2#3{\PHobj{{#1}_{#2}}{{#1}_{#3}}}
+\def\Obj{\mathbf{Obj}}
+\def\powerset{\wp}
+\def\gCont{\f{maxCont}}
+
+\begin{comment}
+%\newcommand{\abstr}[1]{#1^\wedge}%\text{\textasciicircum}}
+%\def\priomax{\mathsf{prio}_{max}}
+\def\procs{\mathsf{procs}}
+\def\allprocs{\mathsf{allProcs}}
+\def\pfp{\mathsf{pfp}}
+\def\pfpprocs{\mathsf{pfpProcs}}
+%
+\def\ctx{\varsigma}
+\def\w{\omega}
+%\def\aBS{\abstr{\BS}}
+%
+\def\Req{\mathrm{Req}}
+\def\Sol{\mathrm{Sol}}
+\def\Cont{\mathrm{Cont}}
+\def\A{\mathcal{A}}
+\def\cwA{\A_\ctx^\w}
+\def\cwReq{\Req_\ctx^\w}
+\def\cwSol{\Sol_\ctx^\w}
+\def\cwCont{\Cont_\ctx^\w}
+%
+%
+%
+\end{comment}

@@ -24,7 +24,8 @@
 \newrefformat{pro}{Property~\ref{#1}}
 \newrefformat{pps}{Proposition~\ref{#1}}
 \newrefformat{lem}{Lemma~\ref{#1}}
-\newrefformat{thm}{Theorem~\ref{#1}}
+\newrefformat{th}{Theorem~\ref{#1}}
+\newrefformat{co}{Corollary~\ref{#1}}
 \newrefformat{sec}{Sect.~\ref{#1}}
 \newrefformat{ssec}{Subsect.~\ref{#1}}
 \newrefformat{suppl}{Appendix~\ref{#1}}
@@ -49,7 +50,7 @@
 
 \input{macros/macros}
 \input{macros/macros-ph}
-%\input{macros/macros-grn}
+\input{macros/macros-abstr}
 
 % Macros
 \newcommand{\sN}{\mathbb{N}}
@@ -57,10 +58,16 @@
 \def\EQDEF{\stackrel{\Delta}\Leftrightarrow}
 \newcommand{\segm}[2]{\llbracket #1; #2 \rrbracket}
 \def\indexes#1{\mathbb{I}^{#1}}
-\newcommand{\sfp}[3]{\mathbf{sfp}\{#1\}\left(#2\mapsto#3\right)}
+\newcommand{\sfp}[3]{\mathbf{lfp}\{#1\}\left(#2\mapsto#3\right)}
 %\def\lfp{\f{pppf}\;}
 \def\f#1{\mathsf{#1}}
 \def\prio{\mathsf{prio}}
+\newcommand{\bottom}{\perp}
+\newcommand{\Vs}{V_\PHs}
+\newcommand{\Vh}{V_\PHh}
+\newcommand{\Va}{\Vh}
+
+\tikzstyle{prio}=[draw,double,-stealth]
 
 \def\restriction#1#2{\mathchoice
               {\setbox1\hbox{${\displaystyle #1}_{\scriptstyle #2}$}
@@ -76,7 +83,8 @@
 
 % Commandes À FAIRE
 \usepackage{color} % Couleurs du texte
-\newcommand{\towrite}[1]{\textcolor{blue}{#1}}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\newcommand{\towrite}[1]{\textcolor{darkgreen}{#1}}
 \newcommand{\todo}[1]{\textcolor{red}{[#1]}}
 
 
@@ -111,7 +119,6 @@
 \section{Introduction}\label{sec:intro}
 \towrite{Intro}
 
-\section{The PH Framework}\label{sec:def-ph}
 \todo{Définir les priorités fixes}
 \input{parts/def-ph}
 
@@ -132,7 +139,7 @@
 }
 
 
-\bibliographystyle{plain}
+\bibliographystyle{entcs}
 \bibliography{biblio}
 
 %\input{parts/contributions}

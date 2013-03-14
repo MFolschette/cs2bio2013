@@ -1,47 +1,6 @@
 
+
 \towrite{Idée : prise en compte des actions perturbatrices, ou des réactions en chaîne pouvant rendre de telles actions jouables}
-
-\newcommand{\abstr}[1]{#1^\wedge}%\text{\textasciicircum}}
-\def\BS{\mathbf{BS}}
-%\def\priomax{\mathsf{prio}_{max}}
-\def\procs{\mathsf{procs}}
-\def\allprocs{\mathsf{allProcs}}
-\def\pfp{\mathsf{pfp}}
-\def\pfpprocs{\mathsf{pfpProcs}}
-
-\def\ctx{\varsigma}
-\def\w{\omega}
-\def\aBS{\abstr{\BS}}
-
-\def\Req{\mathrm{Req}}
-\def\Sol{\mathrm{Sol}}
-\def\Cont{\mathrm{Cont}}
-\def\A{\mathcal{A}}
-\def\cwA{\A_\ctx^\w}
-\def\cwReq{\Req_\ctx^\w}
-\def\cwSol{\Sol_\ctx^\w}
-\def\cwCont{\Cont_\ctx^\w}
-
-\def\aB{\mathcal{B}}
-\def\sat#1{\lceil #1\rceil}
-\def\cwB{\sat{\aB_\ctx^\w}}
-\def\mycwB#1#2{\sat{\aB_{#1}^{#2}}}
-\def\Bsol{\sat{\Sol^\w_\ctx}}
-\def\Breq{\sat{\Req^\w_\ctx}}
-\def\Bcont{\sat{\Cont^\w_\ctx}}
-
-\def\myB{\aB^\w_\ctx}
-\def\mysol{\overline{\Sol^\w_\ctx}}
-\def\myreq{\overline{\Req^\w_\ctx}}
-\def\mycont{\overline{\Cont^\w_\ctx}}
-
-%\def\mlfp#1{\f{pppf}\{#1\}}
-
-\def\PHobjp#1#2#3{\PHobj{{#1}_{#2}}{{#1}_{#3}}}
-\def\Obj{\mathbf{Obj}}
-\def\powerset{\wp}
-\def\gCont{\f{maxCont}}
-\def\w{\omega}
 
 Approximation : pour qu'une séquence de bonds soit jouable, il faut pouvoir atteindre tous les processus nécessaires depuis tous les points fixes possibles locaux, uniquement à l'aide d'actions de priorité maximale pour la sorte considérée.
 
@@ -62,26 +21,13 @@ Approximation : pour qu'une séquence de bonds soit jouable, il faut pouvoir att
 
 Processus rencontrés :
 \begin{align*}
-\allprocs((\cwSol,\cwReq,\cwCont)) = \{ p \in \PHproc &\mid \exists (P,ps) \in \cwSol, p \in ps
+\allprocs((\cwSol,\cwReq,\cwCont,\cwSat)) = \{ p \in \PHproc &\mid \exists (P,ps) \in \cwSol, p \in ps
 \\ & \vee p = \PHtarget(P)
 %\\ & \vee (P \neq \omega \Rightarrow p = \PHbounce(P)) \}
 \\ & \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \}
 \end{align*}
 
 \subsection{Local fixed points}
-Actions chaînées :
-\begin{align*}
-\PHh(a, b) = \{ (h_i)_{i \in \segm{0}{s}} \in \PHh^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_0)) = a \wedge \PHsort(\PHtarget(h_n)) = b \\
-  & \wedge \prio(h_{s-1}) \leq n \wedge \forall i \in \segm{0}{s-1}, \\
-  & (\prio(h_i) \leq n \wedge \PHsort(\PHhitter(h_i)) = \PHsort(\PHtarget(h_{i+1}))) \}
-\end{align*}
-
-Voisinage :
-$$
-V(a) = \{ b \in \PHs \mid \PHh^n(a, b) \neq \emptyset \}
-$$
-
-\towrite{Formaliser}
 
 %%% Pas utile
 %Points fixes possibles : pour toute sorte $a$ et tout contexte partiel $\ctx$ sur $V^n(a)$:
@@ -90,10 +36,12 @@ $$
 %  a &\mapsto \{ s \in \underset{b \in V^n(a)}{\times} \PHl_b \mid \text{$s$ est accessible depuis $\ctx$ et aucune action n'y est jouable} \}
 %\end{align*}
 
+\towrite{Formaliser}
+
 Points fixes possibles : pour toute sorte $a$ et tout contexte $\ctx$:
 \begin{align*}
   \pfp_\ctx: \PHs &\rightarrow \wp(\PHproc) \\
-  a &\mapsto \{ s \in \underset{b \in V^n(a)}{\times} \PHl_b \mid \text{$s$ est (localement) accessible dans $\restriction{\PH}{\prio(a)}$ depuis $\ctx$}\\
+  a &\mapsto \{ s \in \restriction{\PHl}{\Vs(a)} \mid \text{$s$ est (localement) accessible dans $\restriction{\PH}{\prio(a)}$ depuis $\ctx$}\\
   &\qquad\qquad\qquad\qquad \text{et aucune action n'y est jouable} \}
 \end{align*}
 
@@ -126,24 +74,93 @@ where $\zeta^\wedge = (\zeta^\wedge_A, \zeta^\wedge_B, \zeta^\wedge_{max})$ with
 %where:
 %$$\zeta^\wedge = \{ \PHhitter(\zeta_n) \mid n \in \indexes{\zeta} \wedge \PHsort(\PHhitter(\zeta_n)) \neq \PHsort(P) \}$$
 
-The abstract structure $\cwB=(\Breq,\Bsol,\Bcont)$ is defined as
-$
- \cwB = \sfp{\myB}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}
-$,
-with $\myB=(\myreq,\mysol,\mycont)$:
-\begin{align*}
-\myreq &= \{ (a_i,\PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid
-  (a_j \in \PHget{\ctx}{a} \vee a_j \in \pfpprocs_\ctx(a)) \\
-  & \qquad \wedge (\exists (P,ps) \in \mysol, a_i \in ps \vee \exists n \in \indexes{\w}, \PHbounce(\w_n)=a_i) \}
-\\
-\mysol &\subseteq \{ (P,ps) \in \Obj \times \powerset(\PHproc) \mid
-        \exists (a_i,P)\in \myreq \wedge ps \in \aBS(P) \}
-\\
-\mycont & = \{ (P,\PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid 
-        \exists (P,ps)\in \mysol \\
-&\qquad\qquad
-        \wedge q \in \gCont_\ctx(\PHs(P),P)\}
-\end{align*}
+\begin{definition}[$\gCont_\ctx : \Sigma \times \Obj \mapsto \powerset(\Proc)$]
+  \label{def:maxCont}
+  \begin{align*}
+    \gCont_\ctx(a,P) = 
+    \{ p \in \PHproc &\mid \exists ps \in \aBS(P), \exists b_i \in ps, b = a \wedge p = b_i \\
+      & \vee b \neq a \wedge p \in \gCont_\ctx(a, \PHobj{b_j}{b_i}) \wedge b_j \in \PHget{\ctx}{b} \}
+    \enspace.
+  \end{align*}
+\end{definition}
+
+\begin{definition}
+  \label{def:aS}
+  The abstract structure $\cwB=(\Breq,\Bsol,\Bcont,\Bsat)$ is defined as
+  $
+  \cwB = \sfp{\myB}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}
+  $,
+  with $\myB=(\myreq,\mysol,\mycont,\mysat)$:
+  \begin{align*}
+    \myreq &= \{ (a_i,\PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid
+      a_j \in \PHget{\ctx}{a} \\ % \vee a_j \in \pfpprocs_\ctx(a) \\
+      & \qquad \wedge (\exists (P,ps) \in \mysol, a_i \in ps \vee \exists n \in \indexes{\w}, \PHbounce(\w_n)=a_i) \}
+    \\
+    \mysol &\subseteq \{ (P,ps) \in \Obj \times \powerset(\PHproc) \mid
+            \exists (a_i, P) \in \myreq \wedge ps \in \aBS(P) \\
+      & \qquad\qquad \exists (Q, P) \in \myreq \cup \mysat \wedge ps \in \aBS(P) \}
+    \\
+    \mycont & = \{ (P, \PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid
+      \exists (P, ps) \in \mysol \\
+      & \qquad\qquad \wedge q \in \gCont_\ctx(\PHsort(P),P) \}
+    \\
+    \mysat & = \{ (\PHobjp{a}{j}{i}, \PHobjp{a}{k}{i}) \in \Obj \times \Obj \mid
+      \exists (a_i, \PHobjp{a}{j}{i}) \in \myreq, \\
+      & \qquad\qquad a_j \neq a_k \wedge a_j \in \pfpprocs_\ctx(a) \\
+      & \qquad\qquad \wedge (\exists (P, ps) \in \mysol, a_j \in ps \wedge \prio(\PHsort(P)) > \prio(a) \\
+      & \qquad\qquad\qquad \vee \exists (\PHobjp{a}{j}{i}, ps) \in \mysol, \exists p \in ps, \exists (p, P) \in \myreq,\\
+      & \qquad\qquad\qquad \text{$P$ is not trivial} \wedge \prio(\PHsort(P)) > \prio(a) \}
+  \end{align*}
+\end{definition}
+
+\def\muconcr{\ell}
+\def\uconcr{\muconcr_\ctx}
+
+\begin{theorem}[Approximation inf.]\label{th:approxinf}
+If the graph $\cwB$ contains no cycle and all objectives have at least one solution, then $\uconcr(\w) \neq \emptyset$.
+\end{theorem}
+
+\begin{proof}
+We note $max\ctx = \ctx \Cap \allprocs(\cwB)$ the context supported by $\cwB$.
+As there is no cycle in $\cwB$, we show by induction that $\forall s\in L, s\subseteq max\ctx$, 
+for all objective $P$ in $\cwB$ so that $\PHtarget(P) \in s$ and
+$\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
+
+\begin{itemize}
+  \item If $(P, \emptyset) \in \Bsol$, either $\PHtarget(P) = \PHbounce(P)$ and $\delta = \emptyseq$,
+    or $\forall \zeta \in \BS(P), \zeta \in \Sce \wedge \PHsort(\zeta) = \{ \PHsort(P) \}$ and $\delta$ is given by \pref{th:autohits}.
+
+  \item Suppose all children objectives of $P$ are concretizable.
+  \begin{itemize}
+    \item If $\exists Q \in \Bcont$, then by hypothesis,
+      $\muconcr_{s}(\obj{\PHtarget(P)}{\PHtarget(Q)} \concat Q) \neq \emptyset$, thus
+      $\muconcr_{s}(P) \neq \emptyset$.
+    \item Else, by \pref{def:maxCont}, the concretizations of the children of $P$ require no process of sort $\PHsort(P)$.
+      Furthermore, there exists $\zeta \in \BS(P)$ so that $(P, \aZ) \in \Bsol$.
+      We build recursively a scenario $\delta$. Let $m = |\indexes{\zeta}|$.
+      \begin{itemize}
+%        \item[*] Let $\zeta_1 = \PHhit{b_i}{a_j}{a_k}$. By hypothesis, $\exists \delta_1 \in \muconcr_s(\PHobj{\any}{b_i}), \PHget{s \PHplay \delta_1}{a} \in \pfp_s(a)$.
+%          If $\PHget{s \PHplay \delta_1}{a} \neq a_j$, then by construction of $\cwB$, $(\PHobj{a_j}{a_k}, \PHobj{\PHget{s \PHplay \delta_1}{a}}{a_k}) \in \Bsat$.
+%          By hypothesis, $\muconcr_s(\PHobj{\any}{a_k}) \neq \emptyset$.
+%          If $\PHget{s \PHplay \delta_1}{a} = a_j$, then from \pref{th:vplay}, $\exists \delta'_1 \in \Sce$, $\zeta_1$ can be played in $s \PHplay \delta_1 \PHplay \delta'_1$.
+        \item[*] For $n \in \indexes{\zeta}$, let $s_n = s \PHplay \delta_1 \PHplay \delta'_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_{n-1} \PHplay \delta'_{n-1} \PHplay \zeta_{n-1}$ (or $s_1 = s$),
+          and $\zeta_n = \PHhit{b_i}{a_j}{a_k}$. By hypothesis, $\exists \delta_n \in \muconcr_{s_n}(\PHobj{\any}{b_i})$, and we have: $\PHget{s_n \PHplay \delta_n}{a} \in \pfp_{s_n}(a)$.
+          If $\PHget{s_n \PHplay \delta_n}{a} \neq a_j$, then by construction of $\cwB$, $(\PHobj{a_j}{a_k}, \PHobj{\PHget{s_n \PHplay \delta_n}{a}}{a_k}) \in \Bsat$.
+          By hypothesis, $\muconcr_{s_n \PHplay \delta_n}(\PHobj{\any}{a_k}) \neq \emptyset$.
+          If $\PHget{s_n \PHplay \delta_n}{a} = a_j$, then from \pref{th:vplay}, $\exists \delta'_n \in \Sce$, $\zeta_n$ can be played in $s \PHplay \delta_n \PHplay \delta'_n$
+          \todo{Il reste à montrer que $\delta'_n$ ne perturbe pas $b$. Ça se montre par contradiction grâce à l'hyopthèse de cycle-freeness.}
+          .
+%        \item[*] For $n \in \segm{1}{m-1}$, $m = |\indexes{\zeta}|$, let $s_n = s \PHplay \delta_1 \PHplay \delta'_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_n \PHplay \delta'_n \PHplay \zeta_n$ and $\zeta_{n+1} = \PHhit{c_i}{a_j}{a_k}$.
+%          By hypothesis, $\exists \delta_1 \in \muconcr_{s_n}(\PHobj{\any}{c_i}), \PHget{s_n \PHplay \delta_{n+1}}{a} \in \pfp_s(a)$.
+      \end{itemize}
+      Thus, $\delta = \delta_m \in \muconcr_s(P)$. % and $\ceil(\delta) \subseteq max\ctx$.
+  \end{itemize}
+\end{itemize}
+
+Finally, as $\muconcr_{max\ctx}(\w) \neq \emptyset$, $\uconcr(\w) \neq \emptyset$ (property \towrite{xxx}).
+\end{proof}
+
+
 
 \begin{comment}
 Voisinage :
@@ -167,6 +184,70 @@ where:
   \end{split}
 \end{equation*}
 \end{comment}
+
+
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[aS,node distance=1.5cm]
+    \node[Aproc] (c1) {$c_1$};
+    \node[Aobj,right of=c1] (c01) {$\PHobj{c_0}{c_1}$};
+    \node[Asol,right of=c01] (c01s) {};
+    \node[Aproc,right of=c01s] (b1) {$b_1$};
+    \node[Aobj,right of=b1] (b11) {$\PHobj{b_1}{b_1}$};
+    \node[Asol,right of=b11] (b11s) {};
+    \node[Aobj,below right of=b1] (b01) {$\PHobj{b_0}{b_1}$};
+    \node[Anos,right of=b01] (b01nos) {$\bottom$};
+
+    \path
+    (c1) edge (c01)
+    (c01) edge (c01s)
+    (c01s) edge (b1)
+    (b1) edge (b11) edge (b01)
+    (b11) edge (b11s)
+    ;
+  \end{tikzpicture}
+  \label{fig:sa-conca}
+  \caption{The local causality graph of the PH in \pref{fig:ph-conca}.}
+\end{figure}
+
+
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[aS,node distance=1.5cm]
+    \node[Aproc] (c2) {$c_2$};
+    \node[Aobj,right of=c2] (c12) {$\PHobj{c_1}{c_2}$};
+    \node[Asol,right of=c12] (c12s) {};
+    \node[Aproc,right of=c12s] (b1) {$b_1$};
+    \node[Aobj,right of=b1] (b01) {$\PHobj{b_0}{b_1}$};
+    \node[Asol,right of=b01] (b01s) {};
+    \node[Aproc,right of=b01s] (a1) {$a_1$};
+    \node[Aobj,right of=a1] (a11) {$\PHobj{a_1}{a_1}$};
+    \node[Asol,right of=a11] (a11s) {};
+
+    \node[Aobj,above right of=c2] (c22) {$\PHobj{c_2}{c_2}$};
+    \node[Asol,right of=c22] (c22s) {};
+    \node[Aobj,below right of=c2] (c02) {$\PHobj{c_0}{c_2}$};
+    \node[Anos,right of=c02] (c02nos) {$\bottom$};
+
+    \path
+    (c2) edge (c12) edge (c22) edge (c02)
+    (c22) edge (c22s)
+    (c12) edge (c12s)
+    (c12s) edge (b1)
+    (b1) edge (b01)
+    (b01) edge (b01s)
+    (b01s) edge (a1)
+    (a1) edge (a11)
+    (a11) edge (a11s)
+    ;
+  \end{tikzpicture}
+  \label{fig:sa-concb}
+  \caption{The local causality graph of the PH in \pref{fig:ph-concb}.}
+\end{figure}
+
+
 
 
 

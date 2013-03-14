@@ -1,9 +1,9 @@
-\subsection{The Process Hitting framework}
-\label{ssec:PH}
+\section{The Process Hitting framework}
 
 \towrite{Transition.}
 
 \subsection{Definition of the Process Hitting with $k$ priorities}
+\label{ssec:PH}
 \towrite{Reformuler (actuellement trop proche de CMSB)}
 A PH (\pref{def:PH}) gathers a finite number of concurrent \emph{processes} grouped into a finite set of \emph{sorts}.
 A process belongs to a unique sort and is noted $a_i$ where $a$ is the sort and $i$ the identifier of the process within the sort $a$.
@@ -55,11 +55,13 @@ An action $h = \PHhit{a_i}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$ is \emph{pl
 In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$, that is $\PHget{(s \PHplay h)}{b} = b_k$ and $\forall c\in\PHs, c\neq b, \PHget{(s\PHplay h)}{c} = \PHget{s}{c}$.
 For the sake of clarity, for all $h, h'\in\PHa$, $((s\PHplay h)\PHplay h')$ is abbreviated as $(s\PHplay h\PHplay h')$.
 
-\begin{definition}[Process Hitting $n$-reduction] \towrite{Revoir terminologie}
+\begin{definition}[Process Hitting $n$-reduction] \towrite{Revoir terminologie : “reduction” ? “restriction” ?}
   If $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ is a Process Hitting with $k$ priorities and $n \in \segm{1}{k}$, we denote $\restriction{\PH}{n}$ \towrite{$\PH_{|n}$ $\PH'$} the $n$-reduction of $\PH$ the following Process Hitting with $n$ priorities, where:
-  $$\restriction{\PH}{n} = (\PHs; \PHl; \PHa^{\langle n \rangle})$$
+  $$\restriction{\PH}{n} = (\PHs; \PHl; \restriction{\PHa}{n})$$
   and:
-  $$\PHa^{\langle n \rangle} = (\PHa^{(1)}; \dots; \PHa^{(n)})$$
+  $$\restriction{\PHa}{n} = (\PHa^{(1)}; \dots; \PHa^{(n)})$$
+  
+  Furthermore, we define: $\restriction{\PH}{0} = (\PHs; \PHl; \restriction{\PHa}{0})$, where $\restriction{\PHa}{0} = ()$ is a $0$-uplet.
 \end{definition}
 
 \begin{comment} %example*
@@ -225,6 +227,56 @@ Actions involving $b_1$ or $c_1$ are in thick lines.
 }
 \end{figure}
 
+
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \TSort{(0,0)}{a}{2}{l}
+    \TSort{(2,0)}{b}{2}{r}
+    \TSort{(4,0)}{c}{2}{r}
+
+    \THit{a_1}{prio}{b_1}{.west}{b_0}
+    \THit{b_1}{}{c_0}{.north west}{c_1}
+
+    \path[bounce, bend right]
+    \TBounce{b_1}{}{b_0}{.north west}
+    ;
+    \path[bounce, bend left]
+    \TBounce{c_0}{}{c_1}{.south west}
+    ;
+  \end{tikzpicture}
+  \label{fig:ph-conca}
+  \caption{A simple PH example depicting “backward concurrency” between two actions belonging to different classes of priorities.}
+\end{figure}
+
+
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \TSort{(0,0)}{a}{2}{l}
+    \TSort{(2,0)}{b}{2}{r}
+    \TSort{(4,0)}{c}{3}{r}
+
+    \THit{a_1}{}{b_0}{.west}{b_1}
+    \THit{b_0}{prio}{c_1}{.south west}{c_0}
+    \THit{b_1}{prio}{c_1}{.west}{c_2}
+
+    \path[bounce, bend left]
+    \TBounce{b_0}{}{b_1}{.south west}
+    \TBounce{c_1}{}{c_2}{.south west}
+    ;
+    \path[bounce, bend right]
+    \TBounce{c_1}{}{c_0}{.north west}
+    ;
+  \end{tikzpicture}
+  \label{fig:ph-concb}
+  \caption{A simple PH example depicting “forward concurrency” between two actions belonging to different classes of priorities.}
+\end{figure}
+
+
+
 \begin{comment}
 \begin{figure}[p]
 \centering
@@ -314,12 +366,30 @@ Hence, this PH expresses a BRN where $a$ requires both $b$ and $c$ active to rea
 highest level, and $a$ does not become inactive unless both $b$ and $c$ are inactive.
 \end{example}
 
-\subsection{Restrictions} \towrite{Reformuler}
+\subsection{Hypothesis} \towrite{Reformuler}
 
 In this section, we describe several restrictions.
 Although the definition of a Process Hitting with $k$ priorities allows a wide range of models, the method given in the next section only applies to Process Hitting models that regard these restrictions.
 
-Let $\PH$ be a PH model on which we want to apply the static analysis. This PH has to regard the two restrictions below.
+Let $\PH$ be a PH model on which we want to apply the static analysis.
+
+We define the set of chains of actions $\PHh(b, a)$ between two sorts $b$ and $a$ as below:
+\begin{align*}
+\PHh(b, a) = \{ (h_i)_{i \in \segm{0}{s}} \in (\restriction{\PHh}{\prio(b)})^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_0)) = b \wedge \PHsort(\PHtarget(h_n)) = a \\
+  & \wedge \forall i \in \segm{1}{s}, \PHsort(\PHtarget(h_{i-1})) = \PHsort(\PHhitter(h_{i})) \}
+\end{align*}
+
+We define the neighbor \towrite{Revoir terminologie : “neighborhood” ? “vicinity” ?} sorts of any sort $a$ as :
+$$
+\Vs(a) = \{ b \in \PHs \mid \PHh(b, a) \neq \emptyset \}
+$$
+
+We define the neighbor actions of any sort $a$ as :
+$$
+\Vh(a) = \{ h \in \restriction{\PHh}{\prio(a)} \mid \PHsort(\PHhitter(h)) \in \Vs(a) \wedge \PHsort(\PHtarget(h)) \in \Vs(a) \cup \{ a \} \}
+$$
+
+This PH has to regard the two following restrictions.
 
 \paragraph{Cycle-freeness of $\restriction{\PH}{k-1}$}
 \towrite{Définition formelle ? + justification}
@@ -333,3 +403,53 @@ Furthermore, for all sort $a$, we denote $\prio(a)$ the priority of the actions 
 $$\forall a \in \PHs, \exists h \in \PHh, \PHtarget(h) = a \Rightarrow \prio(a) = \prio(h)$$
 \towrite{Ou : $\nexists h \Rightarrow \prio(a) = 0$}
 
+These restrictions bring new interesting properties to the PH models regarding them.
+
+\pref{th:vplay} tells that for any action $h = \PHhit{a_i}{b_j}{b_k}$, if no action can be played in the neighborhood of $a$ in a given state, then $h$ can be played after a series of hits that do not prevent it to be fired. Furthermore, if the requisites of \pref{th:vplay} are true, then no action of this series of hits belongs to $V(a)$, as stated in \pref{co:vplay}.
+\begin{theorem}
+\label{th:vplay}
+  $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, (\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge $\\
+  $\forall h' \in \Vh(a), \PHsort(\PHtarget(h')) \neq a \Rightarrow \text{$h'$ cannot be played in $s$}) \Rightarrow$\\
+  $(\exists \delta \in \Sce, \text{$h$ can be played in $s \PHplay \delta$})$
+\end{theorem}
+
+\begin{proof}
+  Because of the cycle-freeness of $\restriction{\PH}{k-1}$, $\restriction{\PH}{\prio(a)}$ is also cycle-free and there is a $\delta \in \Sce$ so that $\forall h' \in \PHh$, $h'$ cannot be played in $s \PHplay \delta$. Furthermore, $\forall h' \in \delta, \PHsort(\PHtarget(h')) \neq a$ by construction of $\Vs(a)$.
+\end{proof}
+
+
+\begin{corollary}
+  \label{co:vplay}
+  $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, (\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge $\\
+  $(\forall h' \in \Vh(a), \PHsort(\PHtarget(h')) \neq a \Rightarrow \text{$h'$ cannot be played in $s$}) \Rightarrow$\\
+  $\exists \delta \in \Sce, (\forall n \in \indexes{\delta}, \forall h' \in \delta_n, \PHsort(\PHtarget(h')) \notin \Vh(a)) \wedge (\text{$h$ can be played in $s \PHplay \delta$})$
+\end{corollary}
+
+\pref{th:totalss} states that from any state, a steady state is eventually reached. A local variant of this theorem, given in \pref{co:totalss}, can be derived,
+where, for all $\Omega \subset \PHs$, $$\restriction{\PHl}{\Omega} = \underset{a \in \Omega}{\times} \PHl_a$$ and
+for all $H \subset \PHh$, $$\restriction{\Sce}{H} = \{ \delta \in \Sce \mid \forall n \in \indexes{\delta}, \delta_n \in H \} \enspace .$$
+\begin{theorem}
+\label{th:totalss}
+  $\forall s \in \PHl, \exists \delta \in \Sce$, no action can be played in $s \PHplay \delta$.
+\end{theorem}
+
+\begin{corollary}
+\label{co:totalss}
+  $\forall a \in \PHs, \forall s \in \restriction{\PHl}{V(a)}, \exists \delta \in \restriction{\Sce}{V(a)}$, no action can be played in $s \PHplay \delta$.
+\end{corollary}
+
+
+
+\pref{th:autohits} states that any sequence $\zeta$ of self-actions can be played eventually.
+\begin{theorem}
+\label{th:autohits}
+  Let $a \in \PHs$, $s \in \PHl$ and $\zeta \in \BS(a)$, with $n = |\indexes{\zeta}|$ so that $\forall i \in \segm{1}{n}, \PHsort(\PHhitter(\zeta_i)) = a$.
+  %If no action can be played in $V(a)$ in state $s$, then
+  $\exists (\delta_i)_{i \in \segm{1}{n}} \in \Sce$ so that $\forall i \in \segm{1}{n}$, $\zeta_i$ can be played in $s \PHplay \delta_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_i$. 
+\end{theorem}
+
+\begin{proof}
+  With \pref{co:vplay} applied iteratively.
+\end{proof}
+
+\towrite{Théorème nécessaire pour la suite: une séquence d'actions dans $\BS(a)$ peut être jouée si précédée ou entrelacée par des $\zeta$ (?)}
