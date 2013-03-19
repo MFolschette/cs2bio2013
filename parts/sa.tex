@@ -2,8 +2,6 @@
 
 \towrite{Idée : prise en compte des actions perturbatrices, ou des réactions en chaîne pouvant rendre de telles actions jouables}
 
-Approximation : pour qu'une séquence de bonds soit jouable, il faut pouvoir atteindre tous les processus nécessaires depuis tous les points fixes possibles locaux, uniquement à l'aide d'actions de priorité maximale pour la sorte considérée.
-
 
 
 %%% N'est plus utile (?)
@@ -106,7 +104,7 @@ where $\zeta^\wedge = (\zeta^\wedge_A, \zeta^\wedge_B, \zeta^\wedge_{max})$ with
     \\
     \mysat & = \{ (\PHobjp{a}{j}{i}, \PHobjp{a}{k}{i}) \in \Obj \times \Obj \mid
       \exists (a_i, \PHobjp{a}{j}{i}) \in \myreq, \\
-      & \qquad\qquad a_j \neq a_k \wedge a_j \in \pfpprocs_\ctx(a) \\
+      & \qquad\qquad a_j \neq a_k \wedge a_k \in \pfpprocs_\ctx(a) \\
       & \qquad\qquad \wedge (\exists (P, ps) \in \mysol, a_j \in ps \wedge \prio(\PHsort(P)) > \prio(a) \\
       & \qquad\qquad\qquad \vee \exists (\PHobjp{a}{j}{i}, ps) \in \mysol, \exists p \in ps, \exists (p, P) \in \myreq,\\
       & \qquad\qquad\qquad \text{$P$ is not trivial} \wedge \prio(\PHsort(P)) > \prio(a) \}

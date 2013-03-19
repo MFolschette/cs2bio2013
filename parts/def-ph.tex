@@ -373,15 +373,20 @@ Although the definition of a Process Hitting with $k$ priorities allows a wide r
 
 Let $\PH$ be a PH model on which we want to apply the static analysis.
 
-We define the set of chains of actions $\PHh(b, a)$ between two sorts $b$ and $a$ as below:
+We define the set of chains of actions $\PHh^n(b, a)$ between two sorts $b$ and $a$, with $n \in \segm{1}{k}$, as below:
 \begin{align*}
-\PHh(b, a) = \{ (h_i)_{i \in \segm{0}{s}} \in (\restriction{\PHh}{\prio(b)})^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_0)) = b \wedge \PHsort(\PHtarget(h_n)) = a \\
+\PHh^n(b, a) = \{ (h_i)_{i \in \segm{0}{s}} \in (\restriction{\PHh}{n})^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_0)) = b \wedge \PHsort(\PHtarget(h_s)) = a \\
   & \wedge \forall i \in \segm{1}{s}, \PHsort(\PHtarget(h_{i-1})) = \PHsort(\PHhitter(h_{i})) \}
 \end{align*}
 
-We define the neighbor \towrite{Revoir terminologie : “neighborhood” ? “vicinity” ?} sorts of any sort $a$ as :
+We define the neighbor \towrite{Revoir terminologie : “neighborhood” ? “vicinity” ?} sorts of any sort $a$ and $n \in \segm{1}{k}$ as :
 $$
-\Vs(a) = \{ b \in \PHs \mid \PHh(b, a) \neq \emptyset \}
+\Vs^n(a) = \{ b \in \PHs \mid \PHh^m(b, a) \neq \emptyset \wedge m = \min(n, \prio(a)) \}
+$$
+
+And, as a shortcut:
+$$
+\Vs(a) = \Vs^{\prio(a)}(a)
 $$
 
 We define the neighbor actions of any sort $a$ as :
@@ -391,9 +396,14 @@ $$
 
 This PH has to regard the two following restrictions.
 
-\paragraph{Cycle-freeness of $\restriction{\PH}{k-1}$}
-\towrite{Définition formelle ? + justification}
-The model $\restriction{\PH}{k-1}$ contains no cycles. Cycles are still allowed in $\PH$ however.
+%\paragraph{Cycle-freeness of $\restriction{\PH}{k-1}$}
+%\towrite{Définition formelle ? + justification}
+%The model $\restriction{\PH}{k-1}$ contains no cycles. Cycles are still allowed in $\PH$ however.
+
+\paragraph{Bounded reachability property}
+The dynamics of model $\restriction{\PH}{k-1}$ contains no cycles. Cycles are still allowed in $\PH$ however.
+Formally : $\exists N \in \sN, \forall \delta \in \restriction{\Sce}{k-1}, |\indexes{\delta}| \leq N$.
+
 
 \paragraph{Local priorities}
 \towrite{Justification}
@@ -409,8 +419,7 @@ These restrictions bring new interesting properties to the PH models regarding t
 \begin{theorem}
 \label{th:vplay}
   $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, (\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge $\\
-  $\forall h' \in \Vh(a), \PHsort(\PHtarget(h')) \neq a \Rightarrow \text{$h'$ cannot be played in $s$}) \Rightarrow$\\
-  $(\exists \delta \in \Sce, \text{$h$ can be played in $s \PHplay \delta$})$
+  $\forall h' \in \Vh(a), \text{$h'$ cannot be played in $s$}) \Rightarrow (\exists \delta \in \Sce, \text{$h$ can be played in $s \PHplay \delta$})$
 \end{theorem}
 
 \begin{proof}
@@ -421,8 +430,8 @@ These restrictions bring new interesting properties to the PH models regarding t
 \begin{corollary}
   \label{co:vplay}
   $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, (\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge $\\
-  $(\forall h' \in \Vh(a), \PHsort(\PHtarget(h')) \neq a \Rightarrow \text{$h'$ cannot be played in $s$}) \Rightarrow$\\
-  $\exists \delta \in \Sce, (\forall n \in \indexes{\delta}, \forall h' \in \delta_n, \PHsort(\PHtarget(h')) \notin \Vh(a)) \wedge (\text{$h$ can be played in $s \PHplay \delta$})$
+  $(\forall h' \in \Vh(a), \text{$h'$ cannot be played in $s$}) \Rightarrow$\\
+  $\exists \delta \in \Sce, (\forall n \in \indexes{\delta}, \delta_n \notin \Vh(a)) \wedge (\text{$h$ can be played in $s \PHplay \delta$})$
 \end{corollary}
 
 \pref{th:totalss} states that from any state, a steady state is eventually reached. A local variant of this theorem, given in \pref{co:totalss}, can be derived,
@@ -430,12 +439,12 @@ where, for all $\Omega \subset \PHs$, $$\restriction{\PHl}{\Omega} = \underset{a
 for all $H \subset \PHh$, $$\restriction{\Sce}{H} = \{ \delta \in \Sce \mid \forall n \in \indexes{\delta}, \delta_n \in H \} \enspace .$$
 \begin{theorem}
 \label{th:totalss}
-  $\forall s \in \PHl, \exists \delta \in \Sce$, no action can be played in $s \PHplay \delta$.
+  $\forall n \in \segm{1}{k-1}, \forall s \in \PHl, \exists \delta \in \restriction{\Sce}{n}$, no action of model $\restriction{\PH}{n}$ can be played in $s \PHplay \delta$.
 \end{theorem}
 
 \begin{corollary}
 \label{co:totalss}
-  $\forall a \in \PHs, \forall s \in \restriction{\PHl}{V(a)}, \exists \delta \in \restriction{\Sce}{V(a)}$, no action can be played in $s \PHplay \delta$.
+  $\forall a \in \PHs, \forall s \in \restriction{\PHl}{\Vs(a)}, \exists \delta \in \restriction{\Sce}{\Vh(a)}$, no action of $\Vh(a)$ can be played in $s \PHplay \delta$.
 \end{corollary}
 
 
