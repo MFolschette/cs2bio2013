@@ -19,7 +19,7 @@
 
 Processus rencontrés :
 \begin{align*}
-\allprocs((\cwSol,\cwReq,\cwCont,\cwSat)) = \{ p \in \PHproc &\mid \exists (P,ps) \in \cwSol, p \in ps
+\allprocs((\cwSol,\cwReq,\cwCont)) = \{ p \in \PHproc &\mid \exists (P,ps) \in \cwSol, p \in ps
 \\ & \vee p = \PHtarget(P)
 %\\ & \vee (P \neq \omega \Rightarrow p = \PHbounce(P)) \}
 \\ & \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \}
@@ -39,13 +39,25 @@ Processus rencontrés :
 Points fixes possibles : pour toute sorte $a$ et tout contexte $\ctx$:
 \begin{align*}
   \pfp_\ctx: \PHs &\rightarrow \wp(\PHproc) \\
-  a &\mapsto \{ s \in \restriction{\PHl}{\Vs(a)} \mid \text{$s$ est (localement) accessible dans $\restriction{\PH}{\prio(a)}$ depuis $\ctx$}\\
-  &\qquad\qquad\qquad\qquad \text{et aucune action n'y est jouable} \}
+  a &\mapsto \{ s \PHplay \delta \in \restriction{\PHl}{\Vs(a)} \mid s \in \restriction{\ctx}{\Vs(a)} \wedge \delta \in \restriction{\Sce}{\Vs(a)} \\
+  &\qquad\qquad\qquad\qquad \wedge \forall h \in \Vh(a), \text{$h$ n'est pas jouable dans $s \PHplay \delta$} \}
 \end{align*}
 
 Processus rencontrés comme résultats d'un point fixe :
 \begin{align*}
 \pfpprocs_\ctx(a) = \{ \PHget{s}{a} \mid s \in \pfp_\ctx(a) \}
+\end{align*}
+
+
+
+Le nouvel ensemble de processus à prendre en compte à chaque itération du point fixe :
+\begin{align*}
+\newprocs_\ctx(\myB) = %\allprocs(\myB) \cup \bigcup_{a \in \PHs} \pfpprocs_{\allprocs(\myB)}(a)
+  \{ a_k \in \PHproc &\mid a_k \in \allprocs(\myB) \vee \\
+  & (a_i, \PHobjp{a}{j}{i}) \in \cwReq \wedge a_k \in \pfpprocs_{\allprocs(\myB)}(a) \wedge \\
+  & \quad (\exists (P, ps) \in \cwSol, a_i \in ps \wedge \prio(\PHsort(P)) > \prio(a) \\
+  & \quad \vee \exists (\PHobjp{a}{j}{i}, ps) \in \cwSol, \exists p \in ps, \exists (p, P) \in \cwReq,\\
+  & \qquad \text{$P$ is not trivial} \wedge \prio(\PHsort(P)) > \prio(a) \}
 \end{align*}
 
 %%% N'est plus adapté
@@ -84,11 +96,11 @@ where $\zeta^\wedge = (\zeta^\wedge_A, \zeta^\wedge_B, \zeta^\wedge_{max})$ with
 
 \begin{definition}
   \label{def:aS}
-  The abstract structure $\cwB=(\Breq,\Bsol,\Bcont,\Bsat)$ is defined as
+  The abstract structure $\cwB=(\Breq,\Bsol,\Bcont)$ is defined as
   $
-  \cwB = \sfp{\myB}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}
+  \cwB = \sfp{\myB}{\myB}{\aB^\w_{\ctx \Cap \newprocs_\ctx(\myB)}}
   $,
-  with $\myB=(\myreq,\mysol,\mycont,\mysat)$:
+  with $\myB=(\myreq,\mysol,\mycont)$:
   \begin{align*}
     \myreq &= \{ (a_i,\PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid
       a_j \in \PHget{\ctx}{a} \\ % \vee a_j \in \pfpprocs_\ctx(a) \\
@@ -96,18 +108,11 @@ where $\zeta^\wedge = (\zeta^\wedge_A, \zeta^\wedge_B, \zeta^\wedge_{max})$ with
     \\
     \mysol &\subseteq \{ (P,ps) \in \Obj \times \powerset(\PHproc) \mid
             \exists (a_i, P) \in \myreq \wedge ps \in \aBS(P) \\
-      & \qquad\qquad \exists (Q, P) \in \myreq \cup \mysat \wedge ps \in \aBS(P) \}
+      & \qquad\qquad \vee \exists (Q, P) \in \mycont \wedge ps \in \aBS(P) \}
     \\
     \mycont & = \{ (P, \PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid
       \exists (P, ps) \in \mysol \\
       & \qquad\qquad \wedge q \in \gCont_\ctx(\PHsort(P),P) \}
-    \\
-    \mysat & = \{ (\PHobjp{a}{j}{i}, \PHobjp{a}{k}{i}) \in \Obj \times \Obj \mid
-      \exists (a_i, \PHobjp{a}{j}{i}) \in \myreq, \\
-      & \qquad\qquad a_j \neq a_k \wedge a_k \in \pfpprocs_\ctx(a) \\
-      & \qquad\qquad \wedge (\exists (P, ps) \in \mysol, a_j \in ps \wedge \prio(\PHsort(P)) > \prio(a) \\
-      & \qquad\qquad\qquad \vee \exists (\PHobjp{a}{j}{i}, ps) \in \mysol, \exists p \in ps, \exists (p, P) \in \myreq,\\
-      & \qquad\qquad\qquad \text{$P$ is not trivial} \wedge \prio(\PHsort(P)) > \prio(a) \}
   \end{align*}
 \end{definition}
 
@@ -128,7 +133,7 @@ $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
   \item If $(P, \emptyset) \in \Bsol$, either $\PHtarget(P) = \PHbounce(P)$ and $\delta = \emptyseq$,
     or $\forall \zeta \in \BS(P), \zeta \in \Sce \wedge \PHsort(\zeta) = \{ \PHsort(P) \}$ and $\delta$ is given by \pref{th:autohits}.
 
-  \item Suppose all children objectives of $P$ are concretizable.
+  \item Suppose all children objectives of $P$ are concretizable. \todo{Problème : ce n'est plus suffisant avec cette saturation (il faut que les frères de $P$ obtenus par saturation soient concrétisables aussi).}
   \begin{itemize}
     \item If $\exists Q \in \Bcont$, then by hypothesis,
       $\muconcr_{s}(\obj{\PHtarget(P)}{\PHtarget(Q)} \concat Q) \neq \emptyset$, thus
@@ -136,6 +141,7 @@ $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
     \item Else, by \pref{def:maxCont}, the concretizations of the children of $P$ require no process of sort $\PHsort(P)$.
       Furthermore, there exists $\zeta \in \BS(P)$ so that $(P, \aZ) \in \Bsol$.
       We build recursively a scenario $\delta$. Let $m = |\indexes{\zeta}|$.
+      \todo{Idée avec les nouvelles defs : au rang 0, on se replace sur un processus de $\pfp$. Au rang n, il existe par saturation un objectif adéquat qui “reprend” la progression.}
       \begin{itemize}
 %        \item[*] Let $\zeta_1 = \PHhit{b_i}{a_j}{a_k}$. By hypothesis, $\exists \delta_1 \in \muconcr_s(\PHobj{\any}{b_i}), \PHget{s \PHplay \delta_1}{a} \in \pfp_s(a)$.
 %          If $\PHget{s \PHplay \delta_1}{a} \neq a_j$, then by construction of $\cwB$, $(\PHobj{a_j}{a_k}, \PHobj{\PHget{s \PHplay \delta_1}{a}}{a_k}) \in \Bsat$.
