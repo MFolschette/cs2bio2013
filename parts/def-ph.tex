@@ -381,7 +381,7 @@ We define the set of chains of actions $\PHh^n(b, a)$ between two sorts $b$ and 
 
 We define the neighbor \towrite{Revoir terminologie : “neighborhood” ? “vicinity” ?} sorts of any sort $a$ and $n \in \segm{1}{k}$ as :
 $$
-\Vs^n(a) = \{ b \in \PHs \mid \PHh^m(b, a) \neq \emptyset \wedge m = \min(n, \prio(a)) \}
+\Vs^n(a) = \{ b \in \PHs \mid \PHh^m(b, a) \neq \emptyset \wedge m = \min(n, \prio(a)) \} \cup \{ a \}
 $$
 
 And, as a shortcut:
@@ -391,7 +391,7 @@ $$
 
 We define the neighbor actions of any sort $a$ as :
 $$
-\Vh(a) = \{ h \in \restriction{\PHh}{\prio(a)} \mid \PHsort(\PHhitter(h)) \in \Vs(a) \wedge \PHsort(\PHtarget(h)) \in \Vs(a) \cup \{ a \} \}
+\Vh(a) = \{ h \in \restriction{\PHh}{\prio(a)} \mid \{ \PHsort(\PHhitter(h)), \PHsort(\PHtarget(h)) \} \subset \Vs(a) \wedge \prio(h) \leq \prio(a) \}
 $$
 
 This PH has to regard the two following restrictions.
@@ -419,7 +419,8 @@ These restrictions bring new interesting properties to the PH models regarding t
 \begin{theorem}
 \label{th:vplay}
   $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, (\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge $\\
-  $\forall h' \in \Vh(a), \text{$h'$ cannot be played in $s$}) \Rightarrow (\exists \delta \in \Sce, \text{$h$ can be played in $s \PHplay \delta$})$
+  $\forall h' \in \Vh(a), h = h' \vee (\PHhitter(h') \notin s \wedge \PHtarget(h') \notin s)) \Rightarrow$\\
+  $(\exists \delta \in \Sce, \text{$h$ can be played in $s \PHplay \delta$})$
 \end{theorem}
 
 \begin{proof}
@@ -430,7 +431,7 @@ These restrictions bring new interesting properties to the PH models regarding t
 \begin{corollary}
   \label{co:vplay}
   $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, (\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge $\\
-  $(\forall h' \in \Vh(a), \text{$h'$ cannot be played in $s$}) \Rightarrow$\\
+  $\forall h' \in \Vh(a), h = h' \vee (\PHhitter(h') \notin s \wedge \PHtarget(h') \notin s)) \Rightarrow$\\
   $\exists \delta \in \Sce, (\forall n \in \indexes{\delta}, \delta_n \notin \Vh(a)) \wedge (\text{$h$ can be played in $s \PHplay \delta$})$
 \end{corollary}
 
