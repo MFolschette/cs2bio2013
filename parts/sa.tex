@@ -94,6 +94,11 @@ Bonds possibles :
   & \quad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
 \end{align*}
 
+Mise à jour de l'état initial :
+\begin{align*}
+  \update(\ctx) = \ctx \Cap \bigcup_{a \in CS} \pfp_{\restriction{\ctx}{\Vs(a) \cup \{ a \}}}(a)
+\end{align*}
+
 %%% N'est plus adapté
 %Points fixes possibles sur un ensemble de sortes :
 %\begin{align*}
@@ -131,9 +136,7 @@ where $\zeta^\wedge = (\zeta^\wedge_A, \zeta^\wedge_B, \zeta^\wedge_{max})$ with
 \begin{definition}
   \label{def:aS}
   The abstract structure $\cwB=(\Breq,\Bsol,\Bcont,\Bsat)$ is defined as
-  $
-  \cwB = \sfp{\myB}{\myB}{\aB^\w_{\ctx \Cap \allprocs_\ctx(\myB)}}
-  $,
+  $\cwB = \sfp{\aB^\w_{\update(\ctx)}}{\myB}{\aB^\w_{\ctx \Cap \allprocs_\ctx(\myB)}}$,\\
   with $\myB=(\myreq,\mysol,\mycont,\mysat)$:
   \begin{align*}
     \myreq &= \{ (a_i,\PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid
@@ -168,10 +171,7 @@ If the graph $\cwB$ contains no cycle and all objectives have at least one solut
 \end{theorem}
 
 \begin{proof}
-\todo{À refaire}
-
-\begin{comment}
-We note $max\ctx = \ctx \Cap \allprocs(\cwB)$ the context supported by $\cwB$.
+We note $max\ctx = \update(\ctx) \Cap \allprocs(\cwB)$ the context supported by $\cwB$.
 As there is no cycle in $\cwB$, we show by induction that $\forall s\in L, s\subseteq max\ctx$, 
 for all objective $P$ in $\cwB$ so that $\PHtarget(P) \in s$,
 $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
@@ -195,21 +195,18 @@ $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
 %          By hypothesis, $\muconcr_s(\PHobj{\any}{a_k}) \neq \emptyset$.
 %          If $\PHget{s \PHplay \delta_1}{a} = a_j$, then from \pref{th:vplay}, $\exists \delta'_1 \in \Sce$, $\zeta_1$ can be played in $s \PHplay \delta_1 \PHplay \delta'_1$.
         \item[*] For $n \in \indexes{\zeta}$, let $s_n = s \PHplay \delta_1 \PHplay \delta'_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_{n-1} \PHplay \delta'_{n-1} \PHplay \zeta_{n-1}$ (or $s_1 = s$),
-          and $\zeta_n = \PHhit{b_i}{a_j}{a_k}$. By hypothesis, $\exists \delta_n \in \muconcr_{s_n}(\PHobj{\any}{b_i})$, and we have: $\PHget{s_n \PHplay \delta_n}{a} \in \bounceprocs_{s_n} \subset \bounceprocs_\ctx$ \todo{À montrer}.
-          If $\PHget{s_n \PHplay \delta_n}{a} \neq a_j$, then by construction of $\cwB$, $(\PHobj{a_j}{a_k}, \PHobj{\PHget{s_n \PHplay \delta_n}{a}}{a_k}) \in \Bsat$.
-          By hypothesis, $\muconcr_{s_n \PHplay \delta_n}(\PHobj{\any}{a_k}) \neq \emptyset$.
-          If $\PHget{s_n \PHplay \delta_n}{a} = a_j$, then from \pref{th:vplay}, $\exists \delta'_n \in \restriction{\Sce}{k-1}$, $\zeta_n$ can be played in $s \PHplay \delta_n \PHplay \delta'_n$
-          \todo{$\delta'_n$ ne perturbe pas $b$ ?}
-          .
-%        \item[*] For $n \in \segm{1}{m-1}$, $m = |\indexes{\zeta}|$, let $s_n = s \PHplay \delta_1 \PHplay \delta'_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_n \PHplay \delta'_n \PHplay \zeta_n$ and $\zeta_{n+1} = \PHhit{c_i}{a_j}{a_k}$.
-%          By hypothesis, $\exists \delta_1 \in \muconcr_{s_n}(\PHobj{\any}{c_i}), \PHget{s_n \PHplay \delta_{n+1}}{a} \in \pfp_s(a)$.
+          and $\zeta_n = \PHhit{b_i}{a_j}{a_k}$.
+          By hypothesis, $\exists \delta_n \in \muconcr_{s_n}(\PHobj{\any}{b_i})$.
+          If $a \in \cs$, then $\prio(\zeta_n) = 1$ and $\zeta_n$ can be played in $s_n \PHplay \delta_n$ (\ie $\delta'_n = \varepsilon$).
+          If $a \notin \cs$ and $b \in \cs$, then there exists a scenario $\widehat{\delta_n}$ so that $b_i \in \pfp_{s_n \PHplay \delta_n \PHplay \widehat{\delta_n}}(b)$.
+          Then, by \pref{th:hcscomp}, there is a scenario $\delta' \in \restriction{\Sce}{1}$ so that $\zeta_n$ is playable in $s_n \PHplay \delta_n \PHplay \widehat{\delta_n} \PHplay \delta'_n$.
+          Finally, if $a,b \in \components$, then by \pref{th:hcompcomp}, there is a scenario $\delta' \in \restriction{\Sce}{1}$ so that $\zeta_n$ is playable in $s_n \PHplay \delta_n \PHplay \delta'_n$.
       \end{itemize}
       Thus, $\delta = \delta_m \in \muconcr_s(P)$. % and $\ceil(\delta) \subseteq max\ctx$.
   \end{itemize}
 \end{itemize}
 
 Finally, as $\muconcr_{max\ctx}(\w) \neq \emptyset$, $\uconcr(\w) \neq \emptyset$ (property \towrite{xxx}).
-\end{comment}
 \end{proof}
 
 

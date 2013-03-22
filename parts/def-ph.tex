@@ -399,11 +399,34 @@ Prédécesseurs prioritaires :
 $$\Vs(a) = \{ b \in \PHs \mid \PHh^1(b, a) \neq \emptyset \}$$
 $$\Vh(a) = \{ h \in \PHh^{(1)} \mid \PHsort(\PHhitter(h)) \in \Vs(a) \wedge \PHsort(\PHtarget(h)) \in \Vs(a) \cup \{ a \} \}$$
 
+Sorte coopérative :
+$a$ is a well-formed cooperative sort iff:
+\begin{itemize}
+  \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 1$
+  \item $\forall s \in \underset{b \in \Vs(a)}{\times} \PHl_b, |\pfp_s(a)| = 1$
+\end{itemize}
+
+Composant :
+$a$ is a well-formed component iff:
+\begin{itemize}
+  \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2$
+\end{itemize}
+
+We call $\components$ the set of well-formed components and $\cs$ the set of well-formed cooperative sorts.
+We note that: $\forall a \in \components, \Vs(a) = \emptyset \wedge \Vh(a) = \emptyset$
+
+
+
 Let $\PH$ be a PH model on which we want to apply the static analysis.
 In this paper, we focus on a specific class of models that are equivalent to boolean networks.
 
 \paragraph{Components \& cooperative sorts}
-The studied PH is only composed of sorts representing regular components with priority $2$ and of cooperative sorts with priority $1$.
+The studied PH is a PH with 2 priorities, and it is only composed of well-formed components and cooperative sorts:
+$\components \cup \cs = \PHs \wedge \components \cap \cs = \emptyset$
+
+\paragraph{Bounded termination}
+The dynamics of model $\restriction{\PH}{1}$ contains no cycles. Cycles are still allowed in $\PH$ however.
+Formally : $\exists N \in \sN, \forall \delta \in \restriction{\Sce}{1}, |\indexes{\delta}| \leq N$.
 
 
 
@@ -487,3 +510,39 @@ for all $H \subset \PHh$, $$\restriction{\Sce}{H} = \{ \delta \in \Sce \mid \for
 
 \towrite{Théorème nécessaire pour la suite: une séquence d'actions dans $\BS(a)$ peut être jouée si précédée ou entrelacée par des $\zeta$ (?)}
 \end{comment}
+
+\subsection{Consequences of the restrictions}
+\pref{th:hcompcomp} states that for a given state $s$ and for any action $h = \PHhit{a_i}{b_j}{b_k}$ between well-formed components, $h$ can be played after a series of hits that do not prevent it to be fired.
+\pref{th:hcscomp} states the same if $a$ is a well-formed cooperative sort, under the condition that $a_i$ reflects the state of the neighborhood of $a$.
+\begin{theorem}
+\label{th:hcompcomp}
+  $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, a,b \in \components,$\\
+  $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}, \text{$h$ can be played in $s \PHplay \delta$})$
+\end{theorem}
+\begin{proof}
+  There exists a scenario $\delta$ so that: $(s \PHplay \delta) = \update(s)$.
+  As $a,b \in \components$, $a_i \in s \PHplay \delta$ and $b_j \in s \PHplay \delta$.
+  Finally, by definition of $\update(s)$, no action of priority $1$ can be played in $s \PHplay \delta$, thus $h$ can be played in $s \PHplay \delta$.
+\end{proof}
+\begin{theorem}
+\label{th:hcscomp}
+  $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, a \in \cs, b \in \components$\\
+  $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge \pfp_s(a) = a_i) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}, \text{$h$ can be played in $s \PHplay \delta$})$
+\end{theorem}
+\begin{proof}
+  There exists a scenario $\delta$ so that: $(s \PHplay \delta) = \update(s)$.
+  As $a_i \in \pfp_s(a)$, $a_i \in s \PHplay \delta$.
+  Furthermore, $b \in \components$, thus $b_j \in s \PHplay \delta$.
+  Finally, by definition of $\update(s)$, no action of priority $1$ can be played in $s \PHplay \delta$, thus $h$ can be played in $s \PHplay \delta$.
+\end{proof}
+
+\pref{th:autohits} states that any sequence $\zeta$ of self-actions on a well-formed component can be played eventually.
+\begin{theorem}
+\label{th:autohits}
+  Let $a \in \PHs$, $s \in \PHl$ and $\zeta \in \BS$ so that $\forall i \in \indexes{\zeta}, \PHsort(\PHhitter(\zeta_i)) = \PHsort(\PHtarget(\zeta_i)) = a$.
+  $\exists (\delta_i)_{i \in \indexes{\zeta}} \in \restriction{\Sce}{1}$ so that $\forall i \in \indexes{\zeta}$, $\zeta_i$ can be played in $s \PHplay \delta_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_i$. 
+\end{theorem}
+\begin{proof}
+  With \pref{th:hcompcomp} applied iteratively.
+\end{proof}
+
