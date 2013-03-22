@@ -97,6 +97,7 @@
 \def\allprocs{\mathsf{allProcs}}
 \def\pfp{\mathsf{pfp}}
 \def\pfpprocs{\mathsf{pfpProcs}}
+\def\bounceprocs{\mathsf{bounceProcs}}
 \def\newprocs{\mathsf{newProcs}}
 
 \def\aB{\mathcal{B}}
@@ -112,7 +113,12 @@
 \def\myreq{\overline{\Req^\w_\ctx}}
 \def\mycont{\overline{\Cont^\w_\ctx}}
 
-\def\Sat{\mathrm{Sat}}
+\def\PrioCont{\mathrm{PrioCont}}
+\def\mypriocont{\overline{\PrioCont^\w_\ctx}}
+\def\cwPrioCont{\PrioCont_\ctx^\w}
+\def\Bpriocont{\sat{\PrioCont^\w_\ctx}}
+
+\def\Sat{\PrioCont}
 \def\mysat{\overline{\Sat^\w_\ctx}}
 \def\cwSat{\Sat_\ctx^\w}
 \def\Bsat{\sat{\Sat^\w_\ctx}}

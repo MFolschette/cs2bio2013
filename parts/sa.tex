@@ -19,13 +19,12 @@
 
 Processus rencontrés :
 \begin{align*}
-\allprocs((\cwSol,\cwReq,\cwCont)) = \{ p \in \PHproc &\mid \exists (P,ps) \in \cwSol, p \in ps
-\\ & \vee p = \PHtarget(P)
-%\\ & \vee (P \neq \omega \Rightarrow p = \PHbounce(P)) \}
-\\ & \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \}
+&\allprocs((\cwSol,\cwReq,\cwCont,\cwSat)) = \{ p \in \PHproc \mid \exists (P,ps) \in \cwSol, p \in ps \\
+  &\qquad\qquad \vee p = \PHtarget(P) \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \\
+  &\qquad\qquad \vee \exists(Q, \PHobj{p}{\PHbounce(Q)} \in \cwPrioCont \}
 \end{align*}
 
-\subsection{Local fixed points}
+\subsection{Local fixed points / possible bounces}
 
 %%% Pas utile
 %Points fixes possibles : pour toute sorte $a$ et tout contexte partiel $\ctx$ sur $V^n(a)$:
@@ -34,30 +33,65 @@ Processus rencontrés :
 %  a &\mapsto \{ s \in \underset{b \in V^n(a)}{\times} \PHl_b \mid \text{$s$ est accessible depuis $\ctx$ et aucune action n'y est jouable} \}
 %\end{align*}
 
-\towrite{Formaliser}
-
+\begin{comment}
 Points fixes possibles : pour toute sorte $a$ et tout contexte $\ctx$:
 \begin{align*}
   \pfp_\ctx: \PHs &\rightarrow \wp(\PHproc) \\
   a &\mapsto \{ s \PHplay \delta \in \restriction{\PHl}{\Vs(a)} \mid s \in \restriction{\ctx}{\Vs(a)} \wedge \delta \in \restriction{\Sce}{\Vs(a)} \\
-  &\qquad\qquad\qquad\qquad \wedge \forall h \in \Vh(a), \text{$h$ n'est pas jouable dans $s \PHplay \delta$} \}
+  &\qquad\qquad\qquad\qquad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
+  %\text{$h$ n'est pas jouable dans $s \PHplay \delta$} \}
 \end{align*}
-
+%
 Processus rencontrés comme résultats d'un point fixe :
 \begin{align*}
 \pfpprocs_\ctx(a) = \{ \PHget{s}{a} \mid s \in \pfp_\ctx(a) \}
 \end{align*}
-
-
-
-Le nouvel ensemble de processus à prendre en compte à chaque itération du point fixe :
+%
+Le nouvel ensemble de processus à prendre en compte à chaque itération du pppf :
 \begin{align*}
 \newprocs_\ctx(\myB) = %\allprocs(\myB) \cup \bigcup_{a \in \PHs} \pfpprocs_{\allprocs(\myB)}(a)
   \{ a_k \in \PHproc &\mid a_k \in \allprocs(\myB) \vee \\
-  & (a_i, \PHobjp{a}{j}{i}) \in \cwReq \wedge a_k \in \pfpprocs_{\allprocs(\myB)}(a) \wedge \\
+  & (a_i, \PHobjp{a}{j}{i}) \in \cwReq \wedge a_k \in \pfpprocs_{\ctx \Cap \allprocs(\myB)}(a) \wedge \\
   & \quad (\exists (P, ps) \in \cwSol, a_i \in ps \wedge \prio(\PHsort(P)) > \prio(a) \\
   & \quad \vee \exists (\PHobjp{a}{j}{i}, ps) \in \cwSol, \exists p \in ps, \exists (p, P) \in \cwReq,\\
   & \qquad \text{$P$ is not trivial} \wedge \prio(\PHsort(P)) > \prio(a) \}
+\end{align*}
+\end{comment}
+
+\begin{comment}
+=================
+%
+Nouvelle version des états stables possibles: pour tout contexte $\ctx$:
+\begin{align*}
+  \pfp_\ctx = \{ s \PHplay \delta \in \PHl &\mid s \in \ctx \wedge \delta \in \restriction{\Sce}{k-1} \\
+  & \qquad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \restriction{\PHh}{k-1}, \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
+  %\text{$h$ n'est pas jouable dans $s \PHplay \delta$} \}
+\end{align*}
+%
+Processus rencontrés comme résultats d'un état stable :
+\begin{align*}
+\pfpprocs_\ctx = \{ a_i \in \PHproc \mid \exists s \in \pfp_\ctx, a_i \in s \}
+\end{align*}
+%
+Nouvel ensemble $\newprocs$ :
+\begin{align*}
+\newprocs_\ctx(\myB) = \allprocs(\myB) \cup \pfpprocs_\ctx
+\end{align*}
+\end{comment}
+
+\begin{comment}
+==========================
+
+Bonds possibles :
+\begin{align*}
+\bounceprocs_\ctx = \{ a_i \in \PHproc \mid \exists s \in \ctx, \exists \delta \in \restriction{\Sce}{k-1}, a_i \in (s \PHplay \delta) \}
+\end{align*}
+\end{comment}
+
+États focaux possibles: pour tout contexte $\ctx \in \restriction{\PHl}{\Vs(a)}$:
+\begin{align*}
+  \pfp_\ctx(a) = \{ a_i \in \PHl_a &\mid \exists s \in \ctx, \exists \delta \in \restriction{\Sce}{1}, \PHget{(\ctx \PHplay \delta)}{a} = a_i \\
+  & \quad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
 \end{align*}
 
 %%% N'est plus adapté
@@ -96,11 +130,11 @@ where $\zeta^\wedge = (\zeta^\wedge_A, \zeta^\wedge_B, \zeta^\wedge_{max})$ with
 
 \begin{definition}
   \label{def:aS}
-  The abstract structure $\cwB=(\Breq,\Bsol,\Bcont)$ is defined as
+  The abstract structure $\cwB=(\Breq,\Bsol,\Bcont,\Bsat)$ is defined as
   $
-  \cwB = \sfp{\myB}{\myB}{\aB^\w_{\ctx \Cap \newprocs_\ctx(\myB)}}
+  \cwB = \sfp{\myB}{\myB}{\aB^\w_{\ctx \Cap \allprocs_\ctx(\myB)}}
   $,
-  with $\myB=(\myreq,\mysol,\mycont)$:
+  with $\myB=(\myreq,\mysol,\mycont,\mysat)$:
   \begin{align*}
     \myreq &= \{ (a_i,\PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid
       a_j \in \PHget{\ctx}{a} \\ % \vee a_j \in \pfpprocs_\ctx(a) \\
@@ -113,6 +147,16 @@ where $\zeta^\wedge = (\zeta^\wedge_A, \zeta^\wedge_B, \zeta^\wedge_{max})$ with
     \mycont & = \{ (P, \PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid
       \exists (P, ps) \in \mysol \\
       & \qquad\qquad \wedge q \in \gCont_\ctx(\PHsort(P),P) \}
+    \\
+    \mysat & = \{ (\PHobjp{a}{j}{i}, \PHobjp{a}{k}{i}) \in \Obj \times \Obj \mid
+      a_j \neq a_k \wedge a_k \in \pfp_\ctx(a) \}
+%%% Version états stables locaux
+%    \mysat & = \{ (\PHobjp{a}{j}{i}, \PHobjp{a}{k}{i}) \in \Obj \times \Obj \mid
+%      \exists (a_i, \PHobjp{a}{j}{i}) \in \myreq, \\
+%      & \qquad\qquad a_j \neq a_k \wedge a_k \in \pfpprocs_\ctx(a) \\
+%      & \qquad\qquad \wedge (\exists (P, ps) \in \mysol, a_i \in ps \wedge \prio(\PHsort(P)) > \prio(a) \\
+%      & \qquad\qquad\qquad \vee \exists (\PHobjp{a}{j}{i}, ps) \in \mysol, \exists p \in ps, \exists (p, P) \in \myreq,\\
+%      & \qquad\qquad\qquad \text{$P$ is not trivial} \wedge \prio(\PHsort(P)) > \prio(a) \}
   \end{align*}
 \end{definition}
 
@@ -124,16 +168,19 @@ If the graph $\cwB$ contains no cycle and all objectives have at least one solut
 \end{theorem}
 
 \begin{proof}
+\todo{À refaire}
+
+\begin{comment}
 We note $max\ctx = \ctx \Cap \allprocs(\cwB)$ the context supported by $\cwB$.
 As there is no cycle in $\cwB$, we show by induction that $\forall s\in L, s\subseteq max\ctx$, 
-for all objective $P$ in $\cwB$ so that $\PHtarget(P) \in s$ and
+for all objective $P$ in $\cwB$ so that $\PHtarget(P) \in s$,
 $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
 
 \begin{itemize}
   \item If $(P, \emptyset) \in \Bsol$, either $\PHtarget(P) = \PHbounce(P)$ and $\delta = \emptyseq$,
     or $\forall \zeta \in \BS(P), \zeta \in \Sce \wedge \PHsort(\zeta) = \{ \PHsort(P) \}$ and $\delta$ is given by \pref{th:autohits}.
 
-  \item Suppose all children objectives of $P$ are concretizable. \todo{Problème : ce n'est plus suffisant avec cette saturation (il faut que les frères de $P$ obtenus par saturation soient concrétisables aussi).}
+  \item Suppose all children objectives of $P$ are concretizable.
   \begin{itemize}
     \item If $\exists Q \in \Bcont$, then by hypothesis,
       $\muconcr_{s}(\obj{\PHtarget(P)}{\PHtarget(Q)} \concat Q) \neq \emptyset$, thus
@@ -141,18 +188,18 @@ $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
     \item Else, by \pref{def:maxCont}, the concretizations of the children of $P$ require no process of sort $\PHsort(P)$.
       Furthermore, there exists $\zeta \in \BS(P)$ so that $(P, \aZ) \in \Bsol$.
       We build recursively a scenario $\delta$. Let $m = |\indexes{\zeta}|$.
-      \todo{Idée avec les nouvelles defs : au rang 0, on se replace sur un processus de $\pfp$. Au rang n, il existe par saturation un objectif adéquat qui “reprend” la progression.}
+%      \todo{Idée avec les nouvelles defs : au rang 0, on se replace sur un processus de $\pfp$. Au rang n, il existe par saturation un objectif adéquat qui “reprend” la progression.}
       \begin{itemize}
 %        \item[*] Let $\zeta_1 = \PHhit{b_i}{a_j}{a_k}$. By hypothesis, $\exists \delta_1 \in \muconcr_s(\PHobj{\any}{b_i}), \PHget{s \PHplay \delta_1}{a} \in \pfp_s(a)$.
 %          If $\PHget{s \PHplay \delta_1}{a} \neq a_j$, then by construction of $\cwB$, $(\PHobj{a_j}{a_k}, \PHobj{\PHget{s \PHplay \delta_1}{a}}{a_k}) \in \Bsat$.
 %          By hypothesis, $\muconcr_s(\PHobj{\any}{a_k}) \neq \emptyset$.
 %          If $\PHget{s \PHplay \delta_1}{a} = a_j$, then from \pref{th:vplay}, $\exists \delta'_1 \in \Sce$, $\zeta_1$ can be played in $s \PHplay \delta_1 \PHplay \delta'_1$.
         \item[*] For $n \in \indexes{\zeta}$, let $s_n = s \PHplay \delta_1 \PHplay \delta'_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_{n-1} \PHplay \delta'_{n-1} \PHplay \zeta_{n-1}$ (or $s_1 = s$),
-          and $\zeta_n = \PHhit{b_i}{a_j}{a_k}$. By hypothesis, $\exists \delta_n \in \muconcr_{s_n}(\PHobj{\any}{b_i})$, and we have: $\PHget{s_n \PHplay \delta_n}{a} \in \pfp_{s_n}(a)$.
+          and $\zeta_n = \PHhit{b_i}{a_j}{a_k}$. By hypothesis, $\exists \delta_n \in \muconcr_{s_n}(\PHobj{\any}{b_i})$, and we have: $\PHget{s_n \PHplay \delta_n}{a} \in \bounceprocs_{s_n} \subset \bounceprocs_\ctx$ \todo{À montrer}.
           If $\PHget{s_n \PHplay \delta_n}{a} \neq a_j$, then by construction of $\cwB$, $(\PHobj{a_j}{a_k}, \PHobj{\PHget{s_n \PHplay \delta_n}{a}}{a_k}) \in \Bsat$.
           By hypothesis, $\muconcr_{s_n \PHplay \delta_n}(\PHobj{\any}{a_k}) \neq \emptyset$.
-          If $\PHget{s_n \PHplay \delta_n}{a} = a_j$, then from \pref{th:vplay}, $\exists \delta'_n \in \Sce$, $\zeta_n$ can be played in $s \PHplay \delta_n \PHplay \delta'_n$
-          \todo{Il reste à montrer que $\delta'_n$ ne perturbe pas $b$. Ça se montre par contradiction grâce à l'hyopthèse de cycle-freeness.}
+          If $\PHget{s_n \PHplay \delta_n}{a} = a_j$, then from \pref{th:vplay}, $\exists \delta'_n \in \restriction{\Sce}{k-1}$, $\zeta_n$ can be played in $s \PHplay \delta_n \PHplay \delta'_n$
+          \todo{$\delta'_n$ ne perturbe pas $b$ ?}
           .
 %        \item[*] For $n \in \segm{1}{m-1}$, $m = |\indexes{\zeta}|$, let $s_n = s \PHplay \delta_1 \PHplay \delta'_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_n \PHplay \delta'_n \PHplay \zeta_n$ and $\zeta_{n+1} = \PHhit{c_i}{a_j}{a_k}$.
 %          By hypothesis, $\exists \delta_1 \in \muconcr_{s_n}(\PHobj{\any}{c_i}), \PHget{s_n \PHplay \delta_{n+1}}{a} \in \pfp_s(a)$.
@@ -162,6 +209,7 @@ $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
 \end{itemize}
 
 Finally, as $\muconcr_{max\ctx}(\w) \neq \emptyset$, $\uconcr(\w) \neq \emptyset$ (property \towrite{xxx}).
+\end{comment}
 \end{proof}
 
 

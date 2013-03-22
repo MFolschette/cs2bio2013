@@ -349,13 +349,10 @@ reflecting the presence of $bc_{11}$ and $d_1$.  Such constructions are helpful 
 as the static analysis of dynamics developed in \cite{PMR12-MSCS} does not suffer from the number of
 sorts, but on the number of processes within a single sort.
 
-While the construction of cooperation in PH allows to encode any boolean functions
-between cooperating processes \cite{PMR10-TCSB}, it is worth noticing they introduce a temporal
-shift in their application. \towrite{Adapter avec priorités}
-This allows the existence of interleaving of actions leading to a cooperative sort representing a
-past sub-state of the presence of the cooperative processes.
-The resulting behavior is then an over-approximation
-of the realization of an instantaneous cooperation.
+The construction of cooperation in PH allows to encode any boolean functions between cooperating processes \cite{PMR10-TCSB}.
+Due to the presence of priorities, it is possible to build cooperations with no temporal shift by defining the actions on the cooperative sorts with the highest class of priority.
+This allows to gain the same expressivity in PH than in boolean networks.
+\towrite{Traduction BN depuis thèse.}
 
 \begin{example}
 The PH in \pref{fig:runningPH-2} results from the refinement of the PH in \pref{fig:runningPH-1}
@@ -368,11 +365,10 @@ highest level, and $a$ does not become inactive unless both $b$ and $c$ are inac
 
 \subsection{Hypothesis} \towrite{Reformuler}
 
-In this section, we describe several restrictions.
-Although the definition of a Process Hitting with $k$ priorities allows a wide range of models, the method given in the next section only applies to Process Hitting models that regard these restrictions.
+%In this section, we describe several restrictions.
+%Although the definition of a Process Hitting with $k$ priorities allows a wide range of models, the method given in the next section only applies to Process Hitting models that regard these restrictions.
 
-Let $\PH$ be a PH model on which we want to apply the static analysis.
-
+\begin{comment}
 We define the set of chains of actions $\PHh^n(b, a)$ between two sorts $b$ and $a$, with $n \in \segm{1}{k}$, as below:
 \begin{align*}
 \PHh^n(b, a) = \{ (h_i)_{i \in \segm{0}{s}} \in (\restriction{\PHh}{n})^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_0)) = b \wedge \PHsort(\PHtarget(h_s)) = a \\
@@ -393,17 +389,28 @@ We define the neighbor actions of any sort $a$ as :
 $$
 \Vh(a) = \{ h \in \restriction{\PHh}{\prio(a)} \mid \{ \PHsort(\PHhitter(h)), \PHsort(\PHtarget(h)) \} \subset \Vs(a) \wedge \prio(h) \leq \prio(a) \}
 $$
-
-This PH has to regard the two following restrictions.
+\end{comment}
 
 %\paragraph{Cycle-freeness of $\restriction{\PH}{k-1}$}
 %\towrite{Définition formelle ? + justification}
 %The model $\restriction{\PH}{k-1}$ contains no cycles. Cycles are still allowed in $\PH$ however.
 
-\paragraph{Bounded reachability property}
+Prédécesseurs prioritaires :
+$$\Vs(a) = \{ b \in \PHs \mid \PHh^1(b, a) \neq \emptyset \}$$
+$$\Vh(a) = \{ h \in \PHh^{(1)} \mid \PHsort(\PHhitter(h)) \in \Vs(a) \wedge \PHsort(\PHtarget(h)) \in \Vs(a) \cup \{ a \} \}$$
+
+Let $\PH$ be a PH model on which we want to apply the static analysis.
+In this paper, we focus on a specific class of models that are equivalent to boolean networks.
+
+\paragraph{Components \& cooperative sorts}
+The studied PH is only composed of sorts representing regular components with priority $2$ and of cooperative sorts with priority $1$.
+
+
+
+\begin{comment}
+\paragraph{Bounded termination}
 The dynamics of model $\restriction{\PH}{k-1}$ contains no cycles. Cycles are still allowed in $\PH$ however.
 Formally : $\exists N \in \sN, \forall \delta \in \restriction{\Sce}{k-1}, |\indexes{\delta}| \leq N$.
-
 
 \paragraph{Local priorities}
 \towrite{Justification}
@@ -413,13 +420,28 @@ Furthermore, for all sort $a$, we denote $\prio(a)$ the priority of the actions 
 $$\forall a \in \PHs, \exists h \in \PHh, \PHtarget(h) = a \Rightarrow \prio(a) = \prio(h)$$
 \towrite{Ou : $\nexists h \Rightarrow \prio(a) = 0$}
 
+\paragraph{Local stable states}
+\towrite{Justification}
+We define $\pfp$ as the set of possible stable states of a sort from a given state:
+\begin{align*}
+  \pfp_\ctx = \{ s \PHplay \delta \in \PHl &\mid s \in \ctx \wedge \delta \in \restriction{\Sce}{k-1} \\
+  & \qquad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \restriction{\PHh}{k-1}, \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
+  %\text{$h$ n'est pas jouable dans $s \PHplay \delta$} \}
+\end{align*}
+
+All processes are a stable state of a sub-state of the predecessors:
+$\forall a_i \in \PHproc, \prio(a) < k \Rightarrow \exists s \in \restriction{\PHl}{\Vs(a)}, a_i \in \pfp_s$.
+We note: $\stable_{a_i} = \{ s \in \restriction{\PHl}{\Vs(a)} \mid a_i \in \pfp_s \}$.
+\end{comment}
+
+\begin{comment}
 These restrictions bring new interesting properties to the PH models regarding them.
 
 \pref{th:vplay} tells that for any action $h = \PHhit{a_i}{b_j}{b_k}$, if no action can be played in the neighborhood of $a$ in a given state, then $h$ can be played after a series of hits that do not prevent it to be fired. Furthermore, if the requisites of \pref{th:vplay} are true, then no action of this series of hits belongs to $V(a)$, as stated in \pref{co:vplay}.
 \begin{theorem}
 \label{th:vplay}
   $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, (\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge $\\
-  $\forall h' \in \Vh(a), h = h' \vee (\PHhitter(h') \notin s \wedge \PHtarget(h') \notin s)) \Rightarrow$\\
+  $\forall h' \in \Vh^{\prio(b)-1}(a), \PHhitter(h') \notin s \wedge \PHtarget(h') \notin s) \Rightarrow$\\
   $(\exists \delta \in \Sce, \text{$h$ can be played in $s \PHplay \delta$})$
 \end{theorem}
 
@@ -427,13 +449,14 @@ These restrictions bring new interesting properties to the PH models regarding t
   Because of the cycle-freeness of $\restriction{\PH}{k-1}$, $\restriction{\PH}{\prio(a)}$ is also cycle-free and there is a $\delta \in \Sce$ so that $\forall h' \in \PHh$, $h'$ cannot be played in $s \PHplay \delta$. Furthermore, $\forall h' \in \delta, \PHsort(\PHtarget(h')) \neq a$ by construction of $\Vs(a)$.
 \end{proof}
 
-
 \begin{corollary}
   \label{co:vplay}
   $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, (\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge $\\
-  $\forall h' \in \Vh(a), h = h' \vee (\PHhitter(h') \notin s \wedge \PHtarget(h') \notin s)) \Rightarrow$\\
+  $\forall h' \in \Vh^{\prio(b)-1}(a), \PHhitter(h') \notin s \wedge \PHtarget(h') \notin s) \Rightarrow$\\
   $\exists \delta \in \Sce, (\forall n \in \indexes{\delta}, \delta_n \notin \Vh(a)) \wedge (\text{$h$ can be played in $s \PHplay \delta$})$
 \end{corollary}
+
+
 
 \pref{th:totalss} states that from any state, a steady state is eventually reached. A local variant of this theorem, given in \pref{co:totalss}, can be derived,
 where, for all $\Omega \subset \PHs$, $$\restriction{\PHl}{\Omega} = \underset{a \in \Omega}{\times} \PHl_a$$ and
@@ -463,3 +486,4 @@ for all $H \subset \PHh$, $$\restriction{\Sce}{H} = \{ \delta \in \Sce \mid \for
 \end{proof}
 
 \towrite{Théorème nécessaire pour la suite: une séquence d'actions dans $\BS(a)$ peut être jouée si précédée ou entrelacée par des $\zeta$ (?)}
+\end{comment}
