@@ -1,6 +1,131 @@
 
+\begin{definition}[Scenario ($\Sce$)]
+\label{def:scenario}
+  For a given Process Hitting model $(\PHs,\PHl,\PHh)$,
+  a \emph{scenario} $\delta$ is a sequence of actions of $\PHh$ so that for all $n \in \indexes{\delta}$,
+  $a_i = \PHhitter(\delta_n)$ (resp. $\PHtarget(\delta_n)$) $\Rightarrow \last_a(\delta_{1..n-1}) \in \{ \varnothing, a_i \}$.
+  The set of all scenarios is noted $\Sce$.
+%  $\supp(\delta)$ and $\ceil(\delta)$ renvoient respectivement aux premiers et
+%  derniers processus de chaque sorte.
+%  \begin{align}
+%  &\supp(\delta) = \{p\in\Proc\mid \sort(p)\in\sort(\delta) \wedge
+%                        p = \first_{\sort(p)}(\delta) \}\enspace,
+%  \eqlabel{support}
+%  \\
+%  &\ceil(\delta) = \{p\in\Proc\mid \sort(p)\in\sort(\delta) \wedge
+%                        p = \last_{\sort(p)}(\delta) \}\enspace.
+%  \eqlabel{ceil}
+%  \end{align}
+\end{definition}
 
-\towrite{Idée : prise en compte des actions perturbatrices, ou des réactions en chaîne pouvant rendre de telles actions jouables}
+\begin{definition}[Objective ($\Obj$)]
+\label{def:obj}
+  The reachability of a process $a_j$ prof a process $a_i$ is called an \emph{objective}, noted $\PHobj{a_i}{a_j}$.
+  The set of all objectives is called $\Obj = \{ \PHobj{a_i}{a_j} \mid a \in \PHs \wedge (a_i, a_j) \in \PHl_a^2 \}$.
+  For an objective $P \in \Obj$, where $P = \PHobj{a_i}{a_j}$, $\PHsort(P) = a$, $\PHtarget(P)=a_i$, $\PHbounce(P)=a_j$.
+  An objective $P$ is \emph{trivial} is $\PHtarget(P)=\PHbounce(P)$.
+\end{definition}
+
+\begin{definition}[Context $\ctx$ ($\Ctx$)]
+\label{def:context}
+  A \emph{context} $\ctx$ associates to each sort in $\PHs$ a non-empty subset of its processes:
+  $\forall a \in \PHs, \PHget{\ctx}{a} \subseteq \PHl_a \wedge \PHget{\ctx}{a} \neq \emptyset$.
+  $\Ctx$ is the set of all contexts.
+\end{definition}
+
+For a given context $\ctx$, we note $a_i \in \ctx$ if and only if $a_i \in \PHget{\ctx}{a}$, and
+$ps \in \powerset(\Proc), ps \subseteq \ctx \Leftrightarrow \forall a_i \in ps, a_i \in \ctx$.
+%The override of a context $\ctx$ by a set of processes $ps$ is noted $\ctx \Cap ps$ (\defref{ctxcap}).
+%Par exemple, $\state{a_1,a_2,b_1,c_1}\Cap\{ a_3, b_2, b_3 \} = \state{a_3,b_2,b_3,c_1}$.
+\begin{definition}[$\Cap: \Ctx \times \powerset(\PHproc) \mapsto \Ctx$]
+\label{def:ctxcap}
+  For a given context $\ctx\in\Ctx$ and a set of processes $ps \in \powerset(\PHproc)$,
+  the override of $\ctx$ by $ps$ is noted $\ctx \Cap ps$ and is defined by
+  \[ \forall a \in \PHs, \PHget{(\ctx \Cap ps)}{a} =
+  \begin{cases}
+    \{ p \in ps \mid \PHsort(p)=a \} & \text{if } \exists p \in ps, \PHsort(p)=a,\\
+    \PHget{\ctx}{a} & \text{else.}
+  \end{cases}
+  \]
+\end{definition}
+
+A scenario $\delta \in \Sce$ is \emph{playable} in a context $\ctx$ if and only if $\supp(\delta) \subseteq \ctx$. 
+The play of $\delta$ in $\ctx$ is denoted $\ctx \PHplay \delta$ where $\ctx \PHplay \delta = \ctx \Cap \ceil(\delta)$.
+
+\begin{definition}[Objective sequence ($\OS$)]
+\label{def:OS}
+  An \emph{objective sequence} is a sequence $\w = P_1 \concat \dots \concat P_{|\w|}$,
+  where $\forall n \in \indexes{\w}, \w_n \in \Obj$ and $a_i = \PHtarget(\w_n) \Rightarrow \last_a(\w_{1..n-1}) \in \{ \varnothing, a_i \}$.
+  The set of all objective sequences is denoted by $\OS$.
+  The definitions of $\last_a$ \todo{À définir}, $\first_a$ \todo{À définir}, $\supp$ \todo{À définir} and $\ceil$ \todo{À définir}
+  are simply derived by omitting the case of hitters.
+\end{definition}
+
+\begin{definition}[Bounce sequence ($\BS$)]
+\label{def:bs}
+  A \emph{bounce sequence} $\zeta$ is a sequence of actions so that $\forall n \in \indexes{\zeta}, n < |\zeta|, \PHbounce(\zeta_{n}) = \PHtarget(\zeta_{n+1})$.
+  $\BS$ denotes the set of all bounce sequences, and
+  $\BS(P)$ denotes the set of bounce sequences \emph{solving} an objective $P$:
+  \[
+    \BS(\PHobj{a_i}{a_j}) = \{ \zeta \in \BS \mid \PHtarget(\zeta_1)= a_i \wedge \PHbounce(\zeta_{|\zeta|}) = a_j \} \enspace.
+  \]
+  Obviously, $\BS(\obj{a_i}{a_i}) = \{\emptyseq\}$; and $\BS(\obj{a_i}{a_j}) = \emptyset$ if there is no way to reach $a_j$ from $a_i$.
+\end{definition}
+
+\begin{definition}[$\aBS:\Obj \mapsto \powerset(\Proc)$]
+\label{def:aBS}
+  \[
+    \aBS(P) = \{ \abstr{\zeta} \mid \zeta \in \BS(P), \nexists \zeta' \in \BS(P), \abstr{\zeta'} \subsetneq \abstr{\zeta} \} \enspace,
+  \]
+  where $\abstr{\zeta} = \{ \PHhitter(\zeta_n) \mid  n \in \indexes{\zeta} \wedge \PHsort(\PHhitter(\zeta_n)) \neq \PHsort(P) \}$.
+\end{definition}
+
+
+
+\subsection{Under-approximation}
+
+\begin{definition}[$\concr: \OS \mapsto \powerset(\Sce)$]
+\label{def:concr}
+  For a given $\w \in \OS$, $\concr(\w)$ is the set of scenarios concretising $\w$ in the context $\ctx$:
+  \begin{align*}
+    \concr(\w) = \{ \delta \in \Sce \mid & (\w^\vartriangle = \emptyseq \wedge \delta = \emptyseq) 
+      \vee (\w^\vartriangle \neq \emptyseq \wedge \supp(\delta) \subseteq \ctx
+    \\ &
+      \wedge \exists \phi:\indexes{\w} \mapsto \indexes{\delta}, (\forall n, m \in \indexes{\w}, n < m \Leftrightarrow \phi(n) \leq \phi(m)) 
+    \\ &
+      \wedge \forall n \in \indexes{\w}, \PHbounce(\w_n) \in \ctx \PHplay \delta_{1..\phi(n)})
+    \}
+    \enspace,
+  \end{align*}
+  where $\omega^\vartriangle$ refers to the sequence of objectives $\omega$ where the trivial objectives have been removed.
+\end{definition}
+%
+\begin{definition}[$\concr: \powerset(\OS) \mapsto \powerset(\Sce)$]
+\label{def:concr-set}
+  $\concr(\W) = \{ \delta \in \concr(\w) \mid \w \in \W \} \enspace.$
+\end{definition}
+
+\begin{definition}[$\uconcr: \OS \mapsto \powerset(\Sce)$]
+\label{def:uconcr}
+  \[
+  \uconcr(\w) = 
+  \begin{cases}
+    \concr(\w) & \text{if } \forall s \in \PHl, s \subseteq \ctx, \exists \delta \in \concr(\w), \supp(\delta) \subseteq s \\
+    \emptyset & \text{else.}
+  \end{cases}
+  \]
+\end{definition}
+% 
+\begin{theorem}
+\label{th:uconcr-ctx}
+  $\ctx' \subseteq \ctx \wedge \uconcr(\w) \neq \emptyset \Longrightarrow \muconcr_{\ctx'}(\w) \neq \emptyset \enspace.$
+\end{theorem}
+% 
+\begin{definition}[$\uconcr: \powerset(\OS) \mapsto \powerset(\Sce)$]
+\label{def:uconcr-set}
+  $\uconcr(\Omega) = \{ \delta \in \uconcr(\w) \mid \w \in \Omega\}$
+\end{definition}
+
 
 
 
@@ -162,9 +287,6 @@ where $\zeta^\wedge = (\zeta^\wedge_A, \zeta^\wedge_B, \zeta^\wedge_{max})$ with
 %      & \qquad\qquad\qquad \text{$P$ is not trivial} \wedge \prio(\PHsort(P)) > \prio(a) \}
   \end{align*}
 \end{definition}
-
-\def\muconcr{\ell}
-\def\uconcr{\muconcr_\ctx}
 
 \begin{theorem}[Approximation inf.]\label{th:approxinf}
 If the graph $\cwB$ contains no cycle and all objectives have at least one solution, then $\uconcr(\w) \neq \emptyset$.
