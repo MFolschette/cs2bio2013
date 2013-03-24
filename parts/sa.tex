@@ -5,17 +5,6 @@
   a \emph{scenario} $\delta$ is a sequence of actions of $\PHh$ so that for all $n \in \indexes{\delta}$,
   $a_i = \PHhitter(\delta_n)$ (resp. $\PHtarget(\delta_n)$) $\Rightarrow \last_a(\delta_{1..n-1}) \in \{ \varnothing, a_i \}$.
   The set of all scenarios is noted $\Sce$.
-%  $\supp(\delta)$ and $\ceil(\delta)$ renvoient respectivement aux premiers et
-%  derniers processus de chaque sorte.
-%  \begin{align}
-%  &\supp(\delta) = \{p\in\Proc\mid \sort(p)\in\sort(\delta) \wedge
-%                        p = \first_{\sort(p)}(\delta) \}\enspace,
-%  \eqlabel{support}
-%  \\
-%  &\ceil(\delta) = \{p\in\Proc\mid \sort(p)\in\sort(\delta) \wedge
-%                        p = \last_{\sort(p)}(\delta) \}\enspace.
-%  \eqlabel{ceil}
-%  \end{align}
 \end{definition}
 
 \begin{definition}[Objective ($\Obj$)]
@@ -332,7 +321,7 @@ $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
   \end{itemize}
 \end{itemize}
 
-Finally, as $\muconcr_{max\ctx}(\w) \neq \emptyset$, $\uconcr(\w) \neq \emptyset$ (property \towrite{xxx}).
+Finally, as $\muconcr_{max\ctx}(\w) \neq \emptyset$, $\uconcr(\w) \neq \emptyset$ (\pref{th:uconcr-ctx}).
 \end{proof}
 
 
@@ -362,6 +351,81 @@ where:
 
 
 
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[aS,node distance=1.5cm]
+    \node[Aproc] (c1) {$c_1$};
+    \node[Aobj,below of=c1] (c01) {$\PHobj{c_0}{c_1}$};
+    \node[Asol,below of=c01] (c01s) {};
+    
+    \node[Aproc,below of=c01s] (ab11) {$ab_{11}$};
+    \node[Aobj,below right of=ab11] (ab0111) {$\PHobj{ab_{01}}{ab_{11}}$};
+    \node[Asol,below of=ab0111] (ab0111s) {};
+    \node[Aobj,below of=ab11,node distance=2.5cm] (ab0011) {$\PHobj{ab_{00}}{ab_{11}}$};
+    \node[Asol,below of=ab0011] (ab0011s) {};
+    \node[Aobj,below left of=ab11] (ab1011) {$\PHobj{ab_{10}}{ab_{11}}$};
+    \node[Asol,below of=ab1011] (ab1011s) {};
+
+    \node[Aproc,below of=ab0111s] (a1) {$a_1$};
+    \node[Aobj,below of=a1] (a11) {$\PHobj{a_1}{a_1}$};
+    \node[Asol,below of=a11] (a11s) {};
+    \node[Aobj,below right of=a1] (a01) {$\PHobj{a_0}{a_1}$};
+    \node[Asol,below of=a01] (a01s) {};
+    \node[Aproc,below of=a01s] (b0) {$b_0$};
+    \node[Aobj,below of=b0] (b00) {$\PHobj{b_0}{b_0}$};
+    \node[Asol,below of=b00] (b00s) {};
+    \node[Aobj,below right of=b0] (b10) {$\PHobj{b_1}{b_0}$};
+    \node[Asol,below of=b10] (b10s) {};
+
+    \node[Aproc,below of=ab1011s] (b1) {$b_1$};
+    \node[Aobj,below of=b1] (b01) {$\PHobj{b_0}{b_1}$};
+    \node[Asol,below of=b01] (b01s) {};
+    \node[Aproc,below of=b01s] (a0) {$a_0$};
+    \node[Aobj,below of=a0] (a10) {$\PHobj{a_1}{a_0}$};
+    \node[Asol,below of=a10] (a10s) {};
+
+    \path
+    (c1) edge (c01)
+    (c01) edge (c01s)
+    (c01s) edge (ab11)
+    (ab11) edge (ab0011) edge (ab0111) edge (ab1011)
+    (ab0011) edge (ab0011s)
+    (ab1011) edge (ab1011s)
+    (ab0111) edge (ab0111s)
+
+    (ab0011s) edge (a1) edge (b1)
+    (ab1011s) edge (b1)
+    (ab0111s) edge (a1)
+
+    (a1) edge (a01) edge (a11)
+    (a01) edge (a01s)
+    (a01s) edge (b0)
+    (a11) edge (a11s)
+    (a0) edge (a10)
+    (a10) edge (a10s)
+    
+    (b0) edge (b10) edge (b00)
+    (b10) edge (b10s)
+    (b00) edge (b00s)
+    (b1) edge (b01)
+    (b01) edge (b01s)
+    (b01s) edge (a0)
+    ;
+    \path
+    (ab0011) edge[double] (ab0111)
+    (ab0011) edge[double,bend right=10] (ab1011)
+    (ab1011) edge[double,bend right=10] (ab0011)
+    (ab0111) edge[double,bend right=10] (ab1011)
+    (ab1011) edge[double,bend right=10] (ab0111)
+    ;
+    \end{tikzpicture}
+  \label{fig:sa-livelock}
+  \caption{The local causality graph of the PH in \pref{fig:ph-livelock}.}
+\end{figure}
+
+
+
+\begin{comment}
 \begin{figure}
   \centering
   \begin{tikzpicture}[aS,node distance=1.5cm]
@@ -421,6 +485,7 @@ where:
   \label{fig:sa-concb}
   \caption{The local causality graph of the PH in \pref{fig:ph-concb}.}
 \end{figure}
+\end{comment}
 
 
 

@@ -47,21 +47,31 @@ $\PHproc$ denotes the set of all processes ($\PHproc \DEF \{ a_i\mid a\in\PHs \w
 The sort of a process $a_i$ is referred to as $\PHsort(a_i)=a$ and the set of sorts present in an action $h\in\PHa$ as $\PHsort(h) = \{\PHsort(\PHhitter(h)),\PHsort(\PHtarget(h))\}$.
 Given a state $s\in \PHl$, the process of sort $a\in\PHs$ present in $s$ is denoted by $\PHget{s}{a}$, that is the $a$-coordinate of the state $s$.
 If $a_i\in \PHl_a$, we define the notation $a_i\in s \EQDEF \PHget{s}{a}=a_i$.
+We define the semantics of actions in a Process Hitting model in \pref{def:play}.
 
-An action $h = \PHhit{a_i}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$ is \emph{playable} in $s \in \PHl$ iff $\PHget{s}{a} = a_i$, $\PHget{s}{b} = b_j$ and $\forall m < n, \forall g \in \PHa^{(m)}$, $g$ is not playable in $s$.
-%Dans un tel cas, l'état résultant du jeu de l'action $h$ dans $\etat$ est dénoté $(\etat \PHjoue h)$, où $\PHget{(\etat \PHjoue h)}{b} = b_k$ et $\forall c \in \PHs, c \neq b \Rightarrow \PHget{(\etat \PHjoue h)}{c} = \PHget{\etat}{c}$.
-%
-%An action $h=\PHhit{a_i}{b_j}{b_k} \in\PHa$ is \emph{playable} in $s \in L$ if and only if $\PHget{s}{a} = a_i$ and $\PHget{s}{b} = b_j$.
-In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$, that is $\PHget{(s \PHplay h)}{b} = b_k$ and $\forall c\in\PHs, c\neq b, \PHget{(s\PHplay h)}{c} = \PHget{s}{c}$.
-For the sake of clarity, for all $h, h'\in\PHa$, $((s\PHplay h)\PHplay h')$ is abbreviated as $(s\PHplay h\PHplay h')$.
+\begin{definition}
+\label{def:play}
+  An action $h = \PHhit{a_i}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$ is \emph{playable} in $s \in \PHl$ iff $\PHget{s}{a} = a_i$, $\PHget{s}{b} = b_j$ and $\forall m < n, \forall g \in \PHa^{(m)}, \PHhitter(g) \notin s \vee \PHtarget(g) \notin s$.
+  In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$, defined by: $\PHget{(s \PHplay h)}{b} = b_k$ and $\forall c\in\PHs, c\neq b, \PHget{(s\PHplay h)}{c} = \PHget{s}{c}$.
+  For the sake of clarity, for all $h, h'\in\PHa$, $((s\PHplay h)\PHplay h')$ is abbreviated as $(s\PHplay h\PHplay h')$.
+\end{definition}
+
+\begin{definition}[Scenario ($\Sce$)]
+\label{def:scenario}
+  For a given Process Hitting model $(\PHs,\PHl,\PHh)$,
+  a \emph{scenario} $\delta$ is a sequence of actions of $\PHh$ so that for all $n \in \indexes{\delta}$,
+  $a_i = \PHhitter(\delta_n)$ (resp. $\PHtarget(\delta_n)$) $\Rightarrow \last_a(\delta_{1..n-1}) \in \{ \varnothing, a_i \}$.
+  The set of all scenarios is noted $\Sce$.
+\end{definition}
 
 \begin{definition}[Process Hitting $n$-reduction] \towrite{Revoir terminologie : “reduction” ? “restriction” ?}
-  If $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ is a Process Hitting with $k$ priorities and $n \in \segm{1}{k}$, we denote $\restriction{\PH}{n}$ \towrite{$\PH_{|n}$ $\PH'$} the $n$-reduction of $\PH$ the following Process Hitting with $n$ priorities, where:
-  $$\restriction{\PH}{n} = (\PHs; \PHl; \restriction{\PHa}{n})$$
-  and:
+  If $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ is a Process Hitting with $k$ priorities and $n \in \segm{1}{k}$, we denote $\restriction{\PH}{n}$ \towrite{$\PH_{|n}$ $\PH'$} the $n$-reduction of $\PH$ the following Process Hitting with $n$ priorities:
+  $\restriction{\PH}{n} = (\PHs; \PHl; \restriction{\PHa}{n})$,
+  with:
   $$\restriction{\PHa}{n} = (\PHa^{(1)}; \dots; \PHa^{(n)})$$
-  
-  Furthermore, we define: $\restriction{\PH}{0} = (\PHs; \PHl; \restriction{\PHa}{0})$, where $\restriction{\PHa}{0} = ()$ is a $0$-uplet.
+  Furthermore, we denote: $\restriction{\Sce}{n}$ the set of scenarios of actions of $\restriction{\PHa}{n}$.
+%  
+%  Furthermore, we define: $\restriction{\PH}{0} = (\PHs; \PHl; \restriction{\PHa}{0})$, where $\restriction{\PHa}{0} = ()$ is a $0$-uplet.
 \end{definition}
 
 \begin{comment} %example*
@@ -154,7 +164,7 @@ we thus model an over-approximation of the possible actions.
 \end{example*}
 \end{comment}
 
-\subsection{Modeling cooperation.}
+\subsection{Modeling cooperation}
 \towrite{Sortes coopératives avec mise à jour prioritaire (pas de décalage temporel)}
 As described in \cite{PMR10-TCSB}, the cooperation between processes to make another bounce can be
 expressed in PH by building a \emph{cooperative sort}.
@@ -169,6 +179,69 @@ and $c$ (e.g., $\PHfrappe{b_1}{bc_{00}}{bc_{10}}$ and $\PHfrappe{b_1}{bc_{01}}{b
 Then, it is the process $bc_{11}$ which hits $a_1$ to make it bounce to $a_2$ instead of the
 independent hits from $b_1$ and $c_1$.
 
+
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \TSort{(0,0)}{a}{2}{l}
+    \TSort{(0,4)}{b}{2}{l}
+    \TSort{(6,2)}{c}{2}{r}
+
+    \TSetTick{ab}{0}{00}
+    \TSetTick{ab}{1}{01}
+    \TSetTick{ab}{2}{10}
+    \TSetTick{ab}{3}{11}
+    \TSort{(3,1)}{ab}{4}{l}
+
+    \THit{a_0}{prio}{ab_3}{.west}{ab_1}
+    \THit{a_0}{prio}{ab_2}{.west}{ab_0}
+    \THit{a_1}{prio}{ab_1}{.west}{ab_3}
+    \THit{a_1}{prio}{ab_0}{.west}{ab_2}
+
+    \THit{b_0}{prio}{ab_3}{.west}{ab_2}
+    \THit{b_0}{prio}{ab_1}{.west}{ab_0}
+    \THit{b_1}{prio}{ab_2}{.west}{ab_3}
+    \THit{b_1}{prio}{ab_0}{.west}{ab_1}
+    
+    \THit{a_1}{selfhit}{a_1}{.west}{a_0}
+    \THit{b_1}{selfhit}{b_1}{.west}{b_0}
+    \THit{a_0}{bend left}{b_0}{.south west}{b_1}
+    \THit{b_0}{bend right=60}{a_0}{.west}{a_1}
+
+    \THit{ab_3}{}{c_0}{.west}{c_1}
+
+    \path[bounce, bend right]
+      \TBounce{ab_3}{}{ab_1}{.north west}
+      \TBounce{ab_2}{}{ab_0}{.north west}
+      \TBounce{ab_3}{}{ab_2}{.north west}
+      \TBounce{ab_1}{}{ab_0}{.north west}
+    ;
+    \path[bounce, bend left]
+      \TBounce{ab_1}{}{ab_3}{.south west}
+      \TBounce{ab_0}{}{ab_2}{.south west}
+      \TBounce{ab_2}{}{ab_3}{.south west}
+      \TBounce{ab_0}{}{ab_1}{.south west}
+    ;
+    \path[bounce, bend right]
+      \TBounce{a_1}{}{a_0}{.north west}
+      \TBounce{b_1}{}{b_0}{.north west}
+    ;
+    \path[bounce, bend left]
+      \TBounce{a_0}{}{a_1}{.south west}
+      \TBounce{b_0}{}{b_1}{.south west}
+    ;
+    \path[bounce, bend left]
+      \TBounce{c_0}{}{c_1}{.south west}
+    ;
+  \end{tikzpicture}
+  \label{fig:ph-livelock}
+  \caption{An example of PH model with three well-formed components ($a$, $b$ and $c$) and a well-formed cooperative sort ($ab$).}
+\end{figure}
+
+
+
+\begin{comment}
 \begin{figure}[p]
 \centering
 \scalebox{1.3}{
@@ -226,9 +299,11 @@ $a_1$ bounce to $a_2$.
 Actions involving $b_1$ or $c_1$ are in thick lines.
 }
 \end{figure}
+\end{comment}
 
 
 
+\begin{comment}
 \begin{figure}
   \centering
   \begin{tikzpicture}
@@ -274,6 +349,7 @@ Actions involving $b_1$ or $c_1$ are in thick lines.
   \label{fig:ph-concb}
   \caption{A simple PH example depicting “forward concurrency” between two actions belonging to different classes of priorities.}
 \end{figure}
+\end{comment}
 
 
 
@@ -395,30 +471,55 @@ $$
 %\towrite{Définition formelle ? + justification}
 %The model $\restriction{\PH}{k-1}$ contains no cycles. Cycles are still allowed in $\PH$ however.
 
-Prédécesseurs prioritaires :
-$$\Vs(a) = \{ b \in \PHs \mid \PHh^1(b, a) \neq \emptyset \}$$
-$$\Vh(a) = \{ h \in \PHh^{(1)} \mid \PHsort(\PHhitter(h)) \in \Vs(a) \wedge \PHsort(\PHtarget(h)) \in \Vs(a) \cup \{ a \} \}$$
+Let $\PH$ be a PH model on which we want to apply the static analysis.
+In this paper, we focus on a specific class of models that are equivalent to boolean networks.
 
-Sorte coopérative :
-$a$ is a well-formed cooperative sort iff:
-\begin{itemize}
-  \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 1$
-  \item $\forall s \in \underset{b \in \Vs(a)}{\times} \PHl_b, |\pfp_s(a)| = 1$
-\end{itemize}
+\paragraph{2 priorities}
+In this paper, we only consider Process Hitting models with 2 priorities.
 
-Composant :
-$a$ is a well-formed component iff:
-\begin{itemize}
-  \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2$
-\end{itemize}
+Given this first hypothesis, we define the neighbor \towrite{revoir terminologie : neighbors ? vicinity ?} sorts and actions (\pref{def:neighbors}).
+\begin{definition}
+\label{def:chainsactions}
+  We define the set of chains of actions $\PHh(b, a)$ between two sorts $b$ and $a$ as below:
+  \begin{align*}
+  \PHh(b, a) = \{ (h_i)_{i \in \segm{0}{s}} \in (\PHh^{(1)})^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_0)) = b \wedge \PHsort(\PHtarget(h_s)) = a \\
+    & \wedge \forall i \in \segm{1}{s}, \PHsort(\PHtarget(h_{i-1})) = \PHsort(\PHhitter(h_{i})) \}
+  \end{align*}
+\end{definition}
+\begin{definition}
+\label{def:neighbors}
+  The set of neighbor sorts $\Vs(a)$ of a given sort $a$ is the set of sorts that can interact with it through actions of priority $1$.
+  The set of neighbor actions $\Vh(a)$ of $a$ is the set of actions of priority $1$ influencing $a$.
+  $$\Vs(a) = \{ b \in \PHs \mid \PHh(b, a) \neq \emptyset \}$$
+  $$\Vh(a) = \{ h \in \PHh^{(1)} \mid \PHsort(\PHhitter(h)) \in \Vs(a) \wedge \PHsort(\PHtarget(h)) \in \Vs(a) \cup \{ a \} \}$$
+\end{definition}
+
+In \pref{def:cs} and \pref{def:component} we define the notion of well-formed component and cooperative sort.
+A sort $a$ is a well-formed component iff
+it is hit only by actions of priority $2$.
+A cooperative sort $a$ is well-formed iff
+it is hit only by actions of priority $1$,
+if any sub-state of its neighborhood is represented by at least one local steady state in this sort,
+and if any of its processes represents at least one sub-state of its neighborhood.
+\begin{definition}
+\label{def:component}
+  A sort $a \in \PHs$ is said to be a well-formed component iff:
+  \begin{itemize}
+    \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2$
+  \end{itemize}
+\end{definition}
+\begin{definition}
+  \label{def:cs}
+  A sort $a \in \PHs$ is said to be a well-formed cooperative sort iff:
+  \begin{itemize}
+    \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 1$
+    \item $\forall s \in \underset{b \in \Vs(a)}{\times} \PHl_b, \pfp_s(a) \neq \emptyset$
+    \item $\forall a_i \in \PHl_a, \exists s \in \underset{b \in \Vs(a)}{\times} \PHl_b, a_i \in \pfp_s(a)$
+  \end{itemize}
+\end{definition}
 
 We call $\components$ the set of well-formed components and $\cs$ the set of well-formed cooperative sorts.
 We note that: $\forall a \in \components, \Vs(a) = \emptyset \wedge \Vh(a) = \emptyset$
-
-
-
-Let $\PH$ be a PH model on which we want to apply the static analysis.
-In this paper, we focus on a specific class of models that are equivalent to boolean networks.
 
 \paragraph{Components \& cooperative sorts}
 The studied PH is a PH with 2 priorities, and it is only composed of well-formed components and cooperative sorts:
