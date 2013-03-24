@@ -218,6 +218,7 @@ Bonds possibles :
   \pfp_\ctx(a) = \{ a_i \in \PHl_a &\mid \exists s \in \ctx, \exists \delta \in \restriction{\Sce}{1}, \PHget{(\ctx \PHplay \delta)}{a} = a_i \\
   & \quad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
 \end{align*}
+Of couse, if $a \in \components$, then $\pfp_\ctx(a) = \PHget{\ctx}{a}$.
 
 Mise à jour de l'état initial :
 \begin{align*}
@@ -304,7 +305,10 @@ $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
 
   \item Suppose all children objectives of $P$ are concretizable.
   \begin{itemize}
-    \item If $\exists Q \in \Bcont$, then by hypothesis,
+    \item If $\exists (P, Q) \in \Bcont$, then by hypothesis,
+      $\muconcr_{s}(\obj{\PHtarget(P)}{\PHtarget(Q)} \concat Q) \neq \emptyset$, thus
+      $\muconcr_{s}(P) \neq \emptyset$.
+    \item If $\exists (P, Q) \in \Bpriocont$, then by hypothesis,
       $\muconcr_{s}(\obj{\PHtarget(P)}{\PHtarget(Q)} \concat Q) \neq \emptyset$, thus
       $\muconcr_{s}(P) \neq \emptyset$.
     \item Else, by \pref{def:maxCont}, the concretizations of the children of $P$ require no process of sort $\PHsort(P)$.
@@ -316,13 +320,13 @@ $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
 %          If $\PHget{s \PHplay \delta_1}{a} \neq a_j$, then by construction of $\cwB$, $(\PHobj{a_j}{a_k}, \PHobj{\PHget{s \PHplay \delta_1}{a}}{a_k}) \in \Bsat$.
 %          By hypothesis, $\muconcr_s(\PHobj{\any}{a_k}) \neq \emptyset$.
 %          If $\PHget{s \PHplay \delta_1}{a} = a_j$, then from \pref{th:vplay}, $\exists \delta'_1 \in \Sce$, $\zeta_1$ can be played in $s \PHplay \delta_1 \PHplay \delta'_1$.
-        \item[*] For $n \in \indexes{\zeta}$, let $s_n = s \PHplay \delta_1 \PHplay \delta'_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_{n-1} \PHplay \delta'_{n-1} \PHplay \zeta_{n-1}$ (or $s_1 = s$),
+        \item[*] For $n \in \indexes{\zeta}$, let $s_n = s \PHplay \delta_1 \PHplay \delta'_1 \PHplay \delta''_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_{n-1} \PHplay \delta'_{n-1} \PHplay \delta''_{n-1} \PHplay \zeta_{n-1}$ (or $s_1 = s$),
           and $\zeta_n = \PHhit{b_i}{a_j}{a_k}$.
           By hypothesis, $\exists \delta_n \in \muconcr_{s_n}(\PHobj{\any}{b_i})$.
-          If $a \in \cs$, then $\prio(\zeta_n) = 1$ and $\zeta_n$ can be played in $s_n \PHplay \delta_n$ (\ie $\delta'_n = \varepsilon$).
-          If $a \notin \cs$ and $b \in \cs$, then there exists a scenario $\widehat{\delta_n}$ so that $b_i \in \pfp_{s_n \PHplay \delta_n \PHplay \widehat{\delta_n}}(b)$.
-          Then, by \pref{th:hcscomp}, there is a scenario $\delta' \in \restriction{\Sce}{1}$ so that $\zeta_n$ is playable in $s_n \PHplay \delta_n \PHplay \widehat{\delta_n} \PHplay \delta'_n$.
-          Finally, if $a,b \in \components$, then by \pref{th:hcompcomp}, there is a scenario $\delta' \in \restriction{\Sce}{1}$ so that $\zeta_n$ is playable in $s_n \PHplay \delta_n \PHplay \delta'_n$.
+          If $a \in \cs$, then $\prio(\zeta_n) = 1$ and $\zeta_n$ can be played in $s_n \PHplay \delta_n$ (\ie $\delta'_n = \delta''_n = \varepsilon$).
+          If $a \notin \cs$ and $b \in \cs$, then there exists a scenario $\delta'_n$ so that $b_i \in \pfp_{s_n \PHplay \delta_n \PHplay \delta'_n}(b)$ (because of the $\Bpriocont$ relation).
+          Then, by \pref{th:hcscomp}, there is a scenario $\delta'' \in \restriction{\Sce}{1}$ so that $\zeta_n$ is playable in $s_n \PHplay \delta_n \PHplay \delta'_n \PHplay \delta''_n$.
+          Finally, if $a,b \in \components$, then by \pref{th:hcompcomp}, there is a scenario $\delta'' \in \restriction{\Sce}{1}$ so that $\zeta_n$ is playable in $s_n \PHplay \delta_n \PHplay \delta''_n$ (\ie $\delta'_n = \varepsilon$).
       \end{itemize}
       Thus, $\delta = \delta_m \in \muconcr_s(P)$. % and $\ceil(\delta) \subseteq max\ctx$.
   \end{itemize}
