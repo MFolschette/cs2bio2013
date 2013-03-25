@@ -1,11 +1,4 @@
-
-\begin{definition}[Scenario ($\Sce$)]
-\label{def:scenario}
-  For a given Process Hitting model $(\PHs,\PHl,\PHh)$,
-  a \emph{scenario} $\delta$ is a sequence of actions of $\PHh$ so that for all $n \in \indexes{\delta}$,
-  $a_i = \PHhitter(\delta_n)$ (resp. $\PHtarget(\delta_n)$) $\Rightarrow \last_a(\delta_{1..n-1}) \in \{ \varnothing, a_i \}$.
-  The set of all scenarios is noted $\Sce$.
-\end{definition}
+\section{Static analysis}\label{sec:sa}
 
 \begin{definition}[Objective ($\Obj$)]
 \label{def:obj}
@@ -201,13 +194,6 @@ Bonds possibles :
 \bounceprocs_\ctx = \{ a_i \in \PHproc \mid \exists s \in \ctx, \exists \delta \in \restriction{\Sce}{k-1}, a_i \in (s \PHplay \delta) \}
 \end{align*}
 \end{comment}
-
-États focaux possibles: pour tout contexte $\ctx \in \restriction{\PHl}{\Vs(a)}$:
-\begin{align*}
-  \pfp_\ctx(a) = \{ a_i \in \PHl_a &\mid \exists s \in \ctx, \exists \delta \in \restriction{\Sce}{1}, \PHget{(\ctx \PHplay \delta)}{a} = a_i \\
-  & \quad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
-\end{align*}
-Of couse, if $a \in \components$, then $\pfp_\ctx(a) = \PHget{\ctx}{a}$.
 
 Mise à jour de l'état initial :
 \begin{align*}

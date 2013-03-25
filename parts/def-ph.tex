@@ -5,7 +5,7 @@
 \subsection{Definition of the Process Hitting with $k$ priorities}
 \label{ssec:PH}
 \towrite{Reformuler (actuellement trop proche de CMSB)}
-A PH (\pref{def:PH}) gathers a finite number of concurrent \emph{processes} grouped into a finite set of \emph{sorts}.
+A PH (\pref{def:ph}) gathers a finite number of concurrent \emph{processes} grouped into a finite set of \emph{sorts}.
 A process belongs to a unique sort and is noted $a_i$ where $a$ is the sort and $i$ the identifier of the process within the sort $a$.
 At any time, one and only one process of each sort is present; a state of the PH thus corresponds to the set of such processes.
 
@@ -34,6 +34,7 @@ $\PHproc$ denotes the set of all processes ($\PHproc \DEF \{ a_i\mid a\in\PHs \w
 \end{comment}
 
 \begin{definition}[Process Hitting with $k$ priorities] \towrite{Revoir terminologie}
+\label{def:ph}
   A \emph{Process Hitting with $k$ priorities}, where $k \in \sN^*$, is a triplet $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$, with $\PHa^{\langle k \rangle} = (\PHa^{(1)}; \dots; \PHa^{(k)})$ a $k$-uplet, where:
   \begin{itemize}
     \item $\PHs \DEF \{a,b,\dots\}$ is the finite set of \emph{sorts}.
@@ -517,9 +518,16 @@ and if any of its processes represents at least one sub-state of its neighborhoo
     \item $\forall a_i \in \PHl_a, \exists s \in \underset{b \in \Vs(a)}{\times} \PHl_b, a_i \in \pfp_s(a)$
   \end{itemize}
 \end{definition}
-
 We call $\components$ the set of well-formed components and $\cs$ the set of well-formed cooperative sorts.
 We note that: $\forall a \in \components, \Vs(a) = \emptyset \wedge \Vh(a) = \emptyset$
+
+Finally, we denote $\pfp_s(a)$ the set of possible local steady-states of a sort $a$ from a state $s$.
+États focaux possibles: pour tout contexte $\ctx \in \restriction{\PHl}{\Vs(a)}$:
+\begin{align*}
+  \pfp_\ctx(a) = \{ a_i \in \PHl_a &\mid \exists s \in \ctx, \exists \delta \in \restriction{\Sce}{1}, \PHget{(\ctx \PHplay \delta)}{a} = a_i \\
+  & \quad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
+\end{align*}
+Of couse, if $a \in \components$, then $\pfp_\ctx(a) = \PHget{\ctx}{a}$.
 
 \paragraph{Components \& cooperative sorts}
 The studied PH is a PH with 2 priorities, and it is only composed of well-formed components and cooperative sorts:
