@@ -105,7 +105,7 @@
 
 \begin{document}
 \begin{frontmatter}
-\title{XXXXX \todo{Le titre !} XXXXX}
+\title{Under-approximation of reachability through static analysis in multivalued asynchronous networks}
 
 \author{Maxime Folschette\thanksref{myemail}}
 \address{\towrite{PRES LUNAM + IRCCyN}}
@@ -121,10 +121,22 @@
 \address{\towrite{PRES LUNAM + IRCCyN}}
 
 \begin{abstract}
-\todo{L'abstract}
+
+The Process Hitting is a recent framework based on the play of concurrent actions.
+Each action can modify the state of a component, and is conditioned by the state of at most one other component.
+Its original definition does not involve priorities between actions, allowing very efficient static analysis based on local causality to compute reachability properties.
+Although a new definition of the framework has been proposed including classes of priorities for actions,
+the static analysis methods were not adapted and thus did not apply to this extension of the framework.
+
+In this paper, we focus on a restriction of the Process Hitting with priorities by considering a class of models equivalent to multivalued networks.
+Then, we develop a new refinement for the under-approximation of the static analysis to give accurate results for this set of Process Hitting models.
+
 \end{abstract}
 \begin{keyword}
-  \todo{Mots-clefs}
+qualitative modelling,
+model abstraction,
+static analysis,
+asynchronous network
 \end{keyword}
 \end{frontmatter}
 
