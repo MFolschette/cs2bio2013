@@ -1,5 +1,7 @@
 \section{Static analysis}\label{sec:sa}
 
+\towrite{Mettre de la colle}
+
 \begin{definition}[Objective ($\Obj$)]
 \label{def:obj}
   The reachability of a process $a_j$ prof a process $a_i$ is called an \emph{objective}, noted $\PHobj{a_i}{a_j}$.
@@ -36,6 +38,7 @@ The play of $\delta$ in $\ctx$ is denoted $\ctx \PHplay \delta$ where $\ctx \PHp
 
 \begin{definition}[Objective sequence ($\OS$)]
 \label{def:OS}
+\towrite{Simplifier / réécrire en dehors d'une def}
   An \emph{objective sequence} is a sequence $\w = P_1 \concat \dots \concat P_{|\w|}$,
   where $\forall n \in \indexes{\w}, \w_n \in \Obj$ and $a_i = \PHtarget(\w_n) \Rightarrow \last_a(\w_{1..n-1}) \in \{ \varnothing, a_i \}$.
   The set of all objective sequences is denoted by $\OS$.
@@ -68,6 +71,7 @@ The play of $\delta$ in $\ctx$ is denoted $\ctx \PHplay \delta$ where $\ctx \PHp
 
 \begin{definition}[$\concr: \OS \mapsto \powerset(\Sce)$]
 \label{def:concr}
+\towrite{Simplifier ? Supprimer la def formelle ?}
   For a given $\w \in \OS$, $\concr(\w)$ is the set of scenarios concretising $\w$ in the context $\ctx$:
   \begin{align*}
     \concr(\w) = \{ \delta \in \Sce \mid & (\w^\vartriangle = \emptyseq \wedge \delta = \emptyseq) 
