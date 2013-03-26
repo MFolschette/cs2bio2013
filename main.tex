@@ -121,18 +121,17 @@
 \address{\towrite{PRES LUNAM + IRCCyN}}
 
 \begin{abstract}
+The Process Hitting is a recently introduced framework designed for the modelling of concurrent systems.
+Its originality lies in a compact representation of both components of the model and its corresponding actions:
+each action can modify the status of a component, and is conditioned by the status of at most one other component.
+This allowed to define very efficient static analysis based on local causality to compute reachability properties.
+However, in the case of cooperations between components (for example, when two components are supposed to interact with a third one only when they are in a given configuration), the approach leads to an over-approximated interleaving between actions, because of the pure asynchronous semantics of the model.
 
-The Process Hitting is a recent framework based on the play of concurrent actions.
-Each action can modify the state of a component, and is conditioned by the state of at most one other component.
-Its original definition does not involve priorities between actions, allowing very efficient static analysis based on local causality to compute reachability properties.
-Although a new definition of the framework has been proposed including classes of priorities for actions,
-the static analysis methods were not adapted and thus did not apply to this extension of the framework.
-
-In this paper, we focus on a restriction of the Process Hitting with two priorities and a specific behaviour of the components.
+To address this issue, we propose an extended definition of the framework, including priority classes for actions.
+In this paper, we focus on a restriction of the Process Hitting with two priorities and a specific behaviour of the components, that is sufficient to tackle the aforementioned problem of cooperations.
 We show that this class of Process Hitting models allows to represent any asynchronous networks, either boolean or multivalued.
-Then we develop a new refinement for the under-approximation of the static analysis to give accurate results for this set of Process Hitting models.
-Thus, our method allows to efficiently under-approximate local reachability properties in asynchronous multivalued networks.
-
+Then we develop a new refinement for the under-approximation of the static analysis to give accurate results for this class of Process Hitting models.
+Our method thus allows to efficiently under-approximate local reachability properties in asynchronous multivalued networks.
 \end{abstract}
 \begin{keyword}
 qualitative modelling,
