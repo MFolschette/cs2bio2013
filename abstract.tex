@@ -1,0 +1,150 @@
+\documentclass{entcs}
+
+\usepackage{entcsmacro}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{amsmath}  % Maths
+\usepackage{amsfonts} % Maths
+\usepackage{amssymb}  % Maths
+\usepackage{stmaryrd} % Maths (crochets doubles)
+
+\usepackage{url}     % Mise en forme + liens pour URLs
+\usepackage{hyperref}
+\usepackage{array}   % Tableaux évolués
+
+\usepackage{comment}
+
+
+\usepackage{prettyref}
+\newrefformat{def}{Def.~\ref{#1}}
+\newrefformat{fig}{Fig.~\ref{#1}}
+%\newrefformat{prop}{Property~\ref{#1}}
+\newrefformat{prop}{Proposition~\ref{#1}}
+\newrefformat{lem}{Lemma~\ref{#1}}
+\newrefformat{th}{Theorem~\ref{#1}}
+\newrefformat{co}{Corollary~\ref{#1}}
+\newrefformat{sec}{Sect.~\ref{#1}}
+\newrefformat{ssec}{Subsect.~\ref{#1}}
+\newrefformat{suppl}{Appendix~\ref{#1}}
+\newrefformat{eq}{Eq.~\eqref{#1}}
+\def\pref{\prettyref}
+
+%\usepackage{ntheorem}
+%\theorembodyfont{\upshape}
+%\newtheorem{definition}{Definition}{}{}
+%\newtheorem*{example}{Example}{}{}
+%\newtheorem{property}{Property}{}{}
+%\newtheorem{proposition}{Proposition}{}{}
+
+\usepackage{tikz}
+\newdimen\pgfex
+\newdimen\pgfem
+\usetikzlibrary{arrows,shapes,shadows,scopes}
+\usetikzlibrary{positioning}
+\usetikzlibrary{matrix}
+\usetikzlibrary{decorations.text}
+\usetikzlibrary{decorations.pathmorphing}
+
+\input{macros/macros}
+\input{macros/macros-ph}
+\input{macros/macros-abstr}
+
+% Macros
+\newcommand{\sN}{\mathbb{N}}
+\def\DEF{\stackrel{\Delta}=}
+\def\EQDEF{\stackrel{\Delta}\Leftrightarrow}
+\newcommand{\segm}[2]{\llbracket #1; #2 \rrbracket}
+\def\indexes#1{\mathbb{I}^{#1}}
+\newcommand{\sfp}[3]{\mathbf{lfp}\{#1\}\left(#2\mapsto#3\right)}
+%\def\lfp{\f{pppf}\;}
+\def\f#1{\mathsf{#1}}
+\def\prio{\mathsf{prio}}
+\newcommand{\bottom}{\perp}
+\newcommand{\Vs}{V_\PHs}
+\newcommand{\Vh}{V_\PHh}
+\newcommand{\Va}{\Vh}
+\newcommand{\stable}{\mathsf{stable}}
+\newcommand{\update}{\mathsf{update}}
+\newcommand{\components}{\Gamma}
+\newcommand{\cs}{CS}
+
+\tikzstyle{prio}=[draw,double,-stealth]
+
+\def\restriction#1#2{\mathchoice
+              {\setbox1\hbox{${\displaystyle #1}_{\scriptstyle #2}$}
+              \restrictionaux{#1}{#2}}
+              {\setbox1\hbox{${\textstyle #1}_{\scriptstyle #2}$}
+              \restrictionaux{#1}{#2}}
+              {\setbox1\hbox{${\scriptstyle #1}_{\scriptscriptstyle #2}$}
+              \restrictionaux{#1}{#2}}
+              {\setbox1\hbox{${\scriptscriptstyle #1}_{\scriptscriptstyle #2}$}
+              \restrictionaux{#1}{#2}}}
+\def\restrictionaux#1#2{{#1\,\smash{\vrule height .8\ht1 depth .85\dp1}}_{\,#2}} 
+
+
+% Commandes À FAIRE
+%\usepackage{color} % Couleurs du texte
+%\definecolor{darkgreen}{rgb}{0,0.5,0}
+%\newcommand{\towrite}[1]{\textcolor{darkgreen}{[#1]}}
+%\newcommand{\todo}[1]{\textcolor{red}{[[#1]]}}
+
+
+% Id est
+\newcommand{\ie}{i.e. }
+
+% Césures
+\hyphenation{pa-ra-me-tri-za-tion}
+\hyphenation{pa-ra-me-tri-za-tions}
+
+
+
+\def\lastname{Folschette \emph{et al}}
+
+\begin{document}
+\begin{frontmatter}
+\title{Under-approximation of reachability through static analysis in multivalued asynchronous networks}
+
+\author{Maxime Folschette\thanksref{myemail}}
+\address{LUNAM Universit\'e, \'Ecole Centrale de Nantes, IRCCyN UMR CNRS 6597\\
+(Institut de Recherche en Communications et Cybern\'etique de Nantes)\\
+1 rue de la No\"e - B.P. 92101 - 44321 Nantes Cedex 3, France.}
+\thanks[myemail]{\url{Maxime.Folschette@irccyn.ec-nantes.fr}}
+
+\author{Loïc Paulevé}
+\address{ETH Zürich, Switzerland.}
+
+\author{Morgan Magnin}
+\address{LUNAM Universit\'e, \'Ecole Centrale de Nantes, IRCCyN UMR CNRS 6597\\
+(Institut de Recherche en Communications et Cybern\'etique de Nantes)\\
+1 rue de la No\"e - B.P. 92101 - 44321 Nantes Cedex 3, France.}
+
+\author{Olivier Roux}
+\address{LUNAM Universit\'e, \'Ecole Centrale de Nantes, IRCCyN UMR CNRS 6597\\
+(Institut de Recherche en Communications et Cybern\'etique de Nantes)\\
+1 rue de la No\"e - B.P. 92101 - 44321 Nantes Cedex 3, France.}
+
+\begin{abstract}
+The Process Hitting is a recently introduced framework designed for the modelling of concurrent systems.
+Its originality lies in a compact representation of both components of the model and its corresponding actions:
+each action can modify the status of a component, and is conditioned by the status of at most one other component.
+This allowed to define very efficient static analysis based on local causality to compute reachability properties.
+However, in the case of cooperations between components (for example, when two components are supposed to interact with a third one only when they are in a given configuration), the approach leads to an over-approximated interleaving between actions, because of the pure asynchronous semantics of the model.
+
+To address this issue, we propose an extended definition of the framework, including priority classes for actions.
+In this paper, we focus on a restriction of the Process Hitting with two priorities and a specific behaviour of the components, that is sufficient to tackle the aforementioned problem of cooperations.
+We show that this class of Process Hitting models allows to represent any asynchronous networks, either boolean or multivalued.
+Then we develop a new refinement for the under-approximation of the static analysis to give accurate results for this class of Process Hitting models.
+Our method thus allows to efficiently under-approximate local reachability properties in asynchronous multivalued networks.
+\end{abstract}
+\begin{keyword}
+qualitative modelling,
+model abstraction,
+static analysis,
+asynchronous network
+\end{keyword}
+\end{frontmatter}
+
+\end{document}
