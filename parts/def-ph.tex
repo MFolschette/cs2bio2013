@@ -478,6 +478,18 @@ In this paper, we focus on a specific class of models that are equivalent to boo
 \paragraph{2 priorities}
 In this paper, we only consider Process Hitting models with 2 priorities.
 
+In \pref{def:cs} we define the notion of well-formed component.
+A sort $a$ is a well-formed component iff
+it is hit only by actions of priority $2$.
+\begin{definition}
+\label{def:component}
+  A sort $a \in \PHs$ is said to be a well-formed component iff:
+  \begin{itemize}
+    \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2$
+  \end{itemize}
+\end{definition}
+We call $\components$ the set of well-formed components.
+
 Given this first hypothesis, we define the neighbor \towrite{revoir terminologie : neighbors ? vicinity ?} sorts and actions (\pref{def:neighbors}).
 \begin{definition}
 \label{def:chainsactions}
@@ -489,45 +501,42 @@ Given this first hypothesis, we define the neighbor \towrite{revoir terminologie
 \end{definition}
 \begin{definition}
 \label{def:neighbors}
-  The set of neighbor sorts $\Vs(a)$ of a given sort $a$ is the set of sorts that can interact with it through actions of priority $1$.
-  The set of neighbor actions $\Vh(a)$ of $a$ is the set of actions of priority $1$ influencing $a$.
-  $$\Vs(a) = \{ b \in \PHs \mid \PHh(b, a) \neq \emptyset \}$$
+  The set of neighbour sorts $\Vs(a)$ of a given sort $a$ is the set of components that can interact with it through actions of priority $1$.
+  The set of neighbour actions $\Vh(a)$ of $a$ is the set of actions of priority $1$ influencing $a$.
+  $$\Vs(a) = \{ b \in \components \mid \PHh(b, a) \neq \emptyset \}$$
   $$\Vh(a) = \{ h \in \PHh^{(1)} \mid \PHsort(\PHhitter(h)) \in \Vs(a) \wedge \PHsort(\PHtarget(h)) \in \Vs(a) \cup \{ a \} \}$$
 \end{definition}
 
-In \pref{def:cs} and \pref{def:component} we define the notion of well-formed component and cooperative sort.
-A sort $a$ is a well-formed component iff
-it is hit only by actions of priority $2$.
+We denote $\pfp_s(a)$ the set of possible local steady-states of a sort $a$ from a state $s$.
+\todo{À corriger : état global ? + prendre en compte l'état de la sorte}
+\begin{align*}
+  \pfp_s(a) = \{ a_i \in \PHl_a &\mid \exists \delta \in \restriction{\Sce}{1}, \PHget{(s \PHplay \delta)}{a} = a_i \\
+  & \quad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
+\end{align*}
+Of course, if $a \in \components$, then $\pfp_s(a) = \PHget{s}{a}$.
+
+In \pref{def:component} we define the notion of well-formed cooperative sort.
 A cooperative sort $a$ is well-formed iff
 it is hit only by actions of priority $1$,
-if any sub-state of its neighborhood is represented by at least one local steady state in this sort,
-and if any of its processes represents at least one sub-state of its neighborhood.
+if any sub-state of its neighbourhood is represented by at least one local steady state in this sort,
+and if any of its processes represents at least one sub-state of its neighbourhood.
 \begin{definition}
-\label{def:component}
-  A sort $a \in \PHs$ is said to be a well-formed component iff:
-  \begin{itemize}
-    \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2$
-  \end{itemize}
-\end{definition}
-\begin{definition}
-  \label{def:cs}
+\label{def:cs}
   A sort $a \in \PHs$ is said to be a well-formed cooperative sort iff:
   \begin{itemize}
     \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 1$
-    \item $\forall s \in \underset{b \in \Vs(a)}{\times} \PHl_b, \pfp_s(a) \neq \emptyset$
+    \item $\forall s \in \underset{b \in \Vs(a)}{\times} \PHl_b, |\pfp_s(a)| = 1$
     \item $\forall a_i \in \PHl_a, \exists s \in \underset{b \in \Vs(a)}{\times} \PHl_b, a_i \in \pfp_s(a)$
   \end{itemize}
 \end{definition}
-We call $\components$ the set of well-formed components and $\cs$ the set of well-formed cooperative sorts.
-We note that: $\forall a \in \components, \Vs(a) = \emptyset \wedge \Vh(a) = \emptyset$
-
-Finally, we denote $\pfp_s(a)$ the set of possible local steady-states of a sort $a$ from a state $s$.
-États focaux possibles: pour tout contexte $\ctx \in \restriction{\PHl}{\Vs(a)}$:
-\begin{align*}
-  \pfp_\ctx(a) = \{ a_i \in \PHl_a &\mid \exists s \in \ctx, \exists \delta \in \restriction{\Sce}{1}, \PHget{(\ctx \PHplay \delta)}{a} = a_i \\
-  & \quad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
-\end{align*}
-Of couse, if $a \in \components$, then $\pfp_\ctx(a) = \PHget{\ctx}{a}$.
+We call $\cs$ the set of well-formed cooperative sorts.
+%We note that: $\forall a \in \components, \Vs(a) = \emptyset \wedge \Vh(a) = \emptyset$
+As any local state of neighbour sorts of a cooperative sort leads to a local steady-state, we denote $\csState(a_i)$ the set of local states represented by the process $a_i$ of the cooperative sort $a$.
+\begin{definition}[$\csState$]
+\label{def:csState}
+  \towrite{À reformuler}
+  $$\csState(a_i) = \{ s \in \underset{b \in \Vs(a)}{\times} \PHl_b \mid \pfp_{s}(a) = a_i \}$$
+\end{definition}
 
 \paragraph{Components \& cooperative sorts}
 The studied PH is a PH with 2 priorities, and it is only composed of well-formed components and cooperative sorts:
