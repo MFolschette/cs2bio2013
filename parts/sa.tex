@@ -128,13 +128,16 @@ The play of $\delta$ in $\ctx$ is denoted $\ctx \PHplay \delta$ where $\ctx \PHp
 %%\\ & \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \}
 %\end{align*}
 
-Processus rencontrés :
-\todo{Revenir à la définition simple de procs ?}
-\begin{align*}
-&\allprocs((\cwSol,\cwReq,\cwCont,\cwSat)) = \{ p \in \PHproc \mid \exists (P,ps) \in \cwSol, p \in ps \\
-  &\qquad\qquad \vee p = \PHtarget(P) \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \\
-  &\qquad\qquad \vee \exists(Q, \PHobj{p}{\PHbounce(Q)} \in \cwPrioCont \}
-\end{align*}
+The set of all processes involved in an abstract structure $\cwB$ is given in \pref{def:allprocs}.
+\begin{definition}
+\label{def:allprocs}
+  \begin{align*}
+  &\allprocs((\cwSol,\cwReq,\cwRSP,\cwCont)) = \{ p \in \PHproc \mid \exists (P,ps) \in \cwSol, \\
+    &\qquad\qquad p \in ps \vee p = \PHtarget(P) \vee p = \PHbounce(P) \} \\
+  %  &\qquad\qquad \vee p = \PHtarget(P) \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \\
+  %  &\qquad\qquad \vee \exists(Q, \PHobj{p}{\PHbounce(Q)} \in \cwPrioCont \}
+  \end{align*}
+\end{definition}
 
 \subsection{Local fixed points / possible bounces}
 
@@ -199,11 +202,6 @@ Bonds possibles :
 \bounceprocs_\ctx = \{ a_i \in \PHproc \mid \exists s \in \ctx, \exists \delta \in \restriction{\Sce}{k-1}, a_i \in (s \PHplay \delta) \}
 \end{align*}
 \end{comment}
-
-Mise à jour de l'état initial :
-\begin{align*}
-  \update(\ctx) = \ctx \Cap \bigcup_{a \in CS} \pfp_{\restriction{\ctx}{\Vs(a) \cup \{ a \}}}(a)
-\end{align*}
 
 %%% N'est plus adapté
 %Points fixes possibles sur un ensemble de sortes :
@@ -288,10 +286,10 @@ $\forall i \in \segm{1}{n}, \PHget{(s \PHplay \delta_n)}{\PHsort(p_i)} = p_i$.
 %    so that: $\PHget{(s \PHplay \delta_n \PHplay \delta')}{\PHsort(p_{n+1})} = p_{n+1}$.
     By hypothesis, $(a_i, ps)$ is coherent (\pref{def:coherent}), which means that solving $p_{n+1}$ does not disturb the processes of $ps$.
     Therefore, $\forall i \in \segm{1}{n+1}$, $\PHget{(s \PHplay \delta_n \PHplay \delta')}{\PHsort(p_{i})} = p_{i}$.
-    Finally, by theorem \todo{théorème mise à jour}, there exists a scenario $\delta'' \in \restriction{\Sce}{1}$
+    Finally, by \pref{th:update}, there exists a scenario $\delta'' \in \restriction{\Sce}{1}$
     that can be played in $s \PHplay \delta_n \PHplay \delta'$
     and so that, if we denote $\delta_{n+1} = \delta_n \PHplay \delta' \PHplay \delta''$,
-    we have: $\update(s \PHplay \delta_n \PHplay \delta') = s \PHplay \delta_{n+1}$ (\todo{théorème stabilité}), and the same property about processes.
+    we have: $\update(s \PHplay \delta_n \PHplay \delta') = s \PHplay \delta_{n+1}$ and the same property about processes (by \pref{th:hcscomp}).
 \end{itemize}
 Therefore, $\delta = \delta_{\indexes{ps}}$ exists, and given its properties, we have: $\PHget{(s \PHplay \delta)}{a} = a_i$
 and $\update(s \PHplay \delta) = s \PHplay \delta$.
@@ -317,14 +315,13 @@ $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
         \item[*] \towrite{construire récurvivement ? Distinguer les cas $b_j$ dans $\components$ ou $\cs$ (stabilité requise et obtenue)}
         Suppose that $\delta_n$ exists and let $\zeta_n = \PHhit{b_i}{a_j}{a_k}$.
         By hypothesis there exists $\delta' \in \muconcr_{s \PHplay \delta_n}(\PHobj{\any}{b_i})$ with $\PHsort(P) \notin \PHsort(\delta')$ by \pref{def:maxCont}.
-        By \todo{théorème mise à jour} there exists $\delta'' \in \restriction{\Sce}{1}$ so that $\update(s \PHplay \delta') = s \PHplay \delta' \PHplay \delta''$.
-        Furthermore, $\PHget{(s \PHplay \delta' \PHplay \delta'')}{b} = b_j$ \todo{car $b \in \components$ ou $b$ est stable}.
+        By \pref{th:update} there exists $\delta'' \in \restriction{\Sce}{1}$ so that $\update(s \PHplay \delta') = s \PHplay \delta' \PHplay \delta''$.
+        Furthermore, $\PHget{(s \PHplay \delta' \PHplay \delta'')}{b} = b_j$ (by \pref{th:hcompcomp} if $b \in \components$ or \pref{th:hcscomp} if $b \in \cs$).
         Therefore, $\delta_{n+1} = \delta_n \PHplay \delta' \PHplay \delta'' \PHplay \zeta_n$.
       \end{itemize}
       Thus, $\delta_{\indexes{\zeta}} \in \muconcr_s(P)$. % and $\ceil(\delta) \subseteq max\ctx$.
   \end{itemize}
 \end{itemize}
-
 Finally, as $\muconcr_{max\ctx}(\w) \neq \emptyset$, $\uconcr(\w) \neq \emptyset$ (\pref{th:uconcr-ctx}).
 \end{proof}
 
