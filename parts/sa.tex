@@ -117,7 +117,8 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
 \label{def:allprocs}
   \begin{align*}
   &\allprocs((\cwSol,\cwReq,\cwRSP,\cwCont)) = \{ p \in \PHproc \mid \exists (P,ps) \in \cwSol, \\
-    &\qquad\qquad p \in ps \vee p = \PHtarget(P) \vee p = \PHbounce(P) \} \\
+    &\qquad\qquad p \in ps \vee p = \PHtarget(P) \vee p = \PHbounce(P) \\
+    &\qquad\qquad \vee \exists (a_i,ps) \in \cwRSP, p \in ps \}
   %  &\qquad\qquad \vee p = \PHtarget(P) \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \\
   %  &\qquad\qquad \vee \exists(Q, \PHobj{p}{\PHbounce(Q)} \in \cwPrioCont \}
   \end{align*}
