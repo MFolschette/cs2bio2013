@@ -518,7 +518,7 @@ Given this first hypothesis, we define the neighbor \towrite{revoir terminologie
 \end{definition}
 
 We denote $\pfp_s(a)$ the set of possible local steady-states of a sort $a$ from a state $s$.
-\todo{À corriger : état global ? + prendre en compte l'état de la sorte}
+\todo{À corriger : état global ?}
 \begin{align*}
   \pfp_s(a) = \{ a_i \in \PHl_a &\mid \exists \delta \in \restriction{\Sce}{1}, \PHget{(s \PHplay \delta)}{a} = a_i \\
   & \quad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
