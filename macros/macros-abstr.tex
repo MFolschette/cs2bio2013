@@ -98,7 +98,8 @@
 
 
 \def\procs{\mathsf{procs}}
-\def\allprocs{\mathsf{allProcs}}
+%\def\allprocs{\mathsf{allProcs}}
+\def\allprocs{\procs}
 \def\pfp{\mathsf{pfp}}
 \def\pfpprocs{\mathsf{pfpProcs}}
 \def\bounceprocs{\mathsf{bounceProcs}}
@@ -117,6 +118,7 @@
 \def\myreq{\overline{\Req^\w_\ctx}}
 \def\mycont{\overline{\Cont^\w_\ctx}}
 
+\begin{comment}
 \def\PrioCont{\textcolor{red}{\mathrm{PrioCont}}}
 \def\mypriocont{\overline{\PrioCont^\w_\ctx}}
 \def\cwPrioCont{\PrioCont_\ctx^\w}
@@ -131,8 +133,27 @@
 \def\myrsp{\overline{\RSP^\w_\ctx}}
 \def\cwRSP{\RSP_\ctx^\w}
 \def\Brsp{\sat{\RSP^\w_\ctx}}
+\end{comment}
 
 \newcommand{\csState}{\mathsf{procState}}
+
+\newcommand{\V}{V}
+\newcommand{\E}{E}
+\newcommand{\cwV}{\V_\ctx^\w}
+\newcommand{\cwE}{\E_\ctx^\w}
+\newcommand{\VProc}{\V_\PHproc}
+\newcommand{\VObj}{\V_\Obj}
+%\newcommand{\VSol}{\V_{Sol}}
+\newcommand{\VSol}{\V_{\Sol}}
+
+\def\Bv{\sat{\cwV}}
+\def\Be{\sat{\cwE}}
+\def\BvProc{\textcolor{red}{\sat{\cwV}^\PHproc}}
+\def\BvObj{\textcolor{red}{\sat{\cwV}^\Obj}}
+%\def\BvSol{\sat{\cwV}^{Sol}}
+\def\BvSol{\textcolor{red}{\sat{\cwV}^{\Sol}}}
+
+\newcommand{\Bee}[2]{\Be^{#1}_{#2}}
 
 %\def\mlfp#1{\f{pppf}\{#1\}}
 

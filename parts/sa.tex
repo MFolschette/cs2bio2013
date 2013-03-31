@@ -131,6 +131,18 @@ if such a scenario exists in all states $s \subseteq \ctx$.
 \end{comment}
 
 The set of all processes involved in an abstract structure $\cwB$ is given in \pref{def:allprocs}.
+\towrite{pré-définir la structure abstraite}
+\begin{definition}
+\label{def:allprocs}
+  \begin{align*}
+  \allprocs(\V, \E) = \{ p \in \PHproc &\mid p \in \V \vee \exists P \in \V \cap \Obj,\\
+  &\qquad p = \PHtarget(P) \vee p = \PHbounce(P) \}
+%    &\qquad\qquad p \in ps \vee p = \PHtarget(P) \vee p = \PHbounce(P) \\
+%    &\qquad\qquad \vee \exists (a_i,ps) \in \cwRSP, p \in ps \}
+  \end{align*}
+\end{definition}
+
+\begin{comment}
 \begin{definition} \todo{À revoir avec la nouvelle sémantique}
 \label{def:allprocs}
   \begin{align*}
@@ -141,6 +153,7 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
   %  &\qquad\qquad \vee \exists(Q, \PHobj{p}{\PHbounce(Q)} \in \cwPrioCont \}
   \end{align*}
 \end{definition}
+\end{comment}
 
 
 
@@ -192,26 +205,8 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
 \end{definition}
 \end{comment}
 
-\newcommand{\V}{V}
-\newcommand{\E}{E}
-\newcommand{\cwV}{\V_\ctx^\w}
-\newcommand{\cwE}{\E_\ctx^\w}
-\newcommand{\VProc}{\V_\PHproc}
-\newcommand{\VObj}{\V_\Obj}
-%\newcommand{\VSol}{\V_{Sol}}
-\newcommand{\VSol}{\V_{\Sol}}
-
-\def\Bv{\sat{\cwV}}
-\def\Be{\sat{\cwE}}
-\def\BvProc{\textcolor{red}{\sat{\cwV}^\PHproc}}
-\def\BvObj{\textcolor{red}{\sat{\cwV}^\Obj}}
-%\def\BvSol{\sat{\cwV}^{Sol}}
-\def\BvSol{\textcolor{red}{\sat{\cwV}^{\Sol}}}
-
-\newcommand{\Bee}[2]{\Be^{#1}_{#2}}
-
 \begin{definition}
-  The graph of local causality $\cwB = (\Bv, \Be)$ is defined as: $\cwB = \sfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs_\ctx(\myB)}}$,
+  The graph of local causality $\cwB = (\Bv, \Be)$ is defined as: $\cwB = \sfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}$,
   where $\myB = (\cwV, \cwE)$ is the smallest graph where: $\cwV = \VProc \cup \VObj \cup \VSol$ with $\VProc \subset \PHproc$, $\VObj \subset \Obj$, $\VSol \subset \Sol$ and $\cwE \subset \cwV \times \cwV$ so that:
   \begin{align}
     \w &\subset \cwV \label{eq:Vw} \\
