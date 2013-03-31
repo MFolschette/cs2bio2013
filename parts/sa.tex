@@ -304,73 +304,64 @@ $\Bee{X}{Y} = \Be \cap (X \times Y)$, with $X, Y$ amongst $\PHproc$, $\Obj$ and 
 
 \begin{figure}[p]
   \centering
-  \begin{tikzpicture}[aS,node distance=1.5cm]
+  \begin{tikzpicture}[aS]
     \node[Aproc] (c1) {$c_1$};
     \node[Aobj,below of=c1] (c01) {$\PHobj{c_0}{c_1}$};
     \node[Asol,below of=c01] (c01s) {};
-    
-    \node[Aproc,below of=c01s] (ab11) {$ab_{11}$};
-    \node[Aobj,below right of=ab11] (ab0111) {$\PHobj{ab_{01}}{ab_{11}}$};
-    \node[Asol,below of=ab0111] (ab0111s) {};
-    \node[Aobj,below of=ab11,node distance=2.5cm] (ab0011) {$\PHobj{ab_{00}}{ab_{11}}$};
-    \node[Asol,below of=ab0011] (ab0011s) {};
-    \node[Aobj,below left of=ab11] (ab1011) {$\PHobj{ab_{10}}{ab_{11}}$};
-    \node[Asol,below of=ab1011] (ab1011s) {};
 
-    \node[Aproc,below of=ab0111s] (a1) {$a_1$};
+    \node[Aproc,below of=c01s] (ab11) {$ab_{11}$};
+    \node[AsolPrio,below of=ab11] (ab11s) {};
+
+    \node[Aproc,below left of=ab11s] (a1) {$a_1$};
     \node[Aobj,below of=a1] (a11) {$\PHobj{a_1}{a_1}$};
     \node[Asol,below of=a11] (a11s) {};
-    \node[Aobj,below right of=a1] (a01) {$\PHobj{a_0}{a_1}$};
+    \node[Aobj,below left of=a1] (a01) {$\PHobj{a_0}{a_1}$};
     \node[Asol,below of=a01] (a01s) {};
     \node[Aproc,below of=a01s] (b0) {$b_0$};
     \node[Aobj,below of=b0] (b00) {$\PHobj{b_0}{b_0}$};
     \node[Asol,below of=b00] (b00s) {};
-    \node[Aobj,below right of=b0] (b10) {$\PHobj{b_1}{b_0}$};
+    \node[Aobj,below left of=b0] (b10) {$\PHobj{b_1}{b_0}$};
     \node[Asol,below of=b10] (b10s) {};
 
-    \node[Aproc,below of=ab1011s] (b1) {$b_1$};
-    \node[Aobj,below of=b1] (b01) {$\PHobj{b_0}{b_1}$};
+    \node[Aproc,below right of=ab11s] (b1) {$b_1$};
+    \node[Aobj,below of=b1] (b11) {$\PHobj{b_1}{b_1}$};
+    \node[Asol,below of=b11] (b11s) {};
+    \node[Aobj,below right of=b1] (b01) {$\PHobj{b_0}{b_1}$};
     \node[Asol,below of=b01] (b01s) {};
     \node[Aproc,below of=b01s] (a0) {$a_0$};
-    \node[Aobj,below of=a0] (a10) {$\PHobj{a_1}{a_0}$};
+    \node[Aobj,below of=a0] (a00) {$\PHobj{a_0}{a_0}$};
+    \node[Asol,below of=a00] (a00s) {};
+    \node[Aobj,below right of=a0] (a10) {$\PHobj{a_1}{a_0}$};
     \node[Asol,below of=a10] (a10s) {};
 
     \path
     (c1) edge (c01)
     (c01) edge (c01s)
     (c01s) edge (ab11)
-    (ab11) edge (ab0011) edge (ab0111) edge (ab1011)
-    (ab0011) edge (ab0011s)
-    (ab1011) edge (ab1011s)
-    (ab0111) edge (ab0111s)
-
-    (ab0011s) edge (a1) edge (b1)
-    (ab1011s) edge (b1)
-    (ab0111s) edge (a1)
+    (ab11) edge (ab11s)
+    (ab11s) edge (a1) edge (b1)
 
     (a1) edge (a01) edge (a11)
     (a01) edge (a01s)
     (a01s) edge (b0)
     (a11) edge (a11s)
-    (a0) edge (a10)
+    (a0) edge (a10) edge (a00)
     (a10) edge (a10s)
-    
+    (a00) edge (a00s)
+
     (b0) edge (b10) edge (b00)
     (b10) edge (b10s)
     (b00) edge (b00s)
-    (b1) edge (b01)
+    (b1) edge (b01) edge (b11)
     (b01) edge (b01s)
     (b01s) edge (a0)
-    ;
-    \path
-    (ab0011) edge[double] (ab0111)
-    (ab0011) edge[double,bend right=10] (ab1011)
-    (ab1011) edge[double,bend right=10] (ab0011)
-    (ab0111) edge[double,bend right=10] (ab1011)
-    (ab1011) edge[double,bend right=10] (ab0111)
+    (b11) edge (b11s)
     ;
     \end{tikzpicture}
   \label{fig:sa-livelock}
-  \caption{The local causality graph of the PH in \pref{fig:ph-livelock}.}
+  \caption{
+    The graph of local causality of the PH model in \pref{fig:ph-livelock}.
+    \pref{th:approxinf} is inconclusive on this example as the only solution of process $ab_{11}$ is not coherent (\pref{def:coherent}).
+  }
 \end{figure}
 
