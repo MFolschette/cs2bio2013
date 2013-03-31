@@ -302,6 +302,19 @@ $\Bee{X}{Y} = \Be \cap (X \times Y)$, with $X, Y$ amongst $\PHproc$, $\Obj$ and 
 
 
 
+\begin{example}
+  As an example showing the usefulness of our method, we can consider \pref{fig:ph-livelock}.
+  Let $\PH' = (\PHs, \PHl, \PHh'^{\langle 1 \rangle})$ be the “flattened” version of $\PH$, that is: $\PHh'^{\langle 1 \rangle} = \PHh^{(1)} \cup \PHh^{(2)}$.
+  As this PH model contains only $1$ priority, it is equivalent to a PH in the semantics without priorities.
+  The under-approximation on this class of models developed in~\cite{PMR12-MSCS} concludes that $c_1$ is reachable.
+  This is due to the “temporal shift” inherent to cooperative sorts in the semantics without priorities.
+  
+  This is an unwanted behaviour that the semantics of PH with priorities proposed in this paper allows to avoid.
+  Indeed, the under-approximation given in \pref{th:approxinf} does not conclude as one of the edges of the resulting graph of local causality is not coherent (\pref{def:coherent}).
+  The graph of local causality for this example is given in \pref{fig:sa-livelock}.
+\end{example}
+
+
 \begin{figure}[p]
   \centering
   \begin{tikzpicture}[aS]
@@ -358,8 +371,8 @@ $\Bee{X}{Y} = \Be \cap (X \times Y)$, with $X, Y$ amongst $\PHproc$, $\Obj$ and 
     (b11) edge (b11s)
     ;
     \end{tikzpicture}
-  \label{fig:sa-livelock}
   \caption{
+  \label{fig:sa-livelock}
     The graph of local causality of the PH model in \pref{fig:ph-livelock}.
     \pref{th:approxinf} is inconclusive on this example as the only solution of process $ab_{11}$ is not coherent (\pref{def:coherent}).
   }
