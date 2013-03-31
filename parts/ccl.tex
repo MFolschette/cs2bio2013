@@ -5,3 +5,22 @@
   \item Modèles Zeno (système de précédences et prise en compte des états globaux)
 \end{itemize}
 }
+
+In this paper we introduced a new semantics to include priorities into the Process Hitting framework, which are especially useful to model cooperations.
+Then, we developed a method to efficiently perform a reachability analysis of a sequence of processes on a restricted class of Process Hitting models.
+This analysis is based on an under-approximation of the true reachability solutions; however, the most usual cases can be handled.
+Furthermore, our method can also be used to determine the reachability of a set of states of a model.
+The method has been implemented as an extension of the existing “ph-reach” tool into the existing Pint\footnote{\url{http://processhitting.wordpress.com/}} library.
+
+Finally, we showed that the class of Process Hitting models that can be handled by the aforementioned method are equivalent to discrete networks, which include boolean networks.
+This allows to efficiently compute reachability results on large biological models provided that they are equivalent to discrete networks and that a translation from the original framework into a Process Hitting model is possible.
+Such a translation for interaction graphs of Thomas modelling was proposed in~\cite{PMR10-TCSB} and is made possible by the Pint software.
+
+Further work can be derived from what have been presented in this paper.
+An over-approximation on Process Hitting models without priorities was proposed in~\cite{PMR12-MSCS}.
+Although it is still accurate on the Process Hitting framework with priorities (by “flattening” all actions),
+it turns out to be too wide even in some obvious cases that are consequently not conclusive.
+This over-approximation may be refined in order to better fit the introduction of priorities, and mode precisely the class of models studied in this paper.
+Furthermore, a more general under-approximation could be developed in order to handle a larger class of Process Hitting models, that is,
+models with more than two classes of priorities, that do not only contain components of cooperative sorts or whose behaviour may contain cycles or cyclic attractors.
+Finally, in order to take into account quantitative data on transition delays, the overall approximation method could be extended to handle evolution that are chronometric instead of only chronologic.
