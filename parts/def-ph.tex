@@ -27,32 +27,40 @@ An action $h=\PHfrappe{a_i}{b_j}{b_k}$ is read as ``$a_i$ \emph{hits} $b_j$ to m
 \end{definition}
 
 \noindent
-The sort of a process $a_i$ is referred to as $\PHsort(a_i)=a$ and the set of sorts present in an action $h\in\PHa$ as $\PHsort(h) = \{\PHsort(\PHhitter(h)),\PHsort(\PHtarget(h))\}$.
-Given a state $s\in \PHl$, the process of sort $a\in\PHs$ present in $s$ is denoted by $\PHget{s}{a}$, that is the $a$-coordinate of the state $s$.
-If $a_i\in \PHl_a$, we define the notation $a_i\in s \EQDEF \PHget{s}{a}=a_i$.
-We define the semantics of actions in a Process Hitting model in \pref{def:play}.
-
+The sort of a process $a_i$ is referred to as $\PHsort(a_i) = a$.
+%and the set of sorts present in an action $h \in \PHa$ as $\PHsort(h) = \{\PHsort(\PHhitter(h)),\PHsort(\PHtarget(h))\}$.
+Given a state $s\in \PHl$, the process of sort $a \in \PHs$ present in $s$ is denoted by $\PHget{s}{a}$, that is the $a$-coordinate of the state $s$.
+If $a_i \in \PHl_a$, we define the notation $a_i \in s \EQDEF \PHget{s}{a} = a_i$.
+We define the override of a state by a process in \pref{def:statecap}, which allows to define the dynamics in a Process Hitting model (\pref{def:play}).
+\begin{definition}
+\label{def:statecap}
+  Given a state $s \in \PHl$ and a process $a_i \in \PHproc$, $(s \Cap a_i)$ is the state defined by:
+  $\PHget{(s \Cap a_i)}{a} = a_i \wedge \forall b \neq a, \PHget{(s \Cap a_i)}{b} = \PHget{s}{b}$.
+  We also extend this definition to a set of processes $ps$ given that all processes are from different sorts by the override of each process:
+  $\forall as \subset \PHs, \forall ps \in \underset{a \in as}{\times} \PHl_a, s \Cap ps = s \underset{a_i \in ps}{\Cap} a_i$.
+\end{definition}
 \begin{definition}
 \label{def:play}
-  An action $h = \PHhit{a_i}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$ is \emph{playable} in $s \in \PHl$ iff $\PHget{s}{a} = a_i$, $\PHget{s}{b} = b_j$ and $\forall m < n, \forall g \in \PHa^{(m)}, \PHhitter(g) \notin s \vee \PHtarget(g) \notin s$.
-  In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$, defined by: $\PHget{(s \PHplay h)}{b} = b_k$ and $\forall c\in\PHs, c\neq b, \PHget{(s\PHplay h)}{c} = \PHget{s}{c}$.
-  For the sake of clarity, for all $h, h'\in\PHa$, $((s\PHplay h)\PHplay h')$ is abbreviated as $(s\PHplay h\PHplay h')$.
+  An action $h = \PHhit{a_i}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$ is \emph{playable} in $s \in \PHl$
+  if and only if $\PHget{s}{a} = a_i$, $\PHget{s}{b} = b_j$ and $\forall m < n, \forall g \in \PHa^{(m)}, \PHhitter(g) \notin s \vee \PHtarget(g) \notin s$.
+  In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$, defined by: $(s \PHplay h) = s \Cap \PHbounce(h)$.
+%  For the sake of clarity, for all $h, h'\in\PHa$, $((s\PHplay h)\PHplay h')$ is abbreviated as $(s\PHplay h\PHplay h')$.
 \end{definition}
-
-\begin{definition}[Scenario ($\Sce$)]
-\label{def:scenario}
-  For a given Process Hitting model $(\PHs,\PHl,\PHh)$,
-  a \emph{scenario} $\delta$ is a sequence of actions of $\PHh$ so that for all $n \in \indexes{\delta}$,
-  $a_i = \PHhitter(\delta_n)$ (resp. $\PHtarget(\delta_n)$) $\Rightarrow \last_a(\delta_{1..n-1}) \in \{ \varnothing, a_i \}$.
-  The set of all scenarios is noted $\Sce$.
-\end{definition}
+%\begin{definition}[Scenario ($\Sce$)]
+%\label{def:scenario}
+  For a given state $s \in \PHl$,
+  a \emph{scenario} $\delta$ from $s$ is a sequence of actions of $\PHh$ that can be played successively in $s$.
+%  so that for all $n \in \indexes{\delta}$,
+%  $a_i = \PHhitter(\delta_n)$ (resp. $\PHtarget(\delta_n)$) $\Rightarrow \last_a(\delta_{1..n-1}) \in \{ \varnothing, a_i \}$.
+  The set of all scenarios from $s$ is noted $\Sce(s)$.
+%\end{definition}
 
 \begin{definition}[Process Hitting $n$-reduction] \towrite{Revoir terminologie : “reduction” ? “restriction” ?}
   If $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ is a Process Hitting with $k$ priorities and $n \in \segm{1}{k}$, we denote $\restriction{\PH}{n}$ \towrite{$\PH_{|n}$ $\PH'$} the $n$-reduction of $\PH$ the following Process Hitting with $n$ priorities:
   $\restriction{\PH}{n} = (\PHs; \PHl; \restriction{\PHa}{n})$,
   with:
   $$\restriction{\PHa}{n} = (\PHa^{(1)}; \dots; \PHa^{(n)})$$
-  Furthermore, we denote: $\restriction{\Sce}{n}$ the set of scenarios of actions of $\restriction{\PHa}{n}$.
+  Furthermore, we denote: $\restriction{\Sce}{n}(s)$ the set of scenarios from $s$ made of actions of $\restriction{\PHa}{n}$.
 \end{definition}
 
 
@@ -163,99 +171,114 @@ highest level, and $a$ does not become inactive unless both $b$ and $c$ are inac
 In the scope of this paper, we focus on a specific class of Process Hitting models.
 We define here the restrictions that lead to this class of models \todo{and show that they are equivalent to discrete networks}.
 
-\paragraph{2 priorities}
-In this paper, we only consider Process Hitting models with 2 priorities.
+\begin{criterion}[2 priorities]
+\label{cr:2prio}
+%\paragraph{2 priorities}
+  In this paper, we only consider Process Hitting models with 2 priorities.
+\end{criterion}
 
-This restriction allows to models two kinds of actions: controllable actions that model the non-determinacy of biological evolutions,
+\pref{cr:2prio} allows to models two kinds of actions: controllable actions that model the non-determinacy of biological evolutions,
 and uncontrollable actions that are used to model non-biological behaviours in the model.
 
-In \pref{def:component} we define the notion of well-formed component.
-A sort $a$ is a well-formed component iff
-it is hit only by actions of priority $2$.
+In \pref{def:component} we define a well-formed component as a sort that is hit only by actions of priority $2$.
 \begin{definition}
 \label{def:component}
-  A sort $a \in \PHs$ is said to be a well-formed component iff:
-  \begin{itemize}
-    \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2$
-  \end{itemize}
+  A sort $a \in \PHs$ is said to be a well-formed component if and only if:
+  $$\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2 \enspace.$$
+  We call $\components$ the set of well-formed components.
 \end{definition}
-We call $\components$ the set of well-formed components.
 
 \begin{definition}
 \label{def:chainsactions}
-  We define the set of chains of actions $\PHh(b, a)$ between two sorts $b$ and $a$ as below:
+  The set of chains of actions $\PHh(b, a)$ between two sorts $b$ and $a$ is defined as below:
   \begin{align*}
   \PHh(b, a) = \{ (h_i)_{i \in \segm{0}{s}} \in (\PHh^{(1)})^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_0)) = b \wedge \PHsort(\PHtarget(h_s)) = a \\
     & \wedge \forall i \in \segm{1}{s}, \PHsort(\PHtarget(h_{i-1})) = \PHsort(\PHhitter(h_{i})) \}
   \end{align*}
 \end{definition}
 
-\paragraph{Cycle-freeness between actions of priority $1$}
-There is no cycle in chains of actions: $\forall a \in \PHs, \PHh(a, a) = \emptyset$.
+\begin{criterion}[Cycle-freeness between actions of priority $1$]
+\label{cr:cyclefreeness}
+%\paragraph{Cycle-freeness between actions of priority $1$}
+  There is no cycle in chains of actions:
+  $$\forall a \in \PHs, \PHh(a, a) = \emptyset \enspace.$$
+\end{criterion}
 
-Given this first hypothesis, we define the neighbor \towrite{revoir terminologie : neighbors ? vicinity ?} sorts and actions (\pref{def:neighbors}).
-\begin{definition}
+Given \pref{cr:cyclefreeness}, we define the neighbour \towrite{revoir terminologie : neighbors ? vicinity ?} sorts and actions (\pref{def:neighbors}).
+\begin{definition}[Neighbour sorts ($\Vs$) and Neighbour actions ($\Vh$)]
 \label{def:neighbors}
   The set of neighbour sorts $\Vs(a)$ of a given sort $a$ is the set of components that can interact with it through actions of priority $1$.
   The set of neighbour actions $\Vh(a)$ of $a$ is the set of actions of priority $1$ influencing $a$.
   $$\Vs(a) = \{ b \in \components \mid \PHh(b, a) \neq \emptyset \}$$
-  $$\Vh(a) = \{ h \in \PHh^{(1)} \mid \PHsort(\PHhitter(h)) \in \Vs(a) \wedge \PHsort(\PHtarget(h)) \in \Vs(a) \cup \{ a \} \}$$
+%  $$\Vh(a) = \{ h \in \PHh^{(1)} \mid \PHsort(\PHhitter(h)) \in \Vs(a) \wedge \PHsort(\PHtarget(h)) \in \Vs(a) \cup \{ a \} \}$$
+  $$\Vh(a) = \{ h \in \PHh^{(1)} \mid \exists b \in \Vs(a), \exists hs \in \PHh(b,a), h \in hs \}$$
 \end{definition}
 
-We denote $\pfp_s(a)$ the set of possible local steady-states of a sort $a$ from a state $s$.
-\todo{À corriger : état global ?}
-\begin{align*}
-  \pfp_s(a) = \{ a_i \in \PHl_a &\mid \exists \delta \in \restriction{\Sce}{1}, \PHget{(s \PHplay \delta)}{a} = a_i \\
-  & \quad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
-\end{align*}
-Of course, if $a \in \components$, then $\pfp_s(a) = \PHget{s}{a}$.
+We denote $\pfp_s(a)$ the set of processes of sort $a$ that can be reached from state $s$ and that are local steady-states.
+%the set of possible local steady-states of a sort $a$ from a state $s$.
+%\todo{À corriger : état global ?}
+\begin{definition}[Local steady-state ($\pfp$)]
+\label{def:pfp}
+  For all $a \in \PHa$ and $s \in \PHl$,
+  \begin{align*}
+    \pfp_s(a) = \{ a_i \in \PHl_a &\mid \exists \delta \in \restriction{\Sce}{1}(s), \PHget{(s \PHplay \delta)}{a} = a_i \\
+    & \quad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
+  \end{align*}
+  Of course, if $a \in \components$, then $\pfp_s(a) = \{ \PHget{s}{a} \}$.
+\end{definition}
 
-In \pref{def:cs} we define the notion of well-formed cooperative sort.
-A cooperative sort $a$ is well-formed iff
-it is hit only by actions of priority $1$,
+In \pref{def:cs} we define a well-formed cooperative sort as a sort that is only by actions of priority $1$ and so that
 any sub-state of its neighbourhood is represented by exactly one local steady state in this sort,
-and all of its processes represents at least one sub-state of its neighbourhood.
+and all of its processes represents at least one sub-state of its neighbourhood. \towrite{reformuler ou supprimer}
 \begin{definition}
 \label{def:cs}
   A sort $a \in \PHs$ is said to be a well-formed cooperative sort iff:
-  \begin{itemize}
+  \begin{enumerate}
     \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 1$
-    \item $\forall s \in \underset{b \in \Vs(a)}{\times} \PHl_b, |\pfp_s(a)| = 1$
-    \item $\forall a_i \in \PHl_a, \exists s \in \underset{b \in \Vs(a)}{\times} \PHl_b, \pfp_s(a) = \{ a_i \}$
-  \end{itemize}
+%    \item $\forall s \in \underset{b \in \Vs(a)}{\times} \PHl_b, |\pfp_s(a)| = 1$
+%    \item $\forall a_i \in \PHl_a, \exists s \in \underset{b \in \Vs(a)}{\times} \PHl_b, \pfp_s(a) = \{ a_i \}$
+    \item \label{csai} $\forall s \in \PHl, |\pfp_s(a)| = 1$
+    \item \label{css} $\forall a_i \in \PHl_a, \exists s \in \PHl, \pfp_s(a) = \{ a_i \}$
+  \end{enumerate}
 \end{definition}
 We call $\cs$ the set of well-formed cooperative sorts.
 %We note that: $\forall a \in \components, \Vs(a) = \emptyset \wedge \Vh(a) = \emptyset$
-As any local state of neighbour sorts of a cooperative sort leads to a local steady-state, we denote $\csState(a_i)$ the set of sub-states represented by the process $a_i$ of the cooperative sort $a$.
-\begin{definition}[$\csState$]
+Because of (\ref{csai}), we denote in the following: $\pfp_s(a) = a_i$.
+Furthermore, because of (\ref{css}), we denote $\csState(a_i)$ the set of sub-states represented by the process $a_i$ of the cooperative sort $a$ (\pref{def:csState}).
+\begin{definition}[Represented sub-states ($\csState$)]
 \label{def:csState}
-  \towrite{À reformuler}
-  $$\csState(a_i) = \{ s \in \underset{b \in \Vs(a)}{\times} \PHl_b \mid \pfp_{s}(a) = a_i \}$$
+  $$\csState(a_i) = \{ ps \in \underset{b \in \Vs(a)}{\times} \PHl_b \mid \forall s \in \PHl, \pfp_{s \Cap ps}(a) = a_i \}$$
 \end{definition}
 
-\paragraph{Components \& cooperative sorts}
-The studied PH is a PH with 2 priorities, and it is only composed of well-formed components and cooperative sorts:
-$\components \cup \cs = \PHs \wedge \components \cap \cs = \emptyset$
+\begin{criterion}[Components \& cooperative sorts]
+\label{cr:compcs}
+%\paragraph{Components \& cooperative sorts}
+  The studied PH is a PH with 2 priorities, and it is only composed of well-formed components and cooperative sorts:
+  $$\components \cup \cs = \PHs \wedge \components \cap \cs = \emptyset \enspace.$$
+\end{criterion}
 
-\paragraph{Bounded termination}
-The dynamics of model $\restriction{\PH}{1}$ contains no cycles. Cycles are still allowed in $\PH$ however.
-Formally : $\exists N \in \sN, \forall \delta \in \restriction{\Sce}{1}, |\indexes{\delta}| \leq N$.
+\begin{criterion}[Bounded termination]
+\label{cr:bounded}
+%\paragraph{Bounded termination}
+  The dynamics of model $\restriction{\PH}{1}$ contains no cycles:
+  %Cycles are still allowed in $\PH$ however.
+  %Formally :
+  $$\exists N \in \sN, \forall \delta \in \restriction{\Sce}{1}, |\indexes{\delta}| \leq N \enspace.$$
+\end{criterion}
 
 
 
 \subsection{Consequences of the restrictions}
-Given these hypotheses, we can denote: $\pfp_s(a) = a_i$ the local steady-state of $a$ in state $s$.
-Furthermore, we denote by $\update(s)$ the state in which all cooperative sorts are updated.
+%Given these hypotheses, we can denote: $\pfp_s(a) = a_i$ the local steady-state of $a$ in state $s$.
+We denote by $\update(s)$ the state in which all cooperative sorts are updated.
 \begin{align*}
-  \update(s) = s \underset{a \in CS}{\Cap } \pfp_{s}(a)
+  \update(s) = s \Cap \{ \pfp_{s}(a) \mid a \in CS \} \enspace.
 \end{align*}
-where for all process $a_i$, $s \Cap a_i$ is the state defined by:
-$\PHget{(s \Cap a_i)}{a} = a_i \wedge \forall b \neq a, \PHget{(s \Cap a_i)}{b} = \PHget{s}{b}$.
 
 \pref{th:update} states that from any state, there exists a scenario updating the cooperative sorts of this state.
 \begin{theorem}
 \label{th:update}
-  $\forall s \in \PHl, \exists \delta \in \restriction{\Sce}{1}, s \PHplay \delta = \update(s)$
+  $\forall s \in \PHl, \exists \delta \in \restriction{\Sce}{1}(s), s \PHplay \delta = \update(s)$
 \end{theorem}
 \begin{proof}
   Let $a$ be a cooperative sort so that $\PHget{s}{a} \neq \pfp_s(a)$.
@@ -267,7 +290,7 @@ $\PHget{(s \Cap a_i)}{a} = a_i \wedge \forall b \neq a, \PHget{(s \Cap a_i)}{b} 
 \begin{theorem}
 \label{th:hcompcomp}
   $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, a,b \in \components,$\\
-  $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}, \text{$h$ can be played in $s \PHplay \delta$})$
+  $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}(s), \text{$h$ can be played in $s \PHplay \delta$})$
 \end{theorem}
 \begin{proof}
   From \pref{th:update}, there exists a scenario $\delta$ so that: $(s \PHplay \delta) = \update(s)$.
@@ -277,7 +300,7 @@ $\PHget{(s \Cap a_i)}{a} = a_i \wedge \forall b \neq a, \PHget{(s \Cap a_i)}{b} 
 \begin{theorem}
 \label{th:hcscomp}
   $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, a \in \cs, b \in \components$\\
-  $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge \pfp_s(a) = a_i) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}, \text{$h$ can be played in $s \PHplay \delta$})$
+  $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge \pfp_s(a) = a_i) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}(s), \text{$h$ can be played in $s \PHplay \delta$})$
 \end{theorem}
 \begin{proof}
   From \pref{th:update}, there exists a scenario $\delta$ so that: $(s \PHplay \delta) = \update(s)$.
@@ -286,6 +309,7 @@ $\PHget{(s \Cap a_i)}{a} = a_i \wedge \forall b \neq a, \PHget{(s \Cap a_i)}{b} 
   Finally, by definition of $\update(s)$, no action of priority $1$ can be played in $s \PHplay \delta$, thus $h$ can be played in $s \PHplay \delta$.
 \end{proof}
 
+\begin{comment}
 \pref{th:autohits} states that any sequence $\zeta$ of self-actions on a well-formed component can be played eventually.
 \begin{theorem}
 \label{th:autohits}
@@ -295,4 +319,5 @@ $\PHget{(s \Cap a_i)}{a} = a_i \wedge \forall b \neq a, \PHget{(s \Cap a_i)}{b} 
 \begin{proof}
   With \pref{th:hcompcomp} applied iteratively.
 \end{proof}
+\end{comment}
 

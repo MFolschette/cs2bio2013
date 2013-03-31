@@ -6,9 +6,11 @@
 \label{def:obj}
   The reachability of a process $a_j$ prof a process $a_i$ is called an \emph{objective}, noted $\PHobj{a_i}{a_j}$.
   The set of all objectives is called $\Obj = \{ \PHobj{a_i}{a_j} \mid a \in \PHs \wedge (a_i, a_j) \in \PHl_a^2 \}$.
-  For an objective $P \in \Obj$, where $P = \PHobj{a_i}{a_j}$, $\PHsort(P) = a$, $\PHtarget(P)=a_i$, $\PHbounce(P)=a_j$.
-  An objective $P$ is \emph{trivial} is $\PHtarget(P)=\PHbounce(P)$.
+  For an objective $P = \PHobj{a_i}{a_j} \in \Obj$, we define: $\PHsort(P) = a$, $\PHtarget(P)=a_i$, $\PHbounce(P)=a_j$,
+  and $P$ is \emph{trivial} if $a_i = a_j$.
 \end{definition}
+We define an \emph{objective sequence} as a sequence of objectives in which each target must be equal to the previous bounce of the same sort, if it exists.
+The set of all objective sequences is denoted by $\OS$.
 
 \begin{definition}[Context $\ctx$ ($\Ctx$)]
 \label{def:context}
@@ -17,10 +19,11 @@
   $\Ctx$ is the set of all contexts.
 \end{definition}
 
-For a given context $\ctx$, we note $a_i \in \ctx$ if and only if $a_i \in \PHget{\ctx}{a}$, and
-$ps \in \powerset(\Proc), ps \subseteq \ctx \Leftrightarrow \forall a_i \in ps, a_i \in \ctx$.
+For a given context $\ctx$, we note $a_i \in \ctx$ if and only if $a_i \in \PHget{\ctx}{a}$,
+and for all $ps \in \powerset(\Proc) \cup \PHl$, $ps \subseteq \ctx \EQDEF \forall a_i \in ps, a_i \in \ctx$.
 %The override of a context $\ctx$ by a set of processes $ps$ is noted $\ctx \Cap ps$ (\defref{ctxcap}).
 %Par exemple, $\state{a_1,a_2,b_1,c_1}\Cap\{ a_3, b_2, b_3 \} = \state{a_3,b_2,b_3,c_1}$.
+
 \begin{definition}[$\Cap: \Ctx \times \powerset(\PHproc) \mapsto \Ctx$]
 \label{def:ctxcap}
   For a given context $\ctx\in\Ctx$ and a set of processes $ps \in \powerset(\PHproc)$,
@@ -33,18 +36,24 @@ $ps \in \powerset(\Proc), ps \subseteq \ctx \Leftrightarrow \forall a_i \in ps, 
   \]
 \end{definition}
 
-A scenario $\delta \in \Sce$ is \emph{playable} in a context $\ctx$ if and only if $\supp(\delta) \subseteq \ctx$. 
-The play of $\delta$ in $\ctx$ is denoted $\ctx \PHplay \delta$ where $\ctx \PHplay \delta = \ctx \Cap \ceil(\delta)$.
+A sequence of actions $\delta$ is \emph{playable} in a context $\ctx$ if and only if 
+$\exists s \subseteq \ctx, \delta \in \Sce(s)$.
+We denote then: $\delta \in \Sce(\ctx)$,
+%$\supp(\delta) \subseteq \ctx$. 
+and the play of $\delta$ in $\ctx$ is $\ctx \PHplay \delta = \ctx \Cap \ceil(\delta)$,
+where $\ceil(\delta)$ is the set containing the last process (hitter or bounce) of each sort present in $\delta$.
 
-\begin{definition}[Objective sequence ($\OS$)]
-\label{def:OS}
-\towrite{Simplifier / réécrire en dehors d'une def}
-  An \emph{objective sequence} is a sequence $\w = P_1 \concat \dots \concat P_{|\w|}$,
-  where $\forall n \in \indexes{\w}, \w_n \in \Obj$ and $a_i = \PHtarget(\w_n) \Rightarrow \last_a(\w_{1..n-1}) \in \{ \varnothing, a_i \}$.
-  The set of all objective sequences is denoted by $\OS$.
-  The definitions of $\last_a$ \todo{À définir}, $\first_a$ \todo{À définir}, $\supp$ \todo{À définir} and $\ceil$ \todo{À définir}
-  are simply derived by omitting the case of hitters.
-\end{definition}
+\begin{comment}
+  \begin{definition}[Objective sequence ($\OS$)]
+  \label{def:OS}
+  \towrite{Simplifier / réécrire en dehors d'une def}
+    An \emph{objective sequence} is a sequence $\w = P_1 \concat \dots \concat P_{|\w|}$,
+    where $\forall n \in \indexes{\w}, \w_n \in \Obj$ and $a_i = \PHtarget(\w_n) \Rightarrow \last_a(\w_{1..n-1}) \in \{ \varnothing, a_i \}$.
+    The set of all objective sequences is denoted by $\OS$.
+    The definitions of $\last_a$ \todo{À définir}, $\first_a$ \todo{À définir}, $\supp$ \todo{À définir} and $\ceil$ \todo{À définir}
+    are simply derived by omitting the case of hitters.
+  \end{definition}
+\end{comment}
 
 \begin{definition}[Bounce sequence ($\BS$)]
 \label{def:bs}
@@ -69,6 +78,11 @@ The play of $\delta$ in $\ctx$ is denoted $\ctx \PHplay \delta$ where $\ctx \PHp
 
 \subsection{Under-approximation}
 
+We define $\concr(\w)$ as the set of scenarios concretising an objective sequence $\w$ in the context $\ctx$.
+In \pref{def:uconcr}, we define $\uconcr(\w)$ as equal to $\concr(\w)$ if it contains scenarios starting from all states $s \subseteq \ctx$.
+if such a scenario exists in all states $s \subseteq \ctx$.
+
+\begin{comment}
 \begin{definition}[$\concr: \OS \mapsto \powerset(\Sce)$]
 \label{def:concr}
 \towrite{Simplifier ? Supprimer la def formelle ?}
@@ -90,13 +104,14 @@ The play of $\delta$ in $\ctx$ is denoted $\ctx \PHplay \delta$ where $\ctx \PHp
 \label{def:concr-set}
   $\concr(\W) = \{ \delta \in \concr(\w) \mid \w \in \W \} \enspace.$
 \end{definition}
+\end{comment}
 
 \begin{definition}[$\uconcr: \OS \mapsto \powerset(\Sce)$]
 \label{def:uconcr}
   \[
   \uconcr(\w) = 
   \begin{cases}
-    \concr(\w) & \text{if } \forall s \in \PHl, s \subseteq \ctx, \exists \delta \in \concr(\w), \supp(\delta) \subseteq s \\
+    \concr(\w) & \text{if } \forall s \in \PHl, s \subseteq \ctx, \exists \delta \in \concr(\w), \delta \in \Sce(s) \\
     \emptyset & \text{else.}
   \end{cases}
   \]
@@ -104,13 +119,15 @@ The play of $\delta$ in $\ctx$ is denoted $\ctx \PHplay \delta$ where $\ctx \PHp
 % 
 \begin{theorem}
 \label{th:uconcr-ctx}
-  $\ctx' \subseteq \ctx \wedge \uconcr(\w) \neq \emptyset \Longrightarrow \muconcr_{\ctx'}(\w) \neq \emptyset \enspace.$
+  $\ctx' \subseteq \ctx \wedge \uconcr(\w) \neq \emptyset \Longrightarrow \muconcr_{\ctx'}(\w) \neq \emptyset$.
 \end{theorem}
-% 
+
+\begin{comment}
 \begin{definition}[$\uconcr: \powerset(\OS) \mapsto \powerset(\Sce)$]
 \label{def:uconcr-set}
   $\uconcr(\Omega) = \{ \delta \in \uconcr(\w) \mid \w \in \Omega\}$
 \end{definition}
+\end{comment}
 
 The set of all processes involved in an abstract structure $\cwB$ is given in \pref{def:allprocs}.
 \begin{definition}
@@ -127,6 +144,8 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
 
 
 \subsection{Abstract structure}
+
+\towrite{expliquer maxCont et le graphe de causalité}
 
 \begin{definition}[$\gCont_\ctx : \Sigma \times \Obj \mapsto \powerset(\Proc)$]
   \label{def:maxCont}
@@ -165,11 +184,11 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
 
 \begin{definition}[Coherent solution]
 \label{def:coherent}
-  A cooperative sort requisite $(a_i, ps)$ in $\myrsp$ is said coherent iff
-  it has no successor $(b_k,\PHobjp{b}{j}{k})$ in $\myreq$ so that there exists $b_n \in ps$, $b_k \neq b_n$.
+  A cooperative sort requisite $(a_i, ps)$ in $\Brsp$ is said coherent iff
+  it has no successor $(b_k,\PHobjp{b}{j}{k})$ in $\Breq$ so that there exists $b_n \in ps$, $b_k \neq b_n$.
 \end{definition}
 
-\begin{theorem}[Approximation inf.]
+\begin{theorem}[Under-Approximation]
 \label{th:approxinf}
   If the graph $\cwB$ contains no cycle,
   all objectives have at least one solution
@@ -204,8 +223,9 @@ for all objective $P$ in $\cwB$ so that $\PHtarget(P) \in s$,
 $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
 
 \begin{itemize}
-  \item If $(P, \emptyset) \in \Bsol$, either $\PHtarget(P) = \PHbounce(P)$ and $\delta = \emptyseq$,
-    or $\forall \zeta \in \BS(P), \zeta \in \Sce \wedge \PHsort(\zeta) = \{ \PHsort(P) \}$ and $\delta$ is given by \pref{th:autohits}.
+  \item If $(P, \emptyset) \in \Bsol$, either $\PHtarget(P) = \PHbounce(P)$ and $\delta = \emptyseq$;
+    or $\forall \zeta \in \BS(P), \zeta \in \Sce(s) \wedge \PHsort(\zeta) = \{ \PHsort(P) \}$
+    and $\delta = \delta_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_{|\zeta|} \PHplay \zeta_{|\zeta|}$ is a sequence given by \pref{th:hcompcomp}.
 
   \item Suppose all children objectives of $P$ are concretizable.
   \begin{itemize}
@@ -231,7 +251,7 @@ Finally, as $\muconcr_{max\ctx}(\w) \neq \emptyset$, $\uconcr(\w) \neq \emptyset
 
 
 
-\begin{figure}
+\begin{figure}[p]
   \centering
   \begin{tikzpicture}[aS,node distance=1.5cm]
     \node[Aproc] (c1) {$c_1$};
