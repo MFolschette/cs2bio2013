@@ -20,7 +20,7 @@ The set of all objective sequences is denoted by $\OS$.
 \end{definition}
 
 For a given context $\ctx$, we note $a_i \in \ctx$ if and only if $a_i \in \PHget{\ctx}{a}$,
-and for all $ps \in \powerset(\Proc) \cup \PHl$, $ps \subseteq \ctx \EQDEF \forall a_i \in ps, a_i \in \ctx$.
+and for all $ps \in \powerset(\PHproc) \cup \PHl$, $ps \subseteq \ctx \EQDEF \forall a_i \in ps, a_i \in \ctx$.
 %The override of a context $\ctx$ by a set of processes $ps$ is noted $\ctx \Cap ps$ (\defref{ctxcap}).
 %Par exemple, $\state{a_1,a_2,b_1,c_1}\Cap\{ a_3, b_2, b_3 \} = \state{a_3,b_2,b_3,c_1}$.
 
@@ -66,10 +66,11 @@ where $\ceil(\delta)$ is the set containing the last process (hitter or bounce) 
   Obviously, $\BS(\obj{a_i}{a_i}) = \{\emptyseq\}$; and $\BS(\obj{a_i}{a_j}) = \emptyset$ if there is no way to reach $a_j$ from $a_i$.
 \end{definition}
 
-\begin{definition}[$\aBS:\Obj \mapsto \powerset(\Proc)$]
+In the following, we denote: $\Sol = \powerset(\PHproc)$.
+\begin{definition}[$\aBS:\Obj \mapsto \powerset(\Sol)$]
 \label{def:aBS}
   \[
-    \aBS(P) = \{ \abstr{\zeta} \mid \zeta \in \BS(P), \nexists \zeta' \in \BS(P), \abstr{\zeta'} \subsetneq \abstr{\zeta} \} \enspace,
+    \aBS(P) = \{ \abstr{\zeta} \in \Sol \mid \zeta \in \BS(P), \nexists \zeta' \in \BS(P), \abstr{\zeta'} \subsetneq \abstr{\zeta} \} \enspace,
   \]
   where $\abstr{\zeta} = \{ \PHhitter(\zeta_n) \mid  n \in \indexes{\zeta} \wedge \PHsort(\PHhitter(\zeta_n)) \neq \PHsort(P) \}$.
 \end{definition}
@@ -147,7 +148,7 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
 
 \towrite{expliquer maxCont et le graphe de causalité}
 
-\begin{definition}[$\gCont_\ctx : \Sigma \times \Obj \mapsto \powerset(\Proc)$]
+\begin{definition}[$\gCont_\ctx : \Sigma \times \Obj \mapsto \powerset(\PHproc)$]
   \label{def:maxCont}
   \begin{align*}
     \gCont_\ctx(a,P) = 
@@ -197,14 +198,21 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
 \newcommand{\cwE}{\E_\ctx^\w}
 \newcommand{\VProc}{\V_\PHproc}
 \newcommand{\VObj}{\V_\Obj}
-\newcommand{\VSol}{\V_{Sol}}
+%\newcommand{\VSol}{\V_{Sol}}
+\newcommand{\VSol}{\V_{\Sol}}
 
 \def\Bv{\sat{\cwV}}
 \def\Be{\sat{\cwE}}
+\def\BvProc{\textcolor{red}{\sat{\cwV}^\PHproc}}
+\def\BvObj{\textcolor{red}{\sat{\cwV}^\Obj}}
+%\def\BvSol{\sat{\cwV}^{Sol}}
+\def\BvSol{\textcolor{red}{\sat{\cwV}^{\Sol}}}
+
+\newcommand{\Bee}[2]{\Be^{#1}_{#2}}
 
 \begin{definition}
   The graph of local causality $\cwB = (\Bv, \Be)$ is defined as: $\cwB = \sfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs_\ctx(\myB)}}$,
-  where $\myB = (\cwV, \cwE)$ is the smallest graph where: $\cwV = \VProc \cup \VObj \cup \VSol$ with $\VProc \subset \PHproc$, $\VObj \subset \Obj$, $\VSol \subset \powerset(\PHproc)$ and $\cwE \subset \cwV \times \cwV$ so that:
+  where $\myB = (\cwV, \cwE)$ is the smallest graph where: $\cwV = \VProc \cup \VObj \cup \VSol$ with $\VProc \subset \PHproc$, $\VObj \subset \Obj$, $\VSol \subset \Sol$ and $\cwE \subset \cwV \times \cwV$ so that:
   \begin{align}
     \w &\subset \cwV \label{eq:Vw} \\
 %      \{ \PHbounce(P) \mid P \in \VProc \} &\subset \V\\
@@ -228,11 +236,18 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
 \end{definition}
 
 \pref{eq:Vw}, \eqref{eq:Vproc} and \eqref{eq:VE} ensure that all required nodes are in $\cwV$.
+Elements in $\PHproc$ are required processes,
+elements in $\Obj$ are the objectives to reach these processes
+and elements in $\Sol$ are the sets of processes that are the solutions to these objectives.
 \pref{eq:ESol1} links an objective $P$ to its solutions in $\BS(P)$,
 \pref{eq:ESol2} links a solution $ps$ to the processes $a_i \in ps$ it contains and
 \pref{eq:EReq} links a required process $a_i$ of a component to all objectives $\PHobjp{a}{j}{i}$ with $a_j \in \ctx$.
 If the resolution of an objective $P$ may require a process of $\PHsort(P)$, then \pref{eq:ECont} re-targets this objective ($\gCont$).
 Finally, \pref{eq:EPrio} links a required process $a_i$ of a cooperative sorts to its solutions in $\csState(a_i)$.
+
+In the following, we denote:
+%$\BvProc = \Bv \cap \PHproc$, $\BvObj = \Bv \cap \Obj$ and $\BvSol = \Bv \cap \Sol$.
+$\Bee{X}{Y} = \Be \cap (X \times Y)$, with $X, Y$ amongst $\PHproc$, $\Obj$ and $\Sol$.
 
 \begin{comment}
 \begin{definition}
@@ -270,8 +285,7 @@ Finally, \pref{eq:EPrio} links a required process $a_i$ of a cooperative sorts t
 \begin{definition}[Coherent solution]
 \label{def:coherent}
   An edge $(x, y) \in \cwE$ is said coherent if and only if
-  it does not belong to $(\PHproc \times \powerset(\PHproc))$
-  or if it does and $y$ has no process successor $a_j \in \Bv \cap \PHproc$ so that $\exists a_i \in y$, $a_i \neq a_k$.
+  $(x, y) \in \Bee{\Proc}{\Sol} \Rightarrow y$ has no process successor $a_j \in \Bv \cap \Proc$ so that $\exists a_i \in y$, $a_i \neq a_k$.
 %  A set of processes $ps \in \Bv \cap \powerset(\PHproc)$ is said coherent if and only if
 %  it has no process successor $a_j \in \Bv \cap \PHproc$ so that there exists $a_i \in ps$, $a_i \neq a_k$.
 \end{definition}
@@ -286,55 +300,54 @@ Finally, \pref{eq:EPrio} links a required process $a_i$ of a cooperative sorts t
   then $\uconcr(\w) \neq \emptyset$.
 \end{theorem}
 
-\begin{proof}
+\begin{proof} \towrite{Déplacer en annexe}
 We note $max\ctx = \ctx \Cap \allprocs(\cwB)$ the context supported by $\cwB$.
 
-Let $(a_i, ps) \in \Brsp$ be a cooperative sort requirement whom all children are concretizable.
+Let $(a_i, ps) \in \Bee{\Proc}{\Sol}$ be an edge linking the required process of a cooperative sort to a solution set and suppose all children of $ps$ are concretisable.
 We label all processes of $ps$ by an integer: $ps = \{ p_n \}_{n \in \indexes{ps}}$.
-Let us prove that for all $n \in \indexes{ps}$, there exists a scenario $\delta_n$ so that:
+Let us prove by induction that for all $n \in \indexes{ps}$, there exists a scenario $\delta_n$ so that:
 $\forall i \in \segm{1}{n}, \PHget{(s \PHplay \delta_n)}{\PHsort(p_i)} = p_i$.
 \begin{itemize}
   \item It is straightforward for $\delta_0 = \varepsilon$.
-  \item Let us suppose such $\delta_n$ exists. \todo{Il faut être plus précis pour prendre en compte les coopérations en cascade}
-    By hypothesis, there exists $\delta' \in \muconcr_{s \PHplay \delta_n}(\PHobj{\any}{p_n})$.
-%    so that: $\PHget{(s \PHplay \delta_n \PHplay \delta')}{\PHsort(p_{n+1})} = p_{n+1}$.
-    By hypothesis, $(a_i, ps)$ is coherent (\pref{def:coherent}), which means that solving $p_{n+1}$ does not disturb the processes of $ps$.
-    Therefore, $\forall i \in \segm{1}{n+1}$, $\PHget{(s \PHplay \delta_n \PHplay \delta')}{\PHsort(p_{i})} = p_{i}$.
-    Finally, by \pref{th:update}, there exists a scenario $\delta'' \in \restriction{\Sce}{1}$
-    that can be played in $s \PHplay \delta_n \PHplay \delta'$
-    and so that, if we denote $\delta_{n+1} = \delta_n \PHplay \delta' \PHplay \delta''$,
+  \item Suppose such $\delta_n$ exists and let $q = \PHget{(s \PHplay \delta_n)}{\PHsort(p_{n+1})}$.
+    By hypothesis, $(a_i, ps)$ is coherent (\pref{def:coherent}) and all processes of $ps$ are processes of components;
+    this means that none of the processes needed to solve $p_{n+1}$ is another process of the same sort than another process of $ps$.
+    Therefore, there exists $\delta' \in \muconcr_{s \PHplay \delta_n}(\PHobj{q}{p_{n+1}})$,
+    so that $\forall i \in \segm{1}{n+1}$, $\PHget{(s \PHplay \delta_n \PHplay \delta')}{\PHsort(p_{i})} = p_{i}$.
+    Finally, by \pref{th:update}, there exists a scenario $\delta'' \in \restriction{\Sce}{1}(s \PHplay \delta_n \PHplay \delta')$
+    so that, if we denote $\delta_{n+1} = \delta_n \PHplay \delta' \PHplay \delta''$,
     we have: $\update(s \PHplay \delta_n \PHplay \delta') = s \PHplay \delta_{n+1}$ and the same property about processes (by \pref{th:hcscomp}).
 \end{itemize}
-Therefore, $\delta = \delta_{\indexes{ps}}$ exists, and given its properties, we have: $\PHget{(s \PHplay \delta)}{a} = a_i$
+Therefore, $\delta = \delta_{|ps|}$ exists, and given its properties, we have: $\PHget{(s \PHplay \delta)}{a} = a_i$
 and $\update(s \PHplay \delta) = s \PHplay \delta$.
 
 As there is no cycle in $\cwB$, we show by induction that $\forall s\in L, s\subseteq max\ctx$, 
-for all objective $P$ in $\cwB$ so that $\PHtarget(P) \in s$,
+for all objective $P$ in $\Bv \cap \Obj$ so that $\PHtarget(P) \in s$,
 $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
-
 \begin{itemize}
-  \item If $(P, \emptyset) \in \Bsol$, either $\PHtarget(P) = \PHbounce(P)$ and $\delta = \emptyseq$;
+  \item If $(P, \emptyset) \in \Bee{\Obj}{\Sol}$, either $\PHtarget(P) = \PHbounce(P)$ and $\delta = \emptyseq$;
     or $\forall \zeta \in \BS(P), \zeta \in \Sce(s) \wedge \PHsort(\zeta) = \{ \PHsort(P) \}$
-    and $\delta = \delta_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_{|\zeta|} \PHplay \zeta_{|\zeta|}$ is a sequence given by \pref{th:hcompcomp}.
+    and $\delta = \delta_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_{|\zeta|} \PHplay \zeta_{|\zeta|}$ is a valid sequence given by \pref{th:hcompcomp}.
 
   \item Suppose all children objectives of $P$ are concretizable.
-  \begin{itemize}
-    \item If $\exists (P, Q) \in \Bcont$, then by hypothesis,
+%  \begin{itemize}
+    %\item 
+    If $\exists (P, Q) \in \Bee{\Obj}{\Obj}$, then by hypothesis,
       $\muconcr_{s}(\obj{\PHtarget(P)}{\PHtarget(Q)} \concat Q) \neq \emptyset$, thus
       $\muconcr_{s}(P) \neq \emptyset$.
-    \item Else, by \pref{def:maxCont}, the concretizations of the children of $P$ require no process of sort $\PHsort(P)$.
-      Furthermore, there exists $\zeta \in \BS(P)$ so that $(P, \aZ) \in \Bsol$.
+    %\item 
+    Else, by \pref{def:maxCont}, the concretizations of the children of $P$ require no process of sort $\PHsort(P)$.
+      Furthermore, there exists $\zeta \in \BS(P)$ so that $(P, \aZ) \in \Bee{\Obj}{\Sol}$.
       We show by induction that for all $n \in \indexes{\zeta}$, there is a scenario $\delta_n$ so that $\PHget{(s \PHplay \delta_n)}{\PHsort(P)} = \PHbounce(\zeta_n)$.
-%      We build recursively a scenario $\delta$. Let $m = |\indexes{\zeta}|$.
       \begin{itemize}
         \item[*] Suppose that $\delta_n$ exists and let $\zeta_n = \PHhit{b_i}{a_j}{a_k}$.
-        By hypothesis there exists $\delta' \in \muconcr_{s \PHplay \delta_n}(\PHobj{\any}{b_i})$ with $\PHsort(P) \notin \PHsort(\delta')$ by \pref{def:maxCont}.
-        By \pref{th:update} there exists $\delta'' \in \restriction{\Sce}{1}$ so that $\update(s \PHplay \delta') = s \PHplay \delta' \PHplay \delta''$.
+        By hypothesis there exists $\delta' \in \muconcr_{s \PHplay \delta_n}(\PHobj{\any}{b_i})$ with $\PHsort(P) \notin \PHsort(\delta')$ (by \pref{def:maxCont}).
+        By \pref{th:update} there exists $\delta'' \in \restriction{\Sce}{1}(s \PHplay \delta')$ so that $\update(s \PHplay \delta') = s \PHplay \delta' \PHplay \delta''$.
         Furthermore, $\PHget{(s \PHplay \delta' \PHplay \delta'')}{b} = b_j$ (by \pref{th:hcompcomp} if $b \in \components$ or \pref{th:hcscomp} if $b \in \cs$).
         Therefore, $\delta_{n+1} = \delta_n \PHplay \delta' \PHplay \delta'' \PHplay \zeta_n$.
       \end{itemize}
-      Thus, $\delta_{\indexes{\zeta}} \in \muconcr_s(P)$. % and $\ceil(\delta) \subseteq max\ctx$.
-  \end{itemize}
+      Thus, $\delta_{|\zeta|} \in \muconcr_s(P)$. % and $\ceil(\delta) \subseteq max\ctx$.
+%  \end{itemize}
 \end{itemize}
 Finally, as $\muconcr_{max\ctx}(\w) \neq \emptyset$, $\uconcr(\w) \neq \emptyset$ (\pref{th:uconcr-ctx}).
 \end{proof}
