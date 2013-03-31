@@ -130,7 +130,7 @@ if such a scenario exists in all states $s \subseteq \ctx$.
 \end{comment}
 
 The set of all processes involved in an abstract structure $\cwB$ is given in \pref{def:allprocs}.
-\begin{definition}
+\begin{definition} \todo{À revoir avec la nouvelle sémantique}
 \label{def:allprocs}
   \begin{align*}
   &\allprocs((\cwSol,\cwReq,\cwRSP,\cwCont)) = \{ p \in \PHproc \mid \exists (P,ps) \in \cwSol, \\
@@ -157,6 +157,84 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
   \end{align*}
 \end{definition}
 
+\begin{comment}
+\begin{definition}
+  $\cwB = (\V, \E)$, $V \subset \PHproc \cup \Obj \cup \powerset(\PHproc)$ and $E \subset V \times V$
+  so that:\\
+  $\w \subset \V$\\
+  $\{ \PHbounce(P) \mid P \in \V \} \subset \V$\\
+  $\{ (P, ps) \in \Obj \times \powerset(\PHproc) \mid P \in \V \wedge ps \in \BS(P) \} \subset \E$\\ % Sol
+  $\{ ps \in \powerset(\PHproc) \mid (P, ps) \in \E \} \subset \V$\\
+  $\{ (ps, a_i) \in \powerset(\PHproc) \times \PHproc \mid a_i \in ps \} \subset \E$\\ % Sol
+  $\{ a_i \in \PHproc \mid (ps, a_i) \in \E \} \subset \V$\\
+  $\{ (a_i, \PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid a \in \components \wedge a_i \in \V \wedge a_j \in \ctx \} \subset \E$\\ % Req
+  $\{ \PHobjp{a}{j}{i} \in \Obj \mid (a_i, \PHobjp{a}{j}{i}) \in \E \} \subset \V$\\
+  $\{ (P, \PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid P \in \V \wedge q \in \gCont_\ctx(\PHsort(P), P) \} \subset \E$\\ % Cont
+  $\{ (a_i, ps) \in \Proc \times \powerset(\PHproc) \mid a \in \cs \wedge a_i \in \V \wedge ps \in \csState(a_i) \} \subset \E$\\ % ReqSolPrio
+\end{definition}
+
+\begin{definition}
+  $\cwB = (\V, \E)$, $V \subset \PHproc \cup \Obj \cup \powerset(\PHproc)$ and $E \subset V \times V$
+  so that:
+  \begin{align*}
+    \w &\subset \V\\
+    \{ \PHbounce(P) \mid P \in \V \} &\subset \V\\
+    \{ (P, ps) \in \Obj \times \powerset(\PHproc) \mid P \in \V \wedge ps \in \BS(P) \} &\subset \E\\ % Sol
+    \{ ps \in \powerset(\PHproc) \mid (P, ps) \in \E \} &\subset \V\\
+    \{ (ps, a_i) \in \powerset(\PHproc) \times \PHproc \mid a_i \in ps \} &\subset \E\\ % Sol
+    \{ a_i \in \PHproc \mid (ps, a_i) \in \E \} &\subset \V\\
+    \{ (a_i, \PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid a \in \components \wedge a_i \in \V \wedge a_j \in \ctx \} &\subset \E\\ % Req
+    \{ \PHobjp{a}{j}{i} \in \Obj \mid (a_i, \PHobjp{a}{j}{i}) \in \E \} &\subset \V\\
+    \{ (P, \PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid P \in \V \wedge q \in \gCont_\ctx(\PHsort(P), P) \} &\subset \E\\ % Cont
+    \{ (a_i, ps) \in \Proc \times \powerset(\PHproc) \mid a \in \cs \wedge a_i \in \V \wedge ps \in \csState(a_i) \} &\subset \E % ReqSolPrio
+  \end{align*}
+\end{definition}
+\end{comment}
+
+\newcommand{\V}{V}
+\newcommand{\E}{E}
+\newcommand{\cwV}{\V_\ctx^\w}
+\newcommand{\cwE}{\E_\ctx^\w}
+\newcommand{\VProc}{\V_\PHproc}
+\newcommand{\VObj}{\V_\Obj}
+\newcommand{\VSol}{\V_{Sol}}
+
+\def\Bv{\sat{\cwV}}
+\def\Be{\sat{\cwE}}
+
+\begin{definition}
+  The graph of local causality $\cwB = (\Bv, \Be)$ is defined as: $\cwB = \sfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs_\ctx(\myB)}}$,
+  where $\myB = (\cwV, \cwE)$ is the smallest graph where: $\cwV = \VProc \cup \VObj \cup \VSol$ with $\VProc \subset \PHproc$, $\VObj \subset \Obj$, $\VSol \subset \powerset(\PHproc)$ and $\cwE \subset \cwV \times \cwV$ so that:
+  \begin{align}
+    \w &\subset \cwV \label{eq:Vw} \\
+%      \{ \PHbounce(P) \mid P \in \VProc \} &\subset \V\\
+    P \in \VProc &\Rightarrow \PHbounce(P) \in \cwV \label{eq:Vproc} \\
+    (x, y) \in \E &\Rightarrow y \in \cwV \label{eq:VE} \\
+%    P \in \VObj &\Rightarrow \PHbounce(P) \in \V\\
+%      \{ (P, ps) \in \Obj \times \powerset(\PHproc) \mid P \in \V \wedge ps \in \BS(P) \} &\subset \E\\ % Sol
+    P \in \VObj \wedge ps \in \BS(P) &\Rightarrow (P, ps) \in \cwE \label{eq:ESol1} \\
+%    \{ ps \in \powerset(\PHproc) \mid (P, ps) \in \E \} &\subset \V\\
+%      \{ (ps, a_i) \in \powerset(\PHproc) \times \PHproc \mid a_i \in ps \} &\subset \E\\ % Sol
+    ps \in \VSol \wedge a_i \in ps &\Rightarrow (ps, a_i) \in \cwE \label{eq:ESol2} \\
+%    \{ a_i \in \PHproc \mid (ps, a_i) \in \E \} &\subset \V\\
+%      \{ (a_i, \PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid a \in \components \wedge a_i \in \V \wedge a_j \in \ctx \} &\subset \E\\ % Req
+    a \in \components \wedge a_i \in \VProc \wedge a_j \in \ctx &\Rightarrow (a_i, \PHobjp{a}{j}{i}) \in \cwE \label{eq:EReq} \\
+%    \{ \PHobjp{a}{j}{i} \in \Obj \mid (a_i, \PHobjp{a}{j}{i}) \in \E \} &\subset \V\\
+%      \{ (P, \PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid P \in \V \wedge q \in \gCont_\ctx(\PHsort(P), P) \} &\subset \E\\ % Cont
+    P \in \VObj \wedge q \in \gCont_\ctx(\PHsort(P), P) &\Rightarrow (P, \PHobj{q}{\PHbounce(P)}) \in \cwE \label{eq:ECont} \\
+%      \{ (a_i, ps) \in \Proc \times \powerset(\PHproc) \mid a \in \cs \wedge a_i \in \V \wedge ps \in \csState(a_i) \} &\subset \E\\ % ReqSolPrio
+    a \in \cs \wedge a_i \in \VProc \wedge ps \in \csState(a_i) &\Rightarrow (a_i, ps) \in \cwE \label{eq:EPrio}
+  \end{align}
+\end{definition}
+
+\pref{eq:Vw}, \eqref{eq:Vproc} and \eqref{eq:VE} ensure that all required nodes are in $\cwV$.
+\pref{eq:ESol1} links an objective $P$ to its solutions in $\BS(P)$,
+\pref{eq:ESol2} links a solution $ps$ to the processes $a_i \in ps$ it contains and
+\pref{eq:EReq} links a required process $a_i$ of a component to all objectives $\PHobjp{a}{j}{i}$ with $a_j \in \ctx$.
+If the resolution of an objective $P$ may require a process of $\PHsort(P)$, then \pref{eq:ECont} re-targets this objective ($\gCont$).
+Finally, \pref{eq:EPrio} links a required process $a_i$ of a cooperative sorts to its solutions in $\csState(a_i)$.
+
+\begin{comment}
 \begin{definition}
   \label{def:aS}
   The abstract structure $\cwB=(\Breq,\Bsol,\Brsp,\Bcont)$ is defined as
@@ -187,12 +265,24 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
   A cooperative sort requisite $(a_i, ps)$ in $\Brsp$ is said coherent iff
   it has no successor $(b_k,\PHobjp{b}{j}{k})$ in $\Breq$ so that there exists $b_n \in ps$, $b_k \neq b_n$.
 \end{definition}
+\end{comment}
+
+\begin{definition}[Coherent solution]
+\label{def:coherent}
+  An edge $(x, y) \in \cwE$ is said coherent if and only if
+  it does not belong to $(\PHproc \times \powerset(\PHproc))$
+  or if it does and $y$ has no process successor $a_j \in \Bv \cap \PHproc$ so that $\exists a_i \in y$, $a_i \neq a_k$.
+%  A set of processes $ps \in \Bv \cap \powerset(\PHproc)$ is said coherent if and only if
+%  it has no process successor $a_j \in \Bv \cap \PHproc$ so that there exists $a_i \in ps$, $a_i \neq a_k$.
+\end{definition}
 
 \begin{theorem}[Under-Approximation]
 \label{th:approxinf}
   If the graph $\cwB$ contains no cycle,
   all objectives have at least one solution
-  and all cooperative sort requisites are coherent,
+  and all edges are coherent,
+  %and $\forall (a_i, ps) \in \cwE \cap (\Proc \times \powerset(\PHproc))$, $ps$ is coherent,
+  %and all cooperative sort requisites are coherent,
   then $\uconcr(\w) \neq \emptyset$.
 \end{theorem}
 
