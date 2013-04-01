@@ -151,6 +151,7 @@ In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH w
 
 
 \subsection{Modelling cooperation}
+\label{ssec:cooperation}
 %\towrite{Sortes coopératives avec mise à jour prioritaire (pas de décalage temporel)}
 Cooperation between processes to make another process bounce can be expressed in PH by building a \emph{cooperative sort}, as described in \cite{PMR10-TCSB}.
 \pref{fig:ph-livelock} shows an example of cooperation between processes $a_1$ and $b_1$ to make $c_0$ bounce to $c_1$:
@@ -199,38 +200,51 @@ highest level, and $a$ does not become inactive unless both $b$ and $c$ are inac
 
 
 \todo{Nouvelle section pour les hypothèses + conséquences ?}
-\subsection{Hypothesis} \towrite{Reformuler}
+\subsection{Restrictions} \towrite{Reformuler}
 \label{ssec:hypothesis}
 
-In the scope of this paper, we focus on a specific class of Process Hitting models.
+In the scope of this paper, we focus on a specific class of PH models.
 We define here the restrictions that lead to this class of models \todo{and show that they are equivalent to discrete networks}.
 
+\pref{cr:2prio} allows to models two kinds of actions: controllable actions that model the non-determinacy of biological evolutions,
+and uncontrollable actions that are used to model non-biological behaviours in the model, that is, the update of cooperative sorts.
+\pref{cr:bounded} states that the dynamics of the studied model $\PH$ contains no infinite sequence of uncontrollable actions.
+As these actions can be considered as non-biological and therefore instantaneous, we thus prevent the existence of any Zeno behaviour
+which would allow the play of an infinite sequence of high priority actions in zero time.
 \begin{criterion}[2 priorities]
 \label{cr:2prio}
 %\paragraph{2 priorities}
-  In this paper, we only consider Process Hitting models with 2 priorities.
+  In this paper, we only consider Process Hitting with $2$ priorities.
+\end{criterion}
+%
+\begin{criterion}[Bounded termination]
+\label{cr:bounded}
+%\paragraph{Bounded termination}
+  The dynamics of $\restriction{\PH}{1}$ contains no cycles:
+  %Cycles are still allowed in $\PH$ however.
+  %Formally :
+  $$\exists N \in \sN, \forall \in \PHl, \forall \delta \in \restriction{\Sce}{1}(s), |\delta| \leq N \enspace.$$
 \end{criterion}
 
-\pref{cr:2prio} allows to models two kinds of actions: controllable actions that model the non-determinacy of biological evolutions,
-and uncontrollable actions that are used to model non-biological behaviours in the model.
-
 In \pref{def:component} we define a well-formed component as a sort that is hit only by actions of priority $2$.
+A well-formed component can stand for a real biological component (protein, light, nutriment…).
 \begin{definition}
 \label{def:component}
-  A sort $a \in \PHs$ is said to be a well-formed component if and only if:
+  A sort $a \in \PHs$ is a \emph{well-formed component} if and only if:
   $$\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2 \enspace.$$
   We call $\components$ the set of well-formed components.
 \end{definition}
 
+\pref{def:chainsactions} defines chains of uncontrollable actions,
+and \pref{cr:cyclefreeness} prevents the presence of cycles in these chains to avoid incoherent states between cooperative sorts.
 \begin{definition}
 \label{def:chainsactions}
-  The set of chains of actions $\PHh(b, a)$ between two sorts $b$ and $a$ is defined as below:
+  The set of chains of actions $\PHh(a, b)$ between two sorts $a, b \in \PHs$ is defined as below:
   \begin{align*}
-  \PHh(b, a) = \{ (h_i)_{i \in \segm{0}{s}} \in (\PHh^{(1)})^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_0)) = b \wedge \PHsort(\PHtarget(h_s)) = a \\
+  \PHh(a, b) = \{ (h_i)_{i \in \segm{0}{s}} \in (\PHh^{(1)})^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_0)) = a \wedge \PHsort(\PHtarget(h_s)) = b \\
     & \wedge \forall i \in \segm{1}{s}, \PHsort(\PHtarget(h_{i-1})) = \PHsort(\PHhitter(h_{i})) \}
   \end{align*}
 \end{definition}
-
 \begin{criterion}[Cycle-freeness between actions of priority $1$]
 \label{cr:cyclefreeness}
 %\paragraph{Cycle-freeness between actions of priority $1$}
@@ -238,67 +252,71 @@ In \pref{def:component} we define a well-formed component as a sort that is hit 
   $$\forall a \in \PHs, \PHh(a, a) = \emptyset \enspace.$$
 \end{criterion}
 
-Given \pref{cr:cyclefreeness}, we define the neighbour \towrite{revoir terminologie : neighbors ? vicinity ?} sorts and actions (\pref{def:neighbors}).
-\begin{definition}[Neighbour sorts ($\Vs$) and Neighbour actions ($\Vh$)]
-\label{def:neighbors}
-  The set of neighbour sorts $\Vs(a)$ of a given sort $a$ is the set of components that can interact with it through actions of priority $1$.
-  The set of neighbour actions $\Vh(a)$ of $a$ is the set of actions of priority $1$ influencing $a$.
-  $$\Vs(a) = \{ b \in \components \mid \PHh(b, a) \neq \emptyset \}$$
-%  $$\Vh(a) = \{ h \in \PHh^{(1)} \mid \PHsort(\PHhitter(h)) \in \Vs(a) \wedge \PHsort(\PHtarget(h)) \in \Vs(a) \cup \{ a \} \}$$
-  $$\Vh(a) = \{ h \in \PHh^{(1)} \mid \exists b \in \Vs(a), \exists hs \in \PHh(b,a), h \in hs \}$$
+In \pref{def:neighbours} we define the notion of neighbour \towrite{revoir terminologie : neighbors ? vicinity ?} sorts and actions of a sort.
+The set of neighbour sorts $\Vs(a)$ of a given sort $a$ is the set of components that can interact with it through actions of priority $1$.
+The set of neighbour actions $\Vh(a)$ of $a$ is the set of actions of priority $1$ influencing $a$.
+These definitions are permitted by the previous restrictions (\pref{cr:2prio} and~\ref{cr:cyclefreeness}).
+\begin{definition}[$\Vs : \PHs \rightarrow \powerset(\PHsort)$ ; $\Vh : \PHs \rightarrow \powerset(\PHh)$]
+\label{def:neighbours}
+  For all sort $a \in \PHs$,
+  \begin{align*}
+    \Vs(a) &= \{ b \in \components \mid \PHh(b, a) \neq \emptyset \}\\
+    \Vh(a) &= \{ h \in \PHh^{(1)} \mid \exists b \in \Vs(a), \exists hs \in \PHh(b,a), h \in hs \}
+  \end{align*}
 \end{definition}
 
-We denote $\pfp_s(a)$ the set of processes of sort $a$ that can be reached from state $s$ and that are local steady-states.
-%the set of possible local steady-states of a sort $a$ from a state $s$.
-%\todo{À corriger : état global ?}
-\begin{definition}[Local steady-state ($\pfp$)]
+Finally, we introduce the notion of local steady-state of a sort from a given state.
+This local steady-state is the set of processes towards which the sort tends to evolve to and stay in by playing only uncontrollable actions.
+We denote $\pfp_s(a)$ this set of processes for a sort $a$ in state $s$ (\pref{def:pfp}),
+and we derive from this the notion of well-formed cooperative sort (\pref{def:cs}).
+A well-formed cooperative sort allows to define a cooperation between sorts as presented in \pref{ssec:cooperation};
+therefore, it must be only hit by actions of high priority
+and in a way that it efficiently represents any configuration of its neighbour sorts.
+%any sub-state of its neighbourhood is represented by exactly one local steady state in this sort,
+%and all of its processes represents at least one sub-state of its neighbourhood. \towrite{reformuler ou supprimer}
+\begin{definition}[$\pfp : \PHl \times \PHs \rightarrow \powerset(\PHproc)$]
 \label{def:pfp}
-  For all $a \in \PHa$ and $s \in \PHl$,
+  For all $s \in \PHl$ and $a \in \PHs$,
   \begin{align*}
     \pfp_s(a) = \{ a_i \in \PHl_a &\mid \exists \delta \in \restriction{\Sce}{1}(s), \PHget{(s \PHplay \delta)}{a} = a_i \\
     & \quad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
   \end{align*}
   Of course, if $a \in \components$, then $\pfp_s(a) = \{ \PHget{s}{a} \}$.
 \end{definition}
-
-In \pref{def:cs} we define a well-formed cooperative sort as a sort that is only by actions of priority $1$ and so that
-any sub-state of its neighbourhood is represented by exactly one local steady state in this sort,
-and all of its processes represents at least one sub-state of its neighbourhood. \towrite{reformuler ou supprimer}
+%
 \begin{definition}
 \label{def:cs}
-  A sort $a \in \PHs$ is said to be a well-formed cooperative sort iff:
+  A sort $a \in \PHs$ is a \emph{well-formed cooperative} sort if and only if:
   \begin{enumerate}
     \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 1$
 %    \item $\forall s \in \underset{b \in \Vs(a)}{\times} \PHl_b, |\pfp_s(a)| = 1$
 %    \item $\forall a_i \in \PHl_a, \exists s \in \underset{b \in \Vs(a)}{\times} \PHl_b, \pfp_s(a) = \{ a_i \}$
-    \item \label{csai} $\forall s \in \PHl, |\pfp_s(a)| = 1$
+    \item \label{csai} $\forall s \in \PHl, \exists a_i \in \PHl_a, \pfp_s(a) = \{ a_i \}$
     \item \label{css} $\forall a_i \in \PHl_a, \exists s \in \PHl, \pfp_s(a) = \{ a_i \}$
   \end{enumerate}
 \end{definition}
 We call $\cs$ the set of well-formed cooperative sorts.
-%We note that: $\forall a \in \components, \Vs(a) = \emptyset \wedge \Vh(a) = \emptyset$
 Because of (\ref{csai}), we denote in the following: $\pfp_s(a) = a_i$.
-Furthermore, because of (\ref{css}), we denote $\csState(a_i)$ the set of sub-states represented by the process $a_i$ of the cooperative sort $a$ (\pref{def:csState}).
-\begin{definition}[Represented sub-states ($\csState$)]
+Furthermore, because of (\ref{css}), we denote $\csState(a_i)$ the set of sub-states represented by the process $a_i$ of any cooperative sort $a$ (\pref{def:csState}).
+\begin{definition}[$\csState : \PHproc \rightarrow \powerset(\PHproc)$]
 \label{def:csState}
+  If $a \in \cs$ and $a_i \in \PHl_a$, we define:
   $$\csState(a_i) = \{ ps \in \underset{b \in \Vs(a)}{\times} \PHl_b \mid \forall s \in \PHl, \pfp_{s \Cap ps}(a) = a_i \}$$
 \end{definition}
 
+In the following we will simply write “component” (resp.~“cooperative sort”) instead of “well-formed component” (resp.~“well-formed cooperative sort”).
+The last criterion states that the set of sorts of the considered PH must be divided between components and cooperative sorts.
+
 \begin{criterion}[Components \& cooperative sorts]
 \label{cr:compcs}
+\towrite{Problème : sortes non frappées dans $\components$ ou $\cs$ ?}
 %\paragraph{Components \& cooperative sorts}
-  The studied PH is a PH with 2 priorities, and it is only composed of well-formed components and cooperative sorts:
-  $$\components \cup \cs = \PHs \wedge \components \cap \cs = \emptyset \enspace.$$
+  %The studied PH is a PH with 2 priorities, and it is only composed of well-formed components and cooperative sorts:
+  $$\PHs = \components \cup \cs \wedge \components \cap \cs = \emptyset$$
 \end{criterion}
 
-\begin{criterion}[Bounded termination]
-\label{cr:bounded}
-%\paragraph{Bounded termination}
-  The dynamics of model $\restriction{\PH}{1}$ contains no cycles:
-  %Cycles are still allowed in $\PH$ however.
-  %Formally :
-  $$\exists N \in \sN, \forall \delta \in \restriction{\Sce}{1}, |\indexes{\delta}| \leq N \enspace.$$
-\end{criterion}
+\todo{The criteria given in this subsection allow to define a class of PH models that share the same behaviour than discrete models.
+The demonstration of this statement is found in Annex B.}
 
 
 
