@@ -1,7 +1,13 @@
 \section{Static analysis}\label{sec:sa}
 
-\towrite{Mettre de la colle}
+The aim of this section is to define the problem of reachability in a PH,
+and propose an under-approximation allowing to efficiently solve it.
+The static analysis presented here is inspired from~\cite{PMR12-MSCS}.
 
+\subsection{Preliminary definitions}
+\label{ssec:sa-def}
+
+The reachability of a process $a_i$ of a sort $a$ from another process $a_j$ is called an objective and is denoted $\PHobjp{a}{j}{i}$ (\pref{def:obj}).
 \begin{definition}[Objective ($\Obj$)]
 \label{def:obj}
   The reachability of a process $a_j$ prof a process $a_i$ is called an \emph{objective}, noted $\PHobj{a_i}{a_j}$.
@@ -9,25 +15,25 @@
   For an objective $P = \PHobj{a_i}{a_j} \in \Obj$, we define: $\PHsort(P) = a$, $\PHtarget(P)=a_i$, $\PHbounce(P)=a_j$,
   and $P$ is \emph{trivial} if $a_i = a_j$.
 \end{definition}
-We define an \emph{objective sequence} as a sequence of objectives in which each target must be equal to the previous bounce of the same sort, if it exists.
+\noindent
+We define an \emph{objective sequence} as a sequence of objectives in which each objective target must be equal to the previous objective bounce of the same sort, if it exists.
 The set of all objective sequences is denoted by $\OS$.
 
-\begin{definition}[Context $\ctx$ ($\Ctx$)]
+A context (\pref{def:context}) is an extension of the notion of state that can stand for a set of possible initial states.
+We also extend the notion of override of a context by a set of processes (\pref{def:ctxcap}).
+\begin{definition}[Context ($\Ctx$)]
 \label{def:context}
   A \emph{context} $\ctx$ associates to each sort in $\PHs$ a non-empty subset of its processes:
   $\forall a \in \PHs, \PHget{\ctx}{a} \subseteq \PHl_a \wedge \PHget{\ctx}{a} \neq \emptyset$.
   $\Ctx$ is the set of all contexts.
 \end{definition}
-
 For a given context $\ctx$, we note $a_i \in \ctx$ if and only if $a_i \in \PHget{\ctx}{a}$,
-and for all $ps \in \powerset(\PHproc) \cup \PHl$, $ps \subseteq \ctx \EQDEF \forall a_i \in ps, a_i \in \ctx$.
-%The override of a context $\ctx$ by a set of processes $ps$ is noted $\ctx \Cap ps$ (\defref{ctxcap}).
-%Par exemple, $\state{a_1,a_2,b_1,c_1}\Cap\{ a_3, b_2, b_3 \} = \state{a_3,b_2,b_3,c_1}$.
-
-\begin{definition}[$\Cap: \Ctx \times \powerset(\PHproc) \mapsto \Ctx$]
+and for all $ps \in \powerset(\PHproc)$ or $ps \in \PHl$, $ps \subseteq \ctx \EQDEF \forall a_i \in ps, a_i \in \ctx$.
+%
+\begin{definition}[$\Cap: \Ctx \times \powerset(\PHproc) \rightarrow \Ctx$]
 \label{def:ctxcap}
   For a given context $\ctx\in\Ctx$ and a set of processes $ps \in \powerset(\PHproc)$,
-  the override of $\ctx$ by $ps$ is noted $\ctx \Cap ps$ and is defined by
+  the override of $\ctx$ by $ps$ is noted $\ctx \Cap ps$ and is defined by:
   \[ \forall a \in \PHs, \PHget{(\ctx \Cap ps)}{a} =
   \begin{cases}
     \{ p \in ps \mid \PHsort(p)=a \} & \text{if } \exists p \in ps, \PHsort(p)=a,\\
@@ -35,7 +41,7 @@ and for all $ps \in \powerset(\PHproc) \cup \PHl$, $ps \subseteq \ctx \EQDEF \fo
   \end{cases}
   \]
 \end{definition}
-
+\noindent
 A sequence of actions $\delta$ is \emph{playable} in a context $\ctx$ if and only if 
 $\exists s \subseteq \ctx, \delta \in \Sce(s)$.
 We denote then: $\delta \in \Sce(\ctx)$,
@@ -55,6 +61,12 @@ where $\ceil(\delta)$ is the set containing the last process (hitter or bounce) 
   \end{definition}
 \end{comment}
 
+Finally, bounce sequences on a sort (\pref{def:bs}) are sequences of actions in which the bounce of each action equals the hitter of the following action.
+Bounce sequences are used to find sequences of actions that locally solve a given objective.
+%solve an objective locally, by finding the sequences of actions that allow to reach a process.
+Bounce sequences can be abstracted into the sets of hitters of every action that are different from the considered sort (\pref{def:aBS}).
+This abstraction allows to propagate an objective into objectives on other sots.
+In the following, we denote: $\Sol = \powerset(\PHproc)$.
 \begin{definition}[Bounce sequence ($\BS$)]
 \label{def:bs}
   A \emph{bounce sequence} $\zeta$ is a sequence of actions so that $\forall n \in \indexes{\zeta}, n < |\zeta|, \PHbounce(\zeta_{n}) = \PHtarget(\zeta_{n+1})$.
@@ -65,8 +77,7 @@ where $\ceil(\delta)$ is the set containing the last process (hitter or bounce) 
   \]
   Obviously, $\BS(\obj{a_i}{a_i}) = \{\emptyseq\}$; and $\BS(\obj{a_i}{a_j}) = \emptyset$ if there is no way to reach $a_j$ from $a_i$.
 \end{definition}
-
-In the following, we denote: $\Sol = \powerset(\PHproc)$.
+%
 \begin{definition}[$\aBS:\Obj \mapsto \powerset(\Sol)$]
 \label{def:aBS}
   \[
@@ -80,8 +91,8 @@ In the following, we denote: $\Sol = \powerset(\PHproc)$.
 \subsection{Under-approximation}
 
 We define $\concr(\w)$ as the set of scenarios concretising an objective sequence $\w$ in the context $\ctx$.
-In \pref{def:uconcr}, we define $\uconcr(\w)$ as equal to $\concr(\w)$ if it contains scenarios starting from all states $s \subseteq \ctx$.
-if such a scenario exists in all states $s \subseteq \ctx$.
+In \pref{def:uconcr}, we define $\uconcr(\w)$ as equal to $\concr(\w)$ if and only if $\concr(\w)$ contains scenarios starting from all states $s \subseteq \ctx$.
+%if such a scenario exists in all states $s \subseteq \ctx$.
 
 \begin{comment}
 \begin{definition}[$\concr: \OS \mapsto \powerset(\Sce)$]
@@ -130,8 +141,12 @@ if such a scenario exists in all states $s \subseteq \ctx$.
 \end{definition}
 \end{comment}
 
-The set of all processes involved in an abstract structure $\cwB$ is given in \pref{def:allprocs}.
-\towrite{pré-définir la structure abstraite}
+The aim of the this subsection is to build a graph of local causality that describes the propagation of objectives due to the bounce sequence abstraction of \pref{def:aBS}.
+This oriented graph has the form $(\V, \E)$, where $\V \subset \Proc \cup \Obj \cup \Sol$ and $\E \subset \V \times \V$.
+%In order to build an accurate under-approximation, this graph is defined as a fixed point, in which each iteration saturates 
+The set of all processes involved in such a graph $(\V, \E)$ is given in \pref{def:allprocs}.
+For any objective $P$ and context $\ctx$, \pref{def:maxCont} allows to obtain the set of processes of sort $\PHsort(P)$ that are required to solve $P$ in $\ctx$,
+by computing $\gCont_\ctx(\PHsort(P), P)$.
 \begin{definition}
 \label{def:allprocs}
   \begin{align*}
@@ -141,7 +156,7 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
 %    &\qquad\qquad \vee \exists (a_i,ps) \in \cwRSP, p \in ps \}
   \end{align*}
 \end{definition}
-
+%
 \begin{comment}
 \begin{definition} \todo{À revoir avec la nouvelle sémantique}
 \label{def:allprocs}
@@ -154,13 +169,10 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
   \end{align*}
 \end{definition}
 \end{comment}
-
-
-
-\subsection{Abstract structure}
-
-\towrite{expliquer maxCont et le graphe de causalité}
-
+%
+%\subsection{Abstract structure}
+%
+%
 \begin{definition}[$\gCont_\ctx : \Sigma \times \Obj \mapsto \powerset(\PHproc)$]
   \label{def:maxCont}
   \begin{align*}
@@ -204,6 +216,8 @@ The set of all processes involved in an abstract structure $\cwB$ is given in \p
   \end{align*}
 \end{definition}
 \end{comment}
+
+\towrite{expliquer le graphe de causalité}
 
 \begin{definition}
   The graph of local causality $\cwB = (\Bv, \Be)$ is defined as: $\cwB = \sfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}$,
@@ -277,13 +291,17 @@ $\Bee{X}{Y} = \Be \cap (X \times Y)$, with $X, Y$ amongst $\PHproc$, $\Obj$ and 
 \end{definition}
 \end{comment}
 
-\begin{definition}[Coherent solution]
+\towrite{Expliquer}
+
+\begin{definition}[Coherent edge]
 \label{def:coherent}
-  An edge $(x, y) \in \cwE$ is said coherent if and only if
+  An edge $(x, y) \in \cwE$ is said coherent if and only if:
   $(x, y) \in \Bee{\Proc}{\Sol} \Rightarrow y$ has no process successor $a_j \in \Bv \cap \Proc$ so that $\exists a_i \in y$, $a_i \neq a_k$.
 %  A set of processes $ps \in \Bv \cap \powerset(\PHproc)$ is said coherent if and only if
 %  it has no process successor $a_j \in \Bv \cap \PHproc$ so that there exists $a_i \in ps$, $a_i \neq a_k$.
 \end{definition}
+
+\towrite{Expliquer}
 
 \begin{theorem}[Under-Approximation]
 \label{th:approxinf}
@@ -308,7 +326,6 @@ $\Bee{X}{Y} = \Be \cap (X \times Y)$, with $X, Y$ amongst $\PHproc$, $\Obj$ and 
   Indeed, the under-approximation given in \pref{th:approxinf} does not conclude as one of the edges of the resulting graph of local causality is not coherent (\pref{def:coherent}).
   The graph of local causality for this example is given in \pref{fig:sa-livelock}.
 \end{example}
-
 
 \begin{figure}[p]
   \centering
