@@ -1,27 +1,32 @@
 \section{The Process Hitting framework}
 
-\towrite{Transition.}
+We give in this section the definition and the semantics of the Process Hitting (PH) with priorities, which is an extension of the basic semantics given in~\cite{PMR10-TCSB}.
+Then we describe the modelling of cooperation between components and discuss how the new aforementioned semantics makes this modelling more accurate.
+\towrite{Démo équivalence avec réseaux discret : ici ou dans la section 3 ?}
+Finally, in order to perform a static analysis on this new semantics, we give several criteria to restrict the class of models that we can study,
+and give several theorems that follow.
 
 \subsection{Definition of the Process Hitting with $k$ priorities}
 \label{ssec:PH}
 \towrite{Reformuler (actuellement trop proche de CMSB)}
-A PH (\pref{def:ph}) gathers a finite number of concurrent \emph{processes} grouped into a finite set of \emph{sorts}.
+A PH with $k$ priorities (\pref{def:ph}), also simply called PH \towrite{abréviation ?} in the following, gathers a finite number of concurrent \emph{processes} divided into a finite set of \emph{sorts}.
 A process belongs to a unique sort and is noted $a_i$ where $a$ is the sort and $i$ the identifier of the process within the sort $a$.
-At any time, one and only one process of each sort is present; a state of the PH thus corresponds to the set of such processes.
+%At any time, one and only one process of each sort is present; a state of the PH thus corresponds to the set of such processes.
+Each process stands for a kind of “activity level” of its sort; a state of the PH thus corresponds to a set of processes containing exactly one process of each sort.
 
 The concurrent interactions between processes are defined by a set of \emph{actions} divided into classes of priorities.
-Actions describe the replacement of a process by another of the same sort conditioned by the presence of at most one other process and by the fact that no other action of higher priority is playable in the current state of the PH.
+Actions describe the replacement of a process by another of the same sort conditioned by the presence of at most one other process and by the fact that no other action of higher priority can be played in the considered state of the PH.
 An action is denoted by $\PHhit{a_i}{b_j}{b_k}$ where $a_i,b_j,b_k$ are processes of sorts $a$ and $b$.
 It is required that $b_j \neq b_k$ and that $a=b\Rightarrow a_i=b_j$.
 An action $h=\PHfrappe{a_i}{b_j}{b_k}$ is read as ``$a_i$ \emph{hits} $b_j$ to make it bounce to $b_k$'', and $a_i,b_j,b_k$ are called respectively \emph{hitter}, \emph{target} and \emph{bounce} of the action, and can be referred to as $\PHhitter(h), \PHtarget(h), \PHbounce(h)$, respectively.
 
 \begin{definition}[Process Hitting with $k$ priorities] \towrite{Revoir terminologie}
 \label{def:ph}
-  A \emph{Process Hitting with $k$ priorities}, where $k \in \sN^*$, is a triplet $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$, with $\PHa^{\langle k \rangle} = (\PHa^{(1)}; \dots; \PHa^{(k)})$ a $k$-uplet, where:
+  If $k \in \sN^*$, a \emph{Process Hitting with $k$ priorities} is a triplet $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ with $\PHa^{\langle k \rangle} = (\PHa^{(1)}; \dots; \PHa^{(k)})$ a $k$-uplet, and:
   \begin{itemize}
     \item $\PHs \DEF \{a,b,\dots\}$ is the finite set of \emph{sorts}.
-    \item $\PHl \DEF \prod_{a \in \PHs} \PHl_a$ is the finite set of states, where $\PHl_a = \{a_0 ; \ldots ; a_{l_a}\}$ is the finite set of \emph{processes} of sort $a \in \PHs$ and $l_a \in \sN^*$. Each process belongs to a unique sort: $\forall (a_i; b_j) \in \PHl_a \times \PHl_b, a \neq b \Rightarrow a_i \neq b_j$.
-    \item $\forall n \in \llbracket 1; k \rrbracket, \PHa^{(n)} \DEF \{\PHfrappe{a_i}{b_j}{b_k} \mid (a; b) \in \PHs^2 \wedge (a_i; b_j; b_k) \in \PHl_a \times \PHl_b \times \PHl_b \wedge b_j \neq b_k \wedge a = b \Rightarrow a_i = b_j \}$ is the finite set of \emph{actions of priority $n$}.
+    \item $\PHl \DEF \prod_{a \in \PHs} \PHl_a$ is the finite set of \emph{states}, where $\PHl_a = \{a_0 ; \ldots ; a_{l_a}\}$ is the finite set of \emph{processes} of sort $a \in \PHs$ and $l_a \in \sN^*$. Each process belongs to a unique sort: $\forall (a_i; b_j) \in \PHl_a \times \PHl_b, a \neq b \Rightarrow a_i \neq b_j$.
+    \item $\forall n \in \llbracket 1; k \rrbracket, \PHa^{(n)} \DEF \{\PHfrappe{a_i}{b_j}{b_l} \mid (a; b) \in \PHs^2 \wedge (a_i; b_j; b_l) \in \PHl_a \times \PHl_b \times \PHl_b \wedge b_j \neq b_l \wedge a = b \Rightarrow a_i = b_j \}$ is the finite set of \emph{actions of priority $n$}.
   \end{itemize}
   We call $\PHproc \DEF \bigcup_{a \in \PHs} \PHl_a$ the set of all processes, and $\PHh \DEF \bigcup_{n \in \segm{1}{k}} \PHh^{(n)}$ the set of all actions.
 \end{definition}
@@ -31,56 +36,54 @@ The sort of a process $a_i$ is referred to as $\PHsort(a_i) = a$.
 %and the set of sorts present in an action $h \in \PHa$ as $\PHsort(h) = \{\PHsort(\PHhitter(h)),\PHsort(\PHtarget(h))\}$.
 Given a state $s\in \PHl$, the process of sort $a \in \PHs$ present in $s$ is denoted by $\PHget{s}{a}$, that is the $a$-coordinate of the state $s$.
 If $a_i \in \PHl_a$, we define the notation $a_i \in s \EQDEF \PHget{s}{a} = a_i$.
-We define the override of a state by a process in \pref{def:statecap}, which allows to define the dynamics in a Process Hitting model (\pref{def:play}).
-\begin{definition}
+The override of a state $s$ by a process $a_i$ is defined in \pref{def:statecap} as the same state in which the process of sort $a$ has been replace by $a_i$,
+which then allows to define the dynamics of a PH in \pref{def:play}.
+\begin{definition}[$\Cap : \PHl \times \PHproc \rightarrow \PHl$]
 \label{def:statecap}
   Given a state $s \in \PHl$ and a process $a_i \in \PHproc$, $(s \Cap a_i)$ is the state defined by:
   $\PHget{(s \Cap a_i)}{a} = a_i \wedge \forall b \neq a, \PHget{(s \Cap a_i)}{b} = \PHget{s}{b}$.
   We also extend this definition to a set of processes $ps$ given that all processes are from different sorts by the override of each process:
   $\forall as \subset \PHs, \forall ps \in \underset{a \in as}{\times} \PHl_a, s \Cap ps = s \underset{a_i \in ps}{\Cap} a_i$.
 \end{definition}
-\begin{definition}
+\begin{definition}[Dynamics of a Process Hitting with $k$ priorities]
 \label{def:play}
   An action $h = \PHhit{a_i}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$ is \emph{playable} in $s \in \PHl$
   if and only if $\PHget{s}{a} = a_i$, $\PHget{s}{b} = b_j$ and $\forall m < n, \forall g \in \PHa^{(m)}, \PHhitter(g) \notin s \vee \PHtarget(g) \notin s$.
-  In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$, defined by: $(s \PHplay h) = s \Cap \PHbounce(h)$.
+  In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$ and is defined by: $(s \PHplay h) = s \Cap \PHbounce(h)$.
 %  For the sake of clarity, for all $h, h'\in\PHa$, $((s\PHplay h)\PHplay h')$ is abbreviated as $(s\PHplay h\PHplay h')$.
-\end{definition}
 %\begin{definition}[Scenario ($\Sce$)]
 %\label{def:scenario}
-  For a given state $s \in \PHl$,
+
+  If $s \in \PHl$,
   a \emph{scenario} $\delta$ from $s$ is a sequence of actions of $\PHh$ that can be played successively in $s$.
 %  so that for all $n \in \indexes{\delta}$,
 %  $a_i = \PHhitter(\delta_n)$ (resp. $\PHtarget(\delta_n)$) $\Rightarrow \last_a(\delta_{1..n-1}) \in \{ \varnothing, a_i \}$.
   The set of all scenarios from $s$ is noted $\Sce(s)$.
 %\end{definition}
+\end{definition}
 
-\begin{definition}[Process Hitting $n$-reduction] \towrite{Revoir terminologie : “reduction” ? “restriction” ?}
-  If $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ is a Process Hitting with $k$ priorities and $n \in \segm{1}{k}$, we denote $\restriction{\PH}{n}$ \towrite{$\PH_{|n}$ $\PH'$} the $n$-reduction of $\PH$ the following Process Hitting with $n$ priorities:
-  $\restriction{\PH}{n} = (\PHs; \PHl; \restriction{\PHa}{n})$,
-  with:
+In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH with $n$ priorities in which only actions of priority lower or equal to $n$ of the original PH are kept.
+\begin{definition}[Process Hitting $n$-reduction] %\towrite{Revoir terminologie : “reduction” ? “restriction” ?}
+\label{def:restriction}
+  If $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ is a Process Hitting with $k$ priorities and $n \in \segm{1}{k}$, we denote $\restriction{\PH}{n}$ %\towrite{$\PH_{|n}$ $\PH'$}
+  the $n$-reduction of $\PH$.
+  %the following Process Hitting with $n$ priorities:
+  $\restriction{\PH}{n} = (\PHs; \PHl; \restriction{\PHa}{n})$ is a PH with $n$ priorities with:
   $$\restriction{\PHa}{n} = (\PHa^{(1)}; \dots; \PHa^{(n)})$$
   Furthermore, we denote: $\restriction{\Sce}{n}(s)$ the set of scenarios from $s$ made of actions of $\restriction{\PHa}{n}$.
 \end{definition}
 
 
 
-\subsection{Modeling cooperation}
-\towrite{Sortes coopératives avec mise à jour prioritaire (pas de décalage temporel)}
-As described in \cite{PMR10-TCSB}, the cooperation between processes to make another bounce can be
-expressed in PH by building a \emph{cooperative sort}.
-\pref{fig:PH-cooperativity} shows an example of cooperation between processes $b_1$ and $c_1$ to
-make $a_1$ bounce to $a_2$:
-a cooperative sort $bc$ is defined with 4 processes (one for each sub-state of the presence of
-processes $b_1$ and $c_1$).
-For the sake of clarity, the $bc$ processes are indexed using the sub-state they represent.
-Hence, $bc_{01}$ represents the sub-state $\PHstate{b_0,c_1}$, and so on.
-Each process of sort $b$ and $c$ hit $bc$ to make it bounce to the process reflecting the status of the sorts $b$
-and $c$ (e.g., $\PHfrappe{b_1}{bc_{00}}{bc_{10}}$ and $\PHfrappe{b_1}{bc_{01}}{bc_{11}}$).
-Then, it is the process $bc_{11}$ which hits $a_1$ to make it bounce to $a_2$ instead of the
-independent hits from $b_1$ and $c_1$.
-
-
+\begin{example}
+  \pref{fig:ph-livelock} gives an example of PH with $2$ priorities, with $\PHs = \{ a, b, c, ab \}$ and:
+  \begin{align*}
+    \PHl_a &= \{ a_0, a_1 \} \enspace, & \PHl_b &= \{ b_0, b_1 \} \enspace, \\
+    \PHl_c &= \{ c_0, c_1 \} \enspace, & \PHl_{ab} &= \{ ab_{00}, ab_{01}, ab_{10}, ab_{11} \} \enspace.
+  \end{align*}
+  Actions of priority $1$ are represented with double arrows and actions of priority $2$ are represented with single arrows.
+  The hit part of each action in drawn in plain line and the bounce part is in dotted line.
+  The greyed processes stand for a possible state $s = \PHstate{a_1, b_0, c_0, ab_{10}}$.
 
 \begin{figure}
   \centering
@@ -93,7 +96,7 @@ independent hits from $b_1$ and $c_1$.
     \TSetTick{ab}{1}{01}
     \TSetTick{ab}{2}{10}
     \TSetTick{ab}{3}{11}
-    \TSort{(3,1)}{ab}{4}{l}
+    \TSort{(3,1)}{ab}{4}{r}
 
     \THit{a_0}{prio}{ab_3}{.west}{ab_1}
     \THit{a_0}{prio}{ab_2}{.west}{ab_0}
@@ -135,6 +138,7 @@ independent hits from $b_1$ and $c_1$.
     \path[bounce, bend left]
       \TBounce{c_0}{}{c_1}{.south west}
     ;
+    \TState{a_1, b_0, ab_2, c_0}
   \end{tikzpicture}
   \caption{
   \label{fig:ph-livelock}
@@ -142,9 +146,30 @@ independent hits from $b_1$ and $c_1$.
   }
 \end{figure}
 
+\end{example}
+
+
+
+\subsection{Modeling cooperation}
+%\towrite{Sortes coopératives avec mise à jour prioritaire (pas de décalage temporel)}
+Cooperation between processes to make another process bounce can be expressed in PH by building a \emph{cooperative sort}, as described in \cite{PMR10-TCSB}.
+\pref{fig:ph-livelock} shows an example of cooperation between processes $a_1$ and $b_1$ to make $c_0$ bounce to $c_1$:
+a cooperative sort $ab$ is defined with 4 processes (one for each sub-state of the presence of processes $a_1$ and $b_1$).
+For the sake of clarity, the processes of $ab$ are indexed using the sub-state they represent.
+Hence, $ab_{01}$ represents the sub-state $\PHstate{a_0,b_1}$, and so on.
+Each process of sort $a$ and $b$ hit $ab$ to make it bounce to the process reflecting the status of the sorts $a$ and $b$
+(e.g., $\PHfrappe{a_1}{ab_{00}}{ab_{10}}$ and $\PHfrappe{a_1}{ab_{01}}{ab_{11}}$).
+Then, to represent the cooperation between $a_1$ and $b_1$, the process $ab_{11}$ hits $c_0$ to make it bounce to $c_1$ instead of independent hits from $b_1$ and $a_1$.
+
 We note that cooperative sorts are standard PH sorts and do not involve any
 special treatment regarding the semantics of related actions.
+Furthermore, it is possible to chain cooperative sorts in order to express more complex cooperations
+or to decrease the number of processes created within each cooperative sort.
+%to prevent the combinatoric explosion of the number of processes created within cooperative sorts.
+%Such constructions are helpful as the static analysis of dynamics developed does not suffer from the number of sorts,
+%but on the number of processes within a single sort.
 
+\begin{comment}
 When the number of cooperating processes is large, it is possible to chain several cooperative sorts
 to prevent the combinatoric explosion of the number of processes created within cooperative sorts.
 For instance, if $b_1$, $c_1$, and $d_1$ cooperate, one can create a cooperative sort $bc$ with 4
@@ -152,12 +177,15 @@ processes reflecting the presence of $b_1$ and $c_1$, and a cooperative sort $bc
 reflecting the presence of $bc_{11}$ and $d_1$.  Such constructions are helpful in PH
 as the static analysis of dynamics developed in \cite{PMR12-MSCS} does not suffer from the number of
 sorts, but on the number of processes within a single sort.
+\end{comment}
 
 The construction of cooperation in PH allows to encode any boolean functions between cooperating processes \cite{PMR10-TCSB}.
-Due to the presence of priorities, it is possible to build cooperations with no temporal shift by defining the actions on the cooperative sorts with the highest class of priority.
-This allows to gain the same expressivity in PH than in boolean networks.
-\towrite{Traduction BN depuis thèse.}
+Due to the introduction of priorities into the PH framework,
+it is possible to build cooperations with no temporal shift by defining actions updating the cooperative sorts with the highest class of priority.
+This allows to gain the same expressivity in PH than in boolean networks, as explained in \towrite{section 2 ou 3}.
+The aim of this paper is to allow the static analysis of the dynamics to be handled on PH models comprising such higher priory actions updating cooperative sorts.
 
+\begin{comment}
 \begin{example}
 The PH in \pref{fig:runningPH-2} results from the refinement of the PH in \pref{fig:runningPH-1}
 where several cooperations have been specified.
@@ -166,7 +194,11 @@ bounce to $a_0$ of a cooperation between $b_0$ and $c_0$.
 Hence, this PH expresses a BRN where $a$ requires both $b$ and $c$ active to reach its
 highest level, and $a$ does not become inactive unless both $b$ and $c$ are inactive.
 \end{example}
+\end{comment}
 
+
+
+\todo{Nouvelle section pour les hypothèses + conséquences ?}
 \subsection{Hypothesis} \towrite{Reformuler}
 \label{ssec:hypothesis}
 
