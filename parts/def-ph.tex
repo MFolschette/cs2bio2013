@@ -321,31 +321,45 @@ The demonstration of this statement is found in Annex B.}
 
 
 \subsection{Consequences of the restrictions}
-%Given these hypotheses, we can denote: $\pfp_s(a) = a_i$ the local steady-state of $a$ in state $s$.
-We denote by $\update(s)$ the state in which all cooperative sorts are updated.
-\begin{align*}
-  \update(s) = s \Cap \{ \pfp_{s}(a) \mid a \in CS \} \enspace.
-\end{align*}
 
-\pref{th:update} states that from any state, there exists a scenario updating the cooperative sorts of this state.
+The previous restrictions lead to a particular class of PH models that can be efficiently studied.
+In this subsection, we give several general theorems that can be derived from these restrictions,
+and which will help building the static analysis of \pref{sec:sa}.
+
+We first denote by $\update(s)$ the state equivalent to $s$ but in which all cooperative sorts are updated (\pref{def:update}).
+This state is unique due to the properties of $\pfp$ given in the previous subsection.
+Then, \pref{th:update} states that from any state, there exists a scenario updating the cooperative sorts of this state.
+%
+\begin{definition}[$\update : \PHl \rightarrow \PHl$]
+\label{def:update}
+  For all $s \in \PHl$, we define:
+  \begin{align*}
+    \update(s) = s \Cap \{ \pfp_{s}(a) \mid a \in CS \} \enspace.
+  \end{align*}
+\end{definition}
+%
 \begin{theorem}
 \label{th:update}
   $\forall s \in \PHl, \exists \delta \in \restriction{\Sce}{1}(s), s \PHplay \delta = \update(s)$
 \end{theorem}
 \begin{proof}
   Let $a$ be a cooperative sort so that $\PHget{s}{a} \neq \pfp_s(a)$.
-  Given the definition of $\pfp_s(a)$, there exists a scenario updating $a$ in $s$.
-  As there is no cycle in between the cooperative sorts and an updated cooperative sort cannot evolve, at most $|\cs|$ updates can be done.
+  Given the definition of $\pfp_s(a)$, there exists a scenario $\delta$ updating $a$ in $s$ so that
+  no scenario in $\restriction{\Sce}{1}(s \PHplay \delta)$ can change the active process of $a$.
+  As there is no cycle of actions between the cooperative sorts (\pref{cr:cyclefreeness}) and an updated cooperative sort cannot evolve, at most $|\cs|$ updates can be done.
 \end{proof}
-\pref{th:hcompcomp} states that for a given state $s$ and for any action $h = \PHhit{a_i}{b_j}{b_k}$ between well-formed components, $h$ can be played after a series of hits that do not prevent it to be fired.
-\pref{th:hcscomp} states the same if $a$ is a well-formed cooperative sort, under the condition that $a_i$ reflects the state of the neighborhood of $a$.
+\pref{th:hcompcomp} states that for a given state $s$ and for any action $h = \PHhit{a_i}{b_j}{b_k}$ between components,
+if $\PHget{s}{a} = a_i$ and $\PHget{s}{b} = b_j$, then
+$h$ can always be played after a series of hits (and these hits do not prevent it to be fired).
+\pref{th:hcscomp} states the same if $a$ is a cooperative sort, under the condition that $a$ is updated in $s$.
+%$a_i$ reflects the state of the neighborhood of $a$.
 \begin{theorem}
 \label{th:hcompcomp}
-  $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, a,b \in \components,$\\
+  $\forall s \in \PHl, \forall a,b \in \components, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh,$\\
   $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}(s), \text{$h$ can be played in $s \PHplay \delta$})$
 \end{theorem}
 \begin{proof}
-  From \pref{th:update}, there exists a scenario $\delta$ so that: $(s \PHplay \delta) = \update(s)$.
+  From \pref{th:update}, there exists such a scenario $\delta$ so that: $(s \PHplay \delta) = \update(s)$.
   As $a,b \in \components$, $a_i \in s \PHplay \delta$ and $b_j \in s \PHplay \delta$.
   Finally, by definition of $\update(s)$, no action of priority $1$ can be played in $s \PHplay \delta$, thus $h$ can be played in $s \PHplay \delta$.
 \end{proof}
@@ -355,10 +369,11 @@ We denote by $\update(s)$ the state in which all cooperative sorts are updated.
   $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge \pfp_s(a) = a_i) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}(s), \text{$h$ can be played in $s \PHplay \delta$})$
 \end{theorem}
 \begin{proof}
-  From \pref{th:update}, there exists a scenario $\delta$ so that: $(s \PHplay \delta) = \update(s)$.
-  As $a_i \in \pfp_s(a)$, $a_i \in s \PHplay \delta$.
-  Furthermore, $b \in \components$, thus $b_j \in s \PHplay \delta$.
-  Finally, by definition of $\update(s)$, no action of priority $1$ can be played in $s \PHplay \delta$, thus $h$ can be played in $s \PHplay \delta$.
+  Similar to the proof of \pref{th:hcompcomp}, and
+  %From \pref{th:update}, there exists such a scenario $\delta$ so that: $(s \PHplay \delta) = \update(s)$.
+  as $a_i \in \pfp_s(a)$, $a_i \in s \PHplay \delta$.
+  %Furthermore, $b \in \components$, thus $b_j \in s \PHplay \delta$.
+  %Finally, by definition of $\update(s)$, no action of priority $1$ can be played in $s \PHplay \delta$, thus $h$ can be played in $s \PHplay \delta$.
 \end{proof}
 
 \begin{comment}
