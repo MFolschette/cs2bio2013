@@ -2,7 +2,7 @@
 
 We give in this section the definition and the semantics of the Process Hitting (PH) with priorities, which is an extension of the basic semantics given in~\cite{PMR10-TCSB}.
 Then we describe the modelling of cooperation between components and discuss how the new aforementioned semantics makes this modelling more accurate.
-Finally, in order to perform a static analysis on this new semantics, we give several criteria to restrict the class of models that we can study,
+Finally, in order to perform a static analysis adapted to this new semantics, we give several criteria to restrict the class of models that we can study,
 and give several theorems that follow.
 This class of models is equivalent to Asynchronous Discrete Networks.
 
@@ -54,7 +54,7 @@ which then allows to define the dynamics of a PH in \pref{def:play}.
   The set of all scenarios from $s$ is noted $\Sce(s)$.
 \end{definition}
 
-In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH with $n$ classes of priorities in which only actions of priority lower or equal to $n$ are kept.
+In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH with $n$ classes of priorities in which only actions of priority lower or equal to $n$ are considered.
 \begin{definition}[PH $n$-reduction]
 \label{def:restriction}
   If $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ is a Process Hitting with $k$ classes of priorities and $n \in \segm{1}{k}$, we denote $\restriction{\PH}{n}$
