@@ -411,4 +411,23 @@ A proof of this theorem is given in Annex~\ref{suppl:demoapproxinf}.
   }
 \end{figure}
 
-\todo{La méthode permet aussi de conclure sur l'accessilibité d'un état (global ou partiel)}
+
+
+\subsection{Reachability of a state}
+
+%\newcommand{\total}{{total}}
+%\newcommand{\reach}{{reach}}
+\newcommand{\total}{\tau}
+\newcommand{\reach}{\sigma}
+
+We note that the semantics of PH with $2$ priorities defined in \pref{ssec:hypothesis} allows to model cooperative sorts representing a coherent configuration of a set of sorts.
+As the method presented in this section allows to efficiently conclude on the reachability of a process,
+we can derive a new method to conclude about the reachability of a state of components.
+Indeed, let $\PH = (\PHs, \PHl, (\PHh^{(1)}, \PHh^{(2)}))$ be a PH and suppose we want to study the reachability of a state $s \in \PHl$.
+Let $\PH' = (\PHs', \PHl', (\PHh'^{(1)}, \PHh'^{(2)}))$,
+with: $\PHs' = \PHs \cup \{ \total, \reach \}$, $\PHl' = \PHl \times \PHl_\total \times \PHl_\reach$,
+where $\total$ is a cooperative sort an all components $\components$ of $\PH$, thus $\PHl_\total = \underset{a \in \components}{\times} \PHl_a$,
+and $\reach$ is a component with $\PHl_\reach = \{ \reach_0, \reach_1 \}$.
+We also define $\PHh'^{(1)}$ as the set $\PHh^{(1)}$ completed with all actions updating the cooperative sort $\total$,
+and $\PHh'^{(2)} = \PHh^{(2)} \cup \{ \PHfrappe{\pfp_s(\total)}{\reach_0}{\reach_1} \}$;
+therefore, the additional action in $\PHh'^{(2)}$ allows to conclude on the reachability of process $\pfp_s(\total)$, that is, on the reachability of $s$ (considering only the components).
