@@ -241,8 +241,8 @@ and \pref{cr:cyclefreeness} prevents the presence of cycles in these chains to a
 \label{def:chainsactions}
   The set of chains of actions $\PHh(a, b)$ between two sorts $a, b \in \PHs$ is defined as below:
   \begin{align*}
-  \PHh(a, b) = \{ (h_i)_{i \in \segm{0}{s}} \in (\PHh^{(1)})^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_0)) = a \wedge \PHsort(\PHtarget(h_s)) = b \\
-    & \wedge \forall i \in \segm{1}{s}, \PHsort(\PHtarget(h_{i-1})) = \PHsort(\PHhitter(h_{i})) \}
+  \PHh(a, b) = \{ (h_i)_{i \in \segm{1}{s+1}} \in (\PHh^{(1)})^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_1)) = a \wedge \PHsort(\PHtarget(h_{s+1})) = b \\
+    & \wedge \forall i \in \segm{1}{s}, \PHsort(\PHtarget(h_{i})) = \PHsort(\PHhitter(h_{i+1})) \}
   \end{align*}
 \end{definition}
 \begin{criterion}[Cycle-freeness between actions of priority $1$]
