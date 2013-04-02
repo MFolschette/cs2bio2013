@@ -1,33 +1,43 @@
 \section{Introduction}
 \label{sec:intro}
 
-Discrete modeling frameworks for biological networks is an active research field where formal methods have proved that they were very powerful.
+Discrete modelling frameworks for biological networks is an active research field where formal methods have proved that they were very powerful.
 Such a work started in the seventies.
 It was later enriched in many directions and widely used to elucidate many biological questions.
-Among these questions, a major one is to understand precisely how biological systems evolve and behave; why and how they change their usual behaviors...
+Among these questions, a major one is to understand precisely how biological systems evolve and behave; why and how they change their usual behaviours…
 This leads to questions about the accessibility (possible or inevitable) of certain states.
 The ultimate goal is to discover how it could be possible to prevent from reaching some pathological states.
 
 Of course, such formal models on which analyses are performed are abstract representations of the actual studied systems.
-They are associated with parameters that have to be synthesized so as to be as much as possible fitting with the real systems having some observed behaviors.
+They are associated with parameters that have to be synthesised so as to be as much as possible fitting with the real systems having some observed behaviors.
 As a matter of fact, the abstractions we get are more or less rough or accurate.
-Usual formal frameworks for such modeling activities are state-transition systems or Petri nets or process algebras.
-We developed a quite similar framework named the Process Hitting \cite{PMR10-TCSB}, with the aim of avoiding to build the whole state space so as to be able to tackle very large systems (which would have led to a huge number of states, hopelessly far to big to be analyzed).
+Usual formal frameworks for such modelling activities are state-transition systems, Petri nets or process algebras.
+We developed a quite similar framework named the Process Hitting \cite{PMR10-TCSB}, with the aim of avoiding to build the whole state space in order to be able to tackle very large systems
+(which would have led to a huge number of states, hopelessly far too big to be analysed).
 
 Besides, one further objective of our work is now to be more accurate in the description of the dynamics of the studied systems.
 The idea for this is to introduce timing features of a system into its model.
-Indeed, we are interested in taking into account some knowledge about the relative length of some phenomena as it is a way to refute some kinds of models (parameters) non convenient with the observed dynamic behaviors.
-In this paper, we are introducing these timing properties through priorities.
-It is based on the simple founding idea that the highest priority actions have to be processed before the other ones.
+Indeed, we are interested in taking into account some knowledge about the relative length of some phenomena as it is a way to refute some kinds of models (parameters) non compatible with the observed dynamic behaviours.
+In this paper, we are dealing with these timing properties through priorities,
+that are based on the simple founding idea that the highest priority actions have to be processed before the other ones.
 
-Until now, such a priority scheduling of the actions was not studied very much in the different formal modeling frameworks of systems biology.
-Nevertheless, such an attempt has been carried out for Petri nets by F. Bause \cite{Bause97} and the concept of priority relations among the transitions of a network has also more recently been introduced by A. K. Wagler \textit{et al.} in \cite{waw,WaglerW12} in order to allow the modelisation of deterministic systems for biological applications.
+Until now, such a priority scheduling of the actions was not studied very much in the different formal modelling frameworks of systems biology.
+Nevertheless, such an attempt has been carried out for Petri nets by F. Bause \cite{Bause97}
+and the concept of priority relations among the transitions of a network has also more recently been introduced by A. K. Wagler \textit{et al.} in \cite{waw,WaglerW12} in order to allow modelling deterministic systems for biological applications.
+The concept of priority is much straightforward in the approach of process algebras as it was shown by R. Cleaveland and M. Hennessy in \cite{Cleaveland199058,Cleaveland99prioritiesin} and their abstractions and equivalences were studied in \cite{Cleaveland:2007:PAP:1282576.1282847}.
+It was later extended for applications in the field of system biology by M. John \textit{et al.} in \cite{jlnu2010}.
 
-Our paper is organized as follows.
+Since our formalism (Process Hitting) is inspired from the $\pi$-calculus, our work is related to such semantic ramifications of extending traditional process algebras with the concepts of priority that allow for some transitions to be given precedence over others.
+The concept is derived in two directions: dynamic versus static, the difference being naturally that the former one refer to a semantics where priority values may change during execution according to some evolution rules.
+In our work, actions exhibit a two-level static priority structure, with certain ones being designated as “prioritised” and others as “unprioritised”.
+
+Our paper is organised as follows.
 The Process Hitting framework is defined in section 2;
 we introduce static analysis of the PH in section 3;
 section 4 illustrates the approach on an example
-before the discussion and conclusion in section 5.
+before the discussion and conclusion in section 5. 
+
+
 
 \paragraph*{Notations}
 We denote: $\segm{a}{b} = \{ a, a+1, \dots, b-1, b \}$.
