@@ -226,7 +226,7 @@ and \emph{prioritised actions} used to model non-biological behaviours in the mo
 \pref{cr:bounded} states that the dynamics of the studied model $\PH$ contains no infinite sequence of prioritised actions.
 As these actions can be considered as non-biological and therefore instantaneous, we thus prevent the existence of any Zeno-like behaviour
 which would allow the play of an infinite sequence of prioritised actions in “zero time”.
-\begin{criterion}[2 priorities]
+\begin{criterion}[2 classes of priorities]
 \label{cr:2prio}
 %\paragraph{2 priorities}
   In this paper, we only consider Process Hitting with $2$ classes of priorities:
@@ -239,7 +239,7 @@ which would allow the play of an infinite sequence of prioritised actions in “
   The dynamics of $\restriction{\PH}{1}$ contains no cycles:
   %Cycles are still allowed in $\PH$ however.
   %Formally :
-  $$\exists N \in \sN, \forall \in \PHl, \forall \delta \in \restriction{\Sce}{1}(s), |\delta| \leq N \enspace.$$
+  $\exists N \in \sN, \forall \in \PHl, \forall \delta \in \restriction{\Sce}{1}(s), |\delta| \leq N$.
 \end{criterion}
 
 In \pref{def:component} we define a well-formed component as a sort that is hit only by unprioritised actions, or that no action hits.
@@ -247,7 +247,7 @@ In \pref{def:component} we define a well-formed component as a sort that is hit 
 \begin{definition}[Well-formed component ($\components$)]
 \label{def:component}
   A sort $a \in \PHs$ is a \emph{well-formed component} if and only if:
-  $$\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2 \enspace.$$
+  $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2$.\\
   We call $\components$ the set of well-formed components.
 \end{definition}
 
@@ -267,7 +267,7 @@ and \pref{cr:cyclefreeness} prevents the presence of cycles in these chains.
 \label{cr:cyclefreeness}
 %\paragraph{Cycle-freeness between actions of priority $1$}
   There is no cycle in chains of actions:
-  $$\forall a \in \PHs, \PHh(a, a) = \emptyset \enspace.$$
+  $\forall a \in \PHs, \PHh(a, a) = \emptyset$.
 \end{criterion}
 
 In \pref{def:neighbours} we define the notion of neighbouring sorts and actions of a given sort.
