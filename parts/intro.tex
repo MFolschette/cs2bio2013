@@ -5,7 +5,7 @@ Discrete modelling frameworks for biological networks is an active research fiel
 Such a work started in the seventies.
 It was later enriched in many directions and widely used to elucidate many biological questions.
 Among these questions, a major one is to understand precisely how biological systems evolve and behave; why and how they change their usual behaviours…
-This leads to questions about the accessibility (possible or inevitable) of certain states.
+This leads to questions about the accessibility (possible or inevitable) of some states.
 The ultimate goal is to discover how it could be possible to prevent biological systems from reaching some pathological states.
 
 Of course, such formal models on which analyses are performed are abstract representations of the actual studied systems.
@@ -31,10 +31,23 @@ and the concept of priority relations among the transitions of a network has als
 The concept of priority is much straightforward in the approach of process algebras as it was shown by R. Cleaveland and M. Hennessy in \cite{Cleaveland199058,Cleaveland99prioritiesin} and their abstractions and equivalences were studied in \cite{Cleaveland:2007:PAP:1282576.1282847}.
 It was later extended for applications in the field of system biology by M. John \textit{et al.} in \cite{jlnu2010}.
 
-Since our formalism (Process Hitting) can be considered as a subset of CCS, %is inspired from the $\pi$-calculus,
+\paragraph{Contributions}
+Since our formalism (the Process Hitting) can be considered as a subset of CCS, %is inspired from the $\pi$-calculus,
 our work is related to such semantic ramifications of extending traditional process algebras with the concepts of priority that allow for some transitions to be given precedence over others.
 The concept is derived in two directions: dynamic versus static, the difference being naturally that the former one refer to a semantics where priority values may change during execution according to some evolution rules.
 In our work, actions exhibit a two-level static priority structure, with certain ones being designated as “prioritised” and others as “unprioritised”.
+
+In this paper, we introduce a new extension to the semantics of Process Hitting by partitioning actions into classes of priorities.
+One of the objectives is to reach an accurate representation of cooperating components in the model, that was not fulfilled with the initial semantics.
+We then develop an efficient under-approximation of the reachability of the state of independent components on a subclass of this new framework, thus allowing to compute efficient static analysis.
+This local reachability under-approximation can be also easily extended to study the reachability of a global state.
+Finally, as the subclass of models studied proves to be bisimilar to Asynchronous Discrete Networks, we state to have developed an efficient method to compute the reachability of a state and thus study the behaviour of such models.
+
+The method developed in this paper has been implemented into the existing Pint library and tested on a large-scale biological model containing 94 components.
+This piece of software turned out to be conclusive in all cases and results were computed in hundredths of seconds,
+thus overtaking the efficiency of usual model-checkers.
+
+
 
 Our paper is organised as follows.
 The Process Hitting framework is defined in section 2;
