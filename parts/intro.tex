@@ -15,36 +15,36 @@ As a matter of fact, the abstractions we get are more or less rough or accurate.
 Usual formal frameworks for such modelling activities are state-transition systems or process algebras. % Petri nets
 We developed a quite similar framework named the Process Hitting \cite{PMR10-TCSB}: %, with the aim of avoiding to build the whole state space in order to be able to tackle very large systems
 our motivation behind this framework was to design a model and analysis techniques that avoid to build the whole state space.
-This allows us to tackle very large systems
+This allows to tackle very large systems
 (which would have led to a huge number of states, hopelessly too huge to be analysed).
 
 Besides, one further objective of our work is now %to be more accurate in the description of the studied systems.
-to improve the accuracy of the description of the dynamics of the studied systems.
+to improve the accuracy of the description of the studied systems dynamics.
 The idea for this is to introduce timing features into its model.
-Indeed, we are interested in taking into account some knowledge about the relative length of some phenomena as it is a way to refute some kinds of models (parameters) that are inconsistent with the observed dynamic behaviours.
+Indeed, we are interested in taking into account some knowledge about the relative length of some phenomena as it is a way to refute some models (parameters) that are inconsistent with the observed dynamic behaviours.
 In this paper, we are dealing with these timing properties through priorities,
 that are based on the simple founding idea that the highest priority actions have to be processed before the other ones.
 
-Until now, such a priority scheduling of the actions was not studied very much in the different formal modelling frameworks dedicated to systems biology.
-Nevertheless, such an attempt has been carried out for Petri nets by F. Bause \cite{Bause97}
-and the concept of priority relations among the transitions of a network has also more recently been introduced by A. K. Wagler \textit{et al.} in \cite{waw,WaglerW12} in order to allow modelling deterministic systems for biological applications.
-The concept of priority is much straightforward in the approach of process algebras as it was shown by R. Cleaveland and M. Hennessy in \cite{Cleaveland199058,Cleaveland99prioritiesin} and their abstractions and equivalences were studied in \cite{Cleaveland:2007:PAP:1282576.1282847}.
-It was later extended for applications in the field of system biology by M. John \textit{et al.} in \cite{jlnu2010}.
+Until now, such a priority scheduling of the actions was not studied extensively in the different formal modelling frameworks dedicated to systems biology.
+Nevertheless, such an attempt has been carried out for Petri nets by F.~Bause \cite{Bause97},
+and the concept of priority relations among the transitions of a network has also more recently been introduced by A.~K.~Wagler \textit{et~al.} \cite{waw,WaglerW12} in order to allow modelling deterministic systems for biological applications.
+The concept of priority is much straightforward in the approach of process algebras as it was shown by R.~Cleaveland and M.~Hennessy in \cite{Cleaveland199058,Cleaveland99prioritiesin} and their abstractions and equivalences were studied in \cite{Cleaveland:2007:PAP:1282576.1282847}.
+It was later extended for applications in the field of system biology by M.~John \textit{et~al.} \cite{jlnu2010}.
 
 \paragraph{Contributions}
 Since our formalism (the Process Hitting) can be considered as a subset of CCS, %is inspired from the $\pi$-calculus,
 our work is related to such semantic ramifications of extending traditional process algebras with the concepts of priority that allow for some transitions to be given precedence over others.
 The concept is derived in two directions: dynamic versus static, the difference being naturally that the former one refer to a semantics where priority values may change during execution according to some evolution rules.
-In our work, actions exhibit a two-level static priority structure, with certain ones being designated as “prioritised” and others as “unprioritised”.
+In our work, actions exhibit a two-level static priority structure, some of them ones being designated as “prioritised” and others as “unprioritised”.
 
 In this paper, we introduce a new extension to the semantics of Process Hitting by partitioning actions into classes of priorities.
 One of the objectives is to reach an accurate representation of cooperating components in the model, that was not fulfilled with the initial semantics.
-We then develop an efficient under-approximation of the reachability of the state of independent components on a subclass of this new framework, thus allowing to compute efficient static analysis.
+We then develop an efficient under-approximation of the reachability of the state of components on a subclass of this new framework, thus allowing to compute efficient static analysis.
 This local reachability under-approximation can be also easily extended to study the reachability of a global state.
 Finally, as the subclass of models studied proves to be bisimilar to Asynchronous Discrete Networks, we state to have developed an efficient method to compute the reachability of a state and thus study the behaviour of such models.
 
 The method developed in this paper has been implemented into the existing Pint library and tested on a large-scale biological model containing 94 components.
-This piece of software turned out to be conclusive in all cases and results were computed in hundredths of seconds,
+The under-approximation turned out to be conclusive in all cases and results were computed in hundredths of seconds,
 thus overtaking the efficiency of usual model-checkers.
 
 
@@ -68,6 +68,6 @@ If $x = (x_i)_{i \in \segm{1}{n}}$ is a sequence of elements indexed by $i \in \
 $\indexes{x} = \segm{1}{n}$ is the set of indexes of this sequence.
 We also denote by $\emptyseq$ the empty sequence.
 If $A$ and $B$ are sets,
-$f : A \rightarrow B$ denotes an application $f$ that maps elements of $A$ to elements of $B$.
-$\lfp{x_0}{x}{x'}$ is the least fixed point greater that $x_0$ of the function $x \mapsto x'$.
+$f : A \rightarrow B$ denotes an application $f$ that maps the elements of $A$ to elements of $B$.
+$\lfp{x_0}{x}{x'}$ is the least fixed point of the function $x \mapsto x'$ which is greater that $x_0$ .
 The Cartesian product is denoted $\times$.
