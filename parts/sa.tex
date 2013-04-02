@@ -415,8 +415,6 @@ A proof of this theorem is given in Annex~\ref{suppl:demoapproxinf}.
 
 \subsection{Reachability of a state}
 
-%\newcommand{\total}{{total}}
-%\newcommand{\reach}{{reach}}
 \newcommand{\total}{\tau}
 \newcommand{\reach}{\sigma}
 
@@ -429,5 +427,9 @@ with: $\PHs' = \PHs \cup \{ \total, \reach \}$, $\PHl' = \PHl \times \PHl_\total
 where $\total$ is a cooperative sort an all components $\components$ of $\PH$, thus $\PHl_\total = \underset{a \in \components}{\times} \PHl_a$,
 and $\reach$ is a component with $\PHl_\reach = \{ \reach_0, \reach_1 \}$.
 We also define $\PHh'^{(1)}$ as the set $\PHh^{(1)}$ completed with all actions updating the cooperative sort $\total$,
-and $\PHh'^{(2)} = \PHh^{(2)} \cup \{ \PHfrappe{\pfp_s(\total)}{\reach_0}{\reach_1} \}$;
-therefore, the additional action in $\PHh'^{(2)}$ allows to conclude on the reachability of process $\pfp_s(\total)$, that is, on the reachability of $s$ (considering only the components).
+and $\PHh'^{(2)} = \PHh^{(2)} \cup \{ \PHhit{\pfp_s(\total)}{\reach_0}{\reach_1} \}$.
+
+Given an initial context $\ctx$, the reachability of $s$ in $\PH$ is equivalent to the concretization of $\PHobjp{\reach}{0}{1}$ in $\PH'$ from the initial context $\ctx \cup \{ \reach_0 \}$ (the initial state of $\total$ does not matter), which can be under-approximated using \pref{th:approxinf}.
+Indeed, the additional action $\PHhit{\pfp_s(\total)}{\reach_0}{\reach_1}$ in $\PHh'^{(2)}$ allows to conclude on the reachability of process $\pfp_s(\total)$, that is, on the reachability of the state $s$ (considering only the components).
+Moreover, it is possible to compute the reachability of a partial state by creating the sort $\total$ on a subset of $\components$,
+or the reachability of a set of states $S \subset \PHl$ by creating several actions $\PHhit{\total_s}{\reach_0}{\reach_1}$ for each state $s \in S$.
