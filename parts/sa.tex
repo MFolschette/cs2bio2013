@@ -114,8 +114,11 @@ and a node in $\Sol$ is a sets of processes required for the solving.
 An objective $P \in \Obj$ is solvable if the abstractions of bounce sequences $\aBS(P) \in \Sol$ (\pref{def:aBS}) can be reached (\pref{eq:ESol1}), leading to several required processes (\pref{eq:ESol2}).
 If $a$ is a component, the reachability of a process $a_i$ is approximated by the ability to solve all objectives $\PHobjp{a}{j}{i} \in \Obj$ for all $a_j$ in the initial context (\pref{eq:EReq});
 if $a$ is a cooperative sort, the reachability of $a_i$ is directly solved by the set of the processes $\csState(a_i)$ (\pref{def:csState}) it represents (\pref{eq:EPrio}).
-Finally, if the resolution of an objective $P$ requires a process of $\PHsort(P)$, \ie $\gCont(\PHsort(P), P) \neq \emptyset$ (\pref{def:maxCont}), then this objective is re-targeted (\pref{eq:ECont}).
+The resolution of an objective $P$ may a process of $\PHsort(P)$, \ie $\gCont(\PHsort(P), P) \neq \emptyset$ (\pref{def:maxCont}); in this cas, the objective is re-targeted (\pref{eq:ECont}).
 \pref{eq:Vw}, \eqref{eq:Vproc} and \eqref{eq:VE} ensure that all required nodes are in $\cwV$.
+Finally, as the active process of every sort may evolve, $\cwB$ is obtained iteratively by saturation with every process it contains,
+\ie by overriding its initial context $\ctx$ by $\allprocs(\V, \E)$, defined by:
+$$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \}$$
 
 \begin{comment}
 The reachability of a process $a_i$ is approximated by the ability to solve all objectives $\PHobjp{a}{j}{i}$ for all $a_j$ in the initial context.
