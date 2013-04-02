@@ -20,7 +20,6 @@ The reachability of a process $a_j$ of a given sort $a$ from another process $a_
 \end{definition}
 
 A context (\pref{def:context}) extends the notion of state to a set of possible initial states.
-%the extension of the override operator follows (\pref{def:ctxcap}).
 We also extend the override operator to contexts (\pref{def:ctxcap}).
 \begin{definition}[Context ($\Ctx$)]
 \label{def:context}
@@ -46,29 +45,13 @@ and for all $ps \in \powerset(\PHproc)$ or $ps \in \PHl$, $ps \subseteq \ctx \EQ
 A sequence of actions $\delta$ is \emph{playable} in a context $\ctx$ if and only if 
 $\exists s \subseteq \ctx, \delta \in \Sce(s)$.
 We denote then: $\delta \in \Sce(\ctx)$,
-%$\supp(\delta) \subseteq \ctx$. 
 and the play of $\delta$ in $\ctx$ is $\ctx \PHplay \delta = \ctx \Cap \ceil(\delta)$,
 where $\ceil(\delta)$ is the set containing the last process (hitter or bounce) of each sort present in $\delta$.
-
-\begin{comment}
-  \begin{definition}[Objective sequence ($\OS$)]
-  \label{def:OS}
-  \towrite{Simplifier / réécrire en dehors d'une def}
-    An \emph{objective sequence} is a sequence $\w = P_1 \concat \dots \concat P_{|\w|}$,
-    where $\forall n \in \indexes{\w}, \w_n \in \Obj$ and $a_i = \PHtarget(\w_n) \Rightarrow \last_a(\w_{1..n-1}) \in \{ \varnothing, a_i \}$.
-    The set of all objective sequences is denoted by $\OS$.
-    The definitions of $\last_a$ \todo{À définir}, $\first_a$ \todo{À définir}, $\supp$ \todo{À définir} and $\ceil$ \todo{À définir}
-    are simply derived by omitting the case of hitters.
-  \end{definition}
-\end{comment}
 
 Finally, a bounce sequence on a sort $a$ (\pref{def:bs}) is a sequence of actions hitting $a$
 in which the bounce process of each action is the hitter process of the following action.
 Bounce sequences are used to find local solutions to a given objective.
-%Bounce sequences are used to find sequences of actions that locally solve a given objective.
-%solve an objective locally, by finding the sequences of actions that allow to reach a process.
 A bounce sequence can be abstracted into sets of all its hitters that are not in sort $a$.
-%of every action that are different from the considered sort (\pref{def:aBS}).
 This abstraction allows to propagate an objective into objectives on other sots.
 In the following, we denote: $\Sol = \powerset(\PHproc)$.
 \begin{definition}[Bounce sequence ($\BS$)]
@@ -79,7 +62,6 @@ In the following, we denote: $\Sol = \powerset(\PHproc)$.
   \[
     \BS(\PHobj{a_i}{a_j}) = \{ \zeta \in \BS \mid \PHtarget(\zeta_1)= a_i \wedge \PHbounce(\zeta_{|\zeta|}) = a_j \} \enspace.
   \]
-%  Obviously, $\emptyseq \in \BS(\obj{a_i}{a_i})$; and $\BS(\obj{a_i}{a_j}) = \emptyset$ if there is no way to reach $a_j$ from $a_i$.
   $\BS(\obj{a_i}{a_j}) = \emptyset$ if there is no way to reach $a_j$ from $a_i$ and $\emptyseq \in \BS(\obj{a_i}{a_i})$.
 \end{definition}
 %
@@ -98,32 +80,6 @@ In the following, we denote: $\Sol = \powerset(\PHproc)$.
 We define $\concr(\w)$ as the set of scenarios concretising an objective sequence $\w$ in the context $\ctx$.
 In \pref{def:uconcr}, we define $\uconcr(\w)$ as equal to $\concr(\w)$ if and only if $\concr(\w)$ contains scenarios starting from all states $s \subseteq \ctx$.
 \pref{th:uconcr-ctx} is used to over-approximate the initial context $\ctx$.
-%if such a scenario exists in all states $s \subseteq \ctx$.
-%
-\begin{comment}
-\begin{definition}[$\concr: \OS \mapsto \powerset(\Sce)$]
-\label{def:concr}
-\towrite{Simplifier ? Supprimer la def formelle ?}
-  For a given $\w \in \OS$, $\concr(\w)$ is the set of scenarios concretising $\w$ in the context $\ctx$:
-  \begin{align*}
-    \concr(\w) = \{ \delta \in \Sce \mid & (\w^\vartriangle = \emptyseq \wedge \delta = \emptyseq) 
-      \vee (\w^\vartriangle \neq \emptyseq \wedge \supp(\delta) \subseteq \ctx
-    \\ &
-      \wedge \exists \phi:\indexes{\w} \mapsto \indexes{\delta}, (\forall n, m \in \indexes{\w}, n < m \Leftrightarrow \phi(n) \leq \phi(m)) 
-    \\ &
-      \wedge \forall n \in \indexes{\w}, \PHbounce(\w_n) \in \ctx \PHplay \delta_{1..\phi(n)})
-    \}
-    \enspace,
-  \end{align*}
-  where $\omega^\vartriangle$ refers to the sequence of objectives $\omega$ where the trivial objectives have been removed.
-\end{definition}
-%
-\begin{definition}[$\concr: \powerset(\OS) \mapsto \powerset(\Sce)$]
-\label{def:concr-set}
-  $\concr(\W) = \{ \delta \in \concr(\w) \mid \w \in \W \} \enspace.$
-\end{definition}
-\end{comment}
-%
 \begin{definition}[$\uconcr: \OS \rightarrow \powerset(\Sce)$]
 \label{def:uconcr}
   \[
@@ -140,45 +96,7 @@ In \pref{def:uconcr}, we define $\uconcr(\w)$ as equal to $\concr(\w)$ if and on
   $\ctx \subseteq \ctx' \wedge \muconcr_{\ctx'}(\w) \neq \emptyset \Longrightarrow \muconcr_{\ctx}(\w) \neq \emptyset$.
 \end{theorem}
 
-\begin{comment}
-\begin{definition}[$\uconcr: \powerset(\OS) \mapsto \powerset(\Sce)$]
-\label{def:uconcr-set}
-  $\uconcr(\Omega) = \{ \delta \in \uconcr(\w) \mid \w \in \Omega\}$
-\end{definition}
-\end{comment}
-
 For any objective $P$ and context $\ctx$, \pref{def:maxCont} allows to obtain the set of processes of sort $\PHsort(P)$ are required to solve $P$ in $\ctx$, given by $\gCont_\ctx(\PHsort(P), P)$.
-\begin{comment}
-\begin{definition}
-\label{def:allprocs}
-  \begin{align*}
-  \allprocs(\V, \E) = \{ p \in \PHproc &\mid p \in \V \vee \exists P \in \V \cap \Obj,\\
-  &\qquad p = \PHtarget(P) \vee p = \PHbounce(P) \}
-%    &\qquad\qquad p \in ps \vee p = \PHtarget(P) \vee p = \PHbounce(P) \\
-%    &\qquad\qquad \vee \exists (a_i,ps) \in \cwRSP, p \in ps \}
-  \end{align*}
-  \begin{align*}
-  \allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \}
-  \end{align*}
-\end{definition}
-\end{comment}
-%
-\begin{comment}
-\begin{definition} \todo{À revoir avec la nouvelle sémantique}
-\label{def:allprocs}
-  \begin{align*}
-  &\allprocs((\cwSol,\cwReq,\cwRSP,\cwCont)) = \{ p \in \PHproc \mid \exists (P,ps) \in \cwSol, \\
-    &\qquad\qquad p \in ps \vee p = \PHtarget(P) \vee p = \PHbounce(P) \\
-    &\qquad\qquad \vee \exists (a_i,ps) \in \cwRSP, p \in ps \}
-  %  &\qquad\qquad \vee p = \PHtarget(P) \vee \exists h \in \BS(P), (p = \PHhitter(h) \vee p = \PHbounce(h)) \\
-  %  &\qquad\qquad \vee \exists(Q, \PHobj{p}{\PHbounce(Q)} \in \cwPrioCont \}
-  \end{align*}
-\end{definition}
-\end{comment}
-%
-%\subsection{Abstract structure}
-%
-%
 \begin{definition}[$\gCont_\ctx : \Sigma \times \Obj \rightarrow \powerset(\PHproc)$]
   \label{def:maxCont}
   \begin{align*}
@@ -189,41 +107,21 @@ For any objective $P$ and context $\ctx$, \pref{def:maxCont} allows to obtain th
   \end{align*}
 \end{definition}
 
+The graph of local causality $\cwB = (\V, \E)$ defined in \pref{def:glc} is a graph where $\V \subset \Proc \cup \Obj \cup \Sol$ and $\E \subset \V \times \V$.
+A node in $\PHproc$ is a required process,
+a node in $\Obj$ is an objective to reach a given process
+and a node in $\Sol$ is a sets of processes required for the solving.
+An objective $P \in \Obj$ is solvable if the abstractions of bounce sequences $\aBS(P) \in \Sol$ (\pref{def:aBS}) can be reached (\pref{eq:ESol1}), leading to several required processes (\pref{eq:ESol2}).
+If $a$ is a component, the reachability of a process $a_i$ is approximated by the ability to solve all objectives $\PHobjp{a}{j}{i} \in \Obj$ for all $a_j$ in the initial context (\pref{eq:EReq});
+if $a$ is a cooperative sort, the reachability of $a_i$ is directly solved by the set of the processes $\csState(a_i)$ (\pref{def:csState}) it represents (\pref{eq:EPrio}).
+The resolution of an objective $P$ may a process of $\PHsort(P)$, \ie $\gCont(\PHsort(P), P) \neq \emptyset$ (\pref{def:maxCont}); in this cas, the objective is re-targeted (\pref{eq:ECont}).
+\pref{eq:Vw}, \eqref{eq:Vproc} and \eqref{eq:VE} ensure that all required nodes are in $\cwV$.
+Finally, as the active process of every sort may evolve, $\cwB$ is obtained iteratively by saturation with every process it contains,
+\ie by overriding its initial context $\ctx$ by $\allprocs(\V, \E)$, defined by:
+$$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \}$$
+
 \begin{comment}
-\begin{definition}
-  $\cwB = (\V, \E)$, $V \subset \PHproc \cup \Obj \cup \powerset(\PHproc)$ and $E \subset V \times V$
-  so that:\\
-  $\w \subset \V$\\
-  $\{ \PHbounce(P) \mid P \in \V \} \subset \V$\\
-  $\{ (P, ps) \in \Obj \times \powerset(\PHproc) \mid P \in \V \wedge ps \in \BS(P) \} \subset \E$\\ % Sol
-  $\{ ps \in \powerset(\PHproc) \mid (P, ps) \in \E \} \subset \V$\\
-  $\{ (ps, a_i) \in \powerset(\PHproc) \times \PHproc \mid a_i \in ps \} \subset \E$\\ % Sol
-  $\{ a_i \in \PHproc \mid (ps, a_i) \in \E \} \subset \V$\\
-  $\{ (a_i, \PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid a \in \components \wedge a_i \in \V \wedge a_j \in \ctx \} \subset \E$\\ % Req
-  $\{ \PHobjp{a}{j}{i} \in \Obj \mid (a_i, \PHobjp{a}{j}{i}) \in \E \} \subset \V$\\
-  $\{ (P, \PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid P \in \V \wedge q \in \gCont_\ctx(\PHsort(P), P) \} \subset \E$\\ % Cont
-  $\{ (a_i, ps) \in \Proc \times \powerset(\PHproc) \mid a \in \cs \wedge a_i \in \V \wedge ps \in \csState(a_i) \} \subset \E$\\ % ReqSolPrio
-\end{definition}
-
-\begin{definition}
-  $\cwB = (\V, \E)$, $V \subset \PHproc \cup \Obj \cup \powerset(\PHproc)$ and $E \subset V \times V$
-  so that:
-  \begin{align*}
-    \w &\subset \V\\
-    \{ \PHbounce(P) \mid P \in \V \} &\subset \V\\
-    \{ (P, ps) \in \Obj \times \powerset(\PHproc) \mid P \in \V \wedge ps \in \BS(P) \} &\subset \E\\ % Sol
-    \{ ps \in \powerset(\PHproc) \mid (P, ps) \in \E \} &\subset \V\\
-    \{ (ps, a_i) \in \powerset(\PHproc) \times \PHproc \mid a_i \in ps \} &\subset \E\\ % Sol
-    \{ a_i \in \PHproc \mid (ps, a_i) \in \E \} &\subset \V\\
-    \{ (a_i, \PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid a \in \components \wedge a_i \in \V \wedge a_j \in \ctx \} &\subset \E\\ % Req
-    \{ \PHobjp{a}{j}{i} \in \Obj \mid (a_i, \PHobjp{a}{j}{i}) \in \E \} &\subset \V\\
-    \{ (P, \PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid P \in \V \wedge q \in \gCont_\ctx(\PHsort(P), P) \} &\subset \E\\ % Cont
-    \{ (a_i, ps) \in \Proc \times \powerset(\PHproc) \mid a \in \cs \wedge a_i \in \V \wedge ps \in \csState(a_i) \} &\subset \E % ReqSolPrio
-  \end{align*}
-\end{definition}
-\end{comment}
-
-The reachability of a process $a_i$ is approximated by the ability to solve all objectives $\PHobjp{a}{j}{i}$ so that $a_j$ is in the initial context.
+The reachability of a process $a_i$ is approximated by the ability to solve all objectives $\PHobjp{a}{j}{i}$ for all $a_j$ in the initial context.
 To this end, the abstractions of bounce sequences (\pref{def:aBS}) solving these objectives are computed, leading to new required processes, and thus new objectives on other sorts.
 Thus, the graph of local causality $\cwB = (\V, \E)$ defined in \pref{def:glc} is a graph where $\V \subset \Proc \cup \Obj \cup \Sol$ and $\E \subset \V \times \V$
 in which edges link any required process $a_i$ in $\Proc$ to all corresponding objectives $P$ in $\Obj$,
@@ -233,45 +131,28 @@ In the case where a process $a_i$ belongs to a cooperative sort, it is directly 
 If the solving of an objective $P$ requires a process of $\PHsort(P)$, a continuity edge is added to re-target this objective (\pref{def:maxCont}).
 Finally, as the active process of every sort may evolve, $\cwB$ is obtained iteratively by saturation with every process it contains,
 \ie by overriding its initial context $\ctx$ by $\allprocs(\V, \E)$, defined by:
-%in which the initial context $\ctx$ is updated by iteratively adding every process that appears in the graph ($\allprocs$).
-%The aim of the this subsection is to build a graph of local causality that describes the propagation of objectives due to the bounce sequence abstraction of \pref{def:aBS}.
-%This oriented graph has the form $(\V, \E)$, where $\V \subset \Proc \cup \Obj \cup \Sol$ and $\E \subset \V \times \V$.
-%In order to build an accurate under-approximation, this graph is defined as a fixed point, in which each iteration saturates 
-%We denote $\allprocs(\V, \E)$ the set of all processes involved in such a graph $(\V, \E)$, defined by: %in \pref{def:allprocs}.
 $$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \}$$
-
-%The final graph of local causality is computed by a fixed point 
-%is defined as a fixed point
+\end{comment}
 
 \begin{definition}
 \label{def:glc}
   The graph of local causality $\cwB = (\Bv, \Be)$ is defined as: $\cwB = \lfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}$,
   where $\myB = (\cwV, \cwE)$ is the smallest graph where:
-  %$\cwV = \VProc \cup \VObj \cup \VSol$ with $\VProc \subset \PHproc$, $\VObj \subset \Obj$, $\VSol \subset \Sol$ and $\cwE \subset \cwV \times \cwV$
   $\cwV \subset \Proc \cup \Obj \cup \Sol$ and $\cwE \subset \cwV \times \cwV$
   so that:
   \begin{align}
     \w &\subset \cwV \label{eq:Vw} \\
-%      \{ \PHbounce(P) \mid P \in \VProc \} &\subset \V\\
     P \in \VProc &\Rightarrow \PHbounce(P) \in \cwV \label{eq:Vproc} \\
     (x, y) \in \E &\Rightarrow y \in \cwV \label{eq:VE} \\
-%    P \in \VObj &\Rightarrow \PHbounce(P) \in \V\\
-%      \{ (P, ps) \in \Obj \times \powerset(\PHproc) \mid P \in \V \wedge ps \in \BS(P) \} &\subset \E\\ % Sol
     P \in \VObj \wedge ps \in \BS(P) &\Rightarrow (P, ps) \in \cwE \label{eq:ESol1} \\
-%    \{ ps \in \powerset(\PHproc) \mid (P, ps) \in \E \} &\subset \V\\
-%      \{ (ps, a_i) \in \powerset(\PHproc) \times \PHproc \mid a_i \in ps \} &\subset \E\\ % Sol
     ps \in \VSol \wedge a_i \in ps &\Rightarrow (ps, a_i) \in \cwE \label{eq:ESol2} \\
-%    \{ a_i \in \PHproc \mid (ps, a_i) \in \E \} &\subset \V\\
-%      \{ (a_i, \PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid a \in \components \wedge a_i \in \V \wedge a_j \in \ctx \} &\subset \E\\ % Req
     a \in \components \wedge a_i \in \VProc \wedge a_j \in \ctx &\Rightarrow (a_i, \PHobjp{a}{j}{i}) \in \cwE \label{eq:EReq} \\
-%      \{ (a_i, ps) \in \Proc \times \powerset(\PHproc) \mid a \in \cs \wedge a_i \in \V \wedge ps \in \csState(a_i) \} &\subset \E\\ % ReqSolPrio
     a \in \cs \wedge a_i \in \VProc \wedge ps \in \csState(a_i) &\Rightarrow (a_i, ps) \in \cwE \label{eq:EPrio} \\
-%    \{ \PHobjp{a}{j}{i} \in \Obj \mid (a_i, \PHobjp{a}{j}{i}) \in \E \} &\subset \V\\
-%      \{ (P, \PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid P \in \V \wedge q \in \gCont_\ctx(\PHsort(P), P) \} &\subset \E\\ % Cont
     P \in \VObj \wedge q \in \gCont_\ctx(\PHsort(P), P) &\Rightarrow (P, \PHobj{q}{\PHbounce(P)}) \in \cwE \label{eq:ECont}
   \end{align}
 \end{definition}
 
+\begin{comment}
 \pref{eq:Vw}, \eqref{eq:Vproc} and \eqref{eq:VE} ensure that all required nodes are in $\cwV$.
 Elements in $\PHproc$ are required processes,
 elements in $\Obj$ are the objectives to reach these processes
@@ -281,48 +162,8 @@ and \pref{eq:ESol2} links a solution $ps$ to the processes $a_i \in ps$ it conta
 Then, \pref{eq:EReq} links a required component process $a_i$ to all objectives $\PHobjp{a}{j}{i}$ with $a_j \in \ctx$
 while \pref{eq:EPrio} links a required cooperative sort process $a_i$ to its solutions in $\csState(a_i)$.
 Finally, if the resolution of an objective $P$ requires a process of $\PHsort(P)$, then \pref{eq:ECont} re-targets this objective ($\gCont$).
-
-\todo{Complexité de la construction du GLC}
-
-%In the following, we denote:
-%$\BvProc = \Bv \cap \PHproc$, $\BvObj = \Bv \cap \Obj$ and $\BvSol = \Bv \cap \Sol$.
-%$\Bee{X}{Y} = \Be \cap (X \times Y)$, with $X, Y$ amongst $\PHproc$, $\Obj$ and $\Sol$.
-%
-\begin{comment}
-\begin{definition}
-  \label{def:aS}
-  The abstract structure $\cwB=(\Breq,\Bsol,\Brsp,\Bcont)$ is defined as
-  $\cwB = \sfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs_\ctx(\myB)}}$,\\
-  with $\myB=(\myreq,\mysol,\myrsp,\mycont)$:
-  \begin{align*}
-    \myreq &= \{ (a_i,\PHobjp{a}{j}{i}) \in \PHproc \times \Obj \mid
-      a \in \components \wedge a_j \in \PHget{\ctx}{a} \\ % \vee a_j \in \pfpprocs_\ctx(a) \\
-      & \qquad \wedge ((\exists (P,ps) \in \mysol \vee \exists (b_j, ps) \in \myrsp), a_i \in ps \\
-      & \qquad\qquad \vee \exists n \in \indexes{\w}, \PHbounce(\w_n)=a_i) \}
-    \\
-    \mysol &\subseteq \{ (P,ps) \in \Obj \times \powerset(\PHproc) \mid
-            \exists (a_i, P) \in \myreq \wedge ps \in \aBS(P) \\
-      & \qquad\qquad \vee \exists (Q, P) \in \mycont \wedge ps \in \aBS(P) \}
-    \\
-    \myrsp &= \{ (a_i,ps) \in \PHproc \times \powerset(\PHproc) \mid a \in \cs \\
-      & \qquad \wedge (\exists (P,ps') \in \mysol \vee \exists (b_j,ps') \in \myrsp), \\
-      & \qquad\qquad a_i \in ps' \wedge \csState(a_i) \in ps \}
-    \\
-    \mycont & = \{ (P, \PHobj{q}{\PHbounce(P)}) \in \Obj \times \Obj \mid
-      \exists (P, ps) \in \mysol \\
-      & \qquad\qquad \wedge q \in \gCont_\ctx(\PHsort(P),P) \}
-  \end{align*}
-\end{definition}
-
-\begin{definition}[Coherent solution]
-\label{def:coherent}
-  A cooperative sort requisite $(a_i, ps)$ in $\Brsp$ is said coherent iff
-  it has no successor $(b_k,\PHobjp{b}{j}{k})$ in $\Breq$ so that there exists $b_n \in ps$, $b_k \neq b_n$.
-\end{definition}
 \end{comment}
-%
-%\towrite{Expliquer}
-%We define in \pref{def:coherent} the notion of coherent edge in the graph of local causality.
+
 In the graph of local causality, an edge linking a process of a cooperative sort to a solution set $ps$ is said coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the children processes of $ps$.
 Then, \pref{th:approxinf} gives a sufficient condition for the concretization of a sequence of objectives in a given context,
 which is derived immediately from the graph of local causality.
@@ -330,7 +171,6 @@ A proof of this theorem is given in Annex~\ref{suppl:demoapproxinf}.
 \begin{definition}[Coherent edge]
 \label{def:coherent}
   An edge $(x, y) \in \cwE$ is said coherent if and only if:
-%  $(x, y) \in \Bee{\Proc}{\Sol} \Rightarrow y$ has no process successor $a_j \in \Bv \cap \Proc$ so that $\exists a_i \in y$, $a_i \neq a_k$.
   $(x, y) \in \Be \cap (\Proc \times \Sol) \Rightarrow y$ has no children process $a_j \in \Bv \cap \Proc$ so that $\exists a_i \in y$, $a_i \neq a_k$.
 \end{definition}
 
@@ -342,26 +182,30 @@ A proof of this theorem is given in Annex~\ref{suppl:demoapproxinf}.
   then $\uconcr(\w) \neq \emptyset$.
 \end{theorem}
 
-\todo{Complexité de la vérification du GLC}
+Computing the graph of local causality is polynomial in the number of sorts in $\PH$ and exponential in the number of processes in one sort.
+Checking the properties allowing to apply \pref{th:approxinf} is polynomial in the size of the graph.
+%Therefore, if the number of processes in each sort is small, the overall method can be processed in polynomial time.
+Furthermore, it is possible to compute only a subset of $\V \cap \Sol$;
+in this case, the overall method turns out to be exponential in the number of solutions to each objective.
+Our method can thus be considered as efficient compared to regular model-checking which is usually PSPACE-complete~\cite{Harel02}.
 
 
 
 \begin{example}
-  %As an example showing the usefulness of our method, we can consider \pref{fig:ph-livelock}.
   Let $\PH' = (\PHs, \PHl, \PHh'^{\langle 1 \rangle})$ be the “flattened” version of the PH in \pref{fig:ph-livelock}, that is: $\PHh'^{\langle 1 \rangle} = \PHh^{(1)} \cup \PHh^{(2)}$,
-  %As this PH model contains only one class of priority, 
   which is equivalent to a PH in the semantics without priorities.
-  The under-approximation on such models developed in~\cite{PMR12-MSCS} concludes that $c_1$ is reachable from $\ctx = \PHstate{a_1, b_0, c_0, ab_{10}}$;
-  this is due to an over-approximation of the behaviours inherent to cooperative sorts in the semantics without priorities.
+  Due to spurious behaviours inherent to the cooperative sorts in this semantics, 
+  the original under-approximation developed in~\cite{PMR12-MSCS} concludes that $c_1$ is reachable in $\PH'$ from $\ctx = \PHstate{a_1, b_0, c_0, ab_{10}}$.
+  %this is due to an over-approximation of the behaviours inherent to cooperative sorts in the semantics without priorities.
   
-  This unwanted behaviour is palliated by the semantics of PH with priorities proposed in this paper.
+  Such unwanted behaviours are palliated by the semantics of PH with priorities proposed in this paper.
   Indeed, the under-approximation given in \pref{th:approxinf} does not conclude regarding the reachability of $c_1$,
   as one of the edges of the resulting graph of local causality is not coherent (\pref{def:coherent}),
   as shown in in \pref{fig:sa-livelock}.
   (However, from the inconclusiveness of \pref{th:approxinf}, one cannot conclude about the unreachability of $c_1$.
-  Such analysis should be driven for instance with over-approximation methods developed in~\cite{PMR10-TCSB}.)
+  Such analysis should be driven for instance with over-approximation methods developed in~\cite{PMR12-MSCS}.)
   
-  We note that if the actions $\PHhit{a_0}{b_0}{b_1}$ and $\PHhit{b_0}{a_0}{a_1}$ are replaced by the self-hits
+  However, if $\PHhit{a_0}{b_0}{b_1}$ and $\PHhit{b_0}{a_0}{a_1}$ are replaced by
   $\PHhit{a_0}{a_0}{a_1}$ and $\PHhit{b_0}{b_0}{b_1}$,
   then \pref{th:approxinf} concludes that $c_1$ is reachable from $\ctx$.
 \end{example}
@@ -437,7 +281,6 @@ A proof of this theorem is given in Annex~\ref{suppl:demoapproxinf}.
 \newcommand{\reach}{\sigma}
 
 The semantics of PH with $2$ classes of priorities studied in this paper allows to model cooperative sorts accurately representing a coherent configuration of a set of sorts.
-%As the method presented in this section allows to efficiently conclude on the reachability of a process,
 Therefore, we can derive a new method to conclude about the reachability of a state (considering only components).
 Indeed, let $\PH = (\PHs, \PHl, (\PHh^{(1)}, \PHh^{(2)}))$ be a PH and suppose that we want to study the reachability of a state $s \in \PHl$.
 Let $\PH' = (\PHs', \PHl', (\PHh'^{(1)}, \PHh'^{(2)}))$
@@ -450,6 +293,4 @@ and $\PHh'^{(2)} = \PHh^{(2)} \cup \{ \PHhit{\pfp_s(\total)}{\reach_0}{\reach_1}
 Given an initial context $\ctx$, the reachability of $s$ in $\PH$ is equivalent to the concretization of $\PHobjp{\reach}{0}{1}$ in $\PH'$ from the initial context $\ctx \cup \{ \reach_0 \}$ (the initial state of $\total$ does not matter), which can be efficiently under-approximated using \pref{th:approxinf}.
 Indeed, the additional action $\PHhit{\pfp_s(\total)}{\reach_0}{\reach_1}$ in $\PHh'^{(2)}$ allows to conclude on the reachability of process $\pfp_s(\total)$, that is, on the reachability of the state $s$ (considering only the components).
 
-%It is also possible to compute the reachability of a partial state
-%by modelling in $\total$ the cooperation of a subset of $\components$,
 It is also possible to compute the reachability of a set of states $S \subset \PHl$ by creating several actions $\PHhit{\total_s}{\reach_0}{\reach_1}$ in $\PHh^{(2)}$ for each state $s \in S$.
