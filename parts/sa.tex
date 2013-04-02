@@ -107,7 +107,18 @@ For any objective $P$ and context $\ctx$, \pref{def:maxCont} allows to obtain th
   \end{align*}
 \end{definition}
 
-The reachability of a process $a_i$ is approximated by the ability to solve all objectives $\PHobjp{a}{j}{i}$ so that $a_j$ is in the initial context.
+The graph of local causality $\cwB = (\V, \E)$ defined in \pref{def:glc} is a graph where $\V \subset \Proc \cup \Obj \cup \Sol$ and $\E \subset \V \times \V$.
+A node in $\PHproc$ is a required process,
+a node in $\Obj$ is an objective to reach a given process
+and a node in $\Sol$ is a sets of processes required for the solving.
+An objective $P \in \Obj$ is solvable if the abstractions of bounce sequences $\aBS(P) \in \Sol$ (\pref{def:aBS}) can be reached (\pref{eq:ESol1}), leading to several required processes (\pref{eq:ESol2}).
+If $a$ is a component, the reachability of a process $a_i$ is approximated by the ability to solve all objectives $\PHobjp{a}{j}{i} \in \Obj$ for all $a_j$ in the initial context (\pref{eq:EReq});
+if $a$ is a cooperative sort, the reachability of $a_i$ is directly solved by the set of the processes $\csState(a_i)$ (\pref{def:csState}) it represents (\pref{eq:EPrio}).
+Finally, if the resolution of an objective $P$ requires a process of $\PHsort(P)$, \ie $\gCont(\PHsort(P), P) \neq \emptyset$ (\pref{def:maxCont}), then this objective is re-targeted (\pref{eq:ECont}).
+\pref{eq:Vw}, \eqref{eq:Vproc} and \eqref{eq:VE} ensure that all required nodes are in $\cwV$.
+
+\begin{comment}
+The reachability of a process $a_i$ is approximated by the ability to solve all objectives $\PHobjp{a}{j}{i}$ for all $a_j$ in the initial context.
 To this end, the abstractions of bounce sequences (\pref{def:aBS}) solving these objectives are computed, leading to new required processes, and thus new objectives on other sorts.
 Thus, the graph of local causality $\cwB = (\V, \E)$ defined in \pref{def:glc} is a graph where $\V \subset \Proc \cup \Obj \cup \Sol$ and $\E \subset \V \times \V$
 in which edges link any required process $a_i$ in $\Proc$ to all corresponding objectives $P$ in $\Obj$,
@@ -118,6 +129,7 @@ If the solving of an objective $P$ requires a process of $\PHsort(P)$, a continu
 Finally, as the active process of every sort may evolve, $\cwB$ is obtained iteratively by saturation with every process it contains,
 \ie by overriding its initial context $\ctx$ by $\allprocs(\V, \E)$, defined by:
 $$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \}$$
+\end{comment}
 
 \begin{definition}
 \label{def:glc}
@@ -137,6 +149,7 @@ $$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \
   \end{align}
 \end{definition}
 
+\begin{comment}
 \pref{eq:Vw}, \eqref{eq:Vproc} and \eqref{eq:VE} ensure that all required nodes are in $\cwV$.
 Elements in $\PHproc$ are required processes,
 elements in $\Obj$ are the objectives to reach these processes
@@ -146,8 +159,11 @@ and \pref{eq:ESol2} links a solution $ps$ to the processes $a_i \in ps$ it conta
 Then, \pref{eq:EReq} links a required component process $a_i$ to all objectives $\PHobjp{a}{j}{i}$ with $a_j \in \ctx$
 while \pref{eq:EPrio} links a required cooperative sort process $a_i$ to its solutions in $\csState(a_i)$.
 Finally, if the resolution of an objective $P$ requires a process of $\PHsort(P)$, then \pref{eq:ECont} re-targets this objective ($\gCont$).
+\end{comment}
 
 \todo{Complexité de la construction du GLC}
+
+
 
 In the graph of local causality, an edge linking a process of a cooperative sort to a solution set $ps$ is said coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the children processes of $ps$.
 Then, \pref{th:approxinf} gives a sufficient condition for the concretization of a sequence of objectives in a given context,
@@ -174,17 +190,18 @@ A proof of this theorem is given in Annex~\ref{suppl:demoapproxinf}.
 \begin{example}
   Let $\PH' = (\PHs, \PHl, \PHh'^{\langle 1 \rangle})$ be the “flattened” version of the PH in \pref{fig:ph-livelock}, that is: $\PHh'^{\langle 1 \rangle} = \PHh^{(1)} \cup \PHh^{(2)}$,
   which is equivalent to a PH in the semantics without priorities.
-  The under-approximation on such models developed in~\cite{PMR12-MSCS} concludes that $c_1$ is reachable from $\ctx = \PHstate{a_1, b_0, c_0, ab_{10}}$;
-  this is due to an over-approximation of the behaviours inherent to cooperative sorts in the semantics without priorities.
+  Due to spurious behaviours inherent to the cooperative sorts in this semantics, 
+  the original under-approximation developed in~\cite{PMR12-MSCS} concludes that $c_1$ is reachable in $\PH'$ from $\ctx = \PHstate{a_1, b_0, c_0, ab_{10}}$.
+  %this is due to an over-approximation of the behaviours inherent to cooperative sorts in the semantics without priorities.
   
-  This unwanted behaviour is palliated by the semantics of PH with priorities proposed in this paper.
+  Such unwanted behaviours are palliated by the semantics of PH with priorities proposed in this paper.
   Indeed, the under-approximation given in \pref{th:approxinf} does not conclude regarding the reachability of $c_1$,
   as one of the edges of the resulting graph of local causality is not coherent (\pref{def:coherent}),
   as shown in in \pref{fig:sa-livelock}.
   (However, from the inconclusiveness of \pref{th:approxinf}, one cannot conclude about the unreachability of $c_1$.
-  Such analysis should be driven for instance with over-approximation methods developed in~\cite{PMR10-TCSB}.)
+  Such analysis should be driven for instance with over-approximation methods developed in~\cite{PMR12-MSCS}.)
   
-  We note that if the actions $\PHhit{a_0}{b_0}{b_1}$ and $\PHhit{b_0}{a_0}{a_1}$ are replaced by the self-hits
+  However, if $\PHhit{a_0}{b_0}{b_1}$ and $\PHhit{b_0}{a_0}{a_1}$ are replaced by
   $\PHhit{a_0}{a_0}{a_1}$ and $\PHhit{b_0}{b_0}{b_1}$,
   then \pref{th:approxinf} concludes that $c_1$ is reachable from $\ctx$.
 \end{example}
