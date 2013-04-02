@@ -1,0 +1,169 @@
+% vim:set spell spelllang=en:
+
+\section{Weak Bisimulation of Asynchronous Discrete Networks}
+
+\def\DNtrans{\rightarrow_{ADN}}
+\def\DNdef{(\mathbb F, \langle f^1, \dots, f^n\rangle)}
+\def\DNdep{\f{dep}}
+\def\PHPtrans{\rightarrow_{PHP}}
+\def\get#1#2{#1[{#2}]}
+\def\encodeF#1{\mathbf{#1}}
+\def\toPH{\encodeF{PH}}
+\def\card#1{|#1|}
+\def\decode#1{\llbracket#1\rrbracket}
+\def\encode#1{\llparenthesis#1\rrparenthesis}
+\def\Hits{\PHa}
+\def\hit{\PHhit}
+\def\play{\cdot}
+
+\todo{synchronise notations and terminology with the main text}
+\todo{define $\PHPtrans$? or defined in main text?}
+
+We exhibit an encoding of Asynchronous Discrete Networks (ADN) with the Process
+Hitting using two priority classes, and prove a weak bisimulation relation.
+
+A Discrete Network gathers a finite number of components $i\in[1;n]$ having a discrete finite domain
+$\mathbb F^i$ that we note $\mathbb{F}^i = [0;l_i]$.
+For each component $i\in[1;n]$, a map $\mathbb F \mapsto F^i$ is defined, where
+$\mathbb F = \mathbb F^1 \times \cdots \times \mathbb F^n$, giving the next value of the component
+with respect to the global state of the network.
+Typically $f^i$ depends on a subset of components that we denote $\DNdep(f^i)$.
+In the case of Asynchronous Discrete Networks (ADN), a transition relation $\DNtrans\subset \mathbb
+F\times \mathbb F$ is defined such that $x\DNtrans x'$ if and only if there exists a unique
+$i\in[1;n]$ such that $\get{x'}{i}=f^i(x)$ and $\forall j\in[1;n], j\neq i, \get{x'}{j}
+=\get{x}{j}$, i.e. one and only component has been updated.
+This is formalised in \pref{def:DN}.
+
+\begin{definition}[Asynchronous Discrete Network (ADN)]
+\label{def:DN}
+An ADN is defined by a couple $(\mathbb F, \langle f^1, \dots, f^n \rangle)$
+where $\mathbb{F} = \mathbb{F}^1\times\dots\times\mathbb{F}^n$,
+and $\forall i\in[1;n]$,
+$f^i: \mathbb{F} \mapsto \mathbb{F}^i$ with
+$\mathbb{F}^i = [0;l_i]$.
+Given two states $x,x'\in\mathbb F$, the transition relation $\DNtrans$ is given by
+\[
+x\DNtrans x' \Longleftrightarrow
+  \exists i\in[1;n], f^i(x)=\get{x'}{i}
+  \wedge \forall j\in[1;n], j\neq i, \get{x}{j}=\get{x'}{j}
+\enspace,
+\]
+where $\get{x}{i}$ is the $i$-th component of $x$.
+%
+We note $\DNdep(f^i)\subseteq \{1,\dots,n\}$ the set of components on which the value of $f^1$
+depends: $\forall x,x'\in \mathbb F$ such that $\forall
+j\in\DNdep(f^i), \get{x}{j}=\get{x'}{j}$, necessarily $f^i(x)=f^i(x')$.
+\end{definition}
+
+Let us denote by $\toPH\DNdef$ the encoding of the ADN $\DNdef$ in Process Hitting with $2$ priority
+classes (\pref{def:DN2PH}).
+For each component $i\in[1;n]$ of the ADN, two sorts are built: $a^i$ acting for the component
+value, and $f^i$ acting for a cooperative sort between the components $\DNdep(f^i)$.
+Sorts $a^i$ have one process $a^i_k$ per element in $k\in\mathbb F^i$.
+Sorts $f^i$ have one process $f^i_\varsigma$ per state $\varsigma \in \prod_{j\in\DNdep(f^i)}
+L_{a^j}$.
+Two classes of actions are then defined:
+$\Hits^1$ is the set of actions updating the cooperative sorts according to the actual state of the
+components:
+if $j\in\DNdep(f^i)$, $a^j_k$ hits each process $f^i_\varsigma$ where $\get{\varsigma}{a^j}\neq
+a^j_k$ to make it bounce to the process $f^i_{\varsigma'}$ where $\get{\varsigma'}{a^j}=a^j_k$.
+$\Hits^2$ is the set of actions encoding the transitions in the ADN:
+$f^i_\varsigma$ hits the processes of sort $a^i$ to make them bounce to the process
+$a^i_{k'}$ if and only if $k'=f^i(\decode \varsigma)$;
+$\decode \varsigma$ being the ADN state correspond to the PH (partial) state $\varsigma$ (note that
+$f^i(\decode \varsigma)$ is fully defined because $\decode \varsigma$ specifies the state for all
+the components in $\DNdep(f^i)$).
+
+\begin{definition}
+\label{def:DN2PH}
+$\toPH\DNdef=(\Sigma,L,\Hits^1,\Hits^2)$ is the Process Hitting with 2 priority classes encoding the
+ADN $\DNdef$, with:
+\begin{itemize}
+\item $\Sigma = \{ a^1, \dots, a^n \} \cup \{ f^1, \dots, f^n \}$,
+the sorts for components ($a^i$) and cooperative sorts ($f^i$).
+
+\item $L=\prod_{i\in[1;n]} L_{a^i} \times \prod_{i\in[1;n]} L_{f^i}$, where
+$L_{a^i}=\{a^i_0, \dots, a^i_{l_i}\}$, and
+$L_{f^i}=\{f^i_\varsigma \mid \varsigma\in\prod_{j\in\DNdep(f^i)} L_{a^i} \}$
+if $\DNdep(f^i)\neq\emptyset$, otherwise
+$L_{f^i}=\{f^i_\emptyset\}$;
+  
+\item $\Hits^1= \{ \hit{a^j_k}{f^i_\varsigma}{f^i_{\varsigma'}}
+ \mid i\in[1;n] \wedge
+j\in\DNdep(f^i) \wedge a^j_k\in L_{a^j} \wedge f^i_\varsigma\in L_{f^i}
+\wedge
+\get{\varsigma}{a^j}\neq a^j_k 
+\wedge \get{\varsigma'}{a^j}=a^j_k
+\wedge (\get{\varsigma'}{a^{l}}=\get{\varsigma}{a^l},
+\forall l\in[1;n],l\neq j)
+\}$, 
+the set of actions with priority $1$ for updating cooperative sorts.
+
+\item $\Hits^2=\{ \hit{f^i_\varsigma}{a^i_k}{a^i_{k'}} \mid i\in[1;n] \wedge
+      f^i_\varsigma\in L_{f^i} \wedge
+      a^i_k\in L_{a^i}\wedge k\neq k' \wedge f^i(\decode \varsigma) = k'
+    \}$,
+the set of actions with priority $2$ for updating the components using their respective discrete
+maps.
+$\decode \varsigma$ is defined below.
+\end{itemize}
+Given a state $s\in L$ of the Process Hitting, 
+$\decode s=x$ is the corresponding state in the ADN:
+$\forall i\in[1;n], \get{s}{a^i}=a^i_k \Rightarrow \get{x}{i}=k$.
+
+\noindent
+Given a state $x\in \mathbb F$ of the ADN, 
+$\encode x=s$ is the corresponding state in the Process Hitting:
+$\forall i\in[1;n], \get{x}{i}=k \Rightarrow \get{s}{a^i}=a^i_k$
+and
+$\forall i\in[1;n], \get{s}{f^i}=f^i_\varsigma$ with $f^i_\varsigma\in L_{f^i}$
+and $\forall j\in\DNdep(f^i), \get{\varsigma}{j}=\get{s}{a^j}$.
+\end{definition}
+
+\pref{thm:bisimDN} states the weak bisimulation relation between an ADN and its encoding in
+Process Hitting with $2$ priority classes.
+Intuitively, actions updating cooperative sorts being of higher priority, actions updating component
+sorts follow strictly the possible transitions of the ADN.
+
+\begin{theorem}[$\DNdef \approx \toPH\DNdef$]~
+\label{thm:bisimDN}
+\begin{enumerate}
+\item $\forall x,x'\in\mathbb F$,
+$x\DNtrans x' \Longrightarrow \encode x \PHPtrans^* \encode{x'}$,
+where $\PHPtrans^*$ is a finite sequence of $\PHPtrans$ transitions.
+
+\item $\forall s,s'\in L$,
+$s\PHPtrans s' \Longrightarrow \decode s = \decode {s'} \vee \decode s \DNtrans
+\decode{s'}\enspace.$
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(1) From \pref{def:DN} $x\DNtrans x'\Rightarrow \exists i\in[1;n],
+f^i(x)=\get{x'}{i} \wedge \forall j\in[1;n],i\neq j, \get{x}{j}=\get{x'}{j}$.
+Let us assume (without loss of generality) that $f^i(x)=k'$, $\get{x}{i}=k$ and
+$\varsigma\in\prod_{j\in\DNdep(f^i)} L_{a^j}$ such that
+$\forall j\in\DNdep(f^i), \get{\varsigma}{j}=a^j_{\get{x}{j}}$.
+From \pref{def:DN2PH}, $h=\hit{f^i_\varsigma}{a^i_k}{a^i_{k'}}\in\Hits^2$.
+From $\encode x$ definition,
+$a^i_k\in \encode x$ and $f^i_\varsigma\in \encode x$;
+moreover, as there is no action in $\Hits^1$ applicable in $\encode x$,
+$h$ is applicable in $\encode x$:
+$\encode x\PHPtrans \encode x\play h$.
+In $\encode x\play h$, the only applicable actions of priority $1$ are those having
+$a^i_{k'}$ as hitter and hitting cooperative sorts, giving a finite number of transitions towards
+$\encode{x'}$.
+
+(2) $s\PHPtrans s'$ only if there exists an action $h$ applicable in $s$ such that
+$s\play h=s'$.
+If $\prio(h)=1$, then, by $\Hits^1$ definition, 
+$\decode s=\decode {s'}$.
+If $\prio(h)=2$, then $\forall i\in[1;n]$,
+if $\get{s}{f^i} = f^i_\varsigma$, then, $\forall j\in\DNdep(f^i),
+\get{\varsigma}{a^j}=\get{s}{a^j}$.
+Let us define $i\in[1;n]$ such that $\get{s}{a^i}\neq\get{s'}{a^i}$ ($i$ is unique for this
+transition).
+By \pref{def:DN2PH}, if $\get{s'}{a^i}=a^i_{k'}$, necessarily $f^i(\decode s)=k'$, hence
+$\decode s\DNtrans \decode{s'}$.
+\end{proof}
+
+
