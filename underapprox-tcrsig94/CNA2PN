@@ -1,0 +1,211 @@
+#!/usr/bin/env python3
+"""
+Copyright or © or Copr. Loïc Paulevé, Morgan Magnin, Olivier Roux (2010)
+
+loic.pauleve@irccyn.ec-nantes.fr
+morgan.magnin@irccyn.ec-nantes.fr
+olivier.roux@irccyn.ec-nantes.fr
+
+This software is a computer program whose purpose is to provide Process
+Hitting related tools.
+
+This software is governed by the CeCILL license under French law and
+abiding by the rules of distribution of free software.  You can  use, 
+modify and/ or redistribute the software under the terms of the
+CeCILL license as circulated by CEA, CNRS and INRIA at the following URL
+"http://www.cecill.info". 
+
+As a counterpart to the access to the source code and  rights to copy,
+modify and redistribute granted by the license, users are provided only
+with a limited warranty  and the software's author, the holder of the
+economic rights, and the successive licensors  have only  limited
+liability. 
+
+In this respect, the user's attention is drawn to the risks associated
+with loading,  using,  modifying and/or developing or reproducing the
+software by the user in light of its specific status of free software,
+that may mean  that it is complicated to manipulate,  and  that  also
+therefore means  that it is reserved for developers  and  experienced
+professionals having in-depth computer knowledge. Users are therefore
+encouraged to load and test the software's suitability as regards their
+requirements in conditions enabling the security of their systems and/or 
+data to be ensured and,  more generally, to use and operate it in the 
+same conditions as regards security. 
+
+The fact that you are presently reading this means that you have had
+knowledge of the CeCILL license and that you accept its terms.
+"""
+
+# NOTE: converts the 'reaction' file of CNA into a Process Hitting.
+#   http://www.mpi-magdeburg.mpg.de/projects/cna/manual/manual_cellnetanalyzer95.htm#_Toc261856171
+
+import os
+import sys
+
+reaction_file = sys.argv[1]
+#assert (os.path.basename(reaction_file) == "reactions"), "Give the file 'reactions' as parameter"
+
+def explode_line( line ) :
+	row = {}
+	reqpart, parpart = line.replace("\t", " ").split("|")
+	# reqpart
+	reqpart = [f for f in reqpart.strip().split(" ") if f]
+	reqpart.pop(0)
+
+	reqpart = " ".join(reqpart)
+	left, right = reqpart.split("=")
+
+	def read_proc_presence( data ) :
+		level, sort = [f for f in data.strip().split(" ") if f]
+		level = int(level)
+		positive = True
+		if sort[0] == "!" :
+			sort = sort[1:]
+			positive = False
+		return (sort, level, positive)
+	
+	if not right.strip() :
+		return None
+
+	(target_sort, bounce_level, bounce_presence) = read_proc_presence(right)
+	assert bounce_presence
+
+	hitters = left.strip().split("+")
+	hitters = [read_proc_presence(h) for h in hitters if h.strip()]
+
+	row["Target"] = (target_sort, bounce_level)
+	row["Hitters"] = hitters
+
+	# parpart
+	parpart = [f for f in parpart.strip().split(" ") if f]
+	row["Default"], row["Par1"], row["Par2"], row["Par3"] = parpart[0:4]
+
+	return row
+
+
+sorts = {} # {sort -> (maxlevel, default_value)}
+interactions = {} # {target -> hitter_list list}
+
+def update_sorts( sort, level, default ) :
+	if default is not None :
+		try :
+			default = int(default)
+		except : 
+			default = None
+	if sort in sorts :
+		old_maxlevel, old_default = sorts[sort]
+	else :
+		old_maxlevel, old_default = 0, 0
+	maxlevel = max(level, old_maxlevel)
+	assert maxlevel <= 1
+	default = default if default is not None else old_default
+	sorts[sort] = (maxlevel, default)
+
+
+for line in open(reaction_file) :
+	row = explode_line(line)
+	if row is None :
+		#print("Ignoring %s" % line, file=sys.stderr)
+		continue
+	elif row["Par3"] == '1' :
+		print("Excluding %s" % row, file=sys.stderr)
+		continue
+	
+	target_sort, bounce_level = row["Target"]
+	assert bounce_level == 1
+
+	update_sorts(target_sort, bounce_level, row["Default"] if not row["Hitters"] else None)
+
+	assert row["Par1"] == '0'
+
+	OR = interactions[target_sort] if target_sort in interactions else []
+	OR.append(row["Hitters"])
+	interactions[target_sort] = OR
+
+
+def neg_lit(lit):
+	(a,i,n) = lit
+	return (a,i,not n)
+
+def neg(dnf):
+	if len(dnf) == 1:
+		return [set([neg_lit(l)]) for l in dnf[0]]
+	ndnfr = neg(dnf[1:])
+	ndnf = []
+	for c in ndnfr:
+		for l in dnf[0]:
+			x = c.copy()
+			x.add(neg_lit(l))
+
+			found = False
+			for y in ndnf:
+				if y.issubset(x):
+					found = True
+					break
+			if not found:
+				ndnf.append(x)
+
+	return ndnf
+
+
+print('<?xml version="1.0" encoding="utf-8"?><TPN>')
+
+reach = (sys.argv[-2], int(sys.argv[-1]))
+
+arg_init = ""
+arg_init_next = False
+for arg in sys.argv[1:]:
+	if arg == "--initial-state":
+		arg_init_next = True
+	elif arg_init_next:
+		arg_init = arg
+		break
+
+initial_state = {}
+for proc in arg_init.split(","):
+	(a,i) = tuple(proc.strip().split())
+	initial_state[a] = int(i)
+
+
+#
+# Places
+#
+
+Pids = {}
+pid = 1
+for sort, (maxlevel, default) in sorts.items() :
+	for i in range(0, maxlevel+1):
+		Pids[(sort,i)] = pid
+		if sort in initial_state:
+			init = 1 if initial_state[sort] == i else 0
+		else:
+			init = 1 if i == default else 0
+		print('<place id="%d" label="%s_%d" initialMarking="%d" />' % (pid, sort, i, init))
+		pid += 1
+
+
+tid = 1
+for a, OR in interactions.items():
+	if OR == [[]]:
+		continue
+
+	for (dnf, a0, a1) in [(OR, 0, 1), (neg(OR), 1, 0)]:
+		for conds in dnf:
+			print('<transition id="%d" />' % tid)
+			print('<arc type="PlaceTransition" place="%d" transition="%d" weight="1" />' \
+						% (Pids[(a,a0)], tid))
+			print('<arc type="TransitionPlace" place="%d" transition="%d" weight="1" />' \
+						% (Pids[(a,a1)], tid))
+			for (b, i, n) in conds:
+				if n:
+					i = 1-i
+				print('<arc type="read" weight="1" transition="%d" place="%d" />' \
+						% (tid, Pids[(b,i)]))
+
+			tid += 1
+
+
+
+print("</TPN>")
+print("EF (P_%d%s_%d = 1);" % (Pids[reach], reach[0], reach[1]))
+

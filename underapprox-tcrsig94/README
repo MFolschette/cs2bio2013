@@ -1,0 +1,18 @@
+
+:: Reachability analysis with Process Hitting
+
+You are required to install Pint - http://process.hitting.free.fr.
+
+$ ph-reach --coop-priority -i model.ph --initial-state "cd45 1, cd28 1, tcrlib 1" ap1 1
+
+You can try with different values for initial state, and different output activation (e.g., sre,
+nfkb, nfat, ...).
+
+
+:: Reachability with libDDD
+
+You are required to install libDDD - http://ddd.lib6.fr, and python3 - http://python.org.
+
+$ ./run_its-cna model.cna --initial-state "cd45 1, cd28 1, tcrlib 1" ap1 1
+
+

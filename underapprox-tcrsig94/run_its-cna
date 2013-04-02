@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+./CNA2PN "$@" > model+ctl.tmp
+tail -n1 model+ctl.tmp > model.ctl
+head -n-1 model+ctl.tmp > model.xml
+its-ctl --quiet --forward -i model.xml -ctl model.ctl
