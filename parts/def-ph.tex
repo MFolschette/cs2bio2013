@@ -89,8 +89,9 @@ In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH w
   \end{align*}
   There also is especially: $\{ \PHhit{ab_{11}}{c_0}{c_1}, \PHhit{a_1}{a_1}{a_0}, \PHhit{a_0}{b_0}{b_1} \} \subset \PHh^{(2)}$.
 
-\begin{figure}
+\begin{figure}[p]
   \centering
+  \scalebox{1.5}{
   \begin{tikzpicture}
     \TSort{(0,0)}{a}{2}{l}
     \TSort{(0,4)}{b}{2}{l}
@@ -144,6 +145,7 @@ In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH w
     ;
     \TState{a_1, b_0, ab_2, c_0}
   \end{tikzpicture}
+  }
   \caption{
   \label{fig:ph-livelock}
     An example of PH with $2$ classes of priorities.
@@ -289,9 +291,9 @@ therefore, it must be only hit by prioritised actions,
 in a way that its local steady-states efficiently represents all configurations of its neighbouring sorts.
 %any sub-state of its neighbourhood is represented by exactly one local steady state in this sort,
 %and all of its processes represents at least one sub-state of its neighbourhood. \towrite{reformuler ou supprimer}
-\begin{definition}[$\pfp : \PHl \times \PHs \rightarrow \powerset(\PHproc)$]
+\begin{definition}[$\pfp : \PHs \rightarrow \powerset(\PHproc)$]
 \label{def:pfp}
-  For all $s \in \PHl$ and $a \in \PHs$,
+  For all $a \in \PHs$,
   \begin{align*}
     \pfp_s(a) = \{ a_i \in \PHl_a &\mid \exists \delta \in \restriction{\Sce}{1}(s), \PHget{(s \PHplay \delta)}{a} = a_i \\
     & \quad \wedge \forall \PHhit{b_i}{c_j}{c_k} \in \Vh(a), \PHget{(s \PHplay \delta)}{b} \neq b_i \vee \PHget{(s \PHplay \delta)}{c} \neq c_j \}
@@ -328,6 +330,10 @@ Finally, \pref{cr:compcs} states that the set of sorts of the considered PH must
   %The studied PH is a PH with 2 priorities, and it is only composed of well-formed components and cooperative sorts:
   $$\PHs = \components \cup \cs \wedge \components \cap \cs = \emptyset$$
 \end{criterion}
+
+\begin{example}
+  The PH in \pref{fig:ph-livelock} contains three components $a$, $b$ and $c$ and a cooperative sort $ab$ that models cooperation between sorts $a$ and $b$.
+\end{example}
 
 The criteria given in this subsection allow to define a class of PH models that is (weakly) bisimilar to Asynchronous Boolean Networks
 or, more generally, to the multivalued version of this framework, called Asynchronous Discrete Models (ADM).
