@@ -31,7 +31,6 @@ An action $h=\PHfrappe{a_i}{b_j}{b_k}$ is read as ``$a_i$ \emph{hits} $b_j$ to m
   \end{itemize}
   We call $\PHproc \DEF \bigcup_{a \in \PHs} \PHl_a$ the set of all processes, and $\PHh \DEF \bigcup_{n \in \segm{1}{k}} \PHh^{(n)}$ the set of all actions.
 \end{definition}
-
 \noindent
 The sort of a process $a_i$ is referred to as $\PHsort(a_i) = a$.
 %and the set of sorts present in an action $h \in \PHa$ as $\PHsort(h) = \{\PHsort(\PHhitter(h)),\PHsort(\PHtarget(h))\}$.
@@ -51,6 +50,8 @@ which then allows to define the dynamics of a PH in \pref{def:play}.
   An action $h = \PHhit{a_i}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$ is \emph{playable} in $s \in \PHl$
   if and only if $\PHget{s}{a} = a_i$, $\PHget{s}{b} = b_j$ and $\forall m < n, \forall g \in \PHa^{(m)}, \PHhitter(g) \notin s \vee \PHtarget(g) \notin s$.
   In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$ and is defined by: $(s \PHplay h) = s \Cap \PHbounce(h)$.
+  Moreover, we denote: $s \PHPtrans (s \PHplay h)$.
+%  If $s, s' \in \PHl$ are two states and $\exists h \in \PHh$, $h$ is playable in $s$ and $s' = s \PHplay h$, then we denote: $s \PHPtrans s'$.
 %  For the sake of clarity, for all $h, h'\in\PHa$, $((s\PHplay h)\PHplay h')$ is abbreviated as $(s\PHplay h\PHplay h')$.
 %\begin{definition}[Scenario ($\Sce$)]
 %\label{def:scenario}
