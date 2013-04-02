@@ -1,5 +1,40 @@
-\section{Example}\label{sec:example}
+% vim:set spell spelllang=en:
+
+\section{Examples}\label{sec:example}
 
 \towrite{Exemple \texttt{livelock\_and.ph} : différent avec / sans priorités}
 
-\todo{Trouver un grs exemple représentatif (EGFR / TCRSIG)}
+
+\subsection{Large-scale application}
+
+In order to support the scalability and applicability of our under-approximation of reachability, we
+apply our new approach for the analysis of large-scale model of the T-cell receptor (TCR)
+signalling pathway \cite{tcrsig94}.
+This model gathers 94 interacting components and is specified as a Boolean network.
+The under-approximation presented in this paper has been implemented in the existing Pint
+software\footnote{Pint is freely available at \url{http://process.hitting.free.fr}.}.
+
+The Boolean model has been automatically encoded into a Process Hitting with 2 classes of priority%
+\footnote{Model and scripts are available at
+\url{http://www.irccyn.ec-nantes.fr/~folschet/underapprox-tcrsig94.tbz2}.}.
+Then, we verified the reachability for the independent activation of 4 outputs of the signalling
+cascade (SRE, AP1, NFkB, NFAT) from all possible input combinations (CD45, CD28, TCRlib) using our
+new reachability under-approximation (answering either \emph{yes} or \emph{inconclusive}) and a 
+previously defined reachability over-approximation \cite{PMR12-MSCS} (answering either \emph{no} or
+\emph{inconclusive}).
+All result in conclusive decisions, and the under-approximation has been satisfied in 12 cases (over
+32) proving the satisfiability of the concerned reachability property in the encoded Boolean network
+(and non-satisfiability in the other cases).
+
+Computations times are in the order of a few hundredths of a second on a 2.4GHz processor with 2GB
+of RAM.
+To give a comparison, we did the same experiments with a standard symbolic model-checker, libDDD
+\cite{libddd}, known for its good performances, the input model being the Boolean network expressed
+as a Petri net.
+However, due to the large scale of the model, the program runs out of memory for all the experiments.
+
+While ensuring a low complexity for the analysis of reachability in Boolean and discrete networks, our
+under-approximation method reveals to be conclusive in numerous cases when applied to real
+large-scale biological models, which were not tractable with exact model-checking.
+
+
