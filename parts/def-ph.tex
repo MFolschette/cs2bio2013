@@ -2,14 +2,15 @@
 
 We give in this section the definition and the semantics of the Process Hitting (PH) with priorities, which is an extension of the basic semantics given in~\cite{PMR10-TCSB}.
 Then we describe the modelling of cooperation between components and discuss how the new aforementioned semantics makes this modelling more accurate.
-\towrite{Démo équivalence avec réseaux discret : ici ou dans la section 3 ?}
 Finally, in order to perform a static analysis on this new semantics, we give several criteria to restrict the class of models that we can study,
 and give several theorems that follow.
+This class of models is equivalent to Asynchronous Discrete Networks.
+%\towrite{Démo équivalence avec réseaux discret : ici ou dans la section 3 ?}
 
-\subsection{Definition of the Process Hitting with $k$ priorities}
+\subsection{Definition of the Process Hitting with $k$ classes of priorities}
 \label{ssec:PH}
-\towrite{Reformuler (actuellement trop proche de CMSB)}
-A PH with $k$ priorities (\pref{def:ph}), also simply called PH \towrite{abréviation ?} in the following, gathers a finite number of concurrent \emph{processes} divided into a finite set of \emph{sorts}.
+%\towrite{Reformuler (actuellement trop proche de CMSB)}
+A PH with $k$ classes of priorities (\pref{def:ph}), also simply called “PH” in the following when it is not ambiguous, gathers a finite number of concurrent \emph{processes} divided into a finite set of \emph{sorts}.
 A process belongs to a unique sort and is noted $a_i$ where $a$ is the sort and $i$ the identifier of the process within the sort $a$.
 %At any time, one and only one process of each sort is present; a state of the PH thus corresponds to the set of such processes.
 Each process stands for a kind of “activity level” of its sort; a state of the PH thus corresponds to a set of processes containing exactly one process of each sort.
@@ -20,13 +21,14 @@ An action is denoted by $\PHhit{a_i}{b_j}{b_k}$ where $a_i,b_j,b_k$ are processe
 It is required that $b_j \neq b_k$ and that $a=b\Rightarrow a_i=b_j$.
 An action $h=\PHfrappe{a_i}{b_j}{b_k}$ is read as ``$a_i$ \emph{hits} $b_j$ to make it bounce to $b_k$'', and $a_i,b_j,b_k$ are called respectively \emph{hitter}, \emph{target} and \emph{bounce} of the action, and can be referred to as $\PHhitter(h), \PHtarget(h), \PHbounce(h)$, respectively.
 
-\begin{definition}[Process Hitting with $k$ priorities] \towrite{Revoir terminologie}
+\begin{definition}[Process Hitting with $k$ classes of priorities]% \towrite{Revoir terminologie}
 \label{def:ph}
-  If $k \in \sN^*$, a \emph{Process Hitting with $k$ priorities} is a triplet $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ with $\PHa^{\langle k \rangle} = (\PHa^{(1)}; \dots; \PHa^{(k)})$ a $k$-uplet, and:
+  If $k \in \sN^*$, a \emph{Process Hitting with $k$ classes of priorities} is a triplet $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$,
+  where $\PHa^{\langle k \rangle} = (\PHa^{(1)}; \dots; \PHa^{(k)})$ is a $k$-uplet and:
   \begin{itemize}
-    \item $\PHs \DEF \{a,b,\dots\}$ is the finite set of \emph{sorts}.
+    \item $\PHs \DEF \{a,b,\dots\}$ is the finite set of \emph{sorts},
     %$\PHl \DEF \prod_{a \in \PHs} \PHl_a$
-    \item $\PHl \DEF \underset{a \in \PHs}{\times} \PHl_a$ is the finite set of \emph{states}, where $\PHl_a = \{a_0 ; \ldots ; a_{l_a}\}$ is the finite set of \emph{processes} of sort $a \in \PHs$ and $l_a \in \sN^*$. Each process belongs to a unique sort: $\forall (a_i; b_j) \in \PHl_a \times \PHl_b, a \neq b \Rightarrow a_i \neq b_j$.
+    \item $\PHl \DEF \underset{a \in \PHs}{\times} \PHl_a$ is the finite set of \emph{states}, where $\PHl_a = \{a_0 ; \ldots ; a_{l_a}\}$ is the finite set of \emph{processes} of sort $a \in \PHs$ and $l_a \in \sN^*$. Each process belongs to a unique sort: $\forall (a_i; b_j) \in \PHl_a \times \PHl_b, a \neq b \Rightarrow a_i \neq b_j$,
     \item $\forall n \in \llbracket 1; k \rrbracket, \PHa^{(n)} \DEF \{\PHfrappe{a_i}{b_j}{b_l} \mid (a; b) \in \PHs^2 \wedge (a_i; b_j; b_l) \in \PHl_a \times \PHl_b \times \PHl_b \wedge b_j \neq b_l \wedge a = b \Rightarrow a_i = b_j \}$ is the finite set of \emph{actions of priority $n$}.
   \end{itemize}
   We call $\PHproc \DEF \bigcup_{a \in \PHs} \PHl_a$ the set of all processes, and $\PHh \DEF \bigcup_{n \in \segm{1}{k}} \PHh^{(n)}$ the set of all actions.
@@ -45,7 +47,7 @@ which then allows to define the dynamics of a PH in \pref{def:play}.
   We also extend this definition to a set of processes $ps$ given that all processes are from different sorts by the override of each process:
   $\forall as \subset \PHs, \forall ps \in \underset{a \in as}{\times} \PHl_a, s \Cap ps = s \underset{a_i \in ps}{\Cap} a_i$.
 \end{definition}
-\begin{definition}[Dynamics of a Process Hitting with $k$ priorities]
+\begin{definition}[Dynamics of a PH ($\PHPtrans$)]
 \label{def:play}
   An action $h = \PHhit{a_i}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$ is \emph{playable} in $s \in \PHl$
   if and only if $\PHget{s}{a} = a_i$, $\PHget{s}{b} = b_j$ and $\forall m < n, \forall g \in \PHa^{(m)}, \PHhitter(g) \notin s \vee \PHtarget(g) \notin s$.
@@ -64,28 +66,28 @@ which then allows to define the dynamics of a PH in \pref{def:play}.
 %\end{definition}
 \end{definition}
 
-In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH with $n$ priorities in which only actions of priority lower or equal to $n$ of the original PH are kept.
-\begin{definition}[Process Hitting $n$-reduction] %\towrite{Revoir terminologie : “reduction” ? “restriction” ?}
+In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH with $n$ classes of priorities in which only actions of priority lower or equal to $n$ are kept.
+\begin{definition}[PH $n$-reduction] %\towrite{Revoir terminologie : “reduction” ? “restriction” ?}
 \label{def:restriction}
-  If $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ is a Process Hitting with $k$ priorities and $n \in \segm{1}{k}$, we denote $\restriction{\PH}{n}$ %\towrite{$\PH_{|n}$ $\PH'$}
+  If $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ is a Process Hitting with $k$ classes of priorities and $n \in \segm{1}{k}$, we denote $\restriction{\PH}{n}$ %\towrite{$\PH_{|n}$ $\PH'$}
   the $n$-reduction of $\PH$.
   %the following Process Hitting with $n$ priorities:
-  $\restriction{\PH}{n} = (\PHs; \PHl; \restriction{\PHa}{n})$ is a PH with $n$ priorities with:
-  $$\restriction{\PHa}{n} = (\PHa^{(1)}; \dots; \PHa^{(n)})$$
-  Furthermore, we denote: $\restriction{\Sce}{n}(s)$ the set of scenarios from $s$ made of actions of $\restriction{\PHa}{n}$.
+  $\restriction{\PH}{n} = (\PHs; \PHl; \PHa'^{\langle n \rangle})$ is a PH with $n$ classes of priorities with:
+  $$\PHa'^{\langle n \rangle} = (\PHa^{(1)}; \dots; \PHa^{(n)})$$
+  Furthermore, we denote: $\restriction{\Sce}{n}(s)$ the set of scenarios from $s$ in $\restriction{\PH}{n}$.
+  %made of actions of $\PHa'^{\langle n \rangle}$.
 \end{definition}
 
 
 
 \begin{example}
-  \pref{fig:ph-livelock} gives an example of PH with $2$ priorities, with $\PHs = \{ a, b, c, ab \}$ and:
+  \pref{fig:ph-livelock} gives an example of PH with $2$ classes of priorities where:
   \begin{align*}
+    \PHs &= \{ a, b, c, ab \} \enspace, \\
     \PHl_a &= \{ a_0, a_1 \} \enspace, & \PHl_b &= \{ b_0, b_1 \} \enspace, \\
     \PHl_c &= \{ c_0, c_1 \} \enspace, & \PHl_{ab} &= \{ ab_{00}, ab_{01}, ab_{10}, ab_{11} \} \enspace.
   \end{align*}
-  Actions of priority $1$ are represented with double arrows and actions of priority $2$ are represented with single arrows.
-  The hit part of each action in drawn in plain line and the bounce part is in dotted line.
-  The greyed processes stand for a possible state $s = \PHstate{a_1, b_0, c_0, ab_{10}}$.
+  There also is especially: $\{ \PHhit{ab_{11}}{c_0}{c_1}, \PHhit{a_1}{a_1}{a_0}, \PHhit{a_0}{b_0}{b_1} \} \subset \PHh^{(2)}$.
 
 \begin{figure}
   \centering
@@ -144,7 +146,12 @@ In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH w
   \end{tikzpicture}
   \caption{
   \label{fig:ph-livelock}
-    An example of PH model with three well-formed components ($a$, $b$ and $c$) and a well-formed cooperative sort ($ab$).
+    An example of PH with $2$ classes of priorities.
+    Sorts are represented as labelled boxes and processes as circles with their identifier on the side.
+    Actions of $\PHh^{(1)}$ are represented by double arrows and actions of $\PHh^{(2)}$ are represented by single arrows;
+    the hit part of each action in drawn in plain line and the bounce part is in dotted line.
+    Greyed processes stand for a possible state $s = \PHstate{a_1, b_0, c_0, ab_{10}}$.
+    %This PH notably contains three well-formed components ($a$, $b$ and $c$) and a well-formed cooperative sort ($ab$).
   }
 \end{figure}
 
@@ -154,20 +161,22 @@ In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH w
 
 \subsection{Modelling cooperation}
 \label{ssec:cooperation}
+
 %\towrite{Sortes coopératives avec mise à jour prioritaire (pas de décalage temporel)}
 Cooperation between processes to make another process bounce can be expressed in PH by building a \emph{cooperative sort}, as described in \cite{PMR10-TCSB}.
 \pref{fig:ph-livelock} shows an example of cooperation between processes $a_1$ and $b_1$ to make $c_0$ bounce to $c_1$:
 a cooperative sort $ab$ is defined with 4 processes (one for each sub-state of the presence of processes $a_1$ and $b_1$).
 For the sake of clarity, the processes of $ab$ are indexed using the sub-state they represent.
-Hence, $ab_{01}$ represents the sub-state $\PHstate{a_0,b_1}$, and so on.
+Hence, $ab_{10}$ represents the sub-state $\PHstate{a_1,b_0}$, and so on.
 Each process of sort $a$ and $b$ hit $ab$ to make it bounce to the process reflecting the status of the sorts $a$ and $b$
 (e.g., $\PHfrappe{a_1}{ab_{00}}{ab_{10}}$ and $\PHfrappe{a_1}{ab_{01}}{ab_{11}}$).
-Then, to represent the cooperation between $a_1$ and $b_1$, the process $ab_{11}$ hits $c_0$ to make it bounce to $c_1$ instead of independent hits from $b_1$ and $a_1$.
+Then, to represent the cooperation between $a_1$ and $b_1$, the process $ab_{11}$ hits $c_0$ to make it bounce to $c_1$ instead of independent hits from $a_1$ and $b_1$.
 
 We note that cooperative sorts are standard PH sorts and do not involve any
 special treatment regarding the semantics of related actions.
 Furthermore, it is possible to chain cooperative sorts in order to express more complex cooperations
-or to decrease the number of processes created within each cooperative sort.
+or to decrease the number of processes created within each cooperative sort,
+as this number is exponential in the number of sorts that cooperate.
 %to prevent the combinatoric explosion of the number of processes created within cooperative sorts.
 %Such constructions are helpful as the static analysis of dynamics developed does not suffer from the number of sorts,
 %but on the number of processes within a single sort.
@@ -182,10 +191,10 @@ as the static analysis of dynamics developed in \cite{PMR12-MSCS} does not suffe
 sorts, but on the number of processes within a single sort.
 \end{comment}
 
-The construction of cooperation in PH allows to encode any boolean functions between cooperating processes \cite{PMR10-TCSB}.
+The construction of cooperation in PH allows to encode any Boolean functions between cooperating processes \cite{PMR10-TCSB}.
 Due to the introduction of priorities into the PH framework,
 it is possible to build cooperations with no temporal shift by defining actions updating the cooperative sorts with the highest class of priority.
-This allows to gain the same expressivity in PH than in boolean networks, as explained in \towrite{section 2 ou 3}.
+This allows to gain the same expressivity in PH than in Boolean networks, as stated in \pref{ssec:hypothesis}.
 The aim of this paper is to allow the static analysis of the dynamics to be handled on PH models comprising such higher priory actions updating cooperative sorts.
 
 \begin{comment}
@@ -202,21 +211,23 @@ highest level, and $a$ does not become inactive unless both $b$ and $c$ are inac
 
 
 \todo{Nouvelle section pour les hypothèses + conséquences ?}
-\subsection{Restrictions} \towrite{Reformuler}
 \label{ssec:hypothesis}
+\subsection{Restrictions} %\towrite{Reformuler}
 
 In the scope of this paper, we focus on a specific class of PH models.
-We define here the restrictions that lead to this class of models \todo{and show that they are equivalent to discrete networks}.
+We define here the restrictions that lead to this class of models and show that they are equivalent to discrete networks.
 
-\pref{cr:2prio} allows to models two kinds of actions: controllable actions that model the non-determinacy of biological evolutions,
-and uncontrollable actions that are used to model non-biological behaviours in the model, that is, the update of cooperative sorts.
-\pref{cr:bounded} states that the dynamics of the studied model $\PH$ contains no infinite sequence of uncontrollable actions.
-As these actions can be considered as non-biological and therefore instantaneous, we thus prevent the existence of any Zeno behaviour
-which would allow the play of an infinite sequence of high priority actions in zero time.
+\pref{cr:2prio} allows to distinguish two kinds of actions:
+\emph{unprioritised actions} modelling the non-determinacy of biological evolutions
+and \emph{prioritised actions} used to model non-biological behaviours in the model, namely the update of cooperative sorts.
+\pref{cr:bounded} states that the dynamics of the studied model $\PH$ contains no infinite sequence of prioritised actions.
+As these actions can be considered as non-biological and therefore instantaneous, we thus prevent the existence of any Zeno-like behaviour
+which would allow the play of an infinite sequence of prioritised actions in “zero time”.
 \begin{criterion}[2 priorities]
 \label{cr:2prio}
 %\paragraph{2 priorities}
-  In this paper, we only consider Process Hitting with $2$ priorities.
+  In this paper, we only consider Process Hitting with $2$ classes of priorities:
+  $\PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle})$.
 \end{criterion}
 %
 \begin{criterion}[Bounded termination]
@@ -228,17 +239,19 @@ which would allow the play of an infinite sequence of high priority actions in z
   $$\exists N \in \sN, \forall \in \PHl, \forall \delta \in \restriction{\Sce}{1}(s), |\delta| \leq N \enspace.$$
 \end{criterion}
 
-In \pref{def:component} we define a well-formed component as a sort that is hit only by actions of priority $2$.
-A well-formed component can stand for a real biological component (protein, light, nutriment…).
-\begin{definition}
+In \pref{def:component} we define a well-formed component as a sort that is hit only by unprioritised actions, or that no action hits.
+%A well-formed component may stand for a real biological component (protein, light, nutriment…).
+\begin{definition}[Well-formed component ($\components$)]
 \label{def:component}
   A sort $a \in \PHs$ is a \emph{well-formed component} if and only if:
   $$\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2 \enspace.$$
   We call $\components$ the set of well-formed components.
 \end{definition}
 
-\pref{def:chainsactions} defines chains of uncontrollable actions,
-and \pref{cr:cyclefreeness} prevents the presence of cycles in these chains to avoid incoherent states between cooperative sorts.
+\pref{def:chainsactions} defines chains of prioritised actions,
+and \pref{cr:cyclefreeness} prevents the presence of cycles in these chains.
+%as prioritised actions are used to update non-biological components.
+%this restriction will prevent incoherent states between cooperative sorts ().
 \begin{definition}
 \label{def:chainsactions}
   The set of chains of actions $\PHh(a, b)$ between two sorts $a, b \in \PHs$ is defined as below:
@@ -247,18 +260,18 @@ and \pref{cr:cyclefreeness} prevents the presence of cycles in these chains to a
     & \wedge \forall i \in \segm{1}{s}, \PHsort(\PHtarget(h_{i})) = \PHsort(\PHhitter(h_{i+1})) \}
   \end{align*}
 \end{definition}
-\begin{criterion}[Cycle-freeness between actions of priority $1$]
+\begin{criterion}[Cycle-freeness between prioritised actions]
 \label{cr:cyclefreeness}
 %\paragraph{Cycle-freeness between actions of priority $1$}
   There is no cycle in chains of actions:
   $$\forall a \in \PHs, \PHh(a, a) = \emptyset \enspace.$$
 \end{criterion}
 
-In \pref{def:neighbours} we define the notion of neighbour \towrite{revoir terminologie : neighbors ? vicinity ?} sorts and actions of a sort.
-The set of neighbour sorts $\Vs(a)$ of a given sort $a$ is the set of components that can interact with it through actions of priority $1$.
-The set of neighbour actions $\Vh(a)$ of $a$ is the set of actions of priority $1$ influencing $a$.
+In \pref{def:neighbours} we define the notion of neighbouring sorts and actions of a given sort.
+The set of neighbouring sorts $\Vs(a)$ of a sort $a$ is the set of components that can interact with it through prioritised actions.
+The set of neighbouring actions $\Vh(a)$ of $a$ is the set of prioritised actions influencing $a$.
 These definitions are permitted by the previous restrictions (\pref{cr:2prio} and~\ref{cr:cyclefreeness}).
-\begin{definition}[$\Vs : \PHs \rightarrow \powerset(\PHsort)$ ; $\Vh : \PHs \rightarrow \powerset(\PHh)$]
+\begin{definition}[$\Vs : \PHs \rightarrow \powerset(\PHsort)$; $\Vh : \PHs \rightarrow \powerset(\PHh)$]
 \label{def:neighbours}
   For all sort $a \in \PHs$,
   \begin{align*}
@@ -268,12 +281,12 @@ These definitions are permitted by the previous restrictions (\pref{cr:2prio} an
 \end{definition}
 
 Finally, we introduce the notion of local steady-state of a sort from a given state.
-This local steady-state is the set of processes towards which the sort tends to evolve to and stay in by playing only uncontrollable actions.
+This local steady-state is the set of processes towards which the sort tends to evolve to, and stay in, when playing only prioritised actions.
 We denote $\pfp_s(a)$ this set of processes for a sort $a$ in state $s$ (\pref{def:pfp}),
 and we derive from this the notion of well-formed cooperative sort (\pref{def:cs}).
-A well-formed cooperative sort allows to define a cooperation between sorts as presented in \pref{ssec:cooperation};
-therefore, it must be only hit by actions of high priority
-and in a way that it efficiently represents any configuration of its neighbour sorts.
+A well-formed cooperative sort models a cooperation between sorts as presented in \pref{ssec:cooperation};
+therefore, it must be only hit by prioritised actions,
+in a way that its local steady-states efficiently represents all configurations of its neighbouring sorts.
 %any sub-state of its neighbourhood is represented by exactly one local steady state in this sort,
 %and all of its processes represents at least one sub-state of its neighbourhood. \towrite{reformuler ou supprimer}
 \begin{definition}[$\pfp : \PHl \times \PHs \rightarrow \powerset(\PHproc)$]
@@ -286,46 +299,47 @@ and in a way that it efficiently represents any configuration of its neighbour s
   Of course, if $a \in \components$, then $\pfp_s(a) = \{ \PHget{s}{a} \}$.
 \end{definition}
 %
-\begin{definition}
+\begin{definition}[Well-formed cooperative sorts ($\cs$)]
 \label{def:cs}
   A sort $a \in \PHs$ is a \emph{well-formed cooperative} sort if and only if:
   \begin{enumerate}
-    \item $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 1$
+    \item $\exists b \in \PHs, \PHh(b, a) \neq \emptyset$
 %    \item $\forall s \in \underset{b \in \Vs(a)}{\times} \PHl_b, |\pfp_s(a)| = 1$
 %    \item $\forall a_i \in \PHl_a, \exists s \in \underset{b \in \Vs(a)}{\times} \PHl_b, \pfp_s(a) = \{ a_i \}$
     \item \label{csai} $\forall s \in \PHl, \exists a_i \in \PHl_a, \pfp_s(a) = \{ a_i \}$
     \item \label{css} $\forall a_i \in \PHl_a, \exists s \in \PHl, \pfp_s(a) = \{ a_i \}$
   \end{enumerate}
+  We call $\cs$ the set of well-formed cooperative sorts.
 \end{definition}
-We call $\cs$ the set of well-formed cooperative sorts.
-Because of (\ref{csai}), we denote in the following: $\pfp_s(a) = a_i$.
-Furthermore, because of (\ref{css}), we denote $\csState(a_i)$ the set of sub-states represented by the process $a_i$ of any cooperative sort $a$ (\pref{def:csState}).
+
+Because of \pref{def:cs}(\ref{csai}), we denote in the following: $\pfp_s(a) = a_i$.
+Furthermore, because of \pref{def:cs}(\ref{css}), we denote $\csState(a_i)$ the set of sub-states represented by the process $a_i$ of any cooperative sort $a$ (\pref{def:csState}).
 \begin{definition}[$\csState : \PHproc \rightarrow \powerset(\PHproc)$]
 \label{def:csState}
   If $a \in \cs$ and $a_i \in \PHl_a$, we define:
   $$\csState(a_i) = \{ ps \in \underset{b \in \Vs(a)}{\times} \PHl_b \mid \forall s \in \PHl, \pfp_{s \Cap ps}(a) = a_i \}$$
 \end{definition}
 
-In the following we will simply write “component” (resp.~“cooperative sort”) instead of “well-formed component” (resp.~“well-formed cooperative sort”).
-The last criterion states that the set of sorts of the considered PH must be divided between components and cooperative sorts.
-
-\begin{criterion}[Components \& cooperative sorts]
+In the following we simply write “component” (resp.~“cooperative sort”) instead of “well-formed component” (resp.~“well-formed cooperative sort”).
+Finally, \pref{cr:compcs} states that the set of sorts of the considered PH must be divided between components and cooperative sorts.
+\begin{criterion}[Components \& cooperative sorts partition]
 \label{cr:compcs}
-\towrite{Problème : sortes non frappées dans $\components$ ou $\cs$ ?}
 %\paragraph{Components \& cooperative sorts}
   %The studied PH is a PH with 2 priorities, and it is only composed of well-formed components and cooperative sorts:
   $$\PHs = \components \cup \cs \wedge \components \cap \cs = \emptyset$$
 \end{criterion}
 
-\todo{The criteria given in this subsection allow to define a class of PH models that share the same behaviour than discrete models.
-The demonstration of this statement is found in Annex B.}
+The criteria given in this subsection allow to define a class of PH models that is (weakly) bisimilar to Asynchronous Boolean Networks
+or, more generally, to the multivalued version of this framework, called Asynchronous Discrete Models (ADM).
+A translation of ADM into PH is given in \pref{suppl:demotrad}, alongside with a demonstration of the weak bisimulation.
 
 
 
 \subsection{Consequences of the restrictions}
 
-The previous restrictions lead to a particular class of PH models that can be efficiently studied.
-In this subsection, we give several general theorems that can be derived from these restrictions,
+%The particular class of PH models defined in \pref{ssec:hypothesis} allows to be efficiently studied.
+%The previous restrictions lead to a particular class of PH models that can be efficiently studied.
+In this subsection, we give several general theorems that can be derived from the restrictions of \pref{ssec:hypothesis},
 and which will help building the static analysis of \pref{sec:sa}.
 
 We first denote by $\update(s)$ the state equivalent to $s$ but in which all cooperative sorts are updated (\pref{def:update}).
@@ -347,10 +361,12 @@ Then, \pref{th:update} states that from any state, there exists a scenario updat
 \begin{proof}
   Let $a$ be a cooperative sort so that $\PHget{s}{a} \neq \pfp_s(a)$.
   Given the definition of $\pfp_s(a)$, there exists a scenario $\delta$ updating $a$ in $s$ so that
-  no scenario in $\restriction{\Sce}{1}(s \PHplay \delta)$ can change the active process of $a$.
-  As there is no cycle of actions between the cooperative sorts (\pref{cr:cyclefreeness}) and an updated cooperative sort cannot evolve, at most $|\cs|$ updates can be done.
+  $\forall \delta' \in \restriction{\Sce}{1}(s \PHplay \delta)$, $\PHget{(s \PHplay \delta \PHplay \delta')}{a} = \pfp_s(a)$.
+%  no scenario in $\restriction{\Sce}{1}(s \PHplay \delta)$ can change the active process of $a$.
+  As there is no cycle of actions between the cooperative sorts (\pref{cr:cyclefreeness}) and given that an updated cooperative sort cannot evolve, at most $|\cs|$ updates have to be performed.
 \end{proof}
-\pref{th:hcompcomp} states that for a given state $s$ and for any action $h = \PHhit{a_i}{b_j}{b_k}$ between components,
+
+\pref{th:hcompcomp} states that for a given state $s$, and for any action $h = \PHhit{a_i}{b_j}{b_k}$ where $a$ and $b$ are components,
 if $\PHget{s}{a} = a_i$ and $\PHget{s}{b} = b_j$, then
 $h$ can always be played after a series of hits (and these hits do not prevent it to be fired).
 \pref{th:hcscomp} states the same if $a$ is a cooperative sort, under the condition that $a$ is updated in $s$.
@@ -358,22 +374,26 @@ $h$ can always be played after a series of hits (and these hits do not prevent i
 \begin{theorem}
 \label{th:hcompcomp}
   $\forall s \in \PHl, \forall a,b \in \components, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh,$\\
-  $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}(s), \text{$h$ can be played in $s \PHplay \delta$})$
+  $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}(s),
+  (s \PHplay \delta) \PHPtrans (s \PHplay \delta \PHplay h))$
+  %\text{$h$ can be played in $s \PHplay \delta$})$
 \end{theorem}
 \begin{proof}
-  From \pref{th:update}, there exists such a scenario $\delta$ so that: $(s \PHplay \delta) = \update(s)$.
-  As $a,b \in \components$, $a_i \in s \PHplay \delta$ and $b_j \in s \PHplay \delta$.
-  Finally, by definition of $\update(s)$, no action of priority $1$ can be played in $s \PHplay \delta$, thus $h$ can be played in $s \PHplay \delta$.
+  From \pref{th:update}, there exists a scenario $\delta$ with: $(s \PHplay \delta) = \update(s)$.
+  As $a,b \in \components$, $a_i \in (s \PHplay \delta)$ and $b_j \in (s \PHplay \delta)$.
+  Finally, by definition of $\update(s)$, no prioritised action can be played in $(s \PHplay \delta)$, thus $h$ can be played in $(s \PHplay \delta)$.
 \end{proof}
 \begin{theorem}
 \label{th:hcscomp}
   $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, a \in \cs, b \in \components$\\
-  $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge \pfp_s(a) = a_i) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}(s), \text{$h$ can be played in $s \PHplay \delta$})$
+  $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge \pfp_s(a) = a_i) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}(s),
+  (s \PHplay \delta) \PHPtrans (s \PHplay \delta \PHplay h))$
+%  \text{$h$ can be played in $s \PHplay \delta$})$
 \end{theorem}
 \begin{proof}
-  Similar to the proof of \pref{th:hcompcomp}, and
+  Similar to the proof of \pref{th:hcompcomp};
   %From \pref{th:update}, there exists such a scenario $\delta$ so that: $(s \PHplay \delta) = \update(s)$.
-  as $a_i \in \pfp_s(a)$, $a_i \in s \PHplay \delta$.
+  as $a_i \in \pfp_s(a)$, $a_i \in (s \PHplay \delta)$.
   %Furthermore, $b \in \components$, thus $b_j \in s \PHplay \delta$.
   %Finally, by definition of $\update(s)$, no action of priority $1$ can be played in $s \PHplay \delta$, thus $h$ can be played in $s \PHplay \delta$.
 \end{proof}
