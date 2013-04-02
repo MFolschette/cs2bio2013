@@ -77,7 +77,7 @@ In the following, we denote: $\Sol = \powerset(\PHproc)$.
 
 \subsection{Under-approximation}
 
-We define $\concr(\w)$ as the set of scenarios concretising an objective sequence $\w$ in the context $\ctx$.
+We denote $\concr(\w)$ the set of scenarios concretising an objective sequence $\w$ in the context $\ctx$.
 In \pref{def:uconcr}, we define $\uconcr(\w)$ as equal to $\concr(\w)$ if and only if $\concr(\w)$ contains scenarios starting from all states $s \subseteq \ctx$.
 \pref{th:uconcr-ctx} is used to over-approximate the initial context $\ctx$.
 \begin{definition}[$\uconcr: \OS \rightarrow \powerset(\Sce)$]
@@ -110,13 +110,13 @@ For any objective $P$ and context $\ctx$, \pref{def:maxCont} allows to obtain th
 The graph of local causality $\cwB = (\V, \E)$ defined in \pref{def:glc} is a graph where $\V \subset \Proc \cup \Obj \cup \Sol$ and $\E \subset \V \times \V$.
 A node in $\PHproc$ is a required process,
 a node in $\Obj$ is an objective to reach a given process
-and a node in $\Sol$ is a sets of processes required for the solving.
-An objective $P \in \Obj$ is solvable if the abstractions of bounce sequences $\aBS(P) \in \Sol$ (\pref{def:aBS}) can be reached (\pref{eq:ESol1}), leading to several required processes (\pref{eq:ESol2}).
-If $a$ is a component, the reachability of a process $a_i$ is approximated by the ability to solve all objectives $\PHobjp{a}{j}{i} \in \Obj$ for all $a_j$ in the initial context (\pref{eq:EReq});
-if $a$ is a cooperative sort, the reachability of $a_i$ is directly solved by the set of the processes $\csState(a_i)$ (\pref{def:csState}) it represents (\pref{eq:EPrio}).
-The resolution of an objective $P$ may a process of $\PHsort(P)$, \ie $\gCont(\PHsort(P), P) \neq \emptyset$ (\pref{def:maxCont}); in this cas, the objective is re-targeted (\pref{eq:ECont}).
-\pref{eq:Vw}, \eqref{eq:Vproc} and \eqref{eq:VE} ensure that all required nodes are in $\cwV$.
-Finally, as the active process of every sort may evolve, $\cwB$ is obtained iteratively by saturation with every process it contains,
+and a node in $\Sol$ is a set of processes required for the solving.
+An objective $P \in \Obj$ is solvable if the abstractions of bounce sequences $\aBS(P) \in \Sol$ (\pref{def:aBS}) can be reached (\pref{eq:ESol1}), thus leading to several required processes (\pref{eq:ESol2}).
+If $a \in \components$, the reachability of one of its process $a_i$ is approximated by the ability to solve all objectives $\PHobjp{a}{j}{i} \in \Obj$ for all $a_j$ in the initial context (\pref{eq:EReq});
+if $a \in \cs$, the reachability of $a_i$ is simply solved by the set of processes $\csState(a_i)$ (\pref{def:csState}) that it represents (\pref{eq:EPrio}).
+The solving of an objective $P$ may require a process of $\PHsort(P)$, \ie $\gCont(\PHsort(P), P) \neq \emptyset$ (\pref{def:maxCont}); in this case, $P$ is re-targeted (\pref{eq:ECont}).
+\pref{eq:Vw}, \eqref{eq:Vproc} and~\eqref{eq:VE} ensure that all required nodes are in $\cwV$.
+Finally, as the active process of every sort may evolve, $\cwB$ is obtained by iteratively saturating with every process it contains,
 \ie by overriding its initial context $\ctx$ by $\allprocs(\V, \E)$, defined by:
 $$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \}$$
 
@@ -137,7 +137,7 @@ $$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \
 \begin{definition}
 \label{def:glc}
   The graph of local causality $\cwB = (\Bv, \Be)$ is defined as: $\cwB = \lfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}$,
-  where $\myB = (\cwV, \cwE)$ is the smallest graph where:
+  where $\myB = (\cwV, \cwE)$ is the smallest graph with
   $\cwV \subset \Proc \cup \Obj \cup \Sol$ and $\cwE \subset \cwV \times \cwV$
   so that:
   \begin{align}
@@ -164,7 +164,8 @@ while \pref{eq:EPrio} links a required cooperative sort process $a_i$ to its sol
 Finally, if the resolution of an objective $P$ requires a process of $\PHsort(P)$, then \pref{eq:ECont} re-targets this objective ($\gCont$).
 \end{comment}
 
-In the graph of local causality, an edge linking a process of a cooperative sort to a solution set $ps$ is said coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the children processes of $ps$.
+In the graph of local causality, an edge $(p, ps) \in \Proc \times \Sol$ %linking a process of a cooperative sort to a solution set $ps$
+is said coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the children processes of $ps$.
 Then, \pref{th:approxinf} gives a sufficient condition for the concretization of a sequence of objectives in a given context,
 which is derived immediately from the graph of local causality.
 A proof of this theorem is given in Annex~\ref{suppl:demoapproxinf}.
