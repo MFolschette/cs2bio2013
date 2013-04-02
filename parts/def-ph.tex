@@ -25,7 +25,8 @@ An action $h=\PHfrappe{a_i}{b_j}{b_k}$ is read as ``$a_i$ \emph{hits} $b_j$ to m
   If $k \in \sN^*$, a \emph{Process Hitting with $k$ priorities} is a triplet $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$ with $\PHa^{\langle k \rangle} = (\PHa^{(1)}; \dots; \PHa^{(k)})$ a $k$-uplet, and:
   \begin{itemize}
     \item $\PHs \DEF \{a,b,\dots\}$ is the finite set of \emph{sorts}.
-    \item $\PHl \DEF \prod_{a \in \PHs} \PHl_a$ is the finite set of \emph{states}, where $\PHl_a = \{a_0 ; \ldots ; a_{l_a}\}$ is the finite set of \emph{processes} of sort $a \in \PHs$ and $l_a \in \sN^*$. Each process belongs to a unique sort: $\forall (a_i; b_j) \in \PHl_a \times \PHl_b, a \neq b \Rightarrow a_i \neq b_j$.
+    %$\PHl \DEF \prod_{a \in \PHs} \PHl_a$
+    \item $\PHl \DEF \underset{a \in \PHs}{\times} \PHl_a$ is the finite set of \emph{states}, where $\PHl_a = \{a_0 ; \ldots ; a_{l_a}\}$ is the finite set of \emph{processes} of sort $a \in \PHs$ and $l_a \in \sN^*$. Each process belongs to a unique sort: $\forall (a_i; b_j) \in \PHl_a \times \PHl_b, a \neq b \Rightarrow a_i \neq b_j$.
     \item $\forall n \in \llbracket 1; k \rrbracket, \PHa^{(n)} \DEF \{\PHfrappe{a_i}{b_j}{b_l} \mid (a; b) \in \PHs^2 \wedge (a_i; b_j; b_l) \in \PHl_a \times \PHl_b \times \PHl_b \wedge b_j \neq b_l \wedge a = b \Rightarrow a_i = b_j \}$ is the finite set of \emph{actions of priority $n$}.
   \end{itemize}
   We call $\PHproc \DEF \bigcup_{a \in \PHs} \PHl_a$ the set of all processes, and $\PHh \DEF \bigcup_{n \in \segm{1}{k}} \PHh^{(n)}$ the set of all actions.
