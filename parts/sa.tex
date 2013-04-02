@@ -164,10 +164,6 @@ while \pref{eq:EPrio} links a required cooperative sort process $a_i$ to its sol
 Finally, if the resolution of an objective $P$ requires a process of $\PHsort(P)$, then \pref{eq:ECont} re-targets this objective ($\gCont$).
 \end{comment}
 
-\todo{Complexité de la construction du GLC}
-
-
-
 In the graph of local causality, an edge linking a process of a cooperative sort to a solution set $ps$ is said coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the children processes of $ps$.
 Then, \pref{th:approxinf} gives a sufficient condition for the concretization of a sequence of objectives in a given context,
 which is derived immediately from the graph of local causality.
@@ -186,7 +182,12 @@ A proof of this theorem is given in Annex~\ref{suppl:demoapproxinf}.
   then $\uconcr(\w) \neq \emptyset$.
 \end{theorem}
 
-\todo{Complexité de la vérification du GLC}
+Computing the graph of local causality is polynomial in the number of sorts in $\PH$ and exponential in the number of processes in one sort.
+Checking the properties allowing to apply \pref{th:approxinf} is polynomial in the size of the graph.
+%Therefore, if the number of processes in each sort is small, the overall method can be processed in polynomial time.
+Furthermore, it is possible to compute only a subset of $\V \cap \Sol$;
+in this case, the overall method turns out to be exponential in the number of solutions to each objective.
+Our method can thus be considered as efficient compared to regular model-checking which is usually PSPACE-complete~\cite{Harel02}.
 
 
 
