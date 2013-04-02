@@ -176,9 +176,10 @@ Then, to represent the cooperation between $a_1$ and $b_1$, the process $ab_{11}
 
 We note that cooperative sorts are standard PH sorts and do not involve any
 special treatment regarding the semantics of related actions.
-Furthermore, it is possible to chain cooperative sorts in order to express more complex cooperations
-or to decrease the number of processes created within each cooperative sort,
-as this number is exponential in the number of sorts that cooperate.
+Furthermore, it is possible to chain cooperative sorts in order to express more complex cooperations or
+to decrease the number of processes created within each cooperative sort,
+as the static analysis method developed in \pref{sec:sa} does not suffer from the number of sorts but from the number of processes in one sort.
+%as this number is exponential in the number of sorts that cooperate.
 %to prevent the combinatoric explosion of the number of processes created within cooperative sorts.
 %Such constructions are helpful as the static analysis of dynamics developed does not suffer from the number of sorts,
 %but on the number of processes within a single sort.
