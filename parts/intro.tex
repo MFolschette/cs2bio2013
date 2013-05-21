@@ -41,7 +41,7 @@ In this paper, we introduce a new extension to the semantics of Process Hitting 
 One of the objectives is to reach an accurate representation of cooperating components in the model, that was not fulfilled with the initial semantics.
 We then develop an efficient under-approximation of the reachability of the state of components on a subclass of this new framework, thus allowing to compute efficient static analysis.
 This local reachability under-approximation can be also easily extended to study the reachability of a global state.
-Finally, as the subclass of models studied proves to be bisimilar to Asynchronous Discrete Networks, we state to have developed an efficient method to compute the reachability of a state and thus study the behaviour of such models.
+Finally, as the subclass of models studied proves to be bisimilar to Asynchronous Discrete Networks~\cite{Thomas73} \todo{Autre formalisme ?}, we state to have developed an efficient method to compute the reachability of a state and thus study the behaviour of such models.
 
 The method developed in this paper has been implemented into the existing Pint library and tested on a large-scale biological model containing 94 components.
 The under-approximation turned out to be conclusive in all cases and results were computed in hundredths of seconds,
@@ -63,11 +63,14 @@ before the discussion and conclusion in section 5.
 If $A$ is a finite set,
 $|A|$ is the cardinality of $A$
 and $\powerset(A)$ is the power set of $A$.
+$\sN$ is the set of natural numbers,
+$\sN^* = \sN \setminus \{ 0 \}$ is the set of positive natural numbers
+and $\segm{x}{y} = \{ x, x+1, \dots, y-1, y \}$ is the set of natural numbers from $x$ to $y$ included.
 If $x = (x_i)_{i \in \segm{1}{n}}$ is a sequence of elements indexed by $i \in \segm{1}{n}$,
 %we denote %$|x| = (b-a)+1$ the size of this sequence and
 $\indexes{x} = \segm{1}{n}$ is the set of indexes of this sequence.
 We also denote by $\emptyseq$ the empty sequence.
 If $A$ and $B$ are sets,
 $f : A \rightarrow B$ denotes an application $f$ that maps the elements of $A$ to elements of $B$.
-$\lfp{x_0}{x}{x'}$ is the least fixed point of the function $x \mapsto x'$ which is greater that $x_0$ .
+$\lfp{x_0}{x}{x'}$ is the least fixed point of the function $x \mapsto x'$ which is greater than $x_0$ .
 The Cartesian product is denoted $\times$.

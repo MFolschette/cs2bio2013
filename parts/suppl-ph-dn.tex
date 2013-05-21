@@ -12,7 +12,7 @@ For each component $i\in\segm{1}{n}$, a map $\mathbb F \mapsto \mathbb F^i$ is d
 $\mathbb F = \mathbb F^1 \times \cdots \times \mathbb F^n$, giving the next value of the component
 with respect to the global state of the network.
 Typically $f^i$ depends on a subset of components that we denote $\DNdep(f^i)$.
-In the case of Asynchronous Discrete Networks (ADN), a transition relation $\DNtrans\subset \mathbb
+In the case of Asynchronous Discrete Networks (ADN), a transition relation $\DNtrans\subseteq \mathbb
 F\times \mathbb F$ is defined such that $x\DNtrans x'$ if and only if there exists a unique
 $i\in\segm{1}{n}$ such that $\get{x'}{i}=f^i(x)$ and $\forall j\in\segm{1}{n}, j\neq i, \get{x'}{j}
 =\get{x}{j}$, i.e.~one and only one component has been updated.

@@ -7,13 +7,13 @@ The static analysis presented here is inspired from~\cite{PMR12-MSCS}.
 \subsection{Preliminary definitions}
 \label{ssec:sa-def}
 
-The reachability of a process $a_j$ of a given sort $a$ from another process $a_i$ is called an objective and is denoted $\PHobjp{a}{j}{i}$ (\pref{def:obj}).
+The reachability of a process $a_j$ of a given sort $a$ from another process $a_i$ is called an objective and is denoted $\PHobjp{a}{i}{j}$ (\pref{def:obj}).
 \begin{definition}[Objective ($\Obj$)]
 \label{def:obj}
   If $a \in \components$, the reachability of a process $a_j$ from a process $a_i$ is called an \emph{objective}, noted $\PHobj{a_i}{a_j}$.
   The set of all objectives is called $\Obj \DEF \{ \PHobj{a_i}{a_j} \mid a \in \components \wedge (a_i, a_j) \in \PHl_a^2 \}$.
   For an objective $P = \PHobj{a_i}{a_j} \in \Obj$, we define: $\PHsort(P) = a$, $\PHtarget(P)=a_i$, $\PHbounce(P)=a_j$,
-  and $P$ is \emph{trivial} if $a_i = a_j$.
+  and $P$ is said \emph{trivial} if $a_i = a_j$.
 
   We define an \emph{objective sequence} as a sequence of objectives in which each objective target must be equal to the previous objective bounce of the same sort, if it exists.
   The set of all objective sequences is denoted by $\OS$.
@@ -46,13 +46,13 @@ A sequence of actions $\delta$ is \emph{playable} in a context $\ctx$ if and onl
 $\exists s \subseteq \ctx, \delta \in \Sce(s)$.
 We denote then: $\delta \in \Sce(\ctx)$,
 and the play of $\delta$ in $\ctx$ is $\ctx \PHplay \delta = \ctx \Cap \ceil(\delta)$,
-where $\ceil(\delta)$ is the set containing the last process (hitter or bounce) of each sort present in $\delta$.
+where $\ceil(\delta)$ is the set containing the last process in the sequence $\delta$ (hitter or bounce) of every sort mentioned in $\delta$.
 
 Finally, a bounce sequence on a sort $a$ (\pref{def:bs}) is a sequence of actions hitting $a$
 in which the bounce process of each action is the hitter process of the following action.
 Bounce sequences are used to find local solutions to a given objective.
-A bounce sequence can be abstracted into sets of all its hitters that are not in sort $a$.
-This abstraction allows to propagate an objective into objectives on other sots.
+A bounce sequence on $a$ can be abstracted into sets of all its hitters that are not in sort $a$ (\pref{def:aBS}).
+This abstraction allows to propagate an objective on the sort $a$ into objectives on other sots.
 In the following, we denote: $\Sol = \powerset(\PHproc)$.
 \begin{definition}[Bounce sequence ($\BS$)]
 \label{def:bs}
@@ -67,6 +67,7 @@ In the following, we denote: $\Sol = \powerset(\PHproc)$.
 %
 \begin{definition}[$\aBS:\Obj \rightarrow \powerset(\Sol)$]
 \label{def:aBS}
+  The \emph{abstractions of bounce sequences} of an objective $P$, denoted by the set $\aBS(P)$, are the sets of hitters of bounce sequences solving $P$:
   \[
     \aBS(P) = \{ \abstr{\zeta} \in \Sol \mid \zeta \in \BS(P), \nexists \zeta' \in \BS(P), \abstr{\zeta'} \subsetneq \abstr{\zeta} \} \enspace,
   \]
@@ -96,7 +97,7 @@ In \pref{def:uconcr}, we define $\uconcr(\w)$ as equal to $\concr(\w)$ if and on
   $\ctx \subseteq \ctx' \wedge \muconcr_{\ctx'}(\w) \neq \emptyset \Longrightarrow \muconcr_{\ctx}(\w) \neq \emptyset$.
 \end{theorem}
 
-For any objective $P$ and context $\ctx$, \pref{def:maxCont} allows to obtain the set of processes of sort $\PHsort(P)$ are required to solve $P$ in $\ctx$, given by $\gCont_\ctx(\PHsort(P), P)$.
+For any objective $P$ and context $\ctx$, \pref{def:maxCont} allows to obtain the set of processes of sort $\PHsort(P)$ that are required to solve $P$ in $\ctx$, given by $\gCont_\ctx(\PHsort(P), P)$.
 \begin{definition}[$\gCont_\ctx : \Sigma \times \Obj \rightarrow \powerset(\PHproc)$]
   \label{def:maxCont}
   \begin{align*}
@@ -107,7 +108,7 @@ For any objective $P$ and context $\ctx$, \pref{def:maxCont} allows to obtain th
   \end{align*}
 \end{definition}
 
-The graph of local causality $\cwB = (\V, \E)$ defined in \pref{def:glc} is a graph where $\V \subset \Proc \cup \Obj \cup \Sol$ and $\E \subset \V \times \V$.
+The graph of local causality $\cwB = (\V, \E)$ defined in \pref{def:glc} is a graph where $\V \subseteq \Proc \cup \Obj \cup \Sol$ and $\E \subseteq \V \times \V$.
 A node in $\PHproc$ is a required process,
 a node in $\Obj$ is an objective to reach a given process
 and a node in $\Sol$ is a set of processes required for the solving.
@@ -138,17 +139,17 @@ $$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \
 \label{def:glc}
   The graph of local causality $\cwB = (\Bv, \Be)$ is defined as: $\cwB = \lfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}$,
   where $\myB = (\cwV, \cwE)$ is the smallest graph with
-  $\cwV \subset \Proc \cup \Obj \cup \Sol$ and $\cwE \subset \cwV \times \cwV$
+  $\cwV \subseteq \Proc \cup \Obj \cup \Sol$ and $\cwE \subseteq \cwV \times \cwV$
   so that:
   \begin{align}
-    \w &\subset \cwV \label{eq:Vw} \\
+    \w &\subseteq \cwV \label{eq:Vw} \\
     P \in \VProc &\Rightarrow \PHbounce(P) \in \cwV \label{eq:Vproc} \\
     (x, y) \in \E &\Rightarrow y \in \cwV \label{eq:VE} \\
     P \in \VObj \wedge ps \in \BS(P) &\Rightarrow (P, ps) \in \cwE \label{eq:ESol1} \\
     ps \in \VSol \wedge a_i \in ps &\Rightarrow (ps, a_i) \in \cwE \label{eq:ESol2} \\
     a \in \components \wedge a_i \in \VProc \wedge a_j \in \ctx &\Rightarrow (a_i, \PHobjp{a}{j}{i}) \in \cwE \label{eq:EReq} \\
     a \in \cs \wedge a_i \in \VProc \wedge ps \in \csState(a_i) &\Rightarrow (a_i, ps) \in \cwE \label{eq:EPrio} \\
-    P \in \VObj \wedge q \in \gCont_\ctx(\PHsort(P), P) &\Rightarrow (P, \PHobj{q}{\PHbounce(P)}) \in \cwE \label{eq:ECont}
+    P \in \VObj \wedge q \in \gCont_\ctx(\PHsort(P), P) &\Rightarrow (P, \PHobj{q}{\PHbounce(P)}) \in \cwE \label{eq:ECont} \!
   \end{align}
 \end{definition}
 
@@ -172,7 +173,7 @@ A proof of this theorem is given in Annex~\ref{suppl:demoapproxinf}.
 \begin{definition}[Coherent edge]
 \label{def:coherent}
   An edge $(x, y) \in \cwE$ is said coherent if and only if:
-  $(x, y) \in \Be \cap (\Proc \times \Sol) \Rightarrow y$ has no children process $a_j \in \Bv \cap \Proc$ so that $\exists a_i \in y$, $a_i \neq a_k$.
+  $(x, y) \in \Be \cap (\Proc \times \Sol) \Rightarrow y$ has no children process $a_j \in \Bv \cap \Proc$ so that $\exists a_i \in y$, $a_i \neq a_j$.
 \end{definition}
 
 \begin{theorem}[Under-Approximation]
@@ -218,7 +219,7 @@ Our method can thus be considered as efficient compared to regular model-checkin
     \node[Aobj,below of=c1] (c01) {$\PHobj{c_0}{c_1}$};
     \node[Asol,below of=c01] (c01s) {};
 
-    \node[Aproc,below of=c01s] (ab11) {$ab_{11}$};
+    \node[AprocPrio,below of=c01s] (ab11) {$ab_{11}$};
     \node[AsolPrio,below of=ab11] (ab11s) {};
 
     \node[Aproc,below left of=ab11s] (a1) {$a_1$};
@@ -247,7 +248,7 @@ Our method can thus be considered as efficient compared to regular model-checkin
     (c1) edge (c01)
     (c01) edge (c01s)
     (c01s) edge (ab11)
-    (ab11) edge (ab11s)
+    (ab11) edge[aSPrio] (ab11s)
     (ab11s) edge (a1) edge (b1)
 
     (a1) edge (a01) edge (a11)
@@ -270,7 +271,12 @@ Our method can thus be considered as efficient compared to regular model-checkin
   \caption{
   \label{fig:sa-livelock}
     The graph of local causality of the PH model in \pref{fig:ph-livelock}.
-    \pref{th:approxinf} is inconclusive on this example as the only solution of process $ab_{11}$ is not coherent (\pref{def:coherent}).
+    Rectangular nodes containing a single process are elements in $\Proc$,
+    nodes containing a couple of processes are elements in $\Obj$
+    and circle nodes are elements in $\Sol$.
+    %The double arrow and the two surrounding nodes represent the only edge in $\Proc \times \Sol$.
+    \pref{th:approxinf} is inconclusive on this example as edge $(ab_{11}, \{ a_1, b_1 \}) \in \Proc \times \Sol$ (here represented with a double line) is not coherent (\pref{def:coherent}).
+    Indeed, $a_0 \in \Proc$ is a child of $\{ a_1, b_1 \}$, but $a_0 \neq a_1$ (and the same also stands for $b_0$).
   }
 \end{figure}
 
@@ -294,4 +300,4 @@ and $\PHh'^{(2)} = \PHh^{(2)} \cup \{ \PHhit{\pfp_s(\total)}{\reach_0}{\reach_1}
 Given an initial context $\ctx$, the reachability of $s$ in $\PH$ is equivalent to the concretization of $\PHobjp{\reach}{0}{1}$ in $\PH'$ from the initial context $\ctx \cup \{ \reach_0 \}$ (the initial state of $\total$ does not matter), which can be efficiently under-approximated using \pref{th:approxinf}.
 Indeed, the additional action $\PHhit{\pfp_s(\total)}{\reach_0}{\reach_1}$ in $\PHh'^{(2)}$ allows to conclude on the reachability of process $\pfp_s(\total)$, that is, on the reachability of the state $s$ (considering only the components).
 
-It is also possible to compute the reachability of a set of states $S \subset \PHl$ by creating several actions $\PHhit{\total_s}{\reach_0}{\reach_1}$ in $\PHh^{(2)}$ for each state $s \in S$.
+It is also possible to compute the reachability of a set of states $S \subseteq \PHl$ by creating several actions $\PHhit{\total_s}{\reach_0}{\reach_1}$ in $\PHh^{(2)}$ for each state $s \in S$.
