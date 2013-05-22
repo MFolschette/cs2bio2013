@@ -17,6 +17,7 @@ We developed a quite similar framework named the Process Hitting \cite{PMR10-TCS
 our motivation behind this framework was to design a model and analysis techniques that avoid to build the whole state space.
 This allows to tackle very large systems
 (which would have led to a huge number of states, hopelessly too huge to be analysed).
+\todo{Mieux replacer le PH dans un contexte biologique (catalytic networks, metabolic networks)}
 
 Besides, one further objective of our work is now %to be more accurate in the description of the studied systems.
 to improve the accuracy of the description of the studied systems dynamics.
@@ -41,7 +42,7 @@ In this paper, we introduce a new extension to the semantics of Process Hitting 
 One of the objectives is to reach an accurate representation of cooperating components in the model, that was not fulfilled with the initial semantics.
 We then develop an efficient under-approximation of the reachability of the state of components on a subclass of this new framework, thus allowing to compute efficient static analysis.
 This local reachability under-approximation can be also easily extended to study the reachability of a global state.
-Finally, as the subclass of models studied proves to be bisimilar to Asynchronous Discrete Networks~\cite{Thomas73} \todo{Autre formalisme ?}, we state to have developed an efficient method to compute the reachability of a state and thus study the behaviour of such models.
+Finally, as the subclass of models studied proves to be bisimilar to Asynchronous Discrete Networks~\cite{Thomas73,Thomas95} \todo{Autre formalisme ? Cf. de Jong}, we state to have developed an efficient method to compute the reachability of a state and thus study the behaviour of such models.
 
 The method developed in this paper has been implemented into the existing Pint library and tested on a large-scale biological model containing 94 components.
 The under-approximation turned out to be conclusive in all cases and results were computed in hundredths of seconds,

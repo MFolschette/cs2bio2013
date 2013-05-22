@@ -47,7 +47,7 @@ $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
       Furthermore, there exists $\zeta \in \BS(P)$ so that $(P, \aZ) \in \Bee{\Obj}{\Sol}$.
       We show by induction that for all $n \in \indexes{\zeta}$, there is a scenario $\delta_n$ so that $\PHget{(s \PHplay \delta_n)}{\PHsort(P)} = \PHbounce(\zeta_n)$.
       \begin{itemize}
-        \item[*] Suppose that $\delta_n$ exists and let $\zeta_n = \PHhit{b_i}{a_j}{a_k}$.
+        \item[$\circ$] Suppose that $\delta_n$ exists and let $\zeta_n = \PHhit{b_i}{a_j}{a_k}$.
         By hypothesis there exists $\delta' \in \muconcr_{s \PHplay \delta_n}(\PHobj{\any}{b_i})$ with $\PHsort(P) \notin \PHsort(\delta')$ (by \pref{def:maxCont}).
         By \pref{th:update} there exists $\delta'' \in \restriction{\Sce}{1}(s \PHplay \delta')$ so that $\update(s \PHplay \delta') = s \PHplay \delta' \PHplay \delta''$.
         Furthermore, $\PHget{(s \PHplay \delta' \PHplay \delta'')}{b} = b_j$ (by \pref{th:hcompcomp} if $b \in \components$ or \pref{th:hcscomp} if $b \in \cs$).

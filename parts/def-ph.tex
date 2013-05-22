@@ -64,6 +64,8 @@ In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH w
   Furthermore, we denote: $\restriction{\Sce}{n}(s)$ the set of scenarios from $s$ in $\restriction{\PH}{n}$.
 \end{definition}
 
+\todo{Mieux replacer le PH dans un contexte biologique (catalytic networks, metabolic networks)}
+
 
 
 \begin{example}
@@ -193,20 +195,26 @@ which would allow the play of an infinite sequence of prioritised actions in “
 \begin{criterion}[2 classes of priorities]
 \label{cr:2prio}
   In this paper, we only consider Process Hitting with $2$ classes of priorities:
-  $\PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle})$.
+  \begin{align*}
+    \PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle}) \enspace.
+  \end{align*}
 \end{criterion}
 %
 \begin{criterion}[Bounded termination]
 \label{cr:bounded}
   The dynamics of $\restriction{\PH}{1}$ contains no cycles:
-  $\exists N \in \sN, \forall s \in \PHl, \forall \delta \in \restriction{\Sce}{1}(s), |\delta| \leq N$.
+  \begin{align*}
+    \exists N \in \sN, \forall s \in \PHl, \forall \delta \in \restriction{\Sce}{1}(s), |\delta| \leq N \enspace.
+  \end{align*}
 \end{criterion}
 
 In \pref{def:component} we define a well-formed component as a sort that is hit only by unprioritised actions, or that no action hits.
 \begin{definition}[Well-formed component ($\components$)]
 \label{def:component}
   A sort $a \in \PHs$ is a \emph{well-formed component} if and only if:
-  $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2$.\\
+  \begin{align*}
+    \forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) = 2 \enspace.
+  \end{align*}
   We call $\components$ the set of well-formed components.
 \end{definition}
 
@@ -216,7 +224,8 @@ and \pref{cr:cyclefreeness} prevents the presence of cycles in these chains.
 \label{def:chainsactions}
   The set of chains of actions $\PHh(a, b)$ between two sorts $a, b \in \PHs$ is defined as below:
   \begin{align*}
-  \PHh(a, b) = \{ (h_i)_{i \in \segm{1}{s+1}} \in (\PHh^{(1)})^{s+1} &\mid s \in \sN, \PHsort(\PHhitter(h_1)) = a \wedge \PHsort(\PHtarget(h_{s+1})) = b \\
+  \PHh(a, b) = \{ (h_i)_{i \in \segm{1}{s+1}} &\in (\PHh^{(1)})^{s+1} \mid s \in \sN \\
+    & \wedge \PHsort(\PHhitter(h_1)) = a \wedge \PHsort(\PHtarget(h_{s+1})) = b \\
     & \wedge \forall i \in \segm{1}{s}, \PHsort(\PHtarget(h_{i})) = \PHsort(\PHhitter(h_{i+1})) \}
   \end{align*}
   where $(\PHh^{(1)})^{s+1}$ is the Cartesian product of $s+1$ times the set $\PHh^{(1)}$.
@@ -224,7 +233,9 @@ and \pref{cr:cyclefreeness} prevents the presence of cycles in these chains.
 \begin{criterion}[Cycle-freeness in prioritised actions]
 \label{cr:cyclefreeness}
   There is no cycle in chains of actions:
-  $\forall a \in \PHs, \PHh(a, a) = \emptyset$.
+  \begin{align*}
+    \forall a \in \PHs, \PHh(a, a) = \emptyset \enspace.
+  \end{align*}
 \end{criterion}
 
 In \pref{def:neighbours} we define the notion of neighbouring sorts and actions of a given sort.
