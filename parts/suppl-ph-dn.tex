@@ -8,7 +8,7 @@ Hitting using two classes of priorities, and prove a weak bisimulation relation.
 
 A Discrete Network gathers a finite number of components $i\in\segm{1}{n}$ having a discrete finite domain
 $\mathbb F^i$ that we note $\mathbb{F}^i = \segm{1}{l_i}$.
-For each component $i\in\segm{1}{n}$, a map $\mathbb F \mapsto \mathbb F^i$ is defined, where
+For each component $i\in\segm{1}{n}$, a map $\mathbb F \rightarrow \mathbb F^i$ is defined, where
 $\mathbb F = \mathbb F^1 \times \cdots \times \mathbb F^n$, giving the next value of the component
 with respect to the global state of the network.
 Typically $f^i$ depends on a subset of components that we denote $\DNdep(f^i)$.
@@ -23,7 +23,7 @@ This is formalised in \pref{def:DN}.
   An ADN is defined by a couple $(\mathbb F, \langle f^1, \dots, f^n \rangle)$
   where $\mathbb{F} = \mathbb{F}^1\times\dots\times\mathbb{F}^n$,
   and $\forall i\in\segm{1}{n}$,
-  $f^i: \mathbb{F} \mapsto \mathbb{F}^i$ with
+  $f^i: \mathbb{F} \rightarrow \mathbb{F}^i$ with
   $\mathbb{F}^i = \segm{1}{l_i}$.
   Given two states $x,x'\in\mathbb F$, the transition relation $\DNtrans$ is given by
   \[
