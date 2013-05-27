@@ -195,17 +195,13 @@ which would allow the play of an infinite sequence of prioritised actions in “
 \begin{criterion}[2 classes of priorities]
 \label{cr:2prio}
   In this paper, we only consider Process Hitting with $2$ classes of priorities:
-  \begin{align*}
-    \PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle}) \enspace.
-  \end{align*}
+  $\PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle})$.
 \end{criterion}
 %
 \begin{criterion}[Bounded termination]
 \label{cr:bounded}
   The dynamics of $\restriction{\PH}{1}$ contains no cycles:
-  \begin{align*}
-    \exists N \in \sN, \forall s \in \PHl, \forall \delta \in \restriction{\Sce}{1}(s), |\delta| \leq N \enspace.
-  \end{align*}
+  $\exists N \in \sN, \forall s \in \PHl, \forall \delta \in \restriction{\Sce}{1}(s), |\delta| \leq N$.
 \end{criterion}
 
 In \pref{def:component} we define a well-formed component as a sort that is hit only by unprioritised actions, or that no action hits.
@@ -230,12 +226,11 @@ and \pref{cr:cyclefreeness} prevents the presence of cycles in these chains.
   \end{align*}
   where $(\PHh^{(1)})^{s+1}$ is the Cartesian product of $s+1$ times the set $\PHh^{(1)}$.
 \end{definition}
+%
 \begin{criterion}[Cycle-freeness in prioritised actions]
 \label{cr:cyclefreeness}
-  There is no cycle in chains of actions:
-  \begin{align*}
-    \forall a \in \PHs, \PHh(a, a) = \emptyset \enspace.
-  \end{align*}
+  There is no cycles in chains of actions:
+  $\forall a \in \PHs, \PHh(a, a) = \emptyset$.
 \end{criterion}
 
 In \pref{def:neighbours} we define the notion of neighbouring sorts and actions of a given sort.
