@@ -18,13 +18,15 @@ consisting in a restriction where the evolution of a component is determined by 
 In a sense, these kind of actions are of the form $X + Y \rightarrow X + Z$ where $X$ behaves like a catalyst molecule that “hits” another molecule $Y$ and changes it into $Z$, without being itself changed.
 Assuming catalysts are always available, this can represent any biochemical system made of monomolecular reactions, and can also represent catalytic networks such as metabolic networks.
 %, with the aim of avoiding to build the whole state space in order to be able to tackle very large systems
-Our motivation behind this framework was to design a model and analysis techniques that avoid to build the whole state space.
-This allows to tackle very large systems (which would have led to a huge number of states, hopelessly too huge to be analysed).
+Our motivation behind this framework was to design a model and analysis techniques adapted to biological modelling.
+These analyses avoid to build the whole state space, which allows to tackle very large systems (that would have led to a huge number of states, hopelessly too huge to be analysed).
+They are based on the fact that most biological models have few levels of expression per component:
+in Boolean networks~\cite{kauffman69,Thomas73} there are only two levels per component and in its multivalued equivalent, Asynchronous Discrete Networks~\cite{deJong02}, components rarely have more that four levels.
 
 Besides, one further objective of our work is now %to be more accurate in the description of the studied systems.
 to improve the accuracy of the description of the studied systems dynamics.
-The idea for this is to introduce timing features into models.
-Indeed, we are interested in taking into account some knowledge about the relative length of some phenomena as it is a way to refute some models (parameters) that are inconsistent with the observed dynamic behaviours.
+The idea for this is to introduce timing features into models:
+we are interested in taking into account some knowledge about the relative length of some phenomena as it is a way to refute some models (or parameters) that are inconsistent with the observed dynamic behaviours.
 In this paper, we are dealing with these timing properties through priorities,
 that are based on the simple founding idea that prioritised actions have to be processed before the other ones.
 Indeed, due to the Process Hitting framework restrictions, bimolecular reactions are not immediately available, but one can simulate them with an encoding called “cooperation”.
@@ -47,7 +49,7 @@ In this paper, we introduce a new extension to the semantics of Process Hitting 
 One of the objectives is to reach an accurate representation of cooperating components in the model, that was not fulfilled with the initial semantics.
 We then develop an efficient under-approximation of the reachability of the state of components on a subclass of this new framework, thus allowing to compute efficient static analysis.
 This local reachability under-approximation can be also easily extended to study the reachability of a global state.
-Finally, as the subclass of models studied proves to be bisimilar to Asynchronous Discrete Networks~\cite{kauffman69,Thomas73,deJong02}, we state to have developed an efficient method to compute the reachability of a state and thus study the behaviour of such models.
+Finally, as the subclass of models studied proves to be bisimilar to Asynchronous Discrete Networks, we state to have developed an efficient method to compute the reachability of a state and thus study the behaviour of such models.
 
 The method developed in this paper has been implemented into the existing Pint library and tested on a large-scale biological model containing 94 components.
 The under-approximation turned out to be conclusive in all cases and results were computed in hundredths of seconds,
