@@ -11,8 +11,8 @@ nfkb, nfat, ...).
 
 :: Reachability with libDDD
 
-You are required to install libDDD - http://ddd.lib6.fr, and python3 - http://python.org.
+You are required to install libDDD - http://ddd.lip6.fr, and python3 - http://python.org.
 
-$ ./run_its-cna model.cna --initial-state "cd45 1, cd28 1, tcrlib 1" ap1 1
+$ ./run_its-cna model.cna --initial-state "cd45 1, cd28 1, tcrlig 1" ap1 1
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-ph="../model.ph"
+ph="model.ph"
 outputs="sre ap1 nfkb nfat"
 mode=${1}
 
