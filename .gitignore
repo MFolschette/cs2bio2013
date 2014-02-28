@@ -13,3 +13,5 @@ main.pdf
 *.zip
 abstract.pdf
 *.kilepr
+*.fdb_latexmk
+
