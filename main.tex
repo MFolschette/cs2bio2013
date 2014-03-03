@@ -1,6 +1,4 @@
-\documentclass{entcs}
-
-\usepackage{entcsmacro}
+\documentclass{elsarticle}
 
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
@@ -17,12 +15,19 @@
 
 \usepackage{comment}
 
+% Theorems and definitions
+\newdefinition{definition}{Definition}
+\newdefinition{criterion}{Criterion}
+\newtheorem{theorem}{Theorem}
+\newproof{example}{Example}
+\newproof{rawproof}{Proof}
 
+\newenvironment{proof}{\begin{rawproof}}{\hfill$\Box$\end{rawproof}}
+
+% Pretty references
 \usepackage{prettyref}
 \newrefformat{def}{Def.~\ref{#1}}
 \newrefformat{fig}{Fig.~\ref{#1}}
-%\newrefformat{prop}{Property~\ref{#1}}
-\newrefformat{prop}{Proposition~\ref{#1}}
 \newrefformat{lem}{Lemma~\ref{#1}}
 \newrefformat{th}{Theorem~\ref{#1}}
 \newrefformat{co}{Corollary~\ref{#1}}
@@ -32,13 +37,6 @@
 \newrefformat{cr}{Criterion~\ref{#1}}
 \newrefformat{eq}{Eq.~\eqref{#1}}
 \def\pref{\prettyref}
-
-%\usepackage{ntheorem}
-%\theorembodyfont{\upshape}
-%\newtheorem{definition}{Definition}{}{}
-%\newtheorem*{example}{Example}{}{}
-%\newtheorem{property}{Property}{}{}
-%\newtheorem{proposition}{Proposition}{}{}
 
 \usepackage{tikz}
 \newdimen\pgfex
@@ -71,6 +69,7 @@
 %\newcommand{\cs}{CS}
 \newcommand{\cs}{\Delta}
 
+% Restriction notation
 \def\restriction#1#2{\mathchoice
               {\setbox1\hbox{${\displaystyle #1}_{\scriptstyle #2}$}
               \restrictionaux{#1}{#2}}
@@ -91,8 +90,14 @@
 \newcommand{\todo}[1]{\textcolor{red}{\textbf{[#1]}}}
 
 
-% Id est
-\newcommand{\ie}{i.e.~}
+
+% Special notations
+\newcommand{\ie}{i.e.,\ }
+\newcommand{\Ie}{I.e.,\ }
+\newcommand{\eg}{e.g.,\ }
+\newcommand{\Eg}{E.g.,\ }
+\newcommand{\resp}{resp.\ }
+\newcommand{\Resp}{Resp.\ }
 
 % Césures
 \hyphenation{pa-ra-me-tri-za-tion}
@@ -106,28 +111,21 @@
 \begin{frontmatter}
 \title{Under-approximation of Reachability in Multivalued Asynchronous Networks}
 
-\author{Maxime Folschette\thanksref{myemail}}
-\address{LUNAM Universit\'e, \'Ecole Centrale de Nantes, IRCCyN UMR CNRS 6597\\
+\author[irccyn]{Maxime Folschette}
+\ead{Maxime.Folschette@irccyn.ec-nantes.fr}
+\author[eth]{Loïc Paulevé}
+\author[irccyn]{Morgan Magnin}
+\author[irccyn]{Olivier Roux}
+
+\address[irccyn]{LUNAM Universit\'e, \'Ecole Centrale de Nantes, IRCCyN UMR CNRS 6597\\
 (Institut de Recherche en Communications et Cybern\'etique de Nantes)\\
 1 rue de la No\"e - B.P. 92101 - 44321 Nantes Cedex 3, France.}
-\thanks[myemail]{\url{Maxime.Folschette@irccyn.ec-nantes.fr}}
 
-\author{Loïc Paulevé}
-%\address{ETH Zürich, Switzerland.}
-\address{BISON group, Automatic Control Laboratory, ETH Zürich\\
+\address[eth]{BISON group, Automatic Control Laboratory, ETH Zürich\\
 Physikstrasse 3, 8092 Zurich, Switzerland.}
 
-\author{Morgan Magnin}
-\address{LUNAM Universit\'e, \'Ecole Centrale de Nantes, IRCCyN UMR CNRS 6597\\
-(Institut de Recherche en Communications et Cybern\'etique de Nantes)\\
-1 rue de la No\"e - B.P. 92101 - 44321 Nantes Cedex 3, France.}
 
-\author{Olivier Roux}
-\address{LUNAM Universit\'e, \'Ecole Centrale de Nantes, IRCCyN UMR CNRS 6597\\
-(Institut de Recherche en Communications et Cybern\'etique de Nantes)\\
-1 rue de la No\"e - B.P. 92101 - 44321 Nantes Cedex 3, France.}
 
-\def\abstractname{\textbf{Abstract}}
 \begin{abstract}
 The Process Hitting is a recently introduced framework designed for the modelling of concurrent systems.
 Its originality lies in a compact representation of both components of the model and its corresponding actions:
@@ -143,9 +141,9 @@ Our method thus allows to efficiently under-approximate reachability properties 
 it is in particular conclusive on reachability properties in a 94 components Boolean network, which is unprecedented.
 \end{abstract}
 \begin{keyword}
-qualitative modelling,
-model abstraction,
-static analysis,
+qualitative modelling \sep
+model abstraction \sep
+static analysis \sep
 asynchronous network
 \end{keyword}
 \end{frontmatter}
@@ -164,7 +162,7 @@ asynchronous network
 
 \input{parts/ccl}
 
-\bibliographystyle{entcs}
+\bibliographystyle{elsarticle-num}
 \bibliography{biblio}
 
 \input{parts/appendix}

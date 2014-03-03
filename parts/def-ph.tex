@@ -157,7 +157,7 @@ a cooperative sort $ab$ is defined with 4 processes (one for each sub-state of t
 For the sake of clarity, the processes of $ab$ are indexed using the sub-state they represent.
 Hence, $ab_{10}$ represents the sub-state $\PHstate{a_1,b_0}$, and so on.
 Each process of sort $a$ and $b$ hit $ab$ to make it bounce to the process reflecting the status of the sorts $a$ and $b$
-(e.g., $\PHfrappe{a_1}{ab_{00}}{ab_{10}}$ and $\PHfrappe{a_1}{ab_{01}}{ab_{11}}$).
+(\eg $\PHfrappe{a_1}{ab_{00}}{ab_{10}}$ and $\PHfrappe{a_1}{ab_{01}}{ab_{11}}$).
 Then, to represent the cooperation between $a_1$ and $b_1$, the process $ab_{11}$ hits $c_0$ to make it bounce to $c_1$ instead of independent hits from $a_1$ and $b_1$.
 
 We note that cooperative sorts are standard PH sorts and do not involve any
@@ -192,6 +192,7 @@ and \emph{prioritised actions} used to model non-biological behaviours in the mo
 \pref{cr:bounded} states that the dynamics of the studied model $\PH$ contains no infinite sequence of prioritised actions.
 As these actions can be considered as non-biological and therefore instantaneous, we thus prevent the existence of any Zeno-like behaviour
 which would allow the play of an infinite sequence of prioritised actions in “zero time”.
+\todo{Change “Criterion” to something else?}
 \begin{criterion}[2 classes of priorities]
 \label{cr:2prio}
   In this paper, we only consider Process Hitting with $2$ classes of priorities:
@@ -266,7 +267,7 @@ in a way that its local steady-states efficiently represent all configurations o
 \begin{definition}[Well-formed cooperative sorts ($\cs$)]
 \label{def:cs}
   A sort $a \in \PHs$ is a \emph{well-formed cooperative} sort if and only if:
-  \begin{enumerate}
+  \begin{enumerate}[(i)]
     \item $\exists b \in \PHs, \PHh(b, a) \neq \emptyset$
     \item \label{csai} $\forall s \in \PHl, \exists a_i \in \PHl_a, \pfp_s(a) = \{ a_i \}$
     \item \label{css} $\forall a_i \in \PHl_a, \exists s \in \PHl, \pfp_s(a) = \{ a_i \}$
@@ -282,7 +283,7 @@ Furthermore, because of \pref{def:cs}(\ref{css}), we denote $\csState(a_i)$ the 
   $$\csState(a_i) = \{ ps \in \underset{b \in \Vs(a)}{\times} \PHl_b \mid \forall s \in \PHl, \pfp_{s \Cap ps}(a) = a_i \}$$
 \end{definition}
 
-In the following we simply write “component” (resp.~“cooperative sort”) instead of “well-formed component” (resp.~“well-formed cooperative sort”).
+In the following we simply write “component” (\resp “cooperative sort”) instead of “well-formed component” (\resp “well-formed cooperative sort”).
 Finally, \pref{cr:compcs} states that the set of sorts of the considered PH must be divided between components and cooperative sorts.
 \begin{criterion}[Components \& cooperative sorts partition]
 \label{cr:compcs}
