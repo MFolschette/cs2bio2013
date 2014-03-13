@@ -5,3 +5,193 @@
 
 \subsection{PH with multiple classes of priorities}
 \todo{Reduce and reuse the flattening method}
+
+\newcommand{\ov}{\overline}
+\newcommand{\F}{F}
+\newcommand{\Fopsymbol}{\F}
+\newcommand{\Fop}[1]{\Fopsymbol(#1)}
+\newcommand{\Fsem}[2]{\left[#1\right](#2)}
+%\newcommand{\Fall}{\F}
+
+Consider a PH with $k \in \sN^*$ classes of priories:
+$\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$.
+We want to translate it to a PH with $2$ classes of priorities
+$\PH = (\PHs; \PHl; \PHa^{\angles{2}})$
+that respects all Criteria given in \pref{ssec:hypothesis}.
+
+A playability property (PP) as defined in \pref{def:pp} is a formula where the atoms are processes of $\ov{\PH}$.
+
+\begin{definition}[Playability property language ($\F$)]
+  \label{def:pp}
+  A \emph{playability property} (PP) is an element of the language $\F$ inductively defined by:
+  \begin{itemize}
+    \item $\top$ and $\bot$ belong to $\F$;
+    \item if $a \in \ov{\PHs}$ and $a_i \in \ov{\PHl}_a$, then $a_i \in \F$ and we call it an \emph{atom};
+    \item if $P \in \F$ and $Q \in \F$, then $\neg P \in \F$, $P \wedge Q \in \F$ and $P \vee Q \in \F$.
+  \end{itemize}
+  We note $\Fsem{P}{s}$ the \emph{evaluation} of a PP $P \in \F$ in a state $s \in \ov{\PHl}$.
+  The semantics of this evaluation is the following for any state $s \in \ov{\PHl}$:
+  \begin{itemize}
+    \item if $P = a_i \in \ov{\PHs}_a$ is an atom, with $a \in \ov{\PHs}$, then $\Fsem{a_i}{s}$ is true iff $a_i \in s$;
+    \item if $P$ is not an atom, then $\Fsem{P}{s}$ is true iff all its subformulas are inductively true in $s$
+      with the classical semantics for the logic operators $\top$, $\bot$, $\neg$, $\wedge$ and $\vee$.
+  \end{itemize}
+\end{definition}
+
+Because we only use classical logic operators, the formulas of Boolean logic on distribution and negation (de Morgan's laws) can be used.
+We also have the following property for the negation of an atom:
+\[\forall a \in \ov{\PHs}, \forall a_i \in \ov{\PHl}_a, \Fsem{\neg a_i}{s}
+  \Leftrightarrow \Fsem{\bigvee_{\substack{a_j \in \PHl_a\\a_j \neq a_i}} a_j}{s}\]
+Indeed, if a process is not active in a state, this means that another process of the same sort is active.
+
+In \pref{def:fop}, we finally define the the operator $\Fopsymbol$ which characterizes the playability of an action
+given the semantics of PH (\pref{def:play}).
+\begin{definition}[Playability property of an action ($\Fopsymbol : \PHh \rightarrow \F$)]\label{def:fop}
+  $$\forall h \in \ov{\PHh}, \Fop{h} \equiv \hitter{h} \wedge
+    \left( \bigwedge_{\substack{g \in \PHh^{(n)}\\n < \prio(h)}}
+    \neg \left( \target{g} \wedge \hitter{g}\right) \right)$$
+\end{definition}
+
+By definition of the semantics of a PH given in \pref{def:play},
+an action $h \in \ov{\PHh}$ is playable in a state $s \in \ov{\PHl}$ iff $\Fsem{\Fop{h}}{s}$.
+
+
+
+\todo{--- Le reste de la traduction ici ---}
+
+\newcommand{\n}[1][h]{n^{#1}}
+\newcommand{\m}[1][h]{m^{#1}}
+
+Because we only use classical logic operators, we can compute the PP on any action in $\ov{\PH}$.
+For any action $h \in \ov{\PHh}$, this DNF takes the form:
+\[\Fop{h} \equiv \bot \qquad \text{or} \qquad
+  \Fop{h} \equiv \bigvee_{i \in \segm{1}{\n}} \left( \bigwedge_{j \in \segm{1}{\m_i}} p_{i,j} \right)\]
+where $\n \in \sN^*$ and $\forall i \in \segm{1}{\n}, \m_i \in \sN^*$.
+The case $\Fop{h} \equiv \bot$ means that the action can never be played
+because it is always preempted other actions with higher priorities.
+The case $\Fop{h} \not\equiv \bot$, on the other hand,
+can be seen as a disjunction of $\n$ smaller playability properties consisting only of conjunctions of atoms.
+These $\n$ conjunctions can be translated to as many prioritized cooperative sorts,
+thus creating a new PH model which is entailed in the restrictions depicted in \pref{ssec:hypothesis}.
+%Indeed, for any $i \in \segm{1}{\n}$, the PP $\bigwedge_{j \in \segm{1}{\m_i}} p_{i,j}$
+In this second case, we denote, for any $i \in \segm{1}{\n}$:
+$\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m_i} \}$
+
+
+
+
+
+\todo{--- Le reste de la traduction ici ---}
+
+
+
+\begin{definition}[Equivalent Process Hitting]\label{def:equiv}
+  Two PH models $\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHh}^\angles{k})$ and $\PH = (\PHs; \PHl; \PHh^\angles{n})$,
+  where $k, n \in \sN^*$,
+  are \emph{equivalent} iff:
+  $$\forall s \in \ov{\PHl}, ( \exists h = \PHhit{A}{b_i}{b_j} \in \PHh, \Fsem{\F(h)}{s}
+    \Longleftrightarrow \exists g = \PHhit{\ov{A}}{b_i}{b_j} \in \ov{\PHh}, \Fsem{\F(g)}{s} )$$
+\end{definition}
+
+We note that several PH models can be equivalent to a same PH model.
+For example, adding actions that are never playable (due to priorities) allows to create an equivalent model.
+
+\begin{theorem}[Bisimilarity of equivalent PH]
+  Two equivalent PH models are bisimilar.
+\end{theorem}
+
+\begin{proof}
+  Let $\PH = (\PHs; \PHl; \PHh^\angles{k})$ and $\ov{\PH} = (\PHs; \PHl; \ov{\PHh}^\angles{n})$
+  two equivalent PH models, with $k, n \in \sN^*$.
+  We want to show:
+  $$\forall s, s' \in \PHl, s \neq s', s \trans{\PH} s' \Longleftrightarrow s \trans{\ov{\PH}} s' $$
+  Let $s, s' \in \PHl$ with $s \neq s'$.
+  ($\Rightarrow$) Suppose $s \trans{\PH} s'$.
+  It means that there exists $h = \PHhit{A}{b_i}{b_j} \in \PHh$ so that $s' = s \PHplay h = s \Cap b_j$
+  in $\PH$ (\pref{def:play}), \ie $\Fsem{\F(h)}{s}$ and $b_i \in s$.
+  As $\ov{\PH}$ is equivalent to $\PH$,
+  there exists $g = \PHhit{\ov{A}}{b_i}{b_j} \in \ov{\PHh}$ so that $\Fsem{\F(g)}{s}$ (\pref{def:equiv}).
+  Therefore, $g$ is playable in $s$ and $s \PHplay g = s \Cap b_j = s'$;
+  which means: $s \trans{\ov{\PH}} s'$
+  ($\Leftarrow$) Same reasoning.
+\end{proof}
+
+\begin{definition}[Flattening]
+  Given a PH model $\PH = (\PHs; \PHl; \PHh^\angles{k})$, where $k \in \sN^*$,
+  we call \emph{flattening} of $\PH$ any PH model $\ov{\PH} = (\PHs; \PHl; \ov{\PHh}^\angles{1})$
+  with 1 class of priority and cooperative actions that is equivalent to $\PH$.
+\todo{Is this definition really useful?}
+\end{definition}
+
+\begin{theorem}[Existence of a flattening]\label{th:exists-flattening}
+  For all $k \in \sN^*$, there exists a flattening of any PH model with $k$ priorities and cooperative actions.
+\todo{Is this theorem really useful?}
+\end{theorem}
+
+The demonstration of this theorem is given in the following subsection.
+
+
+
+
+\begin{comment}
+
+
+%\newcommand{\poz}{\F}
+%\newcommand{\pon}{P_{DNF}}
+%\newcommand{\unneg}{\mathsf{UnNeg}}
+%\newcommand{\negate}{\mathsf{Negate}}
+%\newcommand{\prednf}{\mathsf{Distribute}}
+%\newcommand{\dnf}{\mathsf{DNF}}
+%\newcommand{\DNF}{\dnf}
+%\newcommand{\dnff}{\delta\F}
+
+%\newcommand{\fun}{\mathcal{F}}
+
+
+
+\begin{definition}[Equivalent Process Hitting]\label{def:equiv}
+  Two PH models $\PH = (\PHs; \PHl; \PHh^\angles{k})$ and $\ov{\PH} = (\PHs; \PHl; \ov{\PHh}^\angles{n})$,
+  where $k, n \in \sN^*$,
+  are \emph{equivalent} iff:
+  $$\forall s \in \PHl, ( \exists h = \PHhit{A}{b_i}{b_j} \in \PHh, \Fsem{\F(h)}{s}
+    \Longleftrightarrow \exists g = \PHhit{\ov{A}}{b_i}{b_j} \in \ov{\PHh}, \Fsem{\F(g)}{s} )$$
+\end{definition}
+
+We note that several PH models can be equivalent to a same PH model.
+For example, adding actions that are never playable (due to priorities) allows to create an equivalent model.
+
+\begin{theorem}[Bisimilarity of equivalent PH]
+  Two equivalent PH models are bisimilar.
+\end{theorem}
+
+\begin{demo}
+  Let $\PH = (\PHs; \PHl; \PHh^\angles{k})$ and $\ov{\PH} = (\PHs; \PHl; \ov{\PHh}^\angles{n})$
+  two equivalent PH models, with $k, n \in \sN^*$.
+  We want to show:
+  $$\forall s, s' \in \PHl, s \neq s', s \trans{\PH} s' \Longleftrightarrow s \trans{\ov{\PH}} s' $$
+  Let $s, s' \in \PHl$ with $s \neq s'$.
+  ($\Rightarrow$) Suppose $s \trans{\PH} s'$.
+  It means that there exists $h = \PHhit{A}{b_i}{b_j} \in \PHh$ so that $s' = s \PHplay h = s \Cap b_j$
+  in $\PH$ (\pref{def:play}), \ie $\Fsem{\F(h)}{s}$ and $b_i \in s$.
+  As $\ov{\PH}$ is equivalent to $\PH$,
+  there exists $g = \PHhit{\ov{A}}{b_i}{b_j} \in \ov{\PHh}$ so that $\Fsem{\F(g)}{s}$ (\pref{def:equiv}).
+  Therefore, $g$ is playable in $s$ and $s \PHplay g = s \Cap b_j = s'$;
+  which means: $s \trans{\ov{\PH}} s'$
+  ($\Leftarrow$) Same reasoning.
+\end{demo}
+
+\begin{definition}[Flattening]
+  Given a PH model $\PH = (\PHs; \PHl; \PHh^\angles{k})$, where $k \in \sN^*$,
+  we call \emph{flattening} of $\PH$ any PH model $\ov{\PH} = (\PHs; \PHl; \ov{\PHh}^\angles{1})$
+  with 1 class of priority and cooperative actions that is equivalent to $\PH$.
+\todo{Is this definition really useful?}
+\end{definition}
+
+\begin{theorem}[Existence of a flattening]\label{th:exists-flattening}
+  For all $k \in \sN^*$, there exists a flattening of any PH model with $k$ priorities and cooperative actions.
+\todo{Is this theorem really useful?}
+\end{theorem}
+
+The demonstration of this theorem is given in the following subsection.
+
+\end{comment}

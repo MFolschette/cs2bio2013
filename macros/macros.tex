@@ -24,6 +24,10 @@
 %\newcommand{\PHsort}{\Sigma}
 \newcommand{\PHsort}{\PHs}
 
+\newcommand{\hitter}[1]{\PHhitter(#1)}
+\newcommand{\target}[1]{\PHtarget(#1)}
+\newcommand{\bounce}[1]{\PHbounce(#1)}
+
 %\newcommand{\PHfrappeur}{\mathsf{frappeur}}
 %\newcommand{\PHcible}{\mathsf{cible}}
 %\newcommand{\PHbond}{\mathsf{bond}}
@@ -70,3 +74,7 @@
 \def\Hits{\PHa}
 \def\hit{\PHhit}
 \def\play{\cdot}
+
+\newcommand{\angles}[1]{{\langle #1 \rangle}}
+\newcommand{\trans}[1]{\rightarrow_{#1}}
+\newcommand{\PHdep}[2]{\f{dep}^{#1}(#2)}
