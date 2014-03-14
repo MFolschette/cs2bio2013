@@ -60,22 +60,64 @@ an action $h \in \ov{\PHh}$ is playable in a state $s \in \ov{\PHl}$ iff $\Fsem{
 \todo{--- Le reste de la traduction ici ---}
 
 \newcommand{\n}[1][h]{n^{#1}}
-\newcommand{\m}[1][h]{m^{#1}}
+\newcommand{\m}[1][h,i]{m^{#1}}
 
 Because we only use classical logic operators, we can compute the PP on any action in $\ov{\PH}$.
 For any action $h \in \ov{\PHh}$, this DNF takes the form:
-\[\Fop{h} \equiv \bot \qquad \text{or} \qquad
-  \Fop{h} \equiv \bigvee_{i \in \segm{1}{\n}} \left( \bigwedge_{j \in \segm{1}{\m_i}} p_{i,j} \right)\]
-where $\n \in \sN^*$ and $\forall i \in \segm{1}{\n}, \m_i \in \sN^*$.
-The case $\Fop{h} \equiv \bot$ means that the action can never be played
-because it is always preempted other actions with higher priorities.
-The case $\Fop{h} \not\equiv \bot$, on the other hand,
+\[\Fop{h} \equiv \bigvee_{i \in \segm{1}{\n}} \left( \bigwedge_{j \in \segm{1}{\m}} p_{i,j} \right)\]
+where $\n \in \sN$ and $\forall i \in \segm{1}{\n}, \m \in \sN^*$.
+If $\n = 0$, then $\Fop{h} \equiv \bot$; this means that $h$ can never be played
+due to preemptions by other actions with higher priorities.
+If $\Fop{h} \not\equiv \bot$, on the other hand, then in this case $\Fop{h}$
 can be seen as a disjunction of $\n$ smaller playability properties consisting only of conjunctions of atoms.
 These $\n$ conjunctions can be translated to as many prioritized cooperative sorts,
 thus creating a new PH model which is entailed in the restrictions depicted in \pref{ssec:hypothesis}.
-%Indeed, for any $i \in \segm{1}{\n}$, the PP $\bigwedge_{j \in \segm{1}{\m_i}} p_{i,j}$
+%Indeed, for any $i \in \segm{1}{\n}$, the PP $\bigwedge_{j \in \segm{1}{\m}} p_{i,j}$
 In this second case, we denote, for any $i \in \segm{1}{\n}$:
-$\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m_i} \}$
+$\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m} \}$.
+
+\begin{definition}
+  \label{def:flattening}
+  If $k \in \sN^*$, we note $\PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) = (\PHs; \PHl; \PHa^{\angles{2}})$
+  the flattening of the PH with $k$ classes of priorities $\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}$, with:
+  \begin{itemize}
+    \item $\PHs = \ov{\PHs} \cup \{ f^{h,i} \mid h \in \ov{\PHh} \wedge \n \geq 1 \wedge i \in \segm{1}{\n} \}$;
+    \item $\PHl = \underset{a \in \PHs}{\times} \PHl_{a}$, where
+      $\PHl_{a} = \ov{\PHl}_{a}$ if $a \in \ov{\PHs}$; and 
+      $\PHl_{f^{h,i}} = \{ f^{h,i}_\varsigma \mid \varsigma \in \underset{b \in \PHdep{i}{h}}{\times} \PHl_{b} \}$ otherwise.
+    \item $\PHh^{(1)} = \{ \PHhit{a_k}{f^{h,i}_\varsigma}{f^{h,i}_{\varsigma'}} \mid
+      h \in \ov{\PHh} \wedge %\n \geq 1 \wedge i \in \segm{1}{\n} \wedge
+      a \in \PHdep{i}{h} \wedge a_k \in \PHl_a \wedge
+      f^{h,i}_\varsigma , f^{h,i}_{\varsigma'} \in \PHl_{f^{h,i}} \wedge
+      \PHget{\varsigma}{a} \neq a_k \wedge \varsigma' = \varsigma \Cap \{ a_k \} \}$;
+%      \todo{From here: ...} \PHget{\varsigma'}{a} = a_k \wedge
+%      (\forall b \in \PHdep{i}{h} \setminus \{ a \}, \PHget{\varsigma'}{b} = \PHget{\varsigma}{b}) \}$;
+%      \todo{... can be replaced by: $\varsigma' = \varsigma \Cap \{ a_k \}$}
+    \item $\PHh^{(2)}=\{ \PHhit{f^{h,i}_\varsigma}{\target{h}}{\bounce{h}} \mid
+      h \in \ov{\PHh} \wedge f^{h,i}_\varsigma \in \PHl_{f^{h,i}} \wedge \Fsem{h}{\varsigma} \}$.
+
+
+
+
+    \item $\Hits^{(1)}= \{ \hit{a^j_k}{f^i_\varsigma}{f^i_{\varsigma'}}
+      \mid i\in\segm{1}{n} \wedge
+      j\in\DNdep(f^i) \wedge a^j_k\in \PHl_{a^j} \wedge f^i_\varsigma\in \PHl_{f^i}
+      \wedge
+      \get{\varsigma}{a^j}\neq a^j_k 
+      \wedge \get{\varsigma'}{a^j}=a^j_k
+      \wedge (\get{\varsigma'}{a^{l}}=\get{\varsigma}{a^l},
+      \forall l\in\segm{1}{n},l\neq j)
+      \}$, 
+      the set of actions with priority $1$ that update cooperative sorts;
+
+          \item $\Hits^{(2)}=\{ \hit{f^i_\varsigma}{a^i_k}{a^i_{k'}} \mid i\in\segm{1}{n} \wedge
+          f^i_\varsigma\in \PHl_{f^i} \wedge
+          a^i_k\in \PHl_{a^i}\wedge k\neq k' \wedge f^i(\decode \varsigma) = k'
+        \}$,
+
+  \end{itemize}
+
+\end{definition}
 
 
 
