@@ -51,18 +51,20 @@ given the semantics of PH (\pref{def:play}).
     \left( \bigwedge_{\substack{g \in \PHh^{(n)}\\n < \prio(h)}}
     \neg \left( \target{g} \wedge \hitter{g}\right) \right)$$
 \end{definition}
-
-By definition of the semantics of a PH given in \pref{def:play},
-an action $h \in \ov{\PHh}$ is playable in a state $s \in \ov{\PHl}$ iff $\Fsem{\Fop{h}}{s}$.
-
-
-
-\todo{--- Le reste de la traduction ici ---}
+%
+\begin{theorem}
+\label{th:ppplay}
+  $h \in \ov{\PHh}$ is playable in $s \in \ov{\PHl}$ if and only if $\Fsem{\Fop{h}}{s}$.
+\end{theorem}
+%
+\begin{proof}
+  By definition of the semantics of a PH given in \pref{def:play}.
+\end{proof}
 
 \newcommand{\n}[1][h]{n^{#1}}
 \newcommand{\m}[1][h,i]{m^{#1}}
 
-Because we only use classical logic operators, we can compute the PP on any action in $\ov{\PH}$.
+Because we only use classical logic operators, we can compute the Disjunctive Normal Form (DNF) of any PP.
 For any action $h \in \ov{\PHh}$, this DNF takes the form:
 \[\Fop{h} \equiv \bigvee_{i \in \segm{1}{\n}} \left( \bigwedge_{j \in \segm{1}{\m}} p_{i,j} \right)\]
 where $\n \in \sN$ and $\forall i \in \segm{1}{\n}, \m \in \sN^*$.
@@ -76,17 +78,27 @@ thus creating a new PH model which is entailed in the restrictions depicted in \
 In this second case, we denote, for any $i \in \segm{1}{\n}$:
 $\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m} \}$.
 
+\newcommand{\flats}[1]{\lfloor #1 \rfloor}
+\newcommand{\unflats}[1]{\lceil #1 \rceil}
+
+\newcommand{\os}{\ov{s}}
+\newcommand{\oPH}{\ov{\PH}}
+
 \begin{definition}
   \label{def:flattening}
   If $k \in \sN^*$, we note $\PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) = (\PHs; \PHl; \PHa^{\angles{2}})$
   the flattening of the PH with $k$ classes of priorities $\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}$, with:
   \begin{itemize}
-    \item $\PHs = \ov{\PHs} \cup \{ f^{h,i} \mid h \in \ov{\PHh} \wedge \n \geq 1 \wedge i \in \segm{1}{\n} \}$;
-    \item $\PHl = \underset{a \in \PHs}{\times} \PHl_{a}$, where
-      $\PHl_{a} = \ov{\PHl}_{a}$ if $a \in \ov{\PHs}$; and 
-      $\PHl_{f^{h,i}} = \{ f^{h,i}_\varsigma \mid \varsigma \in \underset{b \in \PHdep{i}{h}}{\times} \PHl_{b} \}$ otherwise.
+    \item $\PHs = \ov{\PHs} \cup \PHs_f$
+      where $\PHs_f = \{ f^{h,i} \mid h \in \ov{\PHh} \wedge \n \geq 1 \wedge i \in \segm{1}{\n} \}$;
+    \item $\PHl = \left( \underset{a \in \ov{\PHs}}{\times} \PHl_{a} \right) \times
+      \left(\underset{f^{h,i} \in \PHs_f}{\times} \PHl_{f^{h,i}} \right)$,
+      where $\forall a \in \ov{\PHs}, \PHl_{a} = \ov{\PHl}_{a}$, and
+      $\forall f^{h,i} \in \PHs_f,
+      \PHl_{f^{h,i}} = \{ f^{h,i}_\varsigma \mid \varsigma \in \underset{b \in \PHdep{i}{h}}{\times} \PHl_{b} \}$;
     \item $\PHh^{(1)} = \{ \PHhit{a_k}{f^{h,i}_\varsigma}{f^{h,i}_{\varsigma'}} \mid
-      h \in \ov{\PHh} \wedge %\n \geq 1 \wedge i \in \segm{1}{\n} \wedge
+      %h \in \ov{\PHh} \wedge %\n \geq 1 \wedge i \in \segm{1}{\n} \wedge
+      f^{h,i} \in \PHs_f \wedge
       a \in \PHdep{i}{h} \wedge a_k \in \PHl_a \wedge
       f^{h,i}_\varsigma , f^{h,i}_{\varsigma'} \in \PHl_{f^{h,i}} \wedge
       \PHget{\varsigma}{a} \neq a_k \wedge \varsigma' = \varsigma \Cap \{ a_k \} \}$;
@@ -94,31 +106,47 @@ $\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m} \}$.
 %      (\forall b \in \PHdep{i}{h} \setminus \{ a \}, \PHget{\varsigma'}{b} = \PHget{\varsigma}{b}) \}$;
 %      \todo{... can be replaced by: $\varsigma' = \varsigma \Cap \{ a_k \}$}
     \item $\PHh^{(2)}=\{ \PHhit{f^{h,i}_\varsigma}{\target{h}}{\bounce{h}} \mid
-      h \in \ov{\PHh} \wedge f^{h,i}_\varsigma \in \PHl_{f^{h,i}} \wedge \Fsem{h}{\varsigma} \}$.
-
-
-
-
-    \item $\Hits^{(1)}= \{ \hit{a^j_k}{f^i_\varsigma}{f^i_{\varsigma'}}
-      \mid i\in\segm{1}{n} \wedge
-      j\in\DNdep(f^i) \wedge a^j_k\in \PHl_{a^j} \wedge f^i_\varsigma\in \PHl_{f^i}
-      \wedge
-      \get{\varsigma}{a^j}\neq a^j_k 
-      \wedge \get{\varsigma'}{a^j}=a^j_k
-      \wedge (\get{\varsigma'}{a^{l}}=\get{\varsigma}{a^l},
-      \forall l\in\segm{1}{n},l\neq j)
-      \}$, 
-      the set of actions with priority $1$ that update cooperative sorts;
-
-          \item $\Hits^{(2)}=\{ \hit{f^i_\varsigma}{a^i_k}{a^i_{k'}} \mid i\in\segm{1}{n} \wedge
-          f^i_\varsigma\in \PHl_{f^i} \wedge
-          a^i_k\in \PHl_{a^i}\wedge k\neq k' \wedge f^i(\decode \varsigma) = k'
-        \}$,
-
+      f^{h,i} \in \PHs_f \wedge
+      %h \in \ov{\PHh} \wedge 
+      f^{h,i}_\varsigma \in \PHl_{f^{h,i}} \wedge \Fsem{h}{\varsigma} \}$.
   \end{itemize}
+  Given a state $s \in \PHl$, $\unflats{s} = \os$ is the corresponding state in $\ov{\PHl}$:
+  $\forall a \in \ov{\PHs}, \PHget{\os}{a} = \PHget{s}{a}$.
 
+  \noindent
+  Given a state $\os \in \ov{\PHl}$, $\flats{\os} = s$ is the corresponding state in $\PHl$:
+  $\forall a \in \ov{\PHs}, \PHget{s}{a} = \PHget{\os}{a}$
+  and $\forall f^{h,i} \in \PHs_f, \PHget{s}{f^{h,i}} = f^{h,i}_\varsigma$ with $f^{h,i}_\varsigma \in \PHl_{f^{h,i}}$
+  and $\forall b \in \PHdep{i}{h}, \PHget{\varsigma}{b} = \PHget{\os}{b}$.
 \end{definition}
 
+
+
+\begin{theorem}[$(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) \approx \PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$]
+\label{thm:bisimPHP}
+  Let $\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$ a PH with $k$ classes of priorities,
+  and $\PH = \PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) = (\PHs; \PHl; \PHa^{\angles{2}})$ its flattening.
+  \begin{enumerate}
+    \item \label{php2ph} $\forall \os, \os' \in \ov{\PHl}$,
+      $\os \PHPtrans[\oPH] \os' \Longrightarrow \flats{\os} \PHPtrans[\oPH]^* \flats{\os'}$,
+      where $\PHPtrans[\oPH]^*$ is a finite sequence of $\PHPtrans[\oPH]$ transitions.
+
+    \item \label{ph2php} $\forall s, s' \in \PHl$,
+      $s \PHPtrans s' \Longrightarrow \unflats{s} = \unflats{s'} \vee
+      \unflats{s} \PHPtrans \unflats{s'}\enspace.$
+  \end{enumerate}
+\end{theorem}
+%
+\begin{proof}
+  (\ref{php2ph}) Let $\flats{\os} = s$.
+    From \pref{def:play}, if $\os \PHPtrans[\PH] \os'$,
+    then there exists $h \in \ov{\PHh}$ so that $\os' = \os \PHplay h$.
+    Furthermore, given \pref{th:ppplay}, $\Fsem{\F(h)}{\os}$.
+    Finally, given \pref{def:flattening}, $\PHget{s}{f^{h,i}}$
+  
+  
+  \todo{-- À continuer --}
+\end{proof}
 
 
 
@@ -171,69 +199,3 @@ For example, adding actions that are never playable (due to priorities) allows t
 \end{theorem}
 
 The demonstration of this theorem is given in the following subsection.
-
-
-
-
-\begin{comment}
-
-
-%\newcommand{\poz}{\F}
-%\newcommand{\pon}{P_{DNF}}
-%\newcommand{\unneg}{\mathsf{UnNeg}}
-%\newcommand{\negate}{\mathsf{Negate}}
-%\newcommand{\prednf}{\mathsf{Distribute}}
-%\newcommand{\dnf}{\mathsf{DNF}}
-%\newcommand{\DNF}{\dnf}
-%\newcommand{\dnff}{\delta\F}
-
-%\newcommand{\fun}{\mathcal{F}}
-
-
-
-\begin{definition}[Equivalent Process Hitting]\label{def:equiv}
-  Two PH models $\PH = (\PHs; \PHl; \PHh^\angles{k})$ and $\ov{\PH} = (\PHs; \PHl; \ov{\PHh}^\angles{n})$,
-  where $k, n \in \sN^*$,
-  are \emph{equivalent} iff:
-  $$\forall s \in \PHl, ( \exists h = \PHhit{A}{b_i}{b_j} \in \PHh, \Fsem{\F(h)}{s}
-    \Longleftrightarrow \exists g = \PHhit{\ov{A}}{b_i}{b_j} \in \ov{\PHh}, \Fsem{\F(g)}{s} )$$
-\end{definition}
-
-We note that several PH models can be equivalent to a same PH model.
-For example, adding actions that are never playable (due to priorities) allows to create an equivalent model.
-
-\begin{theorem}[Bisimilarity of equivalent PH]
-  Two equivalent PH models are bisimilar.
-\end{theorem}
-
-\begin{demo}
-  Let $\PH = (\PHs; \PHl; \PHh^\angles{k})$ and $\ov{\PH} = (\PHs; \PHl; \ov{\PHh}^\angles{n})$
-  two equivalent PH models, with $k, n \in \sN^*$.
-  We want to show:
-  $$\forall s, s' \in \PHl, s \neq s', s \trans{\PH} s' \Longleftrightarrow s \trans{\ov{\PH}} s' $$
-  Let $s, s' \in \PHl$ with $s \neq s'$.
-  ($\Rightarrow$) Suppose $s \trans{\PH} s'$.
-  It means that there exists $h = \PHhit{A}{b_i}{b_j} \in \PHh$ so that $s' = s \PHplay h = s \Cap b_j$
-  in $\PH$ (\pref{def:play}), \ie $\Fsem{\F(h)}{s}$ and $b_i \in s$.
-  As $\ov{\PH}$ is equivalent to $\PH$,
-  there exists $g = \PHhit{\ov{A}}{b_i}{b_j} \in \ov{\PHh}$ so that $\Fsem{\F(g)}{s}$ (\pref{def:equiv}).
-  Therefore, $g$ is playable in $s$ and $s \PHplay g = s \Cap b_j = s'$;
-  which means: $s \trans{\ov{\PH}} s'$
-  ($\Leftarrow$) Same reasoning.
-\end{demo}
-
-\begin{definition}[Flattening]
-  Given a PH model $\PH = (\PHs; \PHl; \PHh^\angles{k})$, where $k \in \sN^*$,
-  we call \emph{flattening} of $\PH$ any PH model $\ov{\PH} = (\PHs; \PHl; \ov{\PHh}^\angles{1})$
-  with 1 class of priority and cooperative actions that is equivalent to $\PH$.
-\todo{Is this definition really useful?}
-\end{definition}
-
-\begin{theorem}[Existence of a flattening]\label{th:exists-flattening}
-  For all $k \in \sN^*$, there exists a flattening of any PH model with $k$ priorities and cooperative actions.
-\todo{Is this theorem really useful?}
-\end{theorem}
-
-The demonstration of this theorem is given in the following subsection.
-
-\end{comment}

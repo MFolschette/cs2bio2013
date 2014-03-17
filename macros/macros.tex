@@ -64,7 +64,8 @@
 \def\DNtrans{\rightarrow_{ADN}}
 \def\DNdef{(\mathbb F, \langle f^1, \dots, f^n\rangle)}
 \def\DNdep{\f{dep}}
-\def\PHPtrans{\rightarrow_{PH}}
+%\def\PHPtrans{\rightarrow_{PH}}
+\newcommand{\PHPtrans}[1][\PH]{\rightarrow_{#1}}
 \def\get#1#2{#1[{#2}]}
 \def\encodeF#1{\mathbf{#1}}
 \def\toPH{\encodeF{PH}}
