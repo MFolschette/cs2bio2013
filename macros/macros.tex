@@ -76,8 +76,27 @@
 \def\hit{\PHhit}
 \def\play{\cdot}
 
+% General macros
 \newcommand{\angles}[1]{{\langle #1 \rangle}}
 \newcommand{\trans}[1]{\rightarrow_{#1}}
+\newcommand{\bigtimes}[1]{\underset{#1}{\times}}
+
+% Macros for falttening
+\newcommand{\PHsubl}[1][\ov{\PHl}]{#1^\diamond}
+
+\newcommand{\ov}{\overline}
+\newcommand{\os}{\ov{s}}
+\newcommand{\oPH}{\ov{\PH}}
+
+\newcommand{\F}{F}
+\newcommand{\Fopsymbol}{\F}
+\newcommand{\Fop}[1]{\Fopsymbol(#1)}
+\newcommand{\Fsem}[2]{\left[#1\right](#2)}
 \newcommand{\PHdep}[2]{\f{dep}^{#1}(#2)}
 \newcommand{\PHflat}{\f{flat}}
-\newcommand{\bigtimes}[1]{\underset{#1}{\times}}
+\newcommand{\flats}[1]{\lfloor #1 \rfloor}
+\newcommand{\unflats}[1]{\lceil #1 \rceil}
+
+\newcommand{\mysigma}{\sigma}
+\newcommand{\n}[1][h]{n^{#1}}
+\newcommand{\m}[1][h,i]{m^{#1}}

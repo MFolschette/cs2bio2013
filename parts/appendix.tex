@@ -3,66 +3,13 @@
 % Fix appendix references
 \renewcommand*{\thesection}{\Alph{section}}
 
-\section{Proof of Under-approximation (\pref{th:approxinf})}
-\label{suppl:demoapproxinf}
-
-In the following, we denote:
-%$\BvProc = \Bv \cap \PHproc$, $\BvObj = \Bv \cap \Obj$ and $\BvSol = \Bv \cap \Sol$.
-$\Bee{X}{Y} = \Be \cap (X \times Y)$, with $X, Y$ amongst $\PHproc$, $\Obj$ and $\Sol$.
-
-\begin{proof}
-We note $max\ctx = \ctx \Cap \allprocs(\cwB)$ the context supported by $\cwB$.
-
-Let $(a_i, ps) \in \Bee{\Proc}{\Sol}$ be an edge linking the required process of a cooperative sort to a solution set and suppose all children of $ps$ are concretisable.
-We label all processes of $ps$ by an integer: $ps = \{ p_n \}_{n \in \indexes{ps}}$.
-Let us prove by induction that for all $n \in \indexes{ps}$, there exists a scenario $\delta_n$ so that:
-$\forall i \in \segm{1}{n}, \PHget{(s \PHplay \delta_n)}{\PHsort(p_i)} = p_i$.
-\begin{itemize}
-  \item It is straightforward for $\delta_0 = \varepsilon$.
-  \item Suppose such $\delta_n$ exists and let $q = \PHget{(s \PHplay \delta_n)}{\PHsort(p_{n+1})}$.
-    By hypothesis, $(a_i, ps)$ is coherent (\pref{def:coherent}) and all processes of $ps$ are processes of components;
-    this means that none of the processes needed to solve $p_{n+1}$ is another process of the same sort than another process of $ps$.
-    Therefore, there exists $\delta' \in \muconcr_{s \PHplay \delta_n}(\PHobj{q}{p_{n+1}})$,
-    so that $\forall i \in \segm{1}{n+1}$, $\PHget{(s \PHplay \delta_n \PHplay \delta')}{\PHsort(p_{i})} = p_{i}$.
-    Finally, by \pref{th:update}, there exists a scenario $\delta'' \in \restriction{\Sce}{1}(s \PHplay \delta_n \PHplay \delta')$
-    so that, if we denote $\delta_{n+1} = \delta_n \PHplay \delta' \PHplay \delta''$,
-    we have: $\update(s \PHplay \delta_n \PHplay \delta') = s \PHplay \delta_{n+1}$ and the same property about processes (by \pref{th:hcscomp}).
-\end{itemize}
-Therefore, $\delta = \delta_{|ps|}$ exists, and given its properties, we have: $\PHget{(s \PHplay \delta)}{a} = a_i$
-and $\update(s \PHplay \delta) = s \PHplay \delta$.
-
-As there is no cycle in $\cwB$, we show by induction that $\forall s\in L, s\subseteq max\ctx$, 
-for all objective $P$ in $\Bv \cap \Obj$ so that $\PHtarget(P) \in s$,
-$\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
-\begin{itemize}
-  \item If $(P, \emptyset) \in \Bee{\Obj}{\Sol}$, either $\PHtarget(P) = \PHbounce(P)$ and $\delta = \emptyseq$;
-    or $\forall \zeta \in \BS(P), \zeta \in \Sce(s) \wedge \PHsort(\zeta) = \{ \PHsort(P) \}$
-    and $\delta = \delta_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_{|\zeta|} \PHplay \zeta_{|\zeta|}$ is a valid sequence given by \pref{th:hcompcomp}.
-
-  \item Suppose all children objectives of $P$ are concretizable.
-%  \begin{itemize}
-    %\item 
-    If $\exists (P, Q) \in \Bee{\Obj}{\Obj}$, then by hypothesis,
-      $\muconcr_{s}(\obj{\PHtarget(P)}{\PHtarget(Q)} \concat Q) \neq \emptyset$, thus
-      $\muconcr_{s}(P) \neq \emptyset$.
-    %\item 
-    Else, by \pref{def:maxCont}, the concretizations of the children of $P$ require no process of sort $\PHsort(P)$.
-      Furthermore, there exists $\zeta \in \BS(P)$ so that $(P, \aZ) \in \Bee{\Obj}{\Sol}$.
-      We show by induction that for all $n \in \indexes{\zeta}$, there is a scenario $\delta_n$ so that $\PHget{(s \PHplay \delta_n)}{\PHsort(P)} = \PHbounce(\zeta_n)$.
-      \begin{itemize}
-        \item[$\circ$] Suppose that $\delta_n$ exists and let $\zeta_n = \PHhit{b_i}{a_j}{a_k}$.
-        By hypothesis there exists $\delta' \in \muconcr_{s \PHplay \delta_n}(\PHobj{\any}{b_i})$ with $\PHsort(P) \notin \PHsort(\delta')$ (by \pref{def:maxCont}).
-        By \pref{th:update} there exists $\delta'' \in \restriction{\Sce}{1}(s \PHplay \delta')$ so that $\update(s \PHplay \delta') = s \PHplay \delta' \PHplay \delta''$.
-        Furthermore, $\PHget{(s \PHplay \delta' \PHplay \delta'')}{b} = b_j$ (by \pref{th:hcompcomp} if $b \in \components$ or \pref{th:hcscomp} if $b \in \cs$).
-        Therefore, $\delta_{n+1} = \delta_n \PHplay \delta' \PHplay \delta'' \PHplay \zeta_n$.
-      \end{itemize}
-      Thus, $\delta_{|\zeta|} \in \muconcr_s(P)$. % and $\ceil(\delta) \subseteq max\ctx$.
-%  \end{itemize}
-\end{itemize}
-Finally, as $\muconcr_{max\ctx}(\w) \neq \emptyset$, $\uconcr(\w) \neq \emptyset$ (\pref{th:uconcr-ctx}).
-\end{proof}
 
 
+% Proof of under-approximation
+\input{parts/suppl-sa.tex}
 
+% Proofs for flattening
+\input{parts/suppl-ph-php.tex}
+
+% Proof of ADN equivalence
 \input{parts/suppl-ph-dn.tex}
-

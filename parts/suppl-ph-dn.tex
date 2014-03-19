@@ -105,13 +105,13 @@ the components in $\DNdep(f^i)$).
   and $\forall j\in\DNdep(f^i), \get{\varsigma}{j}=\get{s}{a^j}$.
 \end{definition}
 
-\pref{thm:bisimDN} states the weak bisimulation relation between an ADN and its encoding in
+\pref{th:bisimDN} states the weak bisimulation relation between an ADN and its encoding in
 PH with $2$ classes of priorities.
 Intuitively, actions updating cooperative sorts being prioritised, actions updating component
 sorts follow strictly the possible transitions of the ADN.
 
 \begin{theorem}[$\DNdef \approx \toPH\DNdef$]~
-\label{thm:bisimDN}
+\label{th:bisimDN}
   \begin{enumerate}
     \item \label{adn2ph} $\forall x,x'\in\mathbb F$,
       $x\DNtrans x' \Longrightarrow \encode x \PHPtrans^* \encode{x'}$,
@@ -122,7 +122,9 @@ sorts follow strictly the possible transitions of the ADN.
       \decode{s'}\enspace.$
   \end{enumerate}
 \end{theorem}
-\begin{proof}
+%
+\newproof{proofbisimDN}{Proof of \pref{th:bisimDN}}
+\begin{proofbisimDN}
 (\ref{adn2ph}) From \pref{def:DN}, $x\DNtrans x'\Rightarrow \exists i\in\segm{1}{n},
 f^i(x)=\get{x'}{i} \wedge \forall j\in\segm{1}{n},i\neq j, \get{x}{j}=\get{x'}{j}$.
 Let us assume (without loss of generality) that $f^i(x)=k'$, $\get{x}{i}=k$ and
@@ -149,6 +151,5 @@ Let $i\in\segm{1}{n}$ such that $\get{s}{a^i}\neq\get{s'}{a^i}$ ($i$ is unique f
 transition).
 By \pref{def:DN2PH}, if $\get{s'}{a^i}=a^i_{k'}$, necessarily $f^i(\decode s)=k'$, hence
 $\decode s\DNtrans \decode{s'}$.
-\end{proof}
-
+\end{proofbisimDN}
 

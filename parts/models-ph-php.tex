@@ -1,0 +1,185 @@
+\subsection{PH with multiple classes of priorities}
+\label{ssec:flattening}
+\todo{Glue up all this section}
+
+Consider a PH with $k \in \sN^*$ classes of priories:
+$\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$.
+We want to translate it to a PH with $2$ classes of priorities
+$\PH = (\PHs; \PHl; \PHa^{\angles{2}})$
+that respects all Criteria given in \pref{ssec:hypothesis}.
+
+
+\begin{definition}[Sub-states ($\PHsubl$)]
+  If $S \subset \ov{\PHs}$ is a set of sorts, a sub-set on $S$ is an element of:
+  $\PHsubl_S \DEF \{ \mysigma \in \bigtimes{a \in S} \ov{\PHl}_a \}$.
+  The set of all sub-sets is:
+  $\PHsubl \DEF \bigcup_{S \subset \ov{\PHs}} \PHsubl_S$.
+  
+  \noindent
+  Furthermore, if $\mysigma \in \PHsubl$ and $s \in \ov{\PHl}$, we note:
+    \[\mysigma \subseteq s \EQDEF \forall a_i \in \Proc, a_i \in \mysigma \Rightarrow a_i \in s \enspace.\]
+\end{definition}
+
+We note that a state is \textit{a fortiori} a sub-state: $\ov{\PHl} \subset \PHsubl$.
+
+A \emph{playability property} as defined in \pref{def:pp} is a Boolean formula where the atoms are processes of $\ov{\PH}$.
+
+\begin{definition}[Playability property language ($\F$)]
+  \label{def:pp}
+  A \emph{playability property} is an element of the language $\F$ inductively defined by:
+  \begin{itemize}
+    \item $\top$ and $\bot$ belong to $\F$;
+    \item if $a \in \ov{\PHs}$ and $a_i \in \ov{\PHl}_a$, then $a_i \in \F$ and we call it an \emph{atom};
+    \item if $P \in \F$ and $Q \in \F$, then $\neg P \in \F$, $P \wedge Q \in \F$ and $P \vee Q \in \F$.
+  \end{itemize}
+  If $P \in \F$ is a playability property and $\mysigma \in \PHsubl$ is a sub-state of $\oPH$,
+  we note $\Fsem{P}{\mysigma}$ the \emph{evaluation} of $P$ in $\mysigma$:
+  \begin{itemize}
+    \item if $P = a_i \in \ov{\PHs}_a$ is an atom, with $a \in \ov{\PHs}$, then $\Fsem{a_i}{\mysigma}$ is true iff $a_i \in \mysigma$;
+    \item if $P$ is not an atom, then $\Fsem{P}{\mysigma}$ is true iff all its subformulas are inductively true in $\mysigma$
+      with the classical semantics for the logic operators $\top$, $\bot$, $\neg$, $\wedge$ and $\vee$.
+  \end{itemize}
+\end{definition}
+
+Because we only use classical logic operators, the formulas of Boolean logic on distribution and negation (de Morgan's laws) can be used.
+We also have the following property for the negation of an atom:
+\[\forall a \in \ov{\PHs}, \forall a_i \in \ov{\PHl}_a, \forall \mysigma \in \PHsubl,
+  \Fsem{\neg a_i}{\mysigma} \Leftrightarrow \Fsem{\bigvee_{\substack{a_j \in \PHl_a\\a_j \neq a_i}} a_j}{\mysigma}\]
+Indeed, if a process is not active in a state, this means that another process of the same sort is active.
+
+In \pref{def:fop}, we finally define the the operator $\Fopsymbol$ which characterizes the playability of an action
+given the semantics of PH (\pref{def:play}).
+\begin{definition}[Playability property of an action ($\Fopsymbol : \PHh \rightarrow \F$)]\label{def:fop}
+  $$\forall h \in \ov{\PHh}, \Fop{h} \equiv \hitter{h} \wedge
+    \left( \bigwedge_{\substack{g \in \PHh^{(n)}\\n < \prio(h)}}
+    \neg \left( \target{g} \wedge \hitter{g}\right) \right)$$
+\end{definition}
+%
+\begin{theorem}
+\label{th:ppplay}
+  $h \in \ov{\PHh}$ is playable in $s \in \ov{\PHl}$ if and only if $\Fsem{\Fop{h}}{s}$.
+\end{theorem}
+%
+\newproof{proofppplay}{Proof of \pref{th:ppplay}}
+\begin{proofppplay}
+  By definition of the semantics of a PH given in \pref{def:play}.
+\end{proofppplay}
+
+Because we only use classical logic operators, we can compute the Disjunctive Normal Form (DNF) of any playability property.
+For any action $h \in \ov{\PHh}$, this DNF takes the form:
+\[\Fop{h} \equiv \bigvee_{i \in \segm{1}{\n}} \left( \bigwedge_{j \in \segm{1}{\m}} p_{i,j} \right)\]
+where $\n \in \sN$ and $\forall i \in \segm{1}{\n}, \m \in \sN^*$.
+If $\n = 0$, then $\Fop{h} \equiv \bot$; this means that $h$ can never be played
+due to preemptions by other actions with higher priorities.
+If $\Fop{h} \not\equiv \bot$, on the other hand, then in this case $\Fop{h}$
+can be seen as a disjunction of $\n$ smaller playability properties consisting only of conjunctions of atoms.
+These $\n$ conjunctions can be translated to as many prioritized cooperative sorts,
+thus creating a new PH model which is entailed in the restrictions depicted in \pref{ssec:hypothesis}.
+In this second case, we denote, for any $i \in \segm{1}{\n}$:
+$\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m} \}$.
+
+\todo{Glue up}
+\begin{theorem}
+\label{th:ppplaysubset}
+  $h \in \ov{\PHh}$ is playable in $s \in \ov{\PHl}$ if and only if
+  $\exists \mysigma \subseteq s, \Fsem{\Fop{h}}{\mysigma}$.
+%  \[\exists i \in \segm{1}{\n}, \exists \mysigma \in \bigtimes{b \in \PHdep{i}{h}} \PHl_b,
+%    \mysigma \subseteq s \wedge \Fsem{\F(h)}{\mysigma} \enspace.\]
+\end{theorem}
+%
+\newproof{proofppplaysubset}{Proof of \pref{th:ppplaysubset}}
+\begin{proofppplaysubset}
+  ($\Rightarrow$) If $\Fsem{\Fop{h}}{s}$ then $\Fop{h} \not\equiv \bot$ and, by property of a DNF,
+    at least one of the $\n$ conjunctions of $\Fop{h}$ is true in $s$.
+    Suppose the $i$\textsuperscript{th} conjunction is true in $s$, with $i \in \segm{1}{\n}$;
+    then we have: $\forall j \in \segm{1}{\m}, p_{i,j} \in s$.
+%    Let $\mysigma \in \bigtimes{b \in \PHdep{i}{h}} \PHl_b$
+    Let $\mysigma \in \PHsubl_{\PHdep{i}{h}}$
+    with $\forall b \in \PHdep{i}{h}, \PHget{\mysigma}{b} = \PHget{s}{b}$.
+    We immediately have: $\mysigma \subseteq s$,
+    and, by construction of $\PHdep{i}{h}$, $\Fsem{\Fop{h}}{\mysigma}$.
+  
+  ($\Leftarrow$) Trivial.
+\end{proofppplaysubset}
+
+\begin{definition}
+  \label{def:flattening}
+  If $k \in \sN^*$, we note $\PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) = (\PHs; \PHl; \PHa^{\angles{2}})$
+  the flattening of the PH with $k$ classes of priorities $\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}$, with:
+  \begin{itemize}
+    \item $\PHs = \ov{\PHs} \cup \PHs_f$
+      where $\PHs_f = \{ f^{h,i} \mid h \in \ov{\PHh} \wedge \n \geq 1 \wedge i \in \segm{1}{\n} \}$;
+    \item $\PHl = \left( \bigtimes{a \in \ov{\PHs}} \PHl_{a} \right) \times
+      \left(\bigtimes{f^{h,i} \in \PHs_f} \PHl_{f^{h,i}} \right)$,
+      where $\forall a \in \ov{\PHs}, \PHl_{a} = \ov{\PHl}_{a}$, and
+      $\forall f^{h,i} \in \PHs_f,
+      \PHl_{f^{h,i}} = \{ f^{h,i}_\mysigma \mid \mysigma \in \PHsubl_{\PHdep{i}{h}} \}$;
+    \item $\PHh^{(1)} = \{ \PHhit{a_k}{f^{h,i}_\mysigma}{f^{h,i}_{\mysigma'}} \mid
+      h \in \ov{\PHh} \wedge
+      %\n \geq 1 \wedge i \in \segm{1}{\n} \wedge
+      f^{h,i} \in \PHs_f \wedge
+      a \in \PHdep{i}{h} \wedge a_k \in \PHl_a \wedge
+      f^{h,i}_\mysigma , f^{h,i}_{\mysigma'} \in \PHl_{f^{h,i}} \wedge
+      \PHget{\mysigma}{a} \neq a_k \wedge \mysigma' = \mysigma \Cap \{ a_k \} \}$;
+%      \todo{From here: ...} \PHget{\mysigma'}{a} = a_k \wedge
+%      (\forall b \in \PHdep{i}{h} \setminus \{ a \}, \PHget{\mysigma'}{b} = \PHget{\mysigma}{b}) \}$;
+%      \todo{... can be replaced by: $\mysigma' = \mysigma \Cap \{ a_k \}$}
+    \item $\PHh^{(2)}=\{ \PHhit{f^{h,i}_\mysigma}{\target{h}}{\bounce{h}} \mid
+      h \in \ov{\PHh} \wedge 
+      f^{h,i} \in \PHs_f \wedge
+      f^{h,i}_\mysigma \in \PHl_{f^{h,i}} \wedge \Fsem{\Fop{h}}{\mysigma} \}$.
+  \end{itemize}
+  Given a state $s \in \PHl$, $\unflats{s} = \os$ is the corresponding state in $\ov{\PHl}$:
+  $\forall a \in \ov{\PHs}, \PHget{\os}{a} = \PHget{s}{a}$.
+
+  \noindent
+  Given a state $\os \in \ov{\PHl}$, $\flats{\os} = s$ is the corresponding state in $\PHl$:
+  $\forall a \in \ov{\PHs}, \PHget{s}{a} = \PHget{\os}{a}$
+  and $\forall f^{h,i} \in \PHs_f, \PHget{s}{f^{h,i}} = f^{h,i}_\mysigma$ with $f^{h,i}_\mysigma \in \PHl_{f^{h,i}}$
+  and $\forall b \in \PHdep{i}{h}, \PHget{\mysigma}{b} = \PHget{\os}{b}$.
+\end{definition}
+
+
+
+\begin{theorem}[$(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) \approx \PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$]
+\label{th:bisimPHP}
+  Let $\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$ a PH with $k$ classes of priorities,
+  and $\PH = \PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) = (\PHs; \PHl; \PHa^{\angles{2}})$ its flattening.
+  \begin{enumerate}
+    \item \label{php2ph} $\forall \os, \os' \in \ov{\PHl}$,
+      $\os \PHPtrans[\oPH] \os' \Longrightarrow \flats{\os} \PHPtrans[\oPH]^* \flats{\os'}$,
+      where $\PHPtrans[\oPH]^*$ is a finite sequence of $\PHPtrans[\oPH]$ transitions.
+    \item \label{ph2php} $\forall s, s' \in \PHl$,
+      $s \PHPtrans s' \Longrightarrow \unflats{s} = \unflats{s'} \vee
+      \unflats{s} \PHPtrans \unflats{s'} \enspace.$
+  \end{enumerate}
+\end{theorem}
+%
+\newproof{proofbisimPHP}{Proof of \pref{th:bisimPHP}}
+\begin{proofbisimPHP}
+  (\ref{php2ph}) Let $\flats{\os} = s$.
+    Given the dynamics of a PH (\pref{def:play}), if $\os \PHPtrans[\PH] \os'$,
+    then there exists $h \in \ov{\PHh}$ playable in $\os$;
+    therefore, $\os' = \os \PHplay h$ and $\target{h} \in \os$.
+    Furthermore, given \pref{th:ppplay}, $\Fsem{\Fop{h}}{\os}$,
+    and given \pref{th:ppplaysubset}, there exists $\mysigma \subseteq s$ so that $\Fsem{\Fop{h}}{\mysigma}$.
+    Therefore, by construction of $\PH$ (\pref{def:flattening}) there exists
+    $g = \PHhit{f^{h,i}_\mysigma}{\target{h}}{\bounce{h}} \in \PHh^{(2)}$.
+    By construction of $s$ (\pref{def:flattening}), $\PHget{s}{f^{h,i}} = f^{h,i}_\mysigma$ and $\target{h} = \target{g} \in s$.
+    Therefore, $g$ is playable in $s$.
+    In $s \PHplay g$, the only playable actions are those in $\PHh^{(1)}$ having $\bounce{h} = \bounce{g}$ as hitter
+    and updating cooperative sorts, allowing to reach $\flats{\os'}$ in a finite number of actions.
+    Thus, $\flats{\os} \PHPtrans[\oPH]^* \flats{\os'}$.
+  
+  (\ref{ph2php}) Let $\os = \unflats{s}$.
+    Given the dynamics of a PH (\pref{def:play}), if $s \PHPtrans s'$,
+    then there exists $g \in \PHh$ playable in $s$; therefore, $s' = s \PHplay g$ and $\target{g} \in s$.
+    If $\prio(g) = 1$ then only the active process of a cooperative sort has evolved, and $\unflats{s} = \unflats{s'}$.
+    Otherwise, $\prio(g) = 2$; we note in this case: $g = \PHhit{f^{h,i}_\mysigma}{b_j}{b_k}$.
+    By construction of the flattening (\pref{def:flattening}), there exists $h \in \ov{\PHh}$ so that
+    $\target{h} = b_j$, $\bounce{h} = b_k$ and $\Fsem{\Fop{h}}{\mysigma}$.
+    If $g$ is playable, this means that no other action in $\PHh^{(1)}$ is playable, and especially the cooperative sort
+    $f^{h,i}$ is already updated; therefore, $\mysigma \subseteq \os$.
+    By \pref{th:ppplaysubset}, it comes that $h$ is playable in $\os$.
+    Thus, $\unflats{s} \PHPtrans \unflats{s'}$.
+\end{proofbisimPHP}
