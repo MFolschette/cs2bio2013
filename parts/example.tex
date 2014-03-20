@@ -3,7 +3,124 @@
 \section{Biological Examples}\label{sec:example}
 
 \subsection{\ldots (metazoan)}
-\todo{Maxime}
+
+\todo{Describe the model}
+
+
+\begin{example}
+  The model of \pref{fig:metazoan-php} gives an example of PH with $3$ classes of priorities.
+  Although the actions of the highest class of priority are only used to update a cooperative sort,
+  the actions of the intermediate priority do not follow the constraints of \pref{ssec:hypothesis},
+  thus having a biological meaning by representing different reaction speeds.
+
+  \begin{figure}[htp]
+    \centering
+    \scalebox{1}{
+    \begin{tikzpicture}
+      \TSort{(0,4)}{c}{2}{l}
+      \TSort{(1,1)}{f}{2}{l}
+      \TSort{(6,4)}{a}{2}{r}
+
+      \TSetTick{fc}{0}{00}
+      \TSetTick{fc}{1}{01}
+      \TSetTick{fc}{2}{10}
+      \TSetTick{fc}{3}{11}
+      \TSort{(4,1)}{fc}{4}{r}
+      
+      \THit{fc_2}{prio}{a_0}{.west}{a_1}
+      \path[bounce, bend left]
+        \TBounce{a_0}{prio}{a_1}{.south west};
+      
+      \THit{c_1}{prio}{a_1}{.west}{a_0}
+      \path[bounce, bend right]
+        \TBounce{a_1}{prio}{a_0}{.north west};
+      
+      \THit{f_1}{bend left=30, in=90}{c_0}{.west}{c_1}
+      \path[bounce, bend left]
+        \TBounce{c_0}{}{c_1}{.south west};
+      
+      \THit{c_1}{selfhit}{c_1}{.west}{c_0}
+      \path[bounce, bend right]
+        \TBounce{c_1}{}{c_0}{.north west};
+      
+      \path (1.8, 1.5) edge[superprio,coopupdate] (3.2, 2);
+      \path (0.8, 4.5) edge[superprio,coopupdate] (3.2, 3);
+    \end{tikzpicture}
+    }
+    \caption{
+    \label{fig:metazoan-php}
+      An example of PH $\oPH$ with $3$ classes of priorities.
+      Actions of $\ov{\PHh}^{(3)}$ (lowest priority) are in thin lines,
+      actions of $\ov{\PHh}^{(2)}$ (intermediate priority) are in thick lines,
+      and actions of $\ov{\PHh}^{(1)}$ (highest priority), whose only purpose is to update the cooperative sort $fc$,
+      are not represented but modeled by the double dashed arrows.
+    }
+  \end{figure}
+\end{example}
+
+\begin{example}
+  \pref{fig:metazoan-ph} gives the flattened model of the PH of \pref{fig:metazoan-php}.
+  It contains $2$ classes of priority, and prioritized actions are only used to update cooperative sorts.
+  The simplifications mentioned at the end of \pref{ssec:flattening} have been applied:
+  \begin{itemize}
+    \item The auto-action $h_1 = \PHhit{c_1}{c_1}{c_0}$ in $\oPH$ has been flattened to a regular action $\PHhit{a_0}{c_1}{c_0}$
+      because its playability property could be simplified to $\Fop{h_1} \equiv c_1 \wedge a_0 \equiv a_0$.
+    \item The existing cooperative sort $fc$ was kept as in $\oPH$ to avoid an exploding complexity due to
+      the numerous updating actions in $\ov{\PHh}^{(1)}$.
+  \end{itemize}
+  
+  \begin{figure}[htp]
+    \centering
+    \scalebox{1}{
+    \begin{tikzpicture}
+      \TSort{(-5,4)}{c}{2}{l}
+      \TSort{(0,1)}{f}{2}{l}
+      \TSort{(5,4)}{a}{2}{r}
+
+      \TSetTick{fc}{0}{00}
+      \TSetTick{fc}{1}{01}
+      \TSetTick{fc}{2}{10}
+      \TSetTick{fc}{3}{11}
+      \TSort{(3,0)}{fc}{4}{r}
+      
+      \TSetTick{fa}{0}{00}
+      \TSetTick{fa}{1}{01}
+      \TSetTick{fa}{2}{10}
+      \TSetTick{fa}{3}{11}
+      \TSort{(-3,0)}{fa}{4}{l}
+      
+      \THit{fc_2}{}{a_0}{.west}{a_1}
+      \path[bounce, bend left]
+        \TBounce{a_0}{}{a_1}{.south west};
+      
+      \THit{fa_3}{}{c_0}{.east}{c_1}
+      \path[bounce, bend right]
+        \TBounce{c_0}{}{c_1}{.south east};
+      
+      \THit{c_1.north east}{}{a_1}{.west}{a_0}
+      \path[bounce, bend right]
+        \TBounce{a_1}{}{a_0}{.north west};
+      
+      \THit{a_0.south west}{}{c_1}{.east}{c_0}
+      \path[bounce, bend left]
+        \TBounce{c_1}{}{c_0}{.north east};
+      
+      \path (0.8, 1.5) edge[prio,coopupdate] (2.2, 1.5);
+      \path (-4.3, 4.5) edge[prio,coopupdate] (2.2, 2.5);
+      
+      \path (-0.8, 1.5) edge[prio,coopupdate] (-2.2, 1.5);
+      \path (4.3, 4.5) edge[prio,coopupdate] (-2.2, 2.5);
+    \end{tikzpicture}
+    }
+    \caption{
+    \label{fig:metazoan-ph}
+      An example of PH $\PH$ with $2$ classes of priorities.
+      Actions of $\PHh^{(2)}$ (unprioritized) are in thin lines,
+      and actions of $\PHh^{(1)}$ (prioritized) which are used to update cooperative sorts,
+      are abstracted by thick dashed arrows.
+    }
+  \end{figure}
+\end{example}
 
 \subsection{Large-scale Application}
 
