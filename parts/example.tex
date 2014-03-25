@@ -61,13 +61,9 @@
 \begin{example}
   \pref{fig:metazoan-ph} gives the flattened model of the PH of \pref{fig:metazoan-php}.
   It contains $2$ classes of priority, and prioritized actions are only used to update cooperative sorts.
-  The simplifications mentioned at the end of \pref{ssec:flattening} have been applied:
-  \begin{itemize}
-    \item The auto-action $h_1 = \PHhit{c_1}{c_1}{c_0}$ in $\oPH$ has been flattened to a regular action $\PHhit{a_0}{c_1}{c_0}$
-      because its playability property could be simplified to $\Fop{h_1} \equiv c_1 \wedge a_0 \equiv a_0$.
-    \item The existing cooperative sort $fc$ was kept as in $\oPH$ to avoid an exploding complexity due to
-      the numerous updating actions in $\ov{\PHh}^{(1)}$.
-  \end{itemize}
+  Note that according to the simplifications mentioned at the end of \pref{ssec:flattening},
+  the auto-action $h_1 = \PHhit{c_1}{c_1}{c_0}$ in $\oPH$ has been flattened to a regular action $\PHhit{a_0}{c_1}{c_0}$
+  because its playability property could be simplified to $\Fop{h_1} \equiv c_1 \wedge a_0 \equiv a_0$.
   
   \begin{figure}[htp]
     \centering

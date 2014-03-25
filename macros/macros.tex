@@ -82,7 +82,8 @@
 \newcommand{\bigtimes}[1]{\underset{#1}{\times}}
 
 % Macros for falttening
-\newcommand{\PHsubl}[1][\ov{\PHl}]{#1^\diamond}
+\newcommand{\PHsublize}[1]{#1^\diamond}
+\newcommand{\PHsubl}[1][\ov{\PHl}]{\PHsublize{#1}}
 
 \newcommand{\ov}{\overline}
 \newcommand{\os}{\ov{s}}
@@ -96,6 +97,7 @@
 \newcommand{\PHflat}{\f{flat}}
 \newcommand{\flats}[1]{\lfloor #1 \rfloor}
 \newcommand{\unflats}[1]{\lceil #1 \rceil}
+\newcommand{\virtualhitters}{\f{VirtualHitters}}
 
 \newcommand{\mysigma}{\sigma}
 \newcommand{\n}[1][h]{n^{#1}}

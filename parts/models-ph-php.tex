@@ -2,25 +2,24 @@
 \label{ssec:flattening}
 \todo{Glue up all this section}
 
+The aim of this section is to propose a translation of any Process Hitting model
+into a PH model with $2$ classes of priorities
+which is weakkly bisimilar
+and that respects all Criteria of \pref{ssec:hypothesis}.
+
+\todo{Prove that $\PHflat(\oPH)$ respects all Criteria!}
+
 Consider a PH with $k \in \sN^*$ classes of priories:
 $\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$.
+that respects all Criteria given in \pref{ssec:hypothesis}.
 We want to translate it to a PH with $2$ classes of priorities
 $\PH = (\PHs; \PHl; \PHa^{\angles{2}})$
 that respects all Criteria given in \pref{ssec:hypothesis}.
 
-
-\begin{definition}[Sub-states ($\PHsubl$)]
-  If $S \subset \ov{\PHs}$ is a set of sorts, a sub-set on $S$ is an element of:
-  $\PHsubl_S \DEF \{ \mysigma \in \bigtimes{a \in S} \ov{\PHl}_a \}$.
-  The set of all sub-sets is:
-  $\PHsubl \DEF \bigcup_{S \subset \ov{\PHs}} \PHsubl_S$.
-  
-  \noindent
-  Furthermore, if $\mysigma \in \PHsubl$ and $s \in \ov{\PHl}$, we note:
-    \[\mysigma \subseteq s \EQDEF \forall a_i \in \Proc, a_i \in \mysigma \Rightarrow a_i \in s \enspace.\]
-\end{definition}
-
-We note that a state is \textit{a fortiori} a sub-state: $\ov{\PHl} \subset \PHsubl$.
+Note that it is possible to apply this method to any PH model $\ov{\PH}$ that may not respect the aforementioned Criteria.
+It is then sufficient to instead consider the PH model with $k+1$ classes of priorities
+$\ov{\PH}' = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k+1}})$
+where $\PHh^{(1)} = \emptyset$.
 
 A \emph{playability property} as defined in \pref{def:pp} is a Boolean formula where the atoms are processes of $\ov{\PH}$.
 
@@ -50,9 +49,15 @@ Indeed, if a process is not active in a state, this means that another process o
 In \pref{def:fop}, we finally define the the operator $\Fopsymbol$ which characterizes the playability of an action
 given the semantics of PH (\pref{def:play}).
 \begin{definition}[Playability property of an action ($\Fopsymbol : \PHh \rightarrow \F$)]\label{def:fop}
-  $$\forall h \in \ov{\PHh}, \Fop{h} \equiv \hitter{h} \wedge
+  \[\forall h \in \ov{\PHh}, \Fop{h} \equiv \virtualhitters{h} \wedge
     \left( \bigwedge_{\substack{g \in \PHh^{(n)}\\n < \prio(h)}}
-    \neg \left( \target{g} \wedge \hitter{g}\right) \right)$$
+    \neg \left( \target{g} \wedge \hitter{g}\right) \right)\]
+  where $\forall h \in \ov{\PHh} \setminus \ov{\PHh}^{(1)}$ so that $\hitter{h} = a_i$,
+  \[\virtualhitters(h) =
+    \begin{cases}
+      a_i & \text{if } a \in \components \\
+      \bigvee_{ps \in \csState(a_i)} \left( \bigwedge_{p \in ps} p \right) & \text{if } a \in \cs
+    \end{cases}\]
 \end{definition}
 %
 \begin{theorem}
@@ -125,7 +130,7 @@ $\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m} \}$.
 %      (\forall b \in \PHdep{i}{h} \setminus \{ a \}, \PHget{\mysigma'}{b} = \PHget{\mysigma}{b}) \}$;
 %      \todo{... can be replaced by: $\mysigma' = \mysigma \Cap \{ a_k \}$}
     \item $\PHh^{(2)}=\{ \PHhit{f^{h,i}_\mysigma}{\target{h}}{\bounce{h}} \mid
-      h \in \ov{\PHh} \wedge 
+      h \in \ov{\PHh} \setminus \ov{\PHh}^{(1)} \wedge
       f^{h,i} \in \PHs_f \wedge
       f^{h,i}_\mysigma \in \PHl_{f^{h,i}} \wedge \Fsem{\Fop{h}}{\mysigma} \}$.
   \end{itemize}
@@ -189,7 +194,7 @@ We note however that the translation given in this section may not be minimal in
 or cooperative sorts.
 We give here several ways to simplify the resulting model, but we do not give the proofs.
 
-\paragraph{Additional properties}
+\paragraph{Playability properties simplifications}
 It is possible to obtain a flattened PH with the same dynamics
 by simplifying the playability property of an action $h = \PHhit{a_i}{b_j}{b_k}$ with the following properties:
 \begin{itemize}
@@ -198,7 +203,7 @@ by simplifying the playability property of an action $h = \PHhit{a_i}{b_j}{b_k}$
   \item if $c_p, c_q$ are different processes ($c_p \neq c_q$) of the same sort $c$, then $c_p \wedge c_q \equiv \bot$.
 \end{itemize}
 
-\paragraph{Removal of the resulting cooperative sorts}
+\paragraph{Removal of the unnecessary cooperative sorts}
 There are two cases where it is possible to remove a cooperative sort $f^{h,i}$ in the flattened PH:
 \begin{itemize}
   \item if $\Fop{h} \equiv \top$, then the action $h$ can be modeled in the flattened model by an auto-action
@@ -207,11 +212,3 @@ There are two cases where it is possible to remove a cooperative sort $f^{h,i}$ 
     then $h$ can be modeled as a regular action $\PHhit{p}{\target{h}}{\bounce{h}}$ in the flattened PH
     (as, apart from the target, only one process is required).
 \end{itemize}
-
-\paragraph{Keeping initial cooperations}
-The initial model $\oPH$ may contain cooperative sorts similar than those described in \pref{ssec:hypothesis},
-only hit by a specific class of priorities, which is the highest.
-It is then possible to simplify the translation by keeping these cooperative sorts and ignoring all updating
-actions in the playability properties of the other actions.
-In this way, the meaning of these cooperative actions is kept, and they end up modeled as regular cooperative sorts
-in the flattened model.

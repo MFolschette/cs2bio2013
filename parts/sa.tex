@@ -4,6 +4,11 @@ The aim of this section is to define the problem of reachability in a PH,
 and propose an under-approximation allowing to efficiently solve it.
 The static analysis presented here is inspired from~\cite{PMR12-MSCS}.
 
+We consider in this section a PH model $\PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle})$ with $2$ classes of priorities
+that respects all Criteria (\ref{cr:bounded}, \ref{cr:cyclefreeness} \& \ref{cr:compcs}) of \pref{ssec:hypothesis}.
+
+
+
 \subsection{Preliminary definitions}
 \label{ssec:sa-def}
 
@@ -11,7 +16,7 @@ The reachability of a process $a_j$ of a given sort $a$ from another process $a_
 \begin{definition}[Objective ($\Obj$)]
 \label{def:obj}
   If $a \in \components$, the reachability of a process $a_j$ from a process $a_i$ is called an \emph{objective}, noted $\PHobj{a_i}{a_j}$.
-  The set of all objectives is called $\Obj \DEF \{ \PHobj{a_i}{a_j} \mid a \in \components \wedge (a_i, a_j) \in \PHl_a^2 \}$.
+  The set of all objectives is called $\Obj \DEF \{ \PHobj{a_i}{a_j} \mid a \in \components \wedge (a_i, a_j) \in \PHl_a \times \PHl_a \}$.
   For an objective $P = \PHobj{a_i}{a_j} \in \Obj$, we define: $\PHsort(P) = a$, $\PHtarget(P)=a_i$, $\PHbounce(P)=a_j$,
   and $P$ is said \emph{trivial} if $a_i = a_j$.
 
