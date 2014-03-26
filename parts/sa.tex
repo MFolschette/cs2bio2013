@@ -1,3 +1,4 @@
+% vi:spell spelllang=en:
 \section{Static Analysis}\label{sec:sa}
 
 The aim of this section is to define the problem of reachability in a PH,
@@ -291,8 +292,12 @@ Our method can thus be considered as efficient compared to regular model-checkin
 \newcommand{\total}{\tau}
 \newcommand{\reach}{\sigma}
 
-The semantics of PH with $2$ classes of priorities studied in this paper allows to model cooperative sorts accurately representing a coherent configuration of a set of sorts.
-Therefore, we can derive a new method to conclude about the reachability of a state (considering only components).
+The reachability property studied so far concern a single process, \ie{} the
+local state of a single component.
+However, we remark that the reachability of a partial or global state can be
+addressed with the very same analysis by introducing a dedicated cooperative
+sort in the scope of the PH semantics with $2$ classes of priorities.
+
 Indeed, let $\PH = (\PHs, \PHl, (\PHh^{(1)}, \PHh^{(2)}))$ be a PH and suppose that we want to study the reachability of a state $s \in \PHl$.
 Let $\PH' = (\PHs', \PHl', (\PHh'^{(1)}, \PHh'^{(2)}))$
 with: $\PHs' = \PHs \cup \{ \total, \reach \}$ and $\PHl' = \PHl \times \PHl_\total \times \PHl_\reach$,
@@ -308,6 +313,24 @@ It is also possible to compute the reachability of a set of states $S \subseteq 
 
 \subsection{Sequential reachability}
 
-\todo{Loic? Maxime?}
+The sufficient condition for the reachability of a process from a given context
+can be extended for the successive reachability of several processes ($a_i$,
+then $b_j$, etc.) in the following manner.
+
+\todo{}
+
+\begin{definition}
+\label{def:lastprocs}
+\end{definition}
+
+\begin{theorem}[Sequential under-approximation]
+\label{thm:ordered-ua}
+Given a context $\ctx$ and an objective sequence $\w =
+P\concat\w'\in\OS$,
+$\uconcr(P)\neq\emptyset \wedge
+	\muconcr_{\ctx'}(\w')\neq\emptyset
+	\Longrightarrow \uconcr(\w)\neq\emptyset$,
+where $\ctx' = \procs(\mycwB{\ctx}{P})\Cap\lastprocs(P)$
+\end{theorem}
 
 
