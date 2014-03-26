@@ -59,9 +59,9 @@ that is used to consider the interesting part of a complete state.
 \begin{definition}[Sub-states ($\PHsublize{\PHl}$)]
 \label{def:substate}
   If $S \subset \PHs$ is a set of sorts, a sub-set on $S$ is an element of:
-  $\PHsubl[\PHl]_S \DEF \{ \mysigma \in \bigtimes{a \in S} \PHl_a \}$.
+  $\PHsubl[\PHl]_S \DEF \bigtimes{a \in S} \PHl_a$.
   The set of all sub-sets is:
-  $\PHsubl[\PHl] \DEF \bigcup_{S \subset \PHs} \PHsubl[\PHl]_S$.
+  $\PHsubl[\PHl] \DEF \bigcup_{S \in\powerset(\PHs)} \PHsubl[\PHl]_S$.
   
   \noindent
   Furthermore, if $\mysigma \in \PHsubl[\PHl]$ and $s \in \PHl$, we note:
@@ -224,13 +224,11 @@ which would allow the play of an infinite sequence of prioritised actions in “
 \end{criterion}
 
 In \pref{def:component} we define a well-formed component as a sort that is hit only by unprioritised actions, or that no action hits.
-\begin{definition}[Well-formed component ($\components$)]
+\begin{definition}[Well-formed component]
 \label{def:component}
   A sort $a \in \PHs$ is a \emph{well-formed component} if and only if:
-  \begin{align*}
-    \forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) \geq 2 \enspace.
-  \end{align*}
-  We call $\components$ the set of well-formed components.
+    $\forall h \in \PHh, \PHsort(\PHtarget(h)) = a \Rightarrow \prio(h) \geq 2$ \enspace.
+  We denote $\components\subset\Sigma$ the set of well-formed components.
 \end{definition}
 
 \pref{def:chainsactions} defines chains of prioritised actions,
