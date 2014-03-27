@@ -86,7 +86,7 @@ In the following, we denote: $\Sol = \powerset(\PHproc)$.
 
 We denote $\concr(\w)$ the set of scenarios concretising an objective sequence $\w$ in the context $\ctx$.
 In \pref{def:uconcr}, we define $\uconcr(\w)$ as equal to $\concr(\w)$ if and only if $\concr(\w)$ contains scenarios starting from all states $s \subseteq \ctx$.
-\pref{th:uconcr-ctx} is used to over-approximate the initial context $\ctx$.
+\pref{lem:uconcr-ctx} is used to over-approximate the initial context $\ctx$.
 \begin{definition}[$\uconcr: \OS \rightarrow \powerset(\Sce)$]
 \label{def:uconcr}
   \[
@@ -98,10 +98,10 @@ In \pref{def:uconcr}, we define $\uconcr(\w)$ as equal to $\concr(\w)$ if and on
   \]
 \end{definition}
 % 
-\begin{theorem}
-\label{th:uconcr-ctx}
+\begin{lemma}
+\label{lem:uconcr-ctx}
   $\ctx \subseteq \ctx' \wedge \muconcr_{\ctx'}(\w) \neq \emptyset \Longrightarrow \muconcr_{\ctx}(\w) \neq \emptyset$.
-\end{theorem}
+\end{lemma}
 
 For any objective $P$ and context $\ctx$, \pref{def:maxCont} gives the set of processes of sort $\PHsort(P)$ that are required to solve $P$ in $\ctx$, given by $\gCont_\ctx(\PHsort(P), P)$.
 \begin{definition}[$\gCont_\ctx : \Sigma \times \Obj \rightarrow \powerset(\PHproc)$]
@@ -184,7 +184,10 @@ A proof of this theorem is given in \pref{suppl:demoapproxinf}.
 
 \begin{theorem}[Under-Approximation]
 \label{th:approxinf}
-  If the graph $\cwB$ contains no cycle,
+Given a Process Hitting $(\PHs; \PHl; \PHa^{\langle 2 \rangle})$
+that satisfies \pref{cr:bounded} and \pref{cr:compcs},
+a context $\ctx$ and a sequence of objectives $\w$,
+  if the graph $\cwB$ contains no cycle,
   all objectives have at least one solution
   and all edges are coherent,
   then $\uconcr(\w) \neq \emptyset$.

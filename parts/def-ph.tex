@@ -3,7 +3,7 @@
 We give in this section the definition and the semantics of the Process Hitting (PH) with priorities, which is an extension of the basic semantics given in~\cite{PMR10-TCSB}.
 Then we describe the modelling of cooperation between components and discuss how the new aforementioned semantics makes this modelling more accurate.
 Finally, in order to perform a static analysis adapted to this new semantics, we give several criteria to restrict the class of models that we can study,
-and give several theorems that follow.
+and give several lemmas that follow.
 This class of models is equivalent to Asynchronous Discrete Networks.
 
 \subsection{Definition of the Process Hitting with $k$ classes of priorities}
@@ -304,13 +304,13 @@ In the following we simply write “component” (\resp “cooperative sort”) 
 
 \subsection{Consequences of the restrictions}
 
-In this subsection, we give several general theorems that can be derived from the restrictions of \pref{ssec:hypothesis}, %(\pref{cr:bounded}, \ref{cr:cyclefreeness} \& \ref{cr:compcs})
+In this subsection, we give several general lemmas that can be derived from the restrictions of \pref{ssec:hypothesis}, %(\pref{cr:bounded}, \ref{cr:cyclefreeness} \& \ref{cr:compcs})
 in the special case of a PH model with $2$ classes of priorities $\PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle})$.
 These results will help building the static analysis of \pref{sec:sa}.
 
 We first denote by $\update(s)$ the state equivalent to $s$ but in which all cooperative sorts are updated (\pref{def:update}).
 This state is unique due to the properties of $\pfp$ given in the previous subsection.
-Then, \pref{th:update} states that from any state, there exists a scenario updating the cooperative sorts of this state.
+Then, \pref{lem:update} states that from any state, there exists a scenario updating the cooperative sorts of this state.
 %
 \begin{definition}[$\update : \PHl \rightarrow \PHl$]
 \label{def:update}
@@ -320,10 +320,10 @@ Then, \pref{th:update} states that from any state, there exists a scenario updat
   \end{align*}
 \end{definition}
 %
-\begin{theorem}
-\label{th:update}
+\begin{lemma}
+\label{lem:update}
   $\forall s \in \PHl, \exists \delta \in \restriction{\Sce}{1}(s), s \PHplay \delta = \update(s)$
-\end{theorem}
+\end{lemma}
 %
 \begin{proof}
   Let $a$ be a cooperative sort so that $\PHget{s}{a} \neq \pfp_s(a)$.
@@ -331,30 +331,30 @@ Then, \pref{th:update} states that from any state, there exists a scenario updat
   $\forall \delta' \in \restriction{\Sce}{1}(s \PHplay \delta)$, $\PHget{(s \PHplay \delta \PHplay \delta')}{a} = \pfp_s(a)$.
 \end{proof}
 
-\pref{th:hcompcomp} states that for a given state $s$, and for any action $h = \PHhit{a_i}{b_j}{b_k}$ where $a$ and $b$ are components,
+\pref{lem:hcompcomp} states that for a given state $s$, and for any action $h = \PHhit{a_i}{b_j}{b_k}$ where $a$ and $b$ are components,
 if $\PHget{s}{a} = a_i$ and $\PHget{s}{b} = b_j$, then
 $h$ can always be played after a series of prioritised hits (and these hits do not prevent it to be fired).
-\pref{th:hcscomp} states the same if $a$ is a cooperative sort, under the condition that $a$ is updated in $s$.
-\begin{theorem}
-\label{th:hcompcomp}
+\pref{lem:hcscomp} states the same if $a$ is a cooperative sort, under the condition that $a$ is updated in $s$.
+\begin{lemma}
+\label{lem:hcompcomp}
   $\forall s \in \PHl, \forall a,b \in \components, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh,$\\
   $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}(s),
   (s \PHplay \delta) \PHPtrans (s \PHplay \delta \PHplay h))$
-\end{theorem}
+\end{lemma}
 %
 \begin{proof}
-  From \pref{th:update}, there exists a scenario $\delta$ with: $(s \PHplay \delta) = \update(s)$.
+  From \pref{lem:update}, there exists a scenario $\delta$ with: $(s \PHplay \delta) = \update(s)$.
   As $a,b \in \components$, $a_i \in (s \PHplay \delta)$ and $b_j \in (s \PHplay \delta)$.
   Finally, by definition of $\update(s)$, no prioritised action can be played in $(s \PHplay \delta)$, thus $h$ can be played in $(s \PHplay \delta)$.
 \end{proof}
 %
-\begin{theorem}
-\label{th:hcscomp}
+\begin{lemma}
+\label{lem:hcscomp}
   $\forall s \in \PHl, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh, a \in \cs, b \in \components,$\\
   $(\PHget{s}{a} = a_i \wedge \PHget{s}{b} = b_j \wedge \pfp_s(a) = a_i) \Rightarrow (\exists \delta \in \restriction{\Sce}{1}(s),
   (s \PHplay \delta) \PHPtrans (s \PHplay \delta \PHplay h))$
-\end{theorem}
+\end{lemma}
 \begin{proof}
-  Similar to the proof of \pref{th:hcompcomp};
+  Similar to the proof of \pref{lem:hcompcomp};
   as $a_i \in \pfp_s(a)$, $a_i \in (s \PHplay \delta)$.
 \end{proof}

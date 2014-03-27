@@ -20,9 +20,10 @@ $\forall i \in \segm{1}{n}, \PHget{(s \PHplay \delta_n)}{\PHsort(p_i)} = p_i$.
     this means that none of the processes needed to solve $p_{n+1}$ is another process of the same sort than another process of $ps$.
     Therefore, there exists $\delta' \in \muconcr_{s \PHplay \delta_n}(\PHobj{q}{p_{n+1}})$,
     so that $\forall i \in \segm{1}{n+1}$, $\PHget{(s \PHplay \delta_n \PHplay \delta')}{\PHsort(p_{i})} = p_{i}$.
-    Finally, by \pref{th:update}, there exists a scenario $\delta'' \in \restriction{\Sce}{1}(s \PHplay \delta_n \PHplay \delta')$
+    Finally, by \pref{lem:update}, there exists a scenario $\delta'' \in \restriction{\Sce}{1}(s \PHplay \delta_n \PHplay \delta')$
     so that, if we denote $\delta_{n+1} = \delta_n \PHplay \delta' \PHplay \delta''$,
-    we have: $\update(s \PHplay \delta_n \PHplay \delta') = s \PHplay \delta_{n+1}$ and the same property about processes (by \pref{th:hcscomp}).
+    we have: $\update(s \PHplay \delta_n \PHplay \delta') = s \PHplay
+	\delta_{n+1}$ and the same property about processes (by \pref{lem:hcscomp}).
 \end{itemize}
 Therefore, $\delta = \delta_{|ps|}$ exists, and given its properties, we have: $\PHget{(s \PHplay \delta)}{a} = a_i$
 and $\update(s \PHplay \delta) = s \PHplay \delta$.
@@ -33,7 +34,9 @@ $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
 \begin{itemize}
   \item If $(P, \emptyset) \in \Bee{\Obj}{\Sol}$, either $\PHtarget(P) = \PHbounce(P)$ and $\delta = \emptyseq$;
     or $\forall \zeta \in \BS(P), \zeta \in \Sce(s) \wedge \PHsort(\zeta) = \{ \PHsort(P) \}$
-    and $\delta = \delta_1 \PHplay \zeta_1 \PHplay \dots \PHplay \delta_{|\zeta|} \PHplay \zeta_{|\zeta|}$ is a valid sequence given by \pref{th:hcompcomp}.
+    and $\delta = \delta_1 \PHplay \zeta_1 \PHplay \dots \PHplay
+	\delta_{|\zeta|} \PHplay \zeta_{|\zeta|}$ is a valid sequence given by
+	\pref{lem:hcompcomp}.
 
   \item Suppose all children objectives of $P$ are concretizable.
 %  \begin{itemize}
@@ -48,12 +51,14 @@ $\exists \delta \in \muconcr_s(P)$.% and $\ceil(\delta) \subseteq max\ctx$.
       \begin{itemize}
         \item[$\circ$] Suppose that $\delta_n$ exists and let $\zeta_n = \PHhit{b_i}{a_j}{a_k}$.
         By hypothesis there exists $\delta' \in \muconcr_{s \PHplay \delta_n}(\PHobj{\any}{b_i})$ with $\PHsort(P) \notin \PHsort(\delta')$ (by \pref{def:maxCont}).
-        By \pref{th:update} there exists $\delta'' \in \restriction{\Sce}{1}(s \PHplay \delta')$ so that $\update(s \PHplay \delta') = s \PHplay \delta' \PHplay \delta''$.
-        Furthermore, $\PHget{(s \PHplay \delta' \PHplay \delta'')}{b} = b_j$ (by \pref{th:hcompcomp} if $b \in \components$ or \pref{th:hcscomp} if $b \in \cs$).
+        By \pref{lem:update} there exists $\delta'' \in \restriction{\Sce}{1}(s \PHplay \delta')$ so that $\update(s \PHplay \delta') = s \PHplay \delta' \PHplay \delta''$.
+        Furthermore, $\PHget{(s \PHplay \delta' \PHplay \delta'')}{b} = b_j$ (by
+		\pref{lem:hcompcomp} if $b \in \components$ or \pref{lem:hcscomp} if $b \in \cs$).
         Therefore, $\delta_{n+1} = \delta_n \PHplay \delta' \PHplay \delta'' \PHplay \zeta_n$.
       \end{itemize}
       Thus, $\delta_{|\zeta|} \in \muconcr_s(P)$. % and $\ceil(\delta) \subseteq max\ctx$.
 %  \end{itemize}
 \end{itemize}
-Finally, as $\muconcr_{max\ctx}(\w) \neq \emptyset$, $\uconcr(\w) \neq \emptyset$ (\pref{th:uconcr-ctx}).
+Finally, as $\muconcr_{max\ctx}(\w) \neq \emptyset$, $\uconcr(\w) \neq
+\emptyset$ (\pref{lem:uconcr-ctx}).
 \end{proofapproxinf}
