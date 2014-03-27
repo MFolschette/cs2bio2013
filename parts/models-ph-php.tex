@@ -1,27 +1,23 @@
 \subsection{PH with multiple classes of priorities}
 \label{ssec:flattening}
-\todo{Glue up all this section}
 
-The aim of this section is to propose a translation of any Process Hitting model
-into a PH model with $2$ classes of priorities
-which is weakkly bisimilar
-and that respects all Criteria of \pref{ssec:hypothesis}.
+\todo{Prove that $\PHflat(\oPH)$ respects all Conditions!}
 
-\todo{Prove that $\PHflat(\oPH)$ respects all Criteria!}
+Consider a PH with $k \in \sNN$ classes of priories
+$\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$
+that respects all Conditions given in \pref{ssec:hypothesis}.
+If $\oPH$ does not respect these Conditions,
+it is then sufficient to instead consider the PH model with $k+1$ classes of priorities
+$\ov{\PH}' = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}'^{\angles{k+1}})$
+where $\ov{\PHh}'^{(1)} = \emptyset$.
+The aim of this section is to propose a translation of $\oPH$
+into a PH model with $2$ classes of priorities $\PH = (\PHs; \PHl; \PHa^{\angles{2}})$
+called \emph{flattening},
+which is weakly bisimilar
+and that also respects all Conditions of \pref{ssec:hypothesis}.
 
-Consider a PH with $k \in \sN^*$ classes of priories:
-$\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$.
-that respects all Criteria given in \pref{ssec:hypothesis}.
-We want to translate it to a PH with $2$ classes of priorities
-$\PH = (\PHs; \PHl; \PHa^{\angles{2}})$
-that respects all Criteria given in \pref{ssec:hypothesis}.
-
-Note that it is possible to apply this method to any PH model $\ov{\PH}$ that may not respect the aforementioned Criteria.
-It is then sufficient to instead consider the PH model with $k+1$ classes of priorities
-$\ov{\PH}' = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k+1}})$
-where $\PHh^{(1)} = \emptyset$.
-
-A \emph{playability property} as defined in \pref{def:pp} is a Boolean formula where the atoms are processes of $\ov{\PH}$.
+This translation is based on the notion of \emph{playability property} defined in \pref{def:pp}
+which is a Boolean formula where the atoms are processes of $\ov{\PH}$.
 
 \begin{definition}[Playability property language ($\F$)]
   \label{def:pp}
@@ -40,35 +36,44 @@ A \emph{playability property} as defined in \pref{def:pp} is a Boolean formula w
   \end{itemize}
 \end{definition}
 
-Because we only use classical logic operators, the formulas of Boolean logic on distribution and negation (de Morgan's laws) can be used.
+Because we only use classical logic operators, the formulas of Boolean logic on 
+distributivity, associativity and commutativity can be used, together with De Morgan's laws on negation.
 We also have the following property for the negation of an atom:
 \[\forall a \in \ov{\PHs}, \forall a_i \in \ov{\PHl}_a, \forall \mysigma \in \PHsubl,
   \Fsem{\neg a_i}{\mysigma} \Leftrightarrow \Fsem{\bigvee_{\substack{a_j \in \PHl_a\\a_j \neq a_i}} a_j}{\mysigma}\]
 Indeed, if a process is not active in a state, this means that another process of the same sort is active.
 
-In \pref{def:fop}, we finally define the the operator $\Fopsymbol$ which characterizes the playability of an action
+In \pref{def:fop}, we define the the operator $\Fopsymbol$ which characterises the playability of an action
 given the semantics of PH (\pref{def:play}).
+This operator considers the \emph{virtual hitters} of an action,
+which are the sub-states given by $\csState$ to activate the hitter of the given action if it is a process of cooperative sort.
+Furthermore, the target of the action if not taken into account as it is not needed for the rest of the flattening.
+%\pref{th:ppplay} gives the condition for an action to be playable given its playability property.
+%
 \begin{definition}[Playability property of an action ($\Fopsymbol : \PHh \rightarrow \F$)]\label{def:fop}
-  \[\forall h \in \ov{\PHh}, \Fop{h} \equiv \virtualhitters{h} \wedge
+  \[\forall h \in \ov{\PHh}, \Fop{h} \equiv \virtualhitters(h) \wedge
     \left( \bigwedge_{\substack{g \in \PHh^{(n)}\\n < \prio(h)}}
     \neg \left( \target{g} \wedge \hitter{g}\right) \right)\]
-  where $\forall h \in \ov{\PHh} \setminus \ov{\PHh}^{(1)}$ so that $\hitter{h} = a_i$,
+  where if we note $\hitter{h} = a_i$, then:
   \[\virtualhitters(h) =
     \begin{cases}
-      a_i & \text{if } a \in \components \\
+      a_i & \text{if } a \in \components \text{ or } h \in \ov{\PHh}^{(1)} \\
       \bigvee_{ps \in \csState(a_i)} \left( \bigwedge_{p \in ps} p \right) & \text{if } a \in \cs
     \end{cases}\]
 \end{definition}
 %
-\begin{theorem}
-\label{th:ppplay}
-  $h \in \ov{\PHh}$ is playable in $s \in \ov{\PHl}$ if and only if $\Fsem{\Fop{h}}{s} \wedge \target{h} \in s$.
-\end{theorem}
-%
-\newproof{proofppplay}{Proof of \pref{th:ppplay}}
-\begin{proofppplay}
-  By definition of the semantics of a PH given in \pref{def:play}.
-\end{proofppplay}
+By construction of this operator and given the dynamics of a PH model,
+an action $h$ is playable in a state $s \in \ov{\PHl}$ if and only if: $\Fsem{\Fop{h}}{s} \wedge \target{h} \in s$.
+%%
+%\begin{theorem}
+%\label{th:ppplay}
+%  $h \in \ov{\PHh}$ is playable in $s \in \ov{\PHl}$ if and only if $\Fsem{\Fop{h}}{s} \wedge \target{h} \in s$.
+%\end{theorem}
+%%
+%\newproof{proofppplay}{Proof of \pref{th:ppplay}}
+%\begin{proofppplay}
+%  By definition of the semantics of a PH given in \pref{def:play}.
+%\end{proofppplay}
 
 Because we only use classical logic operators, we can compute the Disjunctive Normal Form (DNF) of any playability property.
 For any action $h \in \ov{\PHh}$, this DNF takes the form:
@@ -78,23 +83,32 @@ If $\n = 0$, then $\Fop{h} \equiv \bot$; this means that $h$ can never be played
 due to preemptions by other actions with higher priorities.
 If $\Fop{h} \not\equiv \bot$, on the other hand, then in this case $\Fop{h}$
 can be seen as a disjunction of $\n$ smaller playability properties consisting only of conjunctions of atoms.
-These $\n$ conjunctions can be translated to as many prioritized cooperative sorts,
+These $\n$ conjunctions can be translated to as many prioritised cooperative sorts,
 thus creating a new PH model which is entailed in the restrictions depicted in \pref{ssec:hypothesis}.
 In this second case, we denote, for any $i \in \segm{1}{\n}$:
 $\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m} \}$.
 
-\todo{Glue up}
+With \pref{th:ppplaysubset}, we can then characterise the playability of an action in a state only with a sub-state.
+This sub-state corresponds to one of the conjunctions of its playability property's DNF.
+Finally, \pref{def:flattening} gives the construction of the flattening of $\oPH$:
+for each action $h \in \ov{\PHh}$, several cooperative sorts $f^{h,i}$ are built to reflect each of the conjunction in $\Fop{h}$,
+\ie for $i \in \segm{1}{\n}$.
+This construction allows to obtain the same dynamics as $\oPH$, which is proven by \pref{th:bisimPHP}.
+%
 \begin{theorem}
 \label{th:ppplaysubset}
-  $h \in \ov{\PHh}$ is playable in $s \in \ov{\PHl}$ if and only if
-  $\exists \mysigma \subseteq s, \Fsem{\Fop{h}}{\mysigma} \wedge \target{h} \in s$.
+  Let $h \in \ov{\PHh}$ and $s \in \ov{\PHl}$;
+  $h$ is playable in $s$ if and only if:
+  \[\target{h} \in s \wedge \exists \mysigma \subseteq s, \Fsem{\Fop{h}}{\mysigma} \enspace.\]
 %  \[\exists i \in \segm{1}{\n}, \exists \mysigma \in \bigtimes{b \in \PHdep{i}{h}} \PHl_b,
 %    \mysigma \subseteq s \wedge \Fsem{\F(h)}{\mysigma} \enspace.\]
 \end{theorem}
 %
 \newproof{proofppplaysubset}{Proof of \pref{th:ppplaysubset}}
 \begin{proofppplaysubset}
-  ($\Rightarrow$) If $\Fsem{\Fop{h}}{s}$ then $\Fop{h} \not\equiv \bot$ and, by property of a DNF,
+  ($\Rightarrow$)
+    If $h$ is playable in $s$, then $\target{h} \in s$ and $\Fsem{\Fop{h}}{s}$;
+    thus, $\Fop{h} \not\equiv \bot$ and, by property of a DNF,
     at least one of the $\n$ conjunctions of $\Fop{h}$ is true in $s$.
     Suppose the $i$\textsuperscript{th} conjunction is true in $s$, with $i \in \segm{1}{\n}$;
     then we have: $\forall j \in \segm{1}{\m}, p_{i,j} \in s$.
@@ -104,13 +118,16 @@ $\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m} \}$.
     We immediately have: $\mysigma \subseteq s$,
     and, by construction of $\PHdep{i}{h}$, $\Fsem{\Fop{h}}{\mysigma}$.
   
-  ($\Leftarrow$) Trivial.
+  ($\Leftarrow$)
+    Trivial.
 \end{proofppplaysubset}
 
 \begin{definition}
   \label{def:flattening}
-  If $k \in \sN^*$, we note $\PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) = (\PHs; \PHl; \PHa^{\angles{2}})$
-  the flattening of the PH with $k$ classes of priorities $\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}$, with:
+  If $k \in \sNN$ and $\oPH = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$
+  is a PH with $k$ classes of priorities that respects all Conditions of \pref{ssec:hypothesis},
+  we note $\PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) = (\PHs; \PHl; \PHa^{\angles{2}})$
+  the \emph{flattening} of $\oPH$, where:
   \begin{itemize}
     \item $\PHs = \ov{\PHs} \cup \PHs_f$
       where $\PHs_f = \{ f^{h,i} \mid h \in \ov{\PHh} \wedge \n \geq 1 \wedge i \in \segm{1}{\n} \}$;
@@ -164,7 +181,7 @@ $\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m} \}$.
     Given the dynamics of a PH (\pref{def:play}), if $\os \PHPtrans[\PH] \os'$,
     then there exists $h \in \ov{\PHh}$ playable in $\os$;
     therefore, $\os' = \os \PHplay h$.
-    Furthermore, given \pref{th:ppplay}, $\Fsem{\Fop{h}}{\os}$ and $\target{h} \in \os$,
+    Thus, $\Fsem{\Fop{h}}{\os}$ and $\target{h} \in \os$,
     and given \pref{th:ppplaysubset}, there exists $\mysigma \subseteq s$ so that $\Fsem{\Fop{h}}{\mysigma}$.
     Therefore, by construction of $\PH$ (\pref{def:flattening}) there exists
     $g = \PHhit{f^{h,i}_\mysigma}{\target{h}}{\bounce{h}} \in \PHh^{(2)}$.
@@ -188,27 +205,27 @@ $\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m} \}$.
     and $\unflats{s} \PHPtrans \unflats{s'}$.
 \end{proofbisimPHP}
 
-We showed in this subsection that it is possible to model a PH model with $k$ classes of priorities as a PH model
-with $2$ classes of priorities that respects all Criteria of \pref{ssec:hypothesis} and with the same dynamics.
+We showed in this subsection that it is possible to model a PH with $k$ classes of priorities as a PH
+with $2$ classes of priorities with the same dynamics that respects all Conditions of \pref{ssec:hypothesis}.
 We note however that the translation given in this section may not be minimal in terms of number of actions
 or cooperative sorts.
 We give here several ways to simplify the resulting model, but we do not give the proofs.
 
 \paragraph{Playability properties simplifications}
-It is possible to obtain a flattened PH with the same dynamics
-by simplifying the playability property of an action $h = \PHhit{a_i}{b_j}{b_k}$ with the following properties:
+The playability property $\Fop{h}$ of an action $h = \PHhit{a_i}{b_j}{b_k}$ can be simplified with the following properties,
+which may remove the necessity to create some useless actions (that are never playable) or cooperations (that are always true):
 \begin{itemize}
   \item it is always possible to simplify the target because its presence is checked besides: $b_j \equiv \top$;
-  \item any process $b_l \neq b_j$ of the same sort than $b_k$ always prevents the playability, thus: $b_l \equiv \bot$;
+  \item any process $b_l \neq b_j$ of the same sort than the target always prevents the playability, thus: $b_l \equiv \bot$;
   \item if $c_p, c_q$ are different processes ($c_p \neq c_q$) of the same sort $c$, then $c_p \wedge c_q \equiv \bot$.
 \end{itemize}
 
 \paragraph{Removal of the unnecessary cooperative sorts}
-There are two cases where it is possible to remove a cooperative sort $f^{h,i}$ in the flattened PH:
+There are two cases where it is possible to remove a cooperative sort $f^{h,i}$ in the flattening:
 \begin{itemize}
-  \item if $\Fop{h} \equiv \top$, then the action $h$ can be modeled in the flattened model by an auto-action
+  \item if $\Fop{h} \equiv \top$, then the action $h$ can be translated as an auto-action
     (as it is always playable if the target is present);
   \item if the $i$\textsuperscript{th} conjunction of $\Fop{h}$ consists of only one element $p$,
-    then $h$ can be modeled as a regular action $\PHhit{p}{\target{h}}{\bounce{h}}$ in the flattened PH
+    then $h$ can be translated as a regular action $\PHhit{p}{\target{h}}{\bounce{h}}$ instead of a cooperative sort
     (as, apart from the target, only one process is required).
 \end{itemize}
