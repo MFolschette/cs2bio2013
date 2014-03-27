@@ -292,8 +292,7 @@ Our method can thus be considered as efficient compared to regular model-checkin
 \newcommand{\total}{\tau}
 \newcommand{\reach}{\sigma}
 
-The reachability property studied so far concern a single process, \ie{} the
-local state of a single component.
+The reachability property studied so far concern a single process at a time.
 However, we remark that the reachability of a partial or global state can be
 addressed with the very same analysis by introducing a dedicated cooperative
 sort in the scope of the PH semantics with $2$ classes of priorities.
@@ -311,16 +310,55 @@ Indeed, the additional action $\PHhit{\pfp_s(\total)}{\reach_0}{\reach_1}$ in $\
 
 It is also possible to compute the reachability of a set of states $S \subseteq \PHl$ by creating several actions $\PHhit{\total_s}{\reach_0}{\reach_1}$ in $\PHh^{(2)}$ for each state $s \in S$.
 
-\subsection{Sequential reachability}
 
-The sufficient condition for the reachability of a process from a given context
-can be extended for the successive reachability of several processes ($a_i$,
-then $b_j$, etc.) in the following manner.
+\subsection{Sequential under-approximation}
 
-\todo{}
+In this section, we briefly explain an alternative sufficient condition that
+progressively takes into account the successive objectives, instead of
+considering all of them at a time, as it is done in the previous sections.
+Because objectives are taken into account individually, such an approach
+considers only a subset of scenarios.
+However, because each iteration focuses on a smaller part of the network, this
+sequential under-approximation may be more conclusive.
 
-\begin{definition}
+Let us define a sequence of objective $\w=\obj{a_i}{a_j}\concat\w'$ with
+$a_i\neq a_j$ and a state $s\in L$ with $\get{s}{a}=a_i$.
+One can remark that any scenario reaching $a_j$ necessarily includes one of the
+bounce sequence in $\BS(\obj{a_i}{a_j})$, and in particular,
+any minimal scenario reaching $a_j$ ends in a state where $a_j$ is present but
+also the hitter of the last of one bounce sequence in $\BS(\obj{a_i}{a_j})$.
+If such hitter $b_k$ is in a cooperative sort $b\in\cs$, it also means that one of the sub-state
+in $\csState(b_k)$.
+\pref{def:lastprocs} defines $\lastprocs(\obj{a_i}{a_j})$ as the set of set of
+processes that may be present just after reaching $a_j$.
+
+From \pref{th:approxinf}, we can deduce that
+for any scenario $\delta$ in $\uconcr(P)$,
+there exists a set of processes $ps\in\lastprocs(P)$
+such that $ps \subset (s\play\delta)$.
+Hence, if $\muconcr_{\ctx'\Cap ps}(\w')\neq\emptyset$,
+with $\ctx'=\ctx\Cap\procs(\mycwB{\ctx}{P})$,
+there exists a scenario $\delta'$ concretizing $\w'$ from the
+state $(s\play\delta)$.
+Therefore, the scenario $\delta\concat\delta'$ concretizes
+$\w$.
+
+\begin{definition}[$\lastprocs$]
 \label{def:lastprocs}
+Given an objective $\obj{a_i}{a_j}$, $\lastprocs:
+\Obj\to\powerset(\powerset(\Proc))$ is
+defined such that, $\forall lps\in\lastprocs(\obj{a_i}{a_j})$, 
+$lps\in\powerset(\Proc)$,
+\begin{enumerate}
+\item $\{\hitter{\zeta_{\card\zeta}}\} \subset lps$;
+\item $\forall b_j\in lps, b\in\cs, \exists ps\in\csState(b_j): ps\subset lps$;
+\item $\forall b_j\in lps, b\in\cs, 
+		\forall ps\in\csState(b_j),
+			\exists lps'\in\lastprocs(\obj{a_i}{a_j}),
+				ps\subset lps'$;
+\item $\nexists lps'\in\lastprocs(\obj{a_i}{a_j}): lps'\subset lps \wedge
+									lps'\neq lps$.
+\end{enumerate}
 \end{definition}
 
 \begin{theorem}[Sequential under-approximation]
@@ -328,9 +366,25 @@ then $b_j$, etc.) in the following manner.
 Given a context $\ctx$ and an objective sequence $\w =
 P\concat\w'\in\OS$,
 $\uconcr(P)\neq\emptyset \wedge
-	\muconcr_{\ctx'}(\w')\neq\emptyset
+	\forall ps \in\lastprocs(P),
+	\muconcr_{\ctx'\Cap ps}(\w')\neq\emptyset
 	\Longrightarrow \uconcr(\w)\neq\emptyset$,
-where $\ctx' = \procs(\mycwB{\ctx}{P})\Cap\lastprocs(P)$
+where $\ctx' = \ctx\Cap\procs(\mycwB{\ctx}{P})$.
 \end{theorem}
+\begin{proof}
+If $\uconcr(P)\neq\emptyset$,
+for all $s\in L, s\subset\ctx$,
+there exists a scenario $\delta\in\uconcr(P)\cap\Sce(s)$;
+from \pref{def:lastprocs} and proof of \pref{th:approxinf},
+$\exists ps\in\lastprocs(P)$ such that
+$(s\play\delta)\subset\ctx'\Cap ps$.
+Hence, if $\muconcr_{\ctx'\Cap ps}(\w')\neq\emptyset$,
+there exists a scenario $\delta'\in\muconcr_{\ctx'\Cap ps}(\w')$ such that
+$\delta'\in\Sce(s\play\delta)$.
+Hence, $\delta\concat\delta'$ is a scenario playable in $s$.
+Therefore, for all $s\in L, s\subset\ctx$, there exists a scenario
+concretizing $\w$.
+Hence, $\uconcr(\w)\neq\emptyset$.
+\end{proof}
 
 
