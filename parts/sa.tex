@@ -6,7 +6,7 @@ and propose an under-approximation allowing to efficiently solve it.
 The static analysis presented here is inspired from~\cite{PMR12-MSCS}.
 
 We consider in this section a PH model $\PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle})$ with $2$ classes of priorities
-that respects all Criteria (\ref{cr:bounded}, \ref{cr:cyclefreeness} \& \ref{cr:compcs}) of \pref{ssec:hypothesis}.
+that respects all conditions (\ref{cr:bounded} \& \ref{cr:compcs}) of \pref{ssec:hypothesis}.
 
 
 
@@ -216,9 +216,8 @@ Our method can thus be considered as efficient compared to regular model-checkin
   However, if $\PHhit{a_0}{b_0}{b_1}$ and $\PHhit{b_0}{a_0}{a_1}$ are replaced by
   $\PHhit{a_0}{a_0}{a_1}$ and $\PHhit{b_0}{b_0}{b_1}$,
   then \pref{th:approxinf} concludes that $c_1$ is reachable from $\ctx$.
-\end{example}
 
-\begin{figure}[ht]
+\begin{figure}[tp]
   \centering
   \begin{tikzpicture}[aS]
     \node[Aproc] (c1) {$c_1$};
@@ -285,6 +284,7 @@ Our method can thus be considered as efficient compared to regular model-checkin
     Indeed, $a_0 \in \Proc$ is a child of $\{ a_1, b_1 \}$, but $a_0 \neq a_1$ (and the same also stands for $b_0$).
   }
 \end{figure}
+\end{example}
 
 
 \subsection{Reachability of a state}
