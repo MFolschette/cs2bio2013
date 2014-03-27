@@ -2,8 +2,6 @@
 \section{Introduction}
 \label{sec:intro}
 
-\todo{Add stuff about/adapt to multiple priorities}
-
 Discrete modelling frameworks for biological networks is an active research field where formal methods have proved that they were very powerful.
 Such a work started in the seventies.
 It was later enriched in many directions and widely used to elucidate many biological questions.
@@ -48,24 +46,27 @@ our work is related to such semantic ramifications of extending traditional proc
 The concept is derived in two directions: dynamic versus static, the difference being naturally that the former one refers to a semantics where priority values may change during execution according to some evolution rules.
 In our work, actions exhibit a two-level static priority structure, some of them being designated as “prioritised” and others as “unprioritised”.
 
-In this paper, we introduce a new extension to the semantics of Process Hitting by partitioning actions into classes of priorities.
+This paper is an extension of \cite{FPMR13-CS2Bio} were we
+we introduced a new extension to the semantics of Process Hitting by partitioning actions into classes of priorities
+(\pref{sec:ph}).
 One of the objectives is to reach an accurate representation of cooperating components in the model, that was not fulfilled with the initial semantics.
-We then develop an efficient under-approximation of the reachability of the state of components on a subclass of this new framework, thus allowing to compute efficient static analysis.
+In \pref{sec:sa},
+we develop an efficient under-approximation of the reachability of the state of components on a subclass of this new framework, thus allowing to compute efficient static analysis.
 This local reachability under-approximation can be also easily extended to study the reachability of a global state.
-Finally, as the subclass of models studied proves to be bisimilar to Asynchronous Discrete Networks, we state to have developed an efficient method to compute the reachability of a state and thus study the behaviour of such models.
+Furthermore, we provide a new extended under-approximation method to decide a successive reachability property.
 
-The method developed in this paper has been implemented into the existing Pint library and tested on a large-scale biological model containing 94 components.
+Whereas the analysis presented in \pref{sec:sa} consider a particular class of
+Process Hitting with two classes of priority,
+we provide in \pref{sec:encodings} formal encodings of Asynchronous Discrete Networks and general
+Process Hitting models with priorities.
+Those encodings result in Process Hitting fulfilling the conditions for our
+static analysis and show the broad applicability of our method.
+
+In \pref{sec:example}, after giving an example of the encoding of a biological
+network with multiple priority classes,
+we apply our method on a large-scale biological model containing 94 components.
 The under-approximation turned out to be conclusive in all cases and results were computed in hundredths of seconds,
 thus overtaking the efficiency of usual model-checkers.
-
-
-
-Our paper is organised as follows.
-The Process Hitting framework is defined in section 2;
-we introduce static analysis of the Process Hitting in section 3;
-section 4 illustrates the approach on an example
-before the discussion and conclusion in section 5.
-\todo{Section 4}
 
 
 
