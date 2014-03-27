@@ -96,42 +96,46 @@ In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH w
   \begin{tikzpicture}
     \TSort{(0,0)}{a}{2}{l}
     \TSort{(0,4)}{b}{2}{l}
-    \TSort{(6,2)}{c}{2}{r}
+    \TSort{(7,2.5)}{c}{2}{r}
 
     \TSetTick{ab}{0}{00}
     \TSetTick{ab}{1}{01}
     \TSetTick{ab}{2}{10}
     \TSetTick{ab}{3}{11}
-    \TSort{(3,1)}{ab}{4}{r}
+    \TSort{(2,2.5)}{ab}{4}{t}
 
-    \THit{a_0}{prio}{ab_3}{.west}{ab_1}
-    \THit{a_0}{prio}{ab_2}{.west}{ab_0}
-    \THit{a_1}{prio}{ab_1}{.west}{ab_3}
-    \THit{a_1}{prio}{ab_0}{.west}{ab_2}
+    \THit{a_0}{prio}{ab_3}{.south}{ab_1}
+    \THit{a_0}{prio}{ab_2}{.south}{ab_0}
+    \THit{a_1}{prio}{ab_1}{.south}{ab_3}
+    \THit{a_1}{prio}{ab_0}{.south}{ab_2}
 
-    \THit{b_0}{prio}{ab_3}{.west}{ab_2}
-    \THit{b_0}{prio}{ab_1}{.west}{ab_0}
-    \THit{b_1}{prio}{ab_2}{.west}{ab_3}
-    \THit{b_1}{prio}{ab_0}{.west}{ab_1}
+    \THit{b_0}{prio}{ab_3}{.north}{ab_2}
+    \THit{b_0}{prio}{ab_1}{.north}{ab_0}
+    \THit{b_1}{prio}{ab_2}{.north}{ab_3}
+    \THit{b_1}{prio}{ab_0}{.north}{ab_1}
     
     \THit{a_1}{selfhit}{a_1}{.west}{a_0}
     \THit{b_1}{selfhit}{b_1}{.west}{b_0}
-    \THit{a_0}{bend left}{b_0}{.south west}{b_1}
-    \THit{b_0}{bend right=60}{a_0}{.west}{a_1}
+    \THit{a_0.north}{bend left}{b_0}{.west}{b_1}
+    \THit{b_0.south}{bend right=60}{a_0}{.west}{a_1}
 
     \THit{ab_3}{}{c_0}{.west}{c_1}
 
-    \path[bounce, bend right]
-      \TBounce{ab_3}{}{ab_1}{.north west}
-      \TBounce{ab_2}{}{ab_0}{.north west}
-      \TBounce{ab_3}{}{ab_2}{.north west}
-      \TBounce{ab_1}{}{ab_0}{.north west}
+	\path[bounce, bend right=55]
+      \TBounce{ab_0}{}{ab_2}{.west}
+      \TBounce{ab_1}{}{ab_3}{.west}
+	;
+	\path[bounce, bend left=20]
+      \TBounce{ab_3}{}{ab_1}{.south east}
+      \TBounce{ab_2}{}{ab_0}{.south east}
+	;
+    \path[bounce, bend right=20]
+      \TBounce{ab_3}{}{ab_2}{.north east}
+      \TBounce{ab_1}{}{ab_0}{.north east}
     ;
-    \path[bounce, bend left]
-      \TBounce{ab_1}{}{ab_3}{.south west}
-      \TBounce{ab_0}{}{ab_2}{.south west}
-      \TBounce{ab_2}{}{ab_3}{.south west}
-      \TBounce{ab_0}{}{ab_1}{.south west}
+    \path[bounce, bend left=30]
+      \TBounce{ab_2}{}{ab_3}{.west}
+      \TBounce{ab_0}{}{ab_1}{.west}
     ;
     \path[bounce, bend right]
       \TBounce{a_1}{}{a_0}{.north west}
@@ -149,8 +153,6 @@ In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH w
   }
   \caption{
   \label{fig:ph-livelock}
-  	\todo{(Loic) mettre la sorte coopérative horizontale pour mieux voir les
-	frappes}
     An example of PH with $2$ classes of priorities.
     Sorts are represented as labelled boxes and processes as circles with their identifier on the side.
     Actions of $\PHh^{(1)}$ are represented by thick arrows and actions of $\PHh^{(2)}$ are represented by single arrows;
