@@ -16,23 +16,23 @@ As a matter of fact, the abstractions we get are more or less rough or accurate.
 Usual formal frameworks for such modelling activities are state-transition systems or process algebras. % Petri nets
 We developed a quite similar framework named the Process Hitting \cite{PMR10-TCSB},
 consisting in a restriction where the evolution of a component is determined by the state of at most one other component that does not evolve.
-In a sense, these kind of actions are of the form $X + Y \rightarrow X + Z$ where $X$ behaves like a catalyst molecule that “hits” another molecule $Y$ and changes it into $Z$, without being itself changed.
+In a sense, these kind of actions are of the form $X + Y \rightarrow X + Y'$ where $X$ behaves like a catalyst molecule that “hits” another molecule $Y$ and changes it into $Y'$, without being itself changed.
 Assuming catalysts are always available, this can represent any biochemical system made of monomolecular reactions, and can also represent catalytic networks such as metabolic networks.
 %, with the aim of avoiding to build the whole state space in order to be able to tackle very large systems
 Our motivation behind this framework was to design a model and analysis techniques adapted to biological modelling.
 These analyses avoid to build the whole state space, which allows to tackle very large systems (that would have led to a huge number of states, hopelessly too huge to be analysed).
 They are based on the fact that most biological models have few levels of expression per component:
-in Boolean networks~\cite{kauffman69,Thomas73} there are only two levels per component and in its multivalued equivalent, Asynchronous Discrete Networks~\cite{deJong02}, components rarely have more that four levels.
+in Boolean networks~\cite{kauffman69,Thomas73} there are only two levels per component and in their multivalued equivalent, Asynchronous Discrete Networks~\cite{deJong02}, components rarely have more that four levels.
 
 Besides, one further objective of our work is now %to be more accurate in the description of the studied systems.
 to improve the accuracy of the description of the studied systems dynamics.
 The idea for this is to introduce timing features into models:
 we are interested in taking into account some knowledge about the relative length of some phenomena as it is a way to refute some models (or parameters) that are inconsistent with the observed dynamic behaviours.
 In this paper, we are dealing with these timing properties through priorities,
-that are based on the simple founding idea that prioritised actions have to be processed before the other ones.
-Indeed, due to the Process Hitting framework restrictions, bimolecular reactions are not immediately available, but one can simulate them with an encoding called “cooperation”.
+that are based on the simple founding idea that actions with higher priority have to be processed before the ones with lower priority.
+Furthermore, due to the Process Hitting framework restrictions, multimolecular reactions are not immediately available, but one can simulate them with an encoding called “cooperation”.
 That encoding however introduces extra reactions, and this is where the priorities become useful, if not necessary.
-The extra reactions can be given “infinite speed” (high priority) so that they do not affect the behaviour of “normal” (low priority) reactions, including the bimolecular ones.
+The extra reactions can be given “infinite speed” (highest priority) so that they do not affect the behaviour of “normal” (lower priority) reactions, including the multimolecular ones.
 
 Until now, such a priority scheduling of the actions was not studied extensively in the different formal modelling frameworks dedicated to systems biology.
 Nevertheless, such an attempt has been carried out for Petri nets by F.~Bause \cite{Bause97},
@@ -42,9 +42,12 @@ It was later extended for applications in the field of systems biology by M.~Joh
 
 \paragraph{Contributions}
 Since our formalism (the Process Hitting) can be considered as a subset of Calculus of Communicating Systems, %is inspired from the $\pi$-calculus,
-our work is related to such semantic ramifications of extending traditional process algebras with the concepts of priority that allow for some transitions to be given precedence over others.
+our work is related to such semantic ramifications of extending traditional process algebras with the concept of priority that allows for some transitions to be given precedence over others.
 The concept is derived in two directions: dynamic versus static, the difference being naturally that the former one refers to a semantics where priority values may change during execution according to some evolution rules.
-In our work, actions exhibit a two-level static priority structure, some of them being designated as “prioritised” and others as “unprioritised”.
+In our work, actions exhibit a static priority structure.
+The actions modelling biological processes are divided in several classes of priorities which stand for the different reaction rates or relative preemptions.
+Furthermore, the highest class of priority is used to model particular nonbiological actions, designated as “prioritised”,
+that are used to encode Boolean functions inside the model.
 
 This paper is an extension of \cite{FPMR13-CS2Bio} were we
 we introduced a new extension to the semantics of Process Hitting by partitioning actions into classes of priorities
@@ -55,11 +58,11 @@ we develop an efficient under-approximation of the reachability of the state of 
 This local reachability under-approximation can be also easily extended to study the reachability of a global state.
 Furthermore, we provide a new extended under-approximation method to decide a successive reachability property.
 
-Whereas the analysis presented in \pref{sec:sa} consider a particular class of
+Whereas the analysis presented in \pref{sec:sa} considers a particular class of
 Process Hitting with two classes of priority,
 we provide in \pref{sec:encodings} formal encodings of Asynchronous Discrete Networks and general
 Process Hitting models with priorities.
-Those encodings result in Process Hitting fulfilling the conditions for our
+Those encodings result in a Process Hitting fulfilling the conditions for our
 static analysis and show the broad applicability of our method.
 
 In \pref{sec:example}, after giving an example of the encoding of a biological

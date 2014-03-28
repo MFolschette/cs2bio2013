@@ -9,7 +9,7 @@ This class of models is equivalent to Asynchronous Discrete Networks.
 
 \subsection{Definition of the Process Hitting with $k$ classes of priorities}
 \label{ssec:PH}
-A PH with $k$ classes of priorities (\pref{def:ph}), also simply called “PH” in the following when it is not ambiguous, gathers a finite number of concurrent \emph{processes} divided into a finite set of \emph{sorts}.
+A PH with $k \in \sN^*$ classes of priorities (\pref{def:ph}), also simply called “PH” in the following when it is not ambiguous, gathers a finite number of concurrent \emph{processes} divided into a finite set of \emph{sorts}.
 A process belongs to a unique sort and is noted $a_i$ where $a$ is the sort and $i$ the identifier of the process within the sort $a$.
 Each process stands for a kind of “activity level” of its sort; a state of the PH thus corresponds to a set of processes containing exactly one process of each sort.
 
@@ -21,7 +21,7 @@ An action $h=\PHfrappe{a_i}{b_j}{b_k}$ is read as ``$a_i$ \emph{hits} $b_j$ to m
 
 \begin{definition}[Process Hitting with $k$ classes of priorities]
 \label{def:ph}
-  If $k \in \sNN$, a \emph{Process Hitting with $k$ classes of priorities} is a triplet $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$,
+  If $k \in \sN^*$, a \emph{Process Hitting with $k$ classes of priorities} is a triplet $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$,
   where $\PHa^{\langle k \rangle} = (\PHa^{(1)}; \dots; \PHa^{(k)})$ is a $k$-tuple and:
   \begin{itemize}
     \item $\PHs \DEF \{a, b, \dots\}$ is the finite set of \emph{sorts},
@@ -29,34 +29,19 @@ An action $h=\PHfrappe{a_i}{b_j}{b_k}$ is read as ``$a_i$ \emph{hits} $b_j$ to m
     \item $\forall n \in \llbracket 1; k \rrbracket, \PHa^{(n)} \DEF \{\PHfrappe{a_i}{b_j}{b_l} \mid (a; b) \in \PHs^2 \wedge (a_i; b_j; b_l) \in \PHl_a \times \PHl_b \times \PHl_b \wedge b_j \neq b_l \wedge a = b \Rightarrow a_i = b_j \}$ is the finite set of \emph{actions of priority $n$}.
   \end{itemize}
   We call $\PHproc \DEF \bigcup_{a \in \PHs} \PHl_a$ the set of all processes, and $\PHh \DEF \bigcup_{n \in \segm{1}{k}} \PHh^{(n)}$ the set of all actions.
+  Furthermore, for all $n \in \sN^*$ and $h \in \PHh^{(n)}$, $\prio(h) \DEF n$.
 \end{definition}
+%
 \noindent
 The sort of a process $a_i$ is referred to as $\PHsort(a_i) = a$.
 Given a state $s\in \PHl$, the process of sort $a \in \PHs$ present in $s$ is denoted by $\PHget{s}{a}$, that is the $a$-coordinate of the state $s$.
 If $a_i \in \PHl_a$, we define the notation $a_i \in s \EQDEF \PHget{s}{a} = a_i$.
-The override of a state $s$ by a process $a_i$ is defined in \pref{def:statecap} as the same state in which the process of sort $a$ has been replace by $a_i$,
+\pref{def:substate} defines the notion of sub-state on a set of sorts, that is used to focus on the interesting part of a complete state.
+Note that a state is \textit{a fortiori} a sub-state.
+The override of a state $s$ by a process $a_i$ (or by a set of processes)
+is defined in \pref{def:statecap} as the same state in which the process of sort $a$ has been replaced by $a_i$,
 which then allows to define the dynamics of a PH in \pref{def:play}.
-\begin{definition}[$\Cap : \PHl \times \PHproc \rightarrow \PHl$]
-\label{def:statecap}
-  Given a state $s \in \PHl$ and a process $a_i \in \PHproc$, $(s \Cap a_i)$ is the state defined by:
-  $\PHget{(s \Cap a_i)}{a} = a_i \wedge \forall b \neq a, \PHget{(s \Cap a_i)}{b} = \PHget{s}{b}$.
-  We also extend this definition to a set of processes $ps$ given that all processes are from different sorts by the override of each process:
-  $\forall as \subseteq \PHs, \forall ps \in \underset{a \in as}{\times} \PHl_a, s \Cap ps = s \underset{a_i \in ps}{\Cap} a_i$.
-\end{definition}
-\begin{definition}[Dynamics of a PH ($\PHPtrans$)]
-\label{def:play}
-  An action $h = \PHhit{a_i}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$ is \emph{playable} in $s \in \PHl$
-  if and only if $\PHget{s}{a} = a_i$, $\PHget{s}{b} = b_j$ and $\forall m < n, \forall g \in \PHa^{(m)}, \PHhitter(g) \notin s \vee \PHtarget(g) \notin s$.
-  In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$ and is defined by: $(s \PHplay h) = s \Cap \PHbounce(h)$.
-  Moreover, we denote: $s \PHPtrans (s \PHplay h)$.
-
-  If $s \in \PHl$,
-  a \emph{scenario} $\delta$ from $s$ is a sequence of actions of $\PHh$ that can be played successively in $s$.
-  The set of all scenarios from $s$ is noted $\Sce(s)$.
-\end{definition}
-
-\pref{def:substate} defines the notion of sub-state on a set of sorts,
-that is used to consider the interesting part of a complete state.
+%
 \begin{definition}[Sub-states ($\PHsublize{\PHl}$)]
 \label{def:substate}
   If $S \subset \PHs$ is a set of sorts, a sub-set on $S$ is an element of:
@@ -68,7 +53,27 @@ that is used to consider the interesting part of a complete state.
   Furthermore, if $\mysigma \in \PHsubl[\PHl]$ and $s \in \PHl$, we note:
     \[\mysigma \subseteq s \EQDEF \forall a_i \in \Proc, a_i \in \mysigma \Rightarrow a_i \in s \enspace.\]
 \end{definition}
-We note that a state is \textit{a fortiori} a sub-state: $\PHl \subset \PHsubl[\PHl]$.
+%
+\begin{definition}[$\Cap : \PHl \times \PHproc \rightarrow \PHl$]
+\label{def:statecap}
+  Given a state $s \in \PHl$ and a process $a_i \in \PHproc$, $(s \Cap a_i)$ is the state defined by:
+  $\PHget{(s \Cap a_i)}{a} = a_i \wedge \forall b \neq a, \PHget{(s \Cap a_i)}{b} = \PHget{s}{b}$.
+  We also extend this definition to a set of processes given that all processes are from different sorts by the override of each process:
+  $\forall ps \in \PHsubl[\PHl], s \Cap \toset{ps} = s \underset{a_i \in \toset{ps}}{\Cap} a_i$.
+  %$\forall as \subseteq \PHs, \forall ps \in \underset{a \in as}{\times} \PHl_a, s \Cap ps = s \underset{a_i \in ps}{\Cap} a_i$.
+\end{definition}
+%
+\begin{definition}[Dynamics of a PH ($\PHPtrans$)]
+\label{def:play}
+  An action $h = \PHhit{a_i}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$ is \emph{playable} in $s \in \PHl$
+  if and only if $\PHget{s}{a} = a_i$, $\PHget{s}{b} = b_j$ and $\forall m < n, \forall g \in \PHa^{(m)}, \PHhitter(g) \notin s \vee \PHtarget(g) \notin s$.
+  In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$ and is defined by: $(s \PHplay h) = s \Cap b_k$.
+  Moreover, we denote: $s \PHPtrans (s \PHplay h)$.
+
+  If $s \in \PHl$,
+  a \emph{scenario} $\delta$ from $s$ is a sequence of actions of $\PHh$ that can be played successively in $s$.
+  The set of all scenarios from $s$ is noted $\Sce(s)$.
+\end{definition}
 
 In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH with $n$ classes of priorities in which only actions of priority lower or equal to $n$ are considered.
 \begin{definition}[PH $n$-reduction]
@@ -156,7 +161,7 @@ In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH w
   \label{fig:ph-livelock}
     An example of PH with $2$ classes of priorities.
     Sorts are represented as labelled boxes and processes as circles with their identifier on the side.
-    Actions of $\PHh^{(1)}$ are represented by thick arrows and actions of $\PHh^{(2)}$ are represented by single arrows;
+    Actions of $\PHh^{(1)}$ are represented by thick arrows and actions of $\PHh^{(2)}$ are represented by thin arrows;
     the hit part of each action in drawn in plain line and the bounce part is in dotted line.
     Greyed processes stand for a possible state $s = \PHstate{a_1, b_0, c_0, ab_{10}}$.
   }
@@ -192,8 +197,8 @@ It may have computational consequences as the static analysis method developed i
 The construction of cooperation in PH allows to encode any Boolean function between cooperating processes \cite{PMR10-TCSB}.
 Due to the introduction of priorities into the PH framework,
 it is possible to build cooperations with no temporal shift by defining actions updating the cooperative sorts with the highest class of priority.
-This allows to gain the same expressivity in PH than in Boolean networks, as stated in \pref{ssec:hypothesis}.
-The aim of this paper is to allow the static analysis of the dynamics to be handled on PH models comprising such higher priority actions updating cooperative sorts.
+This allows to gain the same expressivity in PH than in Boolean networks, as stated in \pref{sec:dn}.
+The aim of this paper is to allow the static analysis of the dynamics to be handled on PH models comprising such prioritised actions updating cooperative sorts.
 
 
 
@@ -202,23 +207,14 @@ The aim of this paper is to allow the static analysis of the dynamics to be hand
 
 In the scope of this paper, we focus on a specific class of PH models
 in which actions of $\PHh^{(1)}$ are called \emph{prioritized actions} and allow to model non-biological actions.
-%and show that they are equivalent to discrete networks.
 We consider in this section a PH model with $k$ classes of priorities: $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$, with $k \in \sNN$
 and we define here the restrictions that lead to this class of models.
 
-%\pref{cr:2prio} allows to distinguish two kinds of actions:
-%\emph{unprioritised actions} modelling the non-determinacy of biological evolutions
-%and \emph{prioritised actions} used to model non-biological behaviours in the model, namely the update of cooperative sorts.
 \pref{cr:bounded} states that the dynamics of the studied model $\PH$ contains no infinite sequence of prioritised actions.
 As these actions can be considered as non-biological and therefore instantaneous, we thus prevent the existence of any Zeno-like behaviour
 which would allow the play of an infinite sequence of prioritised actions in “zero time”.
 As a consequence, the set $\restriction{\Sce}{1}$ is finite.
-%\begin{condition}[2 classes of priorities]
-%\label{cr:2prio}
-%  In this paper, we only consider Process Hitting with $2$ classes of priorities:
-%  $\PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle})$.
-%\end{condition}
-%
+
 \begin{condition}[Bounded termination]
 \label{cr:bounded}
   The dynamics of $\restriction{\PH}{1}$ contains no cycles:
@@ -244,7 +240,7 @@ Hitting is either a well-formed component (\pref{def:component}) or a well-forme
 (\pref{def:cs}).
 The former is a sort that is hit only by actions with priority greater than $2$.
 The latter is a sort that is hit only by actions with priority $1$ and which
-always converge to the same process with respect to the state of the components
+always converges to the same process with respect to the state of the components
 that have an influence on it (\pref{def:conn}).
 We note $\components\subset\Sigma$ the set of well-formed components,
 and $\cs\subset\Sigma$ the set of well-formed cooperative sorts.
@@ -258,7 +254,7 @@ A sort $a \in \PHs$ is a \emph{well-formed component} if and only if:
 \begin{definition}[Components influence $(\compin: \PHs\to\powerset(\components))$]
 \label{def:conn}
 Given a sort $a$, $\compin(a)\DEF \conn(a)\cap\components$ where
-$\conn(a)$ is the smallest set of sorts satisfying the following properties:
+$\conn(a) \subset \PHs$ is the smallest set of sorts satisfying the following properties:
 \begin{align*}
 a\in\conn(a) &
 \\
@@ -286,6 +282,12 @@ A sort $a \in \PHs$ is a \emph{well-formed cooperative} sort if and only if:
   $$\PHs = \components \cup \cs \wedge \components \cap \cs = \emptyset$$
 \end{condition}
 
+We note that a sort $a$ that is hit by no action (\ie $\forall h \in \PHh, \PHsort(\target{h}) \neq a$)
+does comply with both definitions of well-formed components and well-formed cooperative sorts.
+In this case, such a sort can be arbitrarily affected to either of sets.
+Such case may occur for “input” sorts (which state is initially fixed and do not evolve)
+or some special cases of cooperative sorts produces by the translations of \pref{sec:encodings}.
+
 Because of \pref{def:cs}(\ref{csai}), we denote in the following: $\pfp_s(a) = a_i$.
 Furthermore, because of \pref{def:cs}(\ref{css}), we denote $\csState(a_i)$ the set of sub-states represented by the process $a_i$ of any cooperative sort $a$ (\pref{def:csState}).
 \begin{definition}[$\csState : \PHproc \rightarrow \powerset(\PHproc)$]
@@ -299,7 +301,7 @@ Furthermore, because of \pref{def:cs}(\ref{css}), we denote $\csState(a_i)$ the 
 In the following we simply write “component” (\resp “cooperative sort”) instead of “well-formed component” (\resp “well-formed cooperative sort”).
 
 \begin{example}
-  The PH in \pref{fig:ph-livelock} contains three components $a$, $b$ and $c$ and a cooperative sort $ab$ that models cooperation between sorts $a$ and $b$.
+  The PH in \pref{fig:ph-livelock} contains three components ($a$, $b$ and $c$) and a cooperative sort ($ab$, which models cooperation between sorts $a$ and $b$).
 \end{example}
 
 

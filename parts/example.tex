@@ -5,13 +5,13 @@
 \subsection{Flattening of a model: Metazoan segmentation}
 
 In this section, we illustrate the flattening method presented in \pref{ssec:flattening}
-on a model of metazoan segmentation established in silico in \cite{MSB:MSB4100192}
-in a differential equations framework.
-It is composed of a wavefront gene $f$ that activates the gap-gene $a$ whose products are responsible or stripes.
-Gene $f$ also activates a gene $c$ whose products repress the gene $a$.
+on a model of metazoan segmentation inspired from a first translation to Process Hitting given in \cite{PMR10-TCSB}.
+This model was originally established in silico in \cite{MSB:MSB4100192} in a differential equations framework.
+It is composed of a wavefront gene $f$ that activates the gap-gene $a$ whose products are responsible for stripes formation.
+Gene $f$ also activates a gene $c$ whose products represses the gene $a$.
 The auto-inhibition of $c$ generalises a chain of repressors on $a$.
 The auto-inhibition of $f$, which terminates the stripes formation in the original model,
-have been removed in order to focus on the stationary dynamics of the model.
+has been removed in order to focus on the stationary dynamics of the model.
 
 The actions of the original model make $3$ classes of priorities, as represented in \pref{fig:metazoan-php}.
 Thus, although the actions of the highest class of priority are only used to update a cooperative sort,
@@ -56,11 +56,12 @@ given the fact that the switches of genes $a$ and $c$ have to alternate in order
   }
   \caption{
   \label{fig:metazoan-php}
-    An example of PH $\oPH$ with $3$ classes of priorities.
+    An example of PH $\oPH$ with $3$ classes of priorities,
+    modelling the process of metazoan segmentation.
     Actions of $\ov{\PHh}^{(3)}$ (lowest priority) are in thin lines,
     actions of $\ov{\PHh}^{(2)}$ (intermediate priority) are in thick lines,
     and actions of $\ov{\PHh}^{(1)}$ (highest priority), whose only purpose is to update the cooperative sort $fc$,
-    are not represented but modeled by the double dashed arrows.
+    are not represented but modelled by the double dashed arrows.
   }
 \end{figure}
 
@@ -69,8 +70,6 @@ It contains $2$ classes of priority, and prioritised actions are only used to up
 Note that according to the simplifications mentioned at the end of \pref{ssec:flattening},
 the auto-action $h_1 = \PHhit{c_1}{c_1}{c_0}$ in $\oPH$ has been flattened to a regular action $\PHhit{a_0}{c_1}{c_0}$
 because its playability property could be simplified to $\Fop{h_1} \equiv c_1 \wedge a_0 \equiv a_0$.
-
-\todo{Results on reachability?}
 
 \begin{figure}[htp]
   \centering
@@ -117,9 +116,10 @@ because its playability property could be simplified to $\Fop{h_1} \equiv c_1 \w
   }
   \caption{
   \label{fig:metazoan-ph}
-    An example of PH $\PH$ with $2$ classes of priorities.
-    Actions of $\PHh^{(2)}$ (unprioritized) are in thin lines,
-    and actions of $\PHh^{(1)}$ (prioritized) which are used to update cooperative sorts,
+    An example of PH $\PH$ with $2$ classes of priorities,
+    which is the flattening of the PH in \pref{fig:metazoan-php}.
+    Actions of $\PHh^{(2)}$ (unprioritised) are in thin lines,
+    and actions of $\PHh^{(1)}$ (prioritised) which are used to update cooperative sorts,
     are abstracted by thick dashed arrows.
   }
 \end{figure}
