@@ -1,4 +1,4 @@
-\subsection{PH with multiple classes of priorities}
+\subsection{Process Hitting with multiple classes of priorities}
 \label{ssec:flattening}
 
 Consider a PH with $k \in \sNN$ classes of priories
@@ -86,27 +86,29 @@ thus creating a new PH model which is entailed in the restrictions depicted in \
 In this second case, we denote, for any $i \in \segm{1}{\n}$:
 $\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m} \}$.
 
-With \pref{th:ppplaysubset}, we can then characterise the playability of an action in a state only with a sub-state.
+With \pref{lem:ppplaysubset}, we can then characterise the playability of an action in a state only with a sub-state.
 This sub-state corresponds to one of the conjunctions of its playability property's DNF.
 Finally, \pref{def:flattening} gives the construction of the flattening of $\oPH$:
 for each action $h \in \ov{\PHh}$, several cooperative sorts $f^{h,i}$ are built to reflect each of the conjunction in $\Fop{h}$,
 \ie for $i \in \segm{1}{\n}$.
-This construction allows to obtain the same dynamics as $\oPH$, which is proven by \pref{th:bisimPHP}.
+This construction allows to obtain the same dynamics as $\oPH$, as stated by \pref{th:bisimPHP}.
+A detailed proof of this theorem is available in \pref{suppl:demoflattening}.
 %
-\begin{theorem}
-\label{th:ppplaysubset}
+\begin{lemma}
+\label{lem:ppplaysubset}
   Let $h \in \ov{\PHh}$ and $s \in \ov{\PHl}$;
   $h$ is playable in $s$ if and only if:
   \[\target{h} \in s \wedge \exists \mysigma \subseteq s, \Fsem{\Fop{h}}{\mysigma} \enspace.\]
 %  \[\exists i \in \segm{1}{\n}, \exists \mysigma \in \bigtimes{b \in \PHdep{i}{h}} \PHl_b,
 %    \mysigma \subseteq s \wedge \Fsem{\F(h)}{\mysigma} \enspace.\]
-\end{theorem}
+\end{lemma}
 %
-\newproof{proofppplaysubset}{Proof of \pref{th:ppplaysubset}}
-\begin{proofppplaysubset}
+%\newproof{proofppplaysubset}{Proof of \pref{lem:ppplaysubset}}
+%\begin{proofppplaysubset}
+\begin{proof}
   ($\Rightarrow$)
-    If $h$ is playable in $s$, then $\target{h} \in s$ and $\Fsem{\Fop{h}}{s}$;
-    thus, $\Fop{h} \not\equiv \bot$ and, by property of a DNF,
+    If $h$ is playable in $s$, then $\target{h} \in s$ and $\Fsem{\Fop{h}}{s}$.
+    Thus, $\Fop{h} \not\equiv \bot$ and, by property of a DNF,
     at least one of the $\n$ conjunctions of $\Fop{h}$ is true in $s$.
     Suppose the $i$\textsuperscript{th} conjunction is true in $s$, with $i \in \segm{1}{\n}$;
     then we have: $\forall j \in \segm{1}{\m}, p_{i,j} \in s$.
@@ -117,8 +119,9 @@ This construction allows to obtain the same dynamics as $\oPH$, which is proven 
     and, by construction of $\PHdep{i}{h}$, $\Fsem{\Fop{h}}{\mysigma}$.
   
   ($\Leftarrow$)
-    Trivial.
-\end{proofppplaysubset}
+    $\Fsem{\Fop{h}}{\mysigma}$ therefore $\Fsem{\Fop{h}}{s}$; as $\target{h} \in s$, $h$ is playable in $s$.
+\end{proof}
+%\end{proofppplaysubset}
 
 \begin{definition}
   \label{def:flattening}
@@ -172,36 +175,6 @@ This construction allows to obtain the same dynamics as $\oPH$, which is proven 
       \unflats{s} \PHPtrans \unflats{s'} \enspace.$
   \end{enumerate}
 \end{theorem}
-%
-\newproof{proofbisimPHP}{Proof of \pref{th:bisimPHP}}
-\begin{proofbisimPHP}
-  (\ref{php2ph}) Let $\flats{\os} = s$.
-    Given the dynamics of a PH (\pref{def:play}), if $\os \PHPtrans[\PH] \os'$,
-    then there exists $h \in \ov{\PHh}$ playable in $\os$;
-    therefore, $\os' = \os \PHplay h$.
-    Thus, $\Fsem{\Fop{h}}{\os}$ and $\target{h} \in \os$,
-    and given \pref{th:ppplaysubset}, there exists $\mysigma \subseteq s$ so that $\Fsem{\Fop{h}}{\mysigma}$.
-    Therefore, by construction of $\PH$ (\pref{def:flattening}) there exists
-    $g = \PHhit{f^{h,i}_\mysigma}{\target{h}}{\bounce{h}} \in \PHh^{(2)}$.
-    By construction of $s$ (\pref{def:flattening}), $\PHget{s}{f^{h,i}} = f^{h,i}_\mysigma$ and $\target{h} = \target{g} \in s$.
-    Therefore, $g$ is playable in $s$.
-    In $s \PHplay g$, the only playable actions are those in $\PHh^{(1)}$ having $\bounce{h} = \bounce{g}$ as hitter
-    and updating cooperative sorts, allowing to reach $\flats{\os'}$ in a finite number of actions.
-    Thus, $\flats{\os} \PHPtrans[\oPH]^* \flats{\os'}$.
-  
-  (\ref{ph2php}) Let $\os = \unflats{s}$.
-    Given the dynamics of a PH (\pref{def:play}), if $s \PHPtrans s'$,
-    then there exists $g \in \PHh$ playable in $s$; therefore, $s' = s \PHplay g$ and $\target{g} \in s$.
-    If $\prio(g) = 1$ then only the active process of a cooperative sort has evolved, and $\unflats{s} = \unflats{s'}$.
-    Otherwise, $\prio(g) = 2$; we note in this case: $g = \PHhit{f^{h,i}_\mysigma}{b_j}{b_k}$.
-    By construction of the flattening (\pref{def:flattening}), there exists $h \in \ov{\PHh}$ so that
-    $\target{h} = b_j$, $\bounce{h} = b_k$ and $\Fsem{\Fop{h}}{\mysigma}$.
-    If $g$ is playable, this means that no other action in $\PHh^{(1)}$ is playable, and especially the cooperative sort
-    $f^{h,i}$ is already updated; therefore, $\mysigma \subseteq \os$.
-    Furthermore, $b_j \in \os$.
-    Thus, by \pref{th:ppplaysubset}, it comes that $h$ is playable in $\os$,
-    and $\unflats{s} \PHPtrans \unflats{s'}$.
-\end{proofbisimPHP}
 
 We showed in this subsection that it is possible to model a PH with $k$ classes of priorities as a PH
 with $2$ classes of priorities and the same dynamics.

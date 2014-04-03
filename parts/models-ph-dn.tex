@@ -111,6 +111,7 @@ satisfies the Conditions of \pref{ssec:hypothesis}.
 PH with $2$ classes of priorities.
 Intuitively, actions updating cooperative sorts being prioritised, actions updating component
 sorts follow strictly the possible transitions of the ADN.
+A detailed proof is given in \pref{suppl:proofbisimADN}.
 
 \begin{theorem}[$\DNdef \approx \toPH\DNdef$]~
 \label{th:bisimDN}
@@ -124,33 +125,3 @@ sorts follow strictly the possible transitions of the ADN.
       \decode{s'}\enspace.$
   \end{enumerate}
 \end{theorem}
-%
-\newproof{proofbisimADN}{Proof of \pref{th:bisimDN}}
-\begin{proofbisimADN}
-(\ref{adn2ph}) From \pref{def:DN}, $x\DNtrans x'\Rightarrow \exists i\in\segm{1}{n},
-f^i(x)=\get{x'}{i} \wedge \forall j\in\segm{1}{n},i\neq j, \get{x}{j}=\get{x'}{j}$.
-Let us assume (without loss of generality) that $f^i(x)=k'$, $\get{x}{i}=k$ and
-$\varsigma\in\underset{j\in\DNdep(f^i)}{\times} \PHl_{a^j}$ such that
-$\forall j\in\DNdep(f^i), \get{\varsigma}{j}=a^j_{\get{x}{j}}$.
-From \pref{def:DN2PH}, $h=\hit{f^i_\varsigma}{a^i_k}{a^i_{k'}}\in\Hits^{(2)}$.
-From the definition of $\encode x$,
-$a^i_k\in \encode x$ and $f^i_\varsigma\in \encode x$;
-moreover, as there is no action in $\Hits^{(1)}$ applicable in $\encode x$,
-$h$ is applicable in $\encode x$:
-$\encode x\PHPtrans \encode x\play h$.
-In $\encode x\play h$, the only applicable actions of priority $1$ are those having
-$a^i_{k'}$ as hitter and hitting cooperative sorts, giving a finite number of transitions towards
-$\encode{x'}$.
-
-(\ref{ph2adn}) $s\PHPtrans s'$ only if there exists an action $h$ applicable in $s$ such that
-$s\play h=s'$.
-If $\prio(h)=1$, then, by definition of $\Hits^{(1)}$, 
-$\decode s=\decode {s'}$.
-If $\prio(h)=2$, then $\forall i\in\segm{1}{n}$,
-if $\get{s}{f^i} = f^i_\varsigma$, then, $\forall j\in\DNdep(f^i),
-\get{\varsigma}{a^j}=\get{s}{a^j}$.
-Let $i\in\segm{1}{n}$ such that $\get{s}{a^i}\neq\get{s'}{a^i}$ ($i$ is unique for this
-transition).
-By \pref{def:DN2PH}, if $\get{s'}{a^i}=a^i_{k'}$, necessarily $f^i(\decode s)=k'$, hence
-$\decode s\DNtrans \decode{s'}$.
-\end{proofbisimADN}
