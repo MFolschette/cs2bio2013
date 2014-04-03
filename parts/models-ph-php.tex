@@ -46,7 +46,6 @@ given the semantics of PH (\pref{def:play}).
 This operator considers the \emph{virtual hitters} of an action,
 which are the sub-states given by $\csState$ to activate the hitter of the given action if it is a process of cooperative sort.
 Furthermore, the target of the action if not taken into account as it is not needed for the rest of the flattening.
-%\pref{th:ppplay} gives the condition for an action to be playable given its playability property.
 %
 \begin{definition}[Playability property of an action ($\Fopsymbol : \PHh \rightarrow \F$)]\label{def:fop}
   \[\forall h \in \ov{\PHh}, \Fop{h} \equiv \virtualhitters(h) \wedge
@@ -62,16 +61,6 @@ Furthermore, the target of the action if not taken into account as it is not nee
 %
 By construction of this operator and given the dynamics of a PH model,
 an action $h$ is playable in a state $s \in \ov{\PHl}$ if and only if: $\Fsem{\Fop{h}}{s} \wedge \target{h} \in s$.
-%%
-%\begin{theorem}
-%\label{th:ppplay}
-%  $h \in \ov{\PHh}$ is playable in $s \in \ov{\PHl}$ if and only if $\Fsem{\Fop{h}}{s} \wedge \target{h} \in s$.
-%\end{theorem}
-%%
-%\newproof{proofppplay}{Proof of \pref{th:ppplay}}
-%\begin{proofppplay}
-%  By definition of the semantics of a PH given in \pref{def:play}.
-%\end{proofppplay}
 
 Because we only use classical logic operators, we can compute the Disjunctive Normal Form (DNF) of any playability property.
 For any action $h \in \ov{\PHh}$, this DNF takes the form:
@@ -99,12 +88,8 @@ A detailed proof of this theorem is available in \pref{suppl:demoflattening}.
   Let $h \in \ov{\PHh}$ and $s \in \ov{\PHl}$;
   $h$ is playable in $s$ if and only if:
   \[\target{h} \in s \wedge \exists \mysigma \subseteq s, \Fsem{\Fop{h}}{\mysigma} \enspace.\]
-%  \[\exists i \in \segm{1}{\n}, \exists \mysigma \in \bigtimes{b \in \PHdep{i}{h}} \PHl_b,
-%    \mysigma \subseteq s \wedge \Fsem{\F(h)}{\mysigma} \enspace.\]
 \end{lemma}
 %
-%\newproof{proofppplaysubset}{Proof of \pref{lem:ppplaysubset}}
-%\begin{proofppplaysubset}
 \begin{proof}
   ($\Rightarrow$)
     If $h$ is playable in $s$, then $\target{h} \in s$ and $\Fsem{\Fop{h}}{s}$.
@@ -112,7 +97,6 @@ A detailed proof of this theorem is available in \pref{suppl:demoflattening}.
     at least one of the $\n$ conjunctions of $\Fop{h}$ is true in $s$.
     Suppose the $i$\textsuperscript{th} conjunction is true in $s$, with $i \in \segm{1}{\n}$;
     then we have: $\forall j \in \segm{1}{\m}, p_{i,j} \in s$.
-%    Let $\mysigma \in \bigtimes{b \in \PHdep{i}{h}} \PHl_b$
     Let $\mysigma \in \PHsubl_{\PHdep{i}{h}}$
     with $\forall b \in \PHdep{i}{h}, \PHget{\mysigma}{b} = \PHget{s}{b}$.
     We immediately have: $\mysigma \subseteq s$,
@@ -121,7 +105,6 @@ A detailed proof of this theorem is available in \pref{suppl:demoflattening}.
   ($\Leftarrow$)
     $\Fsem{\Fop{h}}{\mysigma}$ therefore $\Fsem{\Fop{h}}{s}$; as $\target{h} \in s$, $h$ is playable in $s$.
 \end{proof}
-%\end{proofppplaysubset}
 
 \begin{definition}
   \label{def:flattening}
@@ -139,14 +122,10 @@ A detailed proof of this theorem is available in \pref{suppl:demoflattening}.
       \PHl_{f^{h,i}} = \{ f^{h,i}_\mysigma \mid \mysigma \in \PHsubl_{\PHdep{i}{h}} \}$;
     \item $\PHh^{(1)} = \{ \PHhit{a_k}{f^{h,i}_\mysigma}{f^{h,i}_{\mysigma'}} \mid
       h \in \ov{\PHh} \wedge
-      %\n \geq 1 \wedge i \in \segm{1}{\n} \wedge
       f^{h,i} \in \PHs_f \wedge
       a \in \PHdep{i}{h} \wedge a_k \in \PHl_a \wedge
       f^{h,i}_\mysigma , f^{h,i}_{\mysigma'} \in \PHl_{f^{h,i}} \wedge
       \PHget{\mysigma}{a} \neq a_k \wedge \mysigma' = \mysigma \Cap \{ a_k \} \}$;
-%      \todo{From here: ...} \PHget{\mysigma'}{a} = a_k \wedge
-%      (\forall b \in \PHdep{i}{h} \setminus \{ a \}, \PHget{\mysigma'}{b} = \PHget{\mysigma}{b}) \}$;
-%      \todo{... can be replaced by: $\mysigma' = \mysigma \Cap \{ a_k \}$}
     \item $\PHh^{(2)}=\{ \PHhit{f^{h,i}_\mysigma}{\target{h}}{\bounce{h}} \mid
       h \in \ov{\PHh} \setminus \ov{\PHh}^{(1)} \wedge
       f^{h,i} \in \PHs_f \wedge

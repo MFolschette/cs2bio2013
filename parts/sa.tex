@@ -144,20 +144,6 @@ Finally, as the active process of every sort may evolve, $\cwB$ is obtained by i
 \ie by overriding its initial context $\ctx$ by $\allprocs(\V, \E)$, defined by:
 $$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \}$$
 
-\begin{comment}
-The reachability of a process $a_i$ is approximated by the ability to solve all objectives $\PHobjp{a}{j}{i}$ for all $a_j$ in the initial context.
-To this end, the abstractions of bounce sequences (\pref{def:aBS}) solving these objectives are computed, leading to new required processes, and thus new objectives on other sorts.
-Thus, the graph of local causality $\cwB = (\V, \E)$ defined in \pref{def:glc} is a graph where $\V \subset \Proc \cup \Obj \cup \Sol$ and $\E \subset \V \times \V$
-in which edges link any required process $a_i$ in $\Proc$ to all corresponding objectives $P$ in $\Obj$,
-and any objective $P$ to abstractions of bounce sequences $ps \in \Sol$ (\pref{def:aBS}) solving this objective;
-such sets $ps$ then stand for new required processes.
-In the case where a process $a_i$ belongs to a cooperative sort, it is directly linked to the set of the processes $\csState(a_i)$ (\pref{def:csState}) that it represents.
-If the solving of an objective $P$ requires a process of $\PHsort(P)$, a continuity edge is added to re-target this objective (\pref{def:maxCont}).
-Finally, as the active process of every sort may evolve, $\cwB$ is obtained iteratively by saturation with every process it contains,
-\ie by overriding its initial context $\ctx$ by $\allprocs(\V, \E)$, defined by:
-$$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \}$$
-\end{comment}
-
 \begin{definition}
 \label{def:glc}
   The graph of local causality $\cwB \DEF (\Bv, \Be)$ is defined as: $\cwB \DEF \lfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}$,
@@ -176,19 +162,7 @@ $$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \
   \end{align}
 \end{definition}
 
-\begin{comment}
-\pref{eq:Vw}, \eqref{eq:Vproc} and \eqref{eq:VE} ensure that all required nodes are in $\cwV$.
-Elements in $\PHproc$ are required processes,
-elements in $\Obj$ are the objectives to reach these processes
-and elements in $\Sol$ are the sets of processes that allow to solve these objectives.
-\pref{eq:ESol1} links an objective $P$ to its solutions in $\BS(P)$
-and \pref{eq:ESol2} links a solution $ps$ to the processes $a_i \in ps$ it contains.
-Then, \pref{eq:EReq} links a required component process $a_i$ to all objectives $\PHobjp{a}{j}{i}$ with $a_j \in \ctx$
-while \pref{eq:EPrio} links a required cooperative sort process $a_i$ to its solutions in $\csState(a_i)$.
-Finally, if the resolution of an objective $P$ requires a process of $\PHsort(P)$, then \pref{eq:ECont} re-targets this objective ($\gCont$).
-\end{comment}
-
-In the graph of local causality, an edge $(p, ps) \in \Proc \times \Sol$ %linking a process of a cooperative sort to a solution set $ps$
+In the graph of local causality, an edge $(p, ps) \in \Proc \times \Sol$
 is said coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the children processes of $ps$.
 Then, \pref{th:approxinf} gives a sufficient condition for the concretization of a sequence of objectives in a given context,
 which is derived immediately from the graph of local causality.
@@ -212,7 +186,6 @@ a context $\ctx$ and a sequence of objectives $\w$,
 
 Computing the graph of local causality is polynomial in the number of sorts in $\PH$ and exponential in the number of processes in one sort.
 Checking the properties allowing to apply \pref{th:approxinf} is polynomial in the size of the graph.
-%Therefore, if the number of processes in each sort is small, the overall method can be processed in polynomial time.
 Furthermore, it is possible to compute only a subset of $\V \cap \Sol$;
 in this case, the overall method turns out to be exponential in the number of solutions to each objective.
 Our method can thus be considered as efficient compared to regular model-checking which is usually PSPACE-complete~\cite{Harel02}.
@@ -299,7 +272,6 @@ Our method can thus be considered as efficient compared to regular model-checkin
     Rectangular nodes containing a single process are elements in $\Proc$,
     borderless nodes containing a couple of processes are elements in $\Obj$
     and circle nodes are elements in $\Sol$.
-    %The double arrow and the two surrounding nodes represent the only edge in $\Proc \times \Sol$.
     \pref{th:approxinf} is inconclusive on this example as edge $(ab_{11}, \{ a_1, b_1 \}) \in \Proc \times \Sol$ (here represented with a double line) is not coherent (\pref{def:coherent}).
     Indeed, $a_0 \in \Proc$ is a child of $\{ a_1, b_1 \}$, but $a_0 \neq a_1$ (and the same also stands for $b_0$).
   }
