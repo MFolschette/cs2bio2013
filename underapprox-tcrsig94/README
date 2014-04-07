@@ -3,7 +3,7 @@
 
 You are required to install Pint - http://process.hitting.free.fr.
 
-$ ph-reach --coop-priority -i model.ph --initial-state "cd45 1, cd28 1, tcrlib 1" ap1 1
+$ ph-reach --coop-priority -i model.ph --initial-state "cd45 1, cd28 1, tcrlig 1" ap1 1
 
 You can try with different values for initial state, and different output activation (e.g., sre,
 nfkb, nfat, ...).
