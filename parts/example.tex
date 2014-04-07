@@ -71,6 +71,25 @@ Note that according to the simplifications mentioned at the end of \pref{ssec:fl
 the auto-action $h_1 = \PHhit{c_1}{c_1}{c_0}$ in $\oPH$ has been flattened to a regular action $\PHhit{a_0}{c_1}{c_0}$
 because its playability property could be simplified to $\Fop{h_1} \equiv c_1 \wedge a_0 \equiv a_0$.
 
+The static analysis results of \pref{ssec:ua} and \pref{ssec:ordered-ua} can be used to check if the model is functional, \ie
+if genes $a$ and $c$ are successively activated and deactivated,
+thus leading to the formation of regular stripes.
+Starting from context $\ctx = \PHstate{f_1, a_0, c_0}$,
+we want to check the reachability of
+$\w = \PHobj{a_0}{a_1} \PHconcat \PHobj{c_0}{c_1} \PHconcat \PHobj{a_1}{a_0} \PHconcat \PHobj{c_1}{c_0}$.
+Rather than checking this whole objective sequence,
+we decompose it into the following ones:
+\begin{align*}
+  \ctx^1 &= \PHstate{f_1, a_0, c_0} \text{ and } P_1 = \PHobj{a_0}{a_1} &
+  \ctx^3 &= \PHstate{f_1, a_1, c_1} \text{ and } P_2 = \PHobj{a_1}{a_0} \\
+  \ctx^2 &= \PHstate{f_1, a_1, c_0} \text{ and } P_3 = \PHobj{c_0}{c_1} &
+  \ctx^4 &= \PHstate{f_1, a_0, c_1} \text{ and } P_4 = \PHobj{c_1}{c_0}
+\end{align*}
+Given \pref{th:approxinf}, we have: $\forall i \in \segm{1}{4}, \muconcr_{\ctx^i}(P_i) \neq \emptyset$.
+Finally, after checking that it can be applied for $i = 3$ down to $i = 1$,
+\pref{thm:ordered-ua} gives: $\uconcr(\w) \neq \emptyset$.
+Thus the model is functional.
+
 \begin{figure}[htp]
   \centering
   \scalebox{1}{
