@@ -142,7 +142,9 @@ The solving of an objective $P$ may require a process of $\PHsort(P)$, \ie $\gCo
 \pref{eq:Vw}, \eqref{eq:Vproc} and~\eqref{eq:VE} ensure that all required nodes are in $\cwV$.
 Finally, as the active process of every sort may evolve, $\cwB$ is obtained by iteratively saturating with every process it contains,
 \ie by overriding its initial context $\ctx$ by $\allprocs(\V, \E)$, defined by:
-$$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \}$$
+%$$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \}$$
+$\allprocs(\V, \E) = (V \cap \Proc)$.
+\todo{Remove $\allprocs$}
 
 \begin{definition}
 \label{def:glc}
@@ -152,13 +154,13 @@ $$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \
   so that:
   \begin{align}
     \w &\subseteq \cwV \label{eq:Vw} \\
-    P \in \VProc &\Rightarrow \PHbounce(P) \in \cwV \label{eq:Vproc} \\
-    (x, y) \in \E &\Rightarrow y \in \cwV \label{eq:VE} \\
-    P \in \VObj \wedge ps \in \BS(P) &\Rightarrow (P, ps) \in \cwE \label{eq:ESol1} \\
-    ps \in \VSol \wedge a_i \in ps &\Rightarrow (ps, a_i) \in \cwE \label{eq:ESol2} \\
-    a \in \components \wedge a_i \in \VProc \wedge a_j \in \ctx &\Rightarrow (a_i, \PHobjp{a}{j}{i}) \in \cwE \label{eq:EReq} \\
-    a \in \cs \wedge a_i \in \VProc \wedge ps \in \csState(a_i) &\Rightarrow (a_i, ps) \in \cwE \label{eq:EPrio} \\
-    P \in \VObj \wedge q \in \gCont_\ctx(\PHsort(P), P) &\Rightarrow (P, \PHobj{q}{\PHbounce(P)}) \in \cwE \label{eq:ECont} \!
+    P \in \cwVObj &\Rightarrow \PHbounce(P) \in \cwV \label{eq:Vproc} \\
+    (x, y) \in \cwE &\Rightarrow y \in \cwV \label{eq:VE} \\
+    P \in \cwVObj \wedge ps \in \BS(P) &\Rightarrow (P, ps) \in \cwE \label{eq:ESol1} \\
+    ps \in \cwVSol \wedge a_i \in ps &\Rightarrow (ps, a_i) \in \cwE \label{eq:ESol2} \\
+    a \in \components \wedge a_i \in \cwVProc \wedge a_j \in \ctx &\Rightarrow (a_i, \PHobjp{a}{j}{i}) \in \cwE \label{eq:EReq} \\
+    a \in \cs \wedge a_i \in \cwVProc \wedge ps \in \csState(a_i) &\Rightarrow (a_i, ps) \in \cwE \label{eq:EPrio} \\
+    P \in \cwVObj \wedge q \in \gCont_\ctx(\PHsort(P), P) &\Rightarrow (P, \PHobj{q}{\PHbounce(P)}) \in \cwE \label{eq:ECont} \!
   \end{align}
 \end{definition}
 
