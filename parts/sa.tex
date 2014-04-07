@@ -344,7 +344,12 @@ Given an objective $\obj{a_i}{a_j}$, $\lastprocs:
 defined such that, $\forall lps\in\lastprocs(\obj{a_i}{a_j})$, 
 $lps\in\powerset(\Proc)$,
 \begin{enumerate}
-\item $\{\hitter{\zeta_{\card\zeta}}\} \subset lps$;
+\item $a_j\in lps$;
+\item $\exists\zeta\in\BS(\obj{a_i}{a_j})$ s.t.
+ $\PHsort(\hitter{\zeta_{\card\zeta}}) \neq 
+		\PHsort(\bounce{\zeta_{\card\zeta}})
+		 \Rightarrow
+		  \hitter{\zeta_{\card\zeta}}\in lps$;
 \item $\forall b_j\in lps, b\in\cs, \exists ps\in\csState(b_j), ps\subset lps$;
 \item $\forall b_j\in lps, b\in\cs, 
 		\forall ps\in\csState(b_j),
