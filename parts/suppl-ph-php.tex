@@ -1,2 +1,32 @@
-\section{Proofs about flattening (\pref{ssec:flattening})}
+\section{Proof of the Weak Bisimulation of the Flattening (\pref{ssec:flattening})}
 \label{suppl:demoflattening}
+
+\newproof{proofbisimPHP}{Proof of \pref{th:bisimPHP}}
+\begin{proofbisimPHP}
+  (\ref{php2ph}) Let $\flats{\os} = s$.
+    Given the dynamics of a PH (\pref{def:play}), if $\os \PHPtrans[\PH] \os'$,
+    then there exists $h \in \ov{\PHh}$ playable in $\os$;
+    therefore, $\os' = \os \PHplay h$.
+    Thus, $\Fsem{\Fop{h}}{\os}$ and $\target{h} \in \os$,
+    and given \pref{lem:ppplaysubset}, there exists $\mysigma \subseteq s$ so that $\Fsem{\Fop{h}}{\mysigma}$.
+    Therefore, by construction of $\PH$ (\pref{def:flattening}) there exists
+    $g = \PHhit{f^{h,i}_\mysigma}{\target{h}}{\bounce{h}} \in \PHh^{(2)}$.
+    By construction of $s$ (\pref{def:flattening}), $\PHget{s}{f^{h,i}} = f^{h,i}_\mysigma$ and $\target{h} = \target{g} \in s$.
+    Therefore, $g$ is playable in $s$.
+    In $s \PHplay g$, the only playable actions are those in $\PHh^{(1)}$ having $\bounce{h} = \bounce{g}$ as hitter
+    and updating cooperative sorts, allowing to reach $\flats{\os'}$ in a finite number of actions.
+    Thus, $\flats{\os} \PHPtrans[\oPH]^* \flats{\os'}$.
+  
+  (\ref{ph2php}) Let $\os = \unflats{s}$.
+    Given the dynamics of a PH (\pref{def:play}), if $s \PHPtrans s'$,
+    then there exists $g \in \PHh$ playable in $s$; therefore, $s' = s \PHplay g$ and $\target{g} \in s$.
+    If $\prio(g) = 1$ then only the active process of a cooperative sort has evolved, and $\unflats{s} = \unflats{s'}$.
+    Otherwise, $\prio(g) = 2$; we note in this case: $g = \PHhit{f^{h,i}_\mysigma}{b_j}{b_k}$.
+    By construction of the flattening (\pref{def:flattening}), there exists $h \in \ov{\PHh}$ so that
+    $\target{h} = b_j$, $\bounce{h} = b_k$ and $\Fsem{\Fop{h}}{\mysigma}$.
+    If $g$ is playable, this means that no other action in $\PHh^{(1)}$ is playable, and especially the cooperative sort
+    $f^{h,i}$ is already updated; therefore, $\mysigma \subseteq \os$.
+    Furthermore, $b_j \in \os$.
+    Thus, by \pref{lem:ppplaysubset}, it comes that $h$ is playable in $\os$,
+    and $\unflats{s} \PHPtrans \unflats{s'}$.
+\end{proofbisimPHP}

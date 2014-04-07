@@ -60,7 +60,6 @@ which then allows to define the dynamics of a PH in \pref{def:play}.
   $\PHget{(s \Cap a_i)}{a} = a_i \wedge \forall b \neq a, \PHget{(s \Cap a_i)}{b} = \PHget{s}{b}$.
   We also extend this definition to a set of processes given that all processes are from different sorts by the override of each process:
   $\forall ps \in \PHsubl[\PHl], s \Cap \toset{ps} = s \underset{a_i \in \toset{ps}}{\Cap} a_i$.
-  %$\forall as \subseteq \PHs, \forall ps \in \underset{a \in as}{\times} \PHl_a, s \Cap ps = s \underset{a_i \in ps}{\Cap} a_i$.
 \end{definition}
 %
 \begin{definition}[Dynamics of a PH ($\PHPtrans$)]
@@ -307,7 +306,7 @@ In the following we simply write “component” (\resp “cooperative sort”) 
 
 \subsection{Consequences of the restrictions}
 
-In this subsection, we give several general lemmas that can be derived from the restrictions of \pref{ssec:hypothesis}, %(\pref{cr:bounded}, \ref{cr:cyclefreeness} \& \ref{cr:compcs})
+In this subsection, we give several general lemmas that can be derived from the restrictions of \pref{ssec:hypothesis},
 in the special case of a PH model with $2$ classes of priorities $\PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle})$.
 These results will help building the static analysis of \pref{sec:sa}.
 
