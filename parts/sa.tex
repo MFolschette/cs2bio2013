@@ -341,7 +341,7 @@ $\w$.
 \label{def:lastprocs}
 Given an objective $\obj{a_i}{a_j}$, $\lastprocs:
 \Obj\to\powerset(\powerset(\Proc))$ is
-defined such that, $\forall lps\in\lastprocs(\obj{a_i}{a_j})$, 
+defined as the largest set such that, $\forall lps\in\lastprocs(\obj{a_i}{a_j})$, 
 $lps\in\powerset(\Proc)$,
 \begin{enumerate}
 \item $a_j\in lps$;
@@ -351,10 +351,6 @@ $lps\in\powerset(\Proc)$,
 		 \Rightarrow
 		  \hitter{\zeta_{\card\zeta}}\in lps$;
 \item $\forall b_j\in lps, b\in\cs, \exists ps\in\csState(b_j), ps\subset lps$;
-\item $\forall b_j\in lps, b\in\cs, 
-		\forall ps\in\csState(b_j),
-			\exists lps'\in\lastprocs(\obj{a_i}{a_j}),
-				ps\subset lps'$;
 \item $\nexists lps'\in\lastprocs(\obj{a_i}{a_j}), lps'\subset lps \wedge
 									lps'\neq lps$.
 \end{enumerate}
