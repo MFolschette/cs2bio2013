@@ -142,9 +142,7 @@ The solving of an objective $P$ may require a process of $\PHsort(P)$, \ie $\gCo
 \pref{eq:Vw}, \eqref{eq:Vproc} and~\eqref{eq:VE} ensure that all required nodes are in $\cwV$.
 Finally, as the active process of every sort may evolve, $\cwB$ is obtained by iteratively saturating with every process it contains,
 \ie by overriding its initial context $\ctx$ by $\allprocs(\V, \E)$, defined by:
-%$$\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \}$$
-$\allprocs(\V, \E) = (V \cap \Proc)$.
-\todo{Remove $\allprocs$}
+\[\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \} \enspace.\]
 
 \begin{definition}
 \label{def:glc}
