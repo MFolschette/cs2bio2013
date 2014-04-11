@@ -28,7 +28,7 @@ which is a Boolean formula where the atoms are processes of $\ov{\PH}$.
   If $P \in \F$ is a playability property and $\mysigma \in \PHsubl$ is a sub-state of $\oPH$,
   we note $\Fsem{P}{\mysigma}$ the \emph{evaluation} of $P$ in $\mysigma$:
   \begin{itemize}
-    \item if $P = a_i \in \ov{\PHs}_a$ is an atom, with $a \in \ov{\PHs}$, then $\Fsem{a_i}{\mysigma}$ is true iff $a_i \in \mysigma$;
+    \item if $P = a_i \in \ov{\PHl}_a$ is an atom, with $a \in \ov{\PHs}$, then $\Fsem{a_i}{\mysigma}$ is true iff $a_i \in \mysigma$;
     \item if $P$ is not an atom, then $\Fsem{P}{\mysigma}$ is true iff all its subformulas are inductively true in $\mysigma$
       with the classical semantics for the logic operators $\top$, $\bot$, $\neg$, $\wedge$ and $\vee$.
   \end{itemize}
@@ -38,18 +38,18 @@ Because we only use classical logic operators, the formulas of Boolean logic on
 distributivity, associativity and commutativity can be used, together with De Morgan's laws on negation.
 We also have the following property for the negation of an atom:
 \[\forall a \in \ov{\PHs}, \forall a_i \in \ov{\PHl}_a, \forall \mysigma \in \PHsubl,
-  \Fsem{\neg a_i}{\mysigma} \Leftrightarrow \Fsem{\bigvee_{\substack{a_j \in \PHl_a\\a_j \neq a_i}} a_j}{\mysigma}\]
+  \Fsem{\neg a_i}{\mysigma} \Leftrightarrow \Fsem{\bigvee_{\substack{a_j \in \ov{\PHl}_a\\a_j \neq a_i}} a_j}{\mysigma}\]
 Indeed, if a process is not active in a state, this means that another process of the same sort is active.
 
 In \pref{def:fop}, we define the the operator $\Fopsymbol$ which characterises the playability of an action
 given the semantics of PH (\pref{def:play}).
 This operator considers the \emph{virtual hitters} of an action,
 which are the sub-states given by $\csState$ to activate the hitter of the given action if it is a process of cooperative sort.
-Furthermore, the target of the action if not taken into account as it is not needed for the rest of the flattening.
+Furthermore, the target of the action is not taken into account as it is not needed for the rest of the flattening.
 %
 \begin{definition}[Playability property of an action ($\Fopsymbol : \PHh \rightarrow \F$)]\label{def:fop}
   \[\forall h \in \ov{\PHh}, \Fop{h} \equiv \virtualhitters(h) \wedge
-    \left( \bigwedge_{\substack{g \in \PHh^{(n)}\\n < \prio(h)}}
+    \left( \bigwedge_{\substack{g \in \ov{\PHh}^{(n)}\\n < \prio(h)}}
     \neg \left( \target{g} \wedge \hitter{g}\right) \right)\]
   where if we note $\hitter{h} = a_i$, then:
   \[\virtualhitters(h) =

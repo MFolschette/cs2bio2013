@@ -93,7 +93,7 @@ In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH w
     \PHl_a &= \{ a_0, a_1 \} \enspace, & \PHl_b &= \{ b_0, b_1 \} \enspace, \\
     \PHl_c &= \{ c_0, c_1 \} \enspace, & \PHl_{ab} &= \{ ab_{00}, ab_{01}, ab_{10}, ab_{11} \} \enspace.
   \end{align*}
-  There also is especially: $\{ \PHhit{ab_{11}}{c_0}{c_1}, \PHhit{a_1}{a_1}{a_0}, \PHhit{a_0}{b_0}{b_1} \} \subseteq \PHh^{(2)}$.
+  Note that: $\{ \PHhit{ab_{11}}{c_0}{c_1}, \PHhit{a_1}{a_1}{a_0}, \PHhit{a_0}{b_0}{b_1} \} \subseteq \PHh^{(2)}$.
 
 \begin{figure}[tb]
   \centering
@@ -197,7 +197,7 @@ The construction of cooperation in PH allows to encode any Boolean function betw
 Due to the introduction of priorities into the PH framework,
 it is possible to build cooperations with no temporal shift by defining actions updating the cooperative sorts with the highest class of priority.
 This allows to gain the same expressivity in PH than in Boolean networks, as stated in \pref{sec:dn}.
-The aim of this paper is to allow the static analysis of the dynamics to be handled on PH models comprising such prioritised actions updating cooperative sorts.
+The aim of this paper is to allow the static analysis of the dynamics to be handled on PH models involving such prioritised actions updating cooperative sorts.
 
 
 
@@ -205,7 +205,7 @@ The aim of this paper is to allow the static analysis of the dynamics to be hand
 \label{ssec:hypothesis}
 
 In the scope of this paper, we focus on a specific class of PH models
-in which actions of $\PHh^{(1)}$ are called \emph{prioritized actions} and allow to model non-biological actions.
+in which actions of $\PHh^{(1)}$ are called \emph{prioritised actions} and allow to model non-biological actions.
 We consider in this section a PH model with $k$ classes of priorities: $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$, with $k \in \sNN$
 and we define here the restrictions that lead to this class of models.
 
@@ -283,9 +283,9 @@ A sort $a \in \PHs$ is a \emph{well-formed cooperative} sort if and only if:
 
 We note that a sort $a$ that is hit by no action (\ie $\forall h \in \PHh, \PHsort(\target{h}) \neq a$)
 does comply with both definitions of well-formed components and well-formed cooperative sorts.
-In this case, such a sort can be arbitrarily affected to either of sets.
-Such case may occur for “input” sorts (which state is initially fixed and do not evolve)
-or some special cases of cooperative sorts produces by the translations of \pref{sec:encodings}.
+In this case, such a sort can be arbitrarily affected to either set.
+Such a case may occur for “input” sorts (whose state is initially fixed and does not evolve)
+or some special cases of cooperative sorts produced by the translations of \pref{sec:encodings}.
 
 Because of \pref{def:cs}(\ref{csai}), we denote in the following: $\pfp_s(a) = a_i$.
 Furthermore, because of \pref{def:cs}(\ref{css}), we denote $\csState(a_i)$ the set of sub-states represented by the process $a_i$ of any cooperative sort $a$ (\pref{def:csState}).

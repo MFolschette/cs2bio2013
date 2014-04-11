@@ -16,7 +16,7 @@ As a matter of fact, the abstractions we get are more or less rough or accurate.
 Usual formal frameworks for such modelling activities are state-transition systems or process algebras. % Petri nets
 We developed a quite similar framework named the Process Hitting \cite{PMR10-TCSB},
 consisting in a restriction where the evolution of a component is determined by the state of at most one other component that does not evolve.
-In a sense, these kind of actions are of the form $X + Y \rightarrow X + Y'$ where $X$ behaves like a catalyst molecule that “hits” another molecule $Y$ and changes it into $Y'$, without being itself changed.
+In a sense, these kind of actions are of the form $X + Y \rightarrow X + Y'$ where $X$ behaves like a catalyst molecule that “hits” another molecule $Y$ and changes it into $Y'$, without being changed itself.
 Assuming catalysts are always available, this can represent any biochemical system made of monomolecular reactions, and can also represent catalytic networks such as metabolic networks.
 %, with the aim of avoiding to build the whole state space in order to be able to tackle very large systems
 Our motivation behind this framework was to design a model and analysis techniques adapted to biological modelling.
@@ -49,10 +49,10 @@ The actions modelling biological processes are divided in several classes of pri
 Furthermore, the highest class of priority is used to model particular nonbiological actions, designated as “prioritised”,
 that are used to encode Boolean functions inside the model.
 
-This paper is an extension of \cite{FPMR13-CS2Bio} were we
+This paper is an extension of \cite{FPMR13-CS2Bio} where we
 introduced a new extension to the semantics of Process Hitting by partitioning actions into classes of priorities
 (\pref{sec:ph}).
-One of the objectives is to reach an accurate representation of cooperating components in the model, that was not fulfilled with the initial semantics.
+One of the objectives is to reach an accurate representation of cooperating components in the model, that was not fulfilled with the initial semantics, using only two classes of priorities.
 In \pref{sec:sa},
 we develop an efficient under-approximation of the reachability of the state of components on a subclass of this new framework, thus allowing to compute efficient static analysis.
 This local reachability under-approximation can be also easily extended to study the reachability of a global state.
@@ -70,6 +70,13 @@ network with multiple priority classes,
 we apply our method on a large-scale biological model containing 94 components.
 The under-approximation turned out to be conclusive in all cases and results were computed in hundredths of seconds,
 thus overtaking the efficiency of usual model-checkers.
+
+The main additions in this paper compared to \cite{FPMR13-CS2Bio} are
+two theorems, the first
+stating that any Process Hitting model with any number of classes of priorities can be represented
+with only two classes of priorities,
+and the other giving a method to cope with successive reachability,
+both extending the application range of the static analysis we developed.
 
 
 

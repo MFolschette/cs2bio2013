@@ -91,7 +91,7 @@ In \pref{def:uconcr}, we define $\uconcr(\w)$ as equal to $\concr(\w)$ if and on
 \pref{lem:uconcr-ctx} is used to over-approximate the initial context $\ctx$.
 
 \begin{definition}[$\concr: \OS \to \powerset(\Sce)$]\label{def:concr}
-Given $\w\in\OS$, $\concr(\w)$ is the set of minimal scenarios concretizing $\w$ in the
+Given $\w\in\OS$, $\concr(\w)$ is the set of minimal scenarios concretising $\w$ in the
 context $\ctx$. It is defined as the largest set satisfying the following conditions:
 \begin{enumerate}[(i)]
 \item $\forall\delta\in\concr(\w), \exists s\subseteq\ctx, \delta\in\Sce(s)$
@@ -163,13 +163,13 @@ Finally, as the active process of every sort may evolve, $\cwB$ is obtained by i
 \end{definition}
 
 In the graph of local causality, an edge $(p, ps) \in \Proc \times \Sol$
-is said coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the children processes of $ps$.
-Then, \pref{th:approxinf} gives a sufficient condition for the concretization of a sequence of objectives in a given context,
+is said to be coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the children processes of $ps$.
+Then, \pref{th:approxinf} gives a sufficient condition for the concretisation of a sequence of objectives in a given context,
 which is derived immediately from the graph of local causality.
 A proof of this theorem is given in \pref{suppl:demoapproxinf}.
 \begin{definition}[Coherent edge]
 \label{def:coherent}
-  An edge $(x, y) \in \cwE$ is said coherent if and only if:
+  An edge $(x, y) \in \cwE$ is said to be coherent if and only if:
   $(x, y) \in \Be \cap (\Proc \times \Sol) \Rightarrow y$ has no children process $a_j \in \Bv \cap \Proc$ so that $\exists a_i \in y$, $a_i \neq a_j$.
 \end{definition}
 
@@ -297,7 +297,7 @@ and $\reach$ is a component with $\PHl_\reach = \{ \reach_0, \reach_1 \}$;
 furthermore, $\PHh'^{(1)}$ is the set $\PHh^{(1)}$ completed with all actions updating the cooperative sort $\total$,
 and $\PHh'^{(2)} = \PHh^{(2)} \cup \{ \PHhit{\pfp_s(\total)}{\reach_0}{\reach_1} \}$.
 
-Given an initial context $\ctx$, the reachability of $s$ in $\PH$ is equivalent to the concretization of $\PHobjp{\reach}{0}{1}$ in $\PH'$ from the initial context $\ctx \cup \{ \reach_0 \}$ (the initial state of $\total$ does not matter), which can be efficiently under-approximated using \pref{th:approxinf}.
+Given an initial context $\ctx$, the reachability of $s$ in $\PH$ is equivalent to the concretisation of $\PHobjp{\reach}{0}{1}$ in $\PH'$ from the initial context $\ctx \cup \{ \reach_0 \}$ (the initial state of $\total$ does not matter), which can be efficiently under-approximated using \pref{th:approxinf}.
 Indeed, the additional action $\PHhit{\pfp_s(\total)}{\reach_0}{\reach_1}$ in $\PHh'^{(2)}$ allows to conclude on the reachability of process $\pfp_s(\total)$, that is, on the reachability of the state $s$ (considering only the components).
 
 It is also possible to compute the reachability of a set of states $S \subseteq \PHl$ by creating several actions $\PHhit{\total_s}{\reach_0}{\reach_1}$ in $\PHh^{(2)}$ for each state $s \in S$,
@@ -332,9 +332,9 @@ there exists a set of processes $ps\in\lastprocs(P)$
 such that $ps \subset (s\play\delta)$.
 Hence, if $\muconcr_{\ctx'\Cap ps}(\w')\neq\emptyset$,
 with $\ctx'=\ctx\Cap\procs(\mycwB{\ctx}{P})$,
-there exists a scenario $\delta'$ concretizing $\w'$ from the
+there exists a scenario $\delta'$ concretising $\w'$ from the
 state $(s\play\delta)$.
-Therefore, the scenario $\delta\concat\delta'$ concretizes
+Therefore, the scenario $\delta\concat\delta'$ concretises
 $\w$.
 
 \begin{definition}[$\lastprocs$]
@@ -380,7 +380,7 @@ there exists a scenario $\delta'\in\muconcr_{\ctx'\Cap ps}(\w')$ such that
 $\delta'\in\Sce(s\play\delta)$.
 Hence, $\delta\concat\delta'$ is a scenario playable in $s$.
 Therefore, for all $s\in \PHl, s\subset\ctx$, there exists a scenario
-concretizing $\w$.
+concretising $\w$.
 Hence, $\uconcr(\w)\neq\emptyset$.
 \end{proof}
 
