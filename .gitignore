@@ -15,4 +15,5 @@ abstract.pdf
 *.kilepr
 *.fdb_latexmk
 *.spl
+*.fls
 
