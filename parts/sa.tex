@@ -12,6 +12,28 @@ The static analysis presented here is inspired from~\cite{PMR12-MSCS}.
 We consider in this section a PH model $\PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle})$ with $2$ classes of priorities
 that respects all Conditions (\ref{cr:bounded} \& \ref{cr:compcs}) of \pref{ssec:hypothesis}.
 
+\medskip
+
+\modMF{
+The main idea behind the static analysis presented in this section
+is to abstract the dynamics of a Process Hitting model
+by a more general and easier to analyse dynamics.
+For this, we focus on the notion of objective:
+an objective is a couple of processes (\eg $\PHobj{a_i}{a_j}$) whose reachability
+is required to ensure the global reachability property considered;
+in other words, it is required that a set of actions hitting $a$ exists so that,
+starting from a state containing $a_i$,
+it is possible to play these actions (possibly intertwined with other actions)
+and reach a state containing $a_j$.
+Given the particular form of the actions in Process Hitting,
+the solving of such an objective raises new objectives in the general case,
+because each action can be triggered by (at most) one process from a different sort.
+Indeed, each of these processes also have to be reached before the required actions are played.
+However, the order of the considered actions is abstracted,
+and so is the order of the related objectives,
+thus resulting in an over-approximation of the requirements.
+}
+
 
 
 \subsection{Preliminary definitions}
@@ -30,7 +52,10 @@ The reachability of a process $a_j$ of a given sort $a$ from another process $a_
   The set of all objective sequences is denoted by $\OS$.
 \end{definition}
 
-A context (\pref{def:context}) extends the notion of state to a set of possible initial states.
+A context (\pref{def:context}) extends the notion of state to a set of possible initial states:
+\modMF{
+to each sort in the model, a context maps a set of processes in this sort.
+}
 We also extend the override operator to contexts (\pref{def:ctxcap}).
 \begin{definition}[Context ($\Ctx$)]
 \label{def:context}
@@ -61,9 +86,14 @@ where $\ceil(\delta)$ is the set containing the last process in the sequence $\d
 
 Finally, a bounce sequence on a sort $a$ (\pref{def:bs}) is a sequence of actions hitting $a$
 in which the bounce process of each action is the hitter process of the following action.
-Bounce sequences are used to find local solutions to a given objective.
-A bounce sequence on $a$ can be abstracted into sets of all its hitters that are not in sort $a$ (\pref{def:aBS}).
-This abstraction allows to propagate an objective on the sort $a$ into objectives on other sots.
+Bounce sequences are used to find local solutions to a given objective:
+\modMF{
+indeed, the bounce sequences related to an objective $\PHobj{a_i}{a_j}$
+only take depend on the bounces of the actions hitting the sort $a$.
+}%
+A bounce sequence on $a$ can be abstracted into the minimal sets of its hitters that are not in sort $a$ (\pref{def:aBS}).
+This abstraction is later used to propagate an objective on a given sort
+by creating new objectives on other sots.
 In the following, we denote: $\Sol = \powerset(\PHproc)$.
 \begin{definition}[Bounce sequence ($\BS$)]
 \label{def:bs}
@@ -73,7 +103,11 @@ In the following, we denote: $\Sol = \powerset(\PHproc)$.
   \[
     \BS(\PHobj{a_i}{a_j}) \DEF \{ \zeta \in \BS \mid \PHtarget(\zeta_1)= a_i \wedge \PHbounce(\zeta_{|\zeta|}) = a_j \} \enspace.
   \]
-  $\BS(\obj{a_i}{a_j}) = \emptyset$ if there is no way to reach $a_j$ from $a_i$ and $\emptyseq \in \BS(\obj{a_i}{a_i})$.
+  $\BS(\obj{a_i}{a_j}) = \emptyset$ if there is no way to reach $a_j$ from $a_i$
+  and $\emptyseq \in \BS(\obj{a_i}{a_i})$
+  \modMF{
+  for a trivial objective $\PHobj{a_i}{a_i}$.
+  }
 \end{definition}
 %
 \begin{definition}[$\aBS:\Obj \rightarrow \powerset(\Sol)$]
@@ -82,7 +116,13 @@ In the following, we denote: $\Sol = \powerset(\PHproc)$.
   \[
     \aBS(P) \DEF \{ \abstr{\zeta} \in \Sol \mid \zeta \in \BS(P), \nexists \zeta' \in \BS(P), \abstr{\zeta'} \subsetneq \abstr{\zeta} \} \enspace,
   \]
-  where $\abstr{\zeta} \DEF \{ \PHhitter(\zeta_n) \mid  n \in \indexes{\zeta} \wedge \PHsort(\PHhitter(\zeta_n)) \neq \PHsort(P) \}$.
+  \modMF{
+  where $\forall P \in \Obj, \forall \zeta \in \BS(P)$:
+  \[
+    \abstr{\zeta} \DEF \{ \PHhitter(\zeta_n) \mid
+    n \in \indexes{\zeta} \wedge \PHsort(\PHhitter(\zeta_n)) \neq \PHsort(P) \}
+  \]
+  }%
 \end{definition}
 
 
@@ -98,7 +138,7 @@ In \pref{def:uconcr}, we define $\uconcr(\w)$ as equal to $\concr(\w)$ if and on
 Given $\w\in\OS$, $\concr(\w)$ is the set of minimal scenarios concretising $\w$ in the
 context $\ctx$. It is defined as the largest set satisfying the following conditions:
 \begin{enumerate}[(i)]
-\item $\forall\delta\in\concr(\w), \exists s\subseteq\ctx, \delta\in\Sce(s)$
+\item $\forall\delta\in\concr(\w), \modMF{\delta\in\Sce(\ctx)}$
 \item $\forall\delta\in\concr(\w),
   \exists \phi:\indexes{\w}\to\indexes{\delta},
     (\forall n,m\in\indexes{\w}, n<m \Leftrightarrow \phi(n)\leq\phi(m)),$
@@ -111,6 +151,7 @@ context $\ctx$. It is defined as the largest set satisfying the following condit
 \begin{definition}[$\uconcr: \OS \rightarrow \powerset(\Sce)$]
 \label{def:uconcr}
   \[
+  \modMF{\forall \w \in \OS,}
   \uconcr(\w) \DEF
   \begin{cases}
     \concr(\w) & \text{if } \forall s \in \PHl, s \subseteq \ctx, \exists \delta \in \concr(\w), \delta \in \Sce(s) \\
