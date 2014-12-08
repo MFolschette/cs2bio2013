@@ -49,7 +49,7 @@ Furthermore, the target of the action is not taken into account as it is not nee
 %
 \begin{definition}[Playability property of an action ($\Fopsymbol : \PHh \rightarrow \F$)]\label{def:fop}
   \[\forall h \in \ov{\PHh}, \Fop{h} \equiv \virtualhitters(h) \wedge
-    \left( \bigwedge_{\substack{g \in \ov{\PHh}^{(n)}\\n < \prio(h)}}
+    \left( \bigwedge_{\substack{g \in \ov{\PHh}^{(n)}\\\modMF{1 <} n < \prio(h)}}
     \neg \left( \target{g} \wedge \hitter{g}\right) \right)\]
   where if we note $\hitter{h} = a_i$, then:
   \[\virtualhitters(h) =
@@ -178,6 +178,6 @@ There are two cases where it is possible to remove a cooperative sort $f^{h,i}$ 
   \item if $\Fop{h} \equiv \top$, then the action $h$ can be translated as an auto-action
     (as it is always playable if the target is present);
   \item if the $i$\textsuperscript{th} conjunction of $\Fop{h}$ consists of only one element $p$,
-    then $h$ can be translated as a regular action $\PHhit{p}{\target{h}}{\bounce{h}}$ instead of a cooperative sort
+    then \modMF{this conjunction} can be translated as a regular action $\PHhit{p}{\target{h}}{\bounce{h}}$ instead of a cooperative sort
     (as, apart from the target, only one process is required).
 \end{itemize}
