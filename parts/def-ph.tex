@@ -208,14 +208,24 @@ The aim of this paper is to allow the static analysis of the dynamics to be hand
 \subsection{Restrictions}
 \label{ssec:hypothesis}
 
-\todo{Rajouter un exemple}
-
 In the scope of this paper, we focus on a specific class of PH models
-in which actions of $\PHh^{(1)}$ are called \emph{prioritised actions} and allow to model non-biological actions.
+in which actions of $\PHh^{(1)}$, called \emph{prioritised actions},
+are only used to model cooperations in the form of strict logic gates.
+\modMF{%
+For this, we formally define in this section the notion of well-formed cooperative sorts,
+and we require that prioritized actions can only be used to update them.
+This particular form in the actions allows to apply the static analysis
+developed in \pref{sec:sa}, which is not directly possible in the general case.
+However, we note here that this class of models is not less expressive than
+the general PH framework as given in \pref{def:ph};
+indeed, the translation given in \pref{ssec:flattening} proves that
+this class of models can reproduce any desired dynamics of the general case.
+}%
+
 We consider in this section a PH model with $k$ classes of priorities: $\PH = (\PHs; \PHl; \PHa^{\langle k \rangle})$, with $k \in \sNN$
 and we define here the restrictions that lead to this class of models.
 
-\pref{cr:bounded} states that the dynamics of the studied model $\PH$ contains no infinite sequence of prioritised actions.
+\pref{cr:bounded} states that the dynamics of the studied model $\PH$ contain no infinite sequence of prioritised actions.
 As these actions can be considered as non-biological and therefore instantaneous, we thus prevent the existence of any Zeno-like behaviour
 which would allow the play of an infinite sequence of prioritised actions in “zero time”.
 As a consequence, the set $\restriction{\Sce}{1}$ is finite.
@@ -226,10 +236,23 @@ As a consequence, the set $\restriction{\Sce}{1}$ is finite.
   $\exists N \in \sN, \forall s \in \PHl, \forall \delta \in \restriction{\Sce}{1}(s), |\delta| \leq N$.
 \end{condition}
 
+\modMF{%
+\begin{example}
+  The model of \pref{fig:ph-livelock} respects \pref{cr:bounded}:
+  indeed, whatever are the active processes of $a$ and $b$,
+  it is never possible to indefinitely play actions of $\PHh^{(1)}$.
+\end{example}
+}%
+
 Given a sort $a\in\Sigma$ and a state $s\in L$, 
 we denote $\pfp_s(a)$ (\pref{def:pfp}) the processes of sort $a$ that can be present after
 playing all actions of priority $1$,
 which is always defined because of \pref{cr:bounded}.
+\modMF{%
+This definition will be useful for cooperative sorts,
+in order to determine their local stable state in every configuration,
+and thus which configuration each of their processes represent.
+}%
 
 \begin{definition}[$\pfp : \PHl \times \PHs \rightarrow \powerset(\PHproc)$]
 \label{def:pfp}
@@ -240,13 +263,32 @@ which is always defined because of \pref{cr:bounded}.
   \end{align*}
 \end{definition}
 
+\modMF{%
+\begin{example}
+  In the model of \pref{fig:ph-livelock}, we have for instance:
+  $\pfp_{s}(ab) = \{ab_{10}\}$ for the state $s = \PHstate{a_1, b_0, ab_{00}, z_0}$.
+  Indeed, starting from $\PHstate{a_1, b_0, ab_{00}, z_0}$,
+  it is only possible to play the action $\PHfrappe{a_1}{ab_{00}}{ab_{10}} \in \PH^{(1)}$,
+  and no other action in $\PH^{(1)}$ is playable in the resulting state
+  $\PHstate{a_1, b_0, ab_{10}, z_0}$.
+  Thus, process $ab_{10}$ can be used to represent the configuration $\PHstate{a_1, b_0}$.
+\end{example}
+}%
+
 Our second condition (\pref{cr:compcs}) imposes that any sort in the Process
 Hitting is either a well-formed component (\pref{def:component}) or a well-formed cooperative sort
 (\pref{def:cs}).
-The former is a sort that is hit only by actions with priority greater than $2$.
+The former is a sort that is hit only by actions with priority greater than $2$,
+\modMF{%
+and thus stands for a regular biological component.
+}%
 The latter is a sort that is hit only by actions with priority $1$ and which
 always converges to the same process with respect to the state of the components
 that have an influence on it (\pref{def:conn}).
+\modMF{%
+Indeed, we require that each process of a cooperative sort corresponds
+to exactly one configuration of the sorts it represents.
+}%
 We note $\components\subset\Sigma$ the set of well-formed components,
 and $\cs\subset\Sigma$ the set of well-formed cooperative sorts.
 
@@ -268,6 +310,19 @@ a\in\conn(a) &
 \end{align*}
 \end{definition}
 
+\modMF{%
+\begin{example}
+  For the PH model of \pref{fig:ph-livelock}, we have:
+  \begin{align*}
+    \conn(a) &= \{a\} &
+    \conn(ab) &= \{a, b, ab\} \\
+    \conn(b) &= \{b\} &
+    \conn(z) &= \{z\}
+  \end{align*}
+  Therefore, $\compin(ab) = \{a, b\}$.
+\end{example}
+}%
+
 \begin{definition}[Well-formed cooperative sorts ($\cs$)]
 \label{def:cs}
 A sort $a \in \PHs$ is a \emph{well-formed cooperative} sort if and only if:
@@ -287,11 +342,32 @@ A sort $a \in \PHs$ is a \emph{well-formed cooperative} sort if and only if:
   $$\PHs = \components \cup \cs \wedge \components \cap \cs = \emptyset$$
 \end{condition}
 
-We note that a sort $a$ that is hit by no action (\ie $\forall h \in \PHh, \PHsort(\target{h}) \neq a$)
+\modMF{%
+\begin{example}
+  The sorts $a$, $b$ and $z$ of \pref{fig:ph-livelock} are well-formed components
+  regarding \pref{def:component}.
+  Furthermore, $ab$ of is a well-formed cooperative sort,
+  with respect to \pref{def:cs}, which models cooperation between $a$ and $b$
+  because $\compin(ab) = \{a, b\}$ and:
+  \begin{enumerate}[(i)]
+    \item it is only hit by actions in $\PH^{(1)}$;
+    \item in every state, it has exactly one focal process;
+    \item each of its processes corresponds to at least one state of the model;
+    \item its focal processes only depend on $a$ and $b$.
+  \end{enumerate}
+  Therefore, we obviously have:
+  $\components = \{a, b, z\}$ and $\cs = \{ab\}$,
+  which respects \pref{cr:compcs}.
+\end{example}
+}
+
+
+We note that any sort $a$ that is hit by no action (\ie $\forall h \in \PHh, \PHsort(\target{h}) \neq a$)
 does comply with both definitions of well-formed components and well-formed cooperative sorts.
 In this case, such a sort can be arbitrarily affected to either set.
 Such a case may occur for “input” sorts (whose state is initially fixed and does not evolve)
 or some special cases of cooperative sorts produced by the translations of \pref{sec:encodings}.
+In the following we simply write “component” (\resp “cooperative sort”) instead of “well-formed component” (\resp “well-formed cooperative sort”).
 
 Because of \pref{def:cs}(\ref{csai}), we denote in the following: $\pfp_s(a) = a_i$.
 Furthermore, because of \pref{def:cs}(\ref{css}), we denote $\csState(a_i)$ the set of sub-states represented by the process $a_i$ of any cooperative sort $a$ (\pref{def:csState}).
@@ -303,11 +379,15 @@ Furthermore, because of \pref{def:cs}(\ref{css}), we denote $\csState(a_i)$ the 
 							\}$$
 \end{definition}
 
-In the following we simply write “component” (\resp “cooperative sort”) instead of “well-formed component” (\resp “well-formed cooperative sort”).
-
+\modMF{%
 \begin{example}
-  The PH in \pref{fig:ph-livelock} contains three components ($a$, $b$ and $c$) and a cooperative sort ($ab$, which models cooperation between sorts $a$ and $b$).
+  We have, for the cooperative sort $ab$ of \pref{fig:ph-livelock}
+  $\csState(ab_{10}) = \{\{a_1, b_0\}\}$,
+  which is a direct consequence of the fact that $\pfp_{s}(ab) = \{ab_{10}\}$
+  with $s = \PHstate{a_1, b_0, ab_{00}, z_0}$.
 \end{example}
+}%
+
 
 
 \subsection{Consequences of the restrictions}
@@ -316,10 +396,17 @@ In this subsection, we give several general lemmas that can be derived from the 
 in the special case of a PH model with $2$ classes of priorities $\PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle})$.
 These results will help building the static analysis of \pref{sec:sa}.
 
-We first denote by $\update(s)$ the state equivalent to $s$ but in which all cooperative sorts are updated (\pref{def:update}).
+We first denote by $\update(s)$ (\pref{def:update}) the state equivalent to $s$
+\modMF{%
+but in which the active process of all cooperative sorts is changed to the process
+that represent the current state of the components.
+}%
 This state is unique due to the properties of $\pfp$ given in the previous subsection.
-Then, \pref{lem:update} states that from any state, there exists a scenario updating the cooperative sorts of this state.
-%
+Then, \pref{lem:update} states that from any state, there exists a scenario updating the cooperative sorts of this state,
+\modMF{%
+thus allowing to end in $\update(s)$.
+}%
+
 \begin{definition}[$\update : \PHl \rightarrow \PHl$]
 \label{def:update}
   For all $s \in \PHl$, we define:
@@ -339,10 +426,31 @@ Then, \pref{lem:update} states that from any state, there exists a scenario upda
   $\forall \delta' \in \restriction{\Sce}{1}(s \PHplay \delta)$, $\PHget{(s \PHplay \delta \PHplay \delta')}{a} = \pfp_s(a)$.
 \end{proof}
 
+\modMF{%
+\begin{example}
+  Regarding the model of \pref{fig:ph-livelock}, we have:
+  $\update(s) = \PHstate{a_1, b_0, ab_{10}, z_0}$,
+  with $s = \PHstate{a_1, b_0, ab_{00}, z_0}$.
+  We note that in $\update(s)$, only the active process of the cooperative sort
+  $ab$ is changed
+  to the process representing the presence of both $a_1$ and $b_0$.
+  Furthermore, \pref{lem:update} states that there exists a scenario $\delta$
+  of actions in $\PH^{(1)}$
+  so that $s \play \delta = \update(s)$.
+  Indeed, $\delta = (\PHfrappe{a_1}{ab_{00}}{ab_{10}})$ is such a scenario,
+  here containing only one action.
+\end{example}
+}%
+
 \pref{lem:hcompcomp} states that for a given state $s$, and for any action $h = \PHhit{a_i}{b_j}{b_k}$ where $a$ and $b$ are components,
 if $\PHget{s}{a} = a_i$ and $\PHget{s}{b} = b_j$, then
 $h$ can always be played after a series of prioritised hits (and these hits do not prevent it to be fired).
 \pref{lem:hcscomp} states the same if $a$ is a cooperative sort, under the condition that $a$ is updated in $s$.
+In other words, prioritized actions cannot prevent a non-prioritized action
+to be eventually played, they only ``delay'' it,
+provided only that the hitter of this action
+matches the active process in the updated state.
+
 \begin{lemma}
 \label{lem:hcompcomp}
   $\forall s \in \PHl, \forall a,b \in \components, \forall h = \PHhit{a_i}{b_j}{b_k} \in \PHh,$\\
@@ -366,3 +474,36 @@ $h$ can always be played after a series of prioritised hits (and these hits do n
   Similar to the proof of \pref{lem:hcompcomp};
   as $a_i \in \pfp_s(a)$, $a_i \in (s \PHplay \delta)$.
 \end{proof}
+
+\modMF{%
+\begin{example}
+  Considering the model of \pref{fig:ph-livelock} and starting from the state
+  $s = \PHstate{a_1, b_0, ab_{00}, z_0}$,
+  \pref{lem:hcompcomp} states that the action $h = \PHfrappe{a_1}{a_1}{a_0}$
+  is playable after a scenario $\delta$ of prioritized actions.
+  In this case, $h$ is indeed playable in the state
+  $s \play \delta = \PHstate{a_1, b_0, ab_{10}, z_0}$,
+  where $\delta = (\PHfrappe{a_1}{ab_{00}}{ab_{10}}) \in \restriction{\Sce}{1}(s)$.
+\end{example}
+}%
+
+\medskip
+
+\modMF{%
+This section aimed at defining the PH framework in a general fashion,
+and focused on a more specific class of PH models
+that will be used later in this paper.
+We gave a definition of the notion of cooperative sort,
+a special sort with no explicit biological existence or meaning,
+which is used to model the joint action of several components
+on another one.
+Using this definition, we defined a specific class of PH models
+that assign a specific role to the set of actions
+of highest priority:
+these actions can only be used to update cooperative sorts to ensure that
+they are equivalent to Boolean gates.
+The static analysis developed in the next section can only be applied
+to PH models belonging to this specific class.
+However, it has to be noted that this class is in fact as expressive as
+the class of all possible PH models with priorities (see \pref{ssec:flattening}).
+}%
