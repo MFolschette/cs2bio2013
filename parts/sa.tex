@@ -199,7 +199,7 @@ Finally, as the active process of every sort may evolve, $\cwB$ is obtained by i
     \w &\subseteq \cwV \label{eq:Vw} \\
     P \in \cwVObj &\Rightarrow \PHbounce(P) \in \cwV \label{eq:Vproc} \\
     (x, y) \in \cwE &\Rightarrow y \in \cwV \label{eq:VE} \\
-    P \in \cwVObj \wedge ps \in \BS(P) &\Rightarrow (P, ps) \in \cwE \label{eq:ESol1} \\
+    P \in \cwVObj \wedge ps \in \modMF{\aBS}(P) &\Rightarrow (P, ps) \in \cwE \label{eq:ESol1} \\
     ps \in \cwVSol \wedge a_i \in ps &\Rightarrow (ps, a_i) \in \cwE \label{eq:ESol2} \\
     a \in \components \wedge a_i \in \cwVProc \wedge a_j \in \ctx &\Rightarrow (a_i, \PHobjp{a}{j}{i}) \in \cwE \label{eq:EReq} \\
     a \in \cs \wedge a_i \in \cwVProc \wedge ps \in \csState(a_i) &\Rightarrow (a_i, ps) \in \cwE \label{eq:EPrio} \\
@@ -430,3 +430,76 @@ Hence, $\uconcr(\w)\neq\emptyset$.
 \end{proof}
 
 
+
+\modMF{
+\subsection{Extraction of the scenario}
+}
+
+\modMF{
+This section gives a recursive method to find a scenario that concretizes
+a given objective sequence $\w \in \OS$.
+All the definitions above are well-defined provided that
+$\uconcr(\w)\neq\emptyset$,
+which can be demonstrated by \pref{thm:ordered-ua} or \pref{th:approxinf}.
+The justification of these definitions can be found by analysing the demonstrations
+of these theorems.
+}
+
+\newcommand{\res}{\mathbf{res}}
+\newcommand{\osres}{\mathbf{OSres}}
+\newcommand{\autoBS}{\mathbf{autoBS}}
+\newcommand{\rec}{\mathbf{rec}}
+\newcommand{\thisobj}[1]{P_{#1}}
+\newcommand{\thisseq}[1]{\Theta_{#1}}
+
+\modMF{
+For all $\w \in \OS$:
+\[
+  \osres_s(\w) = \res_s(\w_1) \concat
+    \osres_{s \play \res_s(\w_1)}(\w_2 \concat \dots \concat \w_{\card{\w}})
+\]
+with $\osres_s(\varepsilon) = \varepsilon$.
+For all $P \in \Obj$:
+\[\res_s(P) =
+  \begin{cases}
+    \varepsilon
+      & \text{if } \target{P} = \bounce{P} \\
+%     pickone(\autoBS(P))
+%       & \text{if } \aBS(P) = \{ \emptyset \} \\
+    \osres_s(P^Q \concat Q)
+      & \text{if } \exists Q \in \Obj, (P, Q) \in \Bee{\Obj}{\Obj} \\
+    \rec_s(\zeta)
+      & \text{otherwise, with } \zeta \in \BS(P)
+  \end{cases}
+\]
+where:
+\[
+  \autoBS(P) = \{ \zeta \in \BS(P) \mid \forall i \in \indexes{\zeta}, \PHsort(\hitter{\zeta_i}) = \PHsort(\target{\zeta_i}) = \PHsort(P) \}
+\]
+\[
+  P^Q = \PHobj{\PHtarget(P)}{\PHtarget(Q)}
+\]
+\[
+  \rec_s(\zeta) = \thisseq{\zeta_1} \play
+    \rec_{s \play \thisseq{\zeta_1}}
+    (\zeta_2 \concat \dots \concat \zeta_{\card{\zeta}})
+\]
+with:
+\[
+  \thisseq{h} = \res_s(\thisobj{h}) \play
+    \delta^{upd}_{s \play \res_s(\thisobj{h})} \play h
+\]
+\[
+  \thisobj{h} = \PHobj{\PHget{s}{\PHsort(\hitter{h})}}{\hitter{h}}
+\]
+and $\delta^{upd}_{s'}$ is a scenario of actions in $\PHh^{(1)}$ that updates
+all cooperative sorts from state $s'$.
+Such a scenario always exists given \pref{lem:update},
+and it can be built, starting from $s'$
+by iteratively putting arbitrary prioritized actions into a sequence
+until no more prioritized action is playable.
+Indeed, the order of the actions do not matter and the final state will
+always be $\update(s')$.
+}
+
+\todo{À terminer et gluer}
