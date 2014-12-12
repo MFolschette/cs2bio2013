@@ -13,14 +13,15 @@ The auto-inhibition of $c$ generalises a chain of repressors on $a$.
 The auto-inhibition of $f$, which terminates the stripes formation in the original model,
 has been removed in order to focus on the stationary dynamics of the model.
 
-The actions of the original model make $3$ classes of priorities, as represented in \pref{fig:metazoan-php}.
+The actions of the original model make $3$ classes of priorities, as represented in \pref{fig:metazoan-php}
+and listed in \pref{tab:metazoan-php-actions}.
 Thus, although the actions of the highest class of priority are only used to update a cooperative sort,
 the actions of the two other classes of priorities do have a biological meaning.
 %by representing different reaction rates.
 Indeed, they have been derived given the different reaction rates,
 given the fact that the switches of genes $a$ and $c$ have to alternate in order not to miss a stripe.
 
-\begin{figure}[htp]
+\begin{figure}[p]
   \centering
   \scalebox{1}{
   \begin{tikzpicture}
@@ -65,7 +66,39 @@ given the fact that the switches of genes $a$ and $c$ have to alternate in order
   }
 \end{figure}
 
-\pref{fig:metazoan-ph} gives the flattening of this model.
+\begin{table}[p]
+\modMF{
+\begin{align*}
+  \PHh^{(1)} = \{ \quad
+    & \PHfrappe{f_1}{fc_{00}}{fc_{10}} \quad , \quad
+    \PHfrappe{f_1}{fc_{01}}{fc_{11}} \quad , \\
+    & \PHfrappe{f_0}{fc_{10}}{fc_{00}} \quad , \quad
+    \PHfrappe{f_0}{fc_{11}}{fc_{01}} \quad , \\
+    & \PHfrappe{c_1}{fc_{00}}{fc_{01}} \quad , \quad
+    \PHfrappe{c_1}{fc_{10}}{fc_{11}} \quad , \\
+    & \PHfrappe{c_0}{fc_{01}}{fc_{00}} \quad , \quad
+    \PHfrappe{c_0}{fc_{11}}{fc_{10}}
+  \quad \} \\
+  \PHh^{(2)} = \{ \quad
+    & \PHfrappe{c_1}{a_1}{a_0} \quad , \quad
+    \PHfrappe{fc_{10}}{a_0}{a_1}
+  \quad \} \\
+  \PHh^{(3)} = \{ \quad
+    & \PHfrappe{c_1}{c_1}{c_0} \quad , \quad
+    \PHfrappe{f_1}{c_0}{c_1}
+  \quad \} \\
+\end{align*}%
+}%
+  \caption{\label{tab:metazoan-php-actions}%
+    Sets of actions of the metazoan segmentation model depicted
+    in \pref{fig:metazoan-php}.
+  }
+\end{table}
+
+\pref{fig:metazoan-ph} gives the flattening of this model,
+\modMF{
+whose actions are detailed in \pref{tab:metazoan-ph-actions}.
+}%
 It contains $2$ classes of priority, and prioritised actions are only used to update cooperative sorts.
 Note that according to the simplifications mentioned at the end of \pref{ssec:flattening},
 the auto-action $h_1 = \PHhit{c_1}{c_1}{c_0}$ in $\oPH$ has been flattened to a regular action $\PHhit{a_0}{c_1}{c_0}$
@@ -92,7 +125,7 @@ Thus the model is functional.
 
 \todo{Le résultat peut être raffiné avec l'atteignabilité successive}
 
-\begin{figure}[htp]
+\begin{figure}[p]
   \centering
   \scalebox{1}{
   \begin{tikzpicture}
@@ -144,6 +177,43 @@ Thus the model is functional.
     are abstracted by thick dashed arrows.
   }
 \end{figure}
+
+\begin{table}[p]
+\modMF{
+\begin{align*}
+  \PHh^{(1)} = \{ \quad
+    & \PHfrappe{f_1}{fc_{00}}{fc_{10}} \quad , \quad
+    \PHfrappe{f_1}{fc_{01}}{fc_{11}} \quad , \\
+    & \PHfrappe{f_0}{fc_{10}}{fc_{00}} \quad , \quad
+    \PHfrappe{f_0}{fc_{11}}{fc_{01}} \quad , \\
+    & \PHfrappe{c_1}{fc_{00}}{fc_{01}} \quad , \quad
+    \PHfrappe{c_1}{fc_{10}}{fc_{11}} \quad , \\
+    & \PHfrappe{c_0}{fc_{01}}{fc_{00}} \quad , \quad
+    \PHfrappe{c_0}{fc_{11}}{fc_{10}} \quad , \\
+    & \PHfrappe{f_1}{fa_{00}}{fa_{10}} \quad , \quad
+    \PHfrappe{f_1}{fa_{01}}{fa_{11}} \quad , \\
+    & \PHfrappe{f_0}{fa_{10}}{fa_{00}} \quad , \quad
+    \PHfrappe{f_0}{fa_{11}}{fa_{01}} \quad , \\
+    & \PHfrappe{a_1}{fa_{00}}{fa_{01}} \quad , \quad
+    \PHfrappe{a_1}{fa_{10}}{fa_{11}} \quad , \\
+    & \PHfrappe{a_0}{fa_{01}}{fa_{00}} \quad , \quad
+    \PHfrappe{a_0}{fa_{11}}{fa_{10}}
+  \quad \} \\
+  \PHh^{(2)} = \{ \quad
+    & \PHfrappe{c_1}{a_1}{a_0} \quad , \quad
+    \PHfrappe{fc_{10}}{a_0}{a_1} \quad , \\
+    & \PHfrappe{a_0}{c_1}{c_0} \quad , \quad
+    \PHfrappe{fa_{11}}{c_0}{c_1}
+  \quad \}
+\end{align*}%
+}%
+  \caption{\label{tab:metazoan-ph-actions}%
+    Sets of actions of the flattened metazoan segmentation model depicted
+    in \pref{fig:metazoan-ph}.
+  }
+\end{table}
+
+
 
 \subsection{Large-scale Application: T-cell receptor}
 

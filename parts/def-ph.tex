@@ -93,9 +93,30 @@ In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH w
   \begin{align*}
     \PHs &= \{ a, b, c, ab \} \enspace, \\
     \PHl_a &= \{ a_0, a_1 \} \enspace, & \PHl_b &= \{ b_0, b_1 \} \enspace, \\
-    \PHl_c &= \{ c_0, c_1 \} \enspace, & \PHl_{ab} &= \{ ab_{00}, ab_{01}, ab_{10}, ab_{11} \} \enspace.
+    \PHl_c &= \{ c_0, c_1 \} \enspace, & \PHl_{ab} &= \{ ab_{00}, ab_{01}, ab_{10}, ab_{11} \} \\ \enspace,
+    \PHa^{\langle 2 \rangle} &= (\PHa^{(1)}; \PHa^{(2)})
   \end{align*}
-  Note that: $\{ \PHhit{ab_{11}}{c_0}{c_1}, \PHhit{a_1}{a_1}{a_0}, \PHhit{a_0}{b_0}{b_1} \} \subseteq \PHh^{(2)}$.
+  and the sets of actions are:
+  \begin{align*}
+    \PHh^{(1)} = \{ \quad
+      & \PHfrappe{a_1}{ab_{00}}{ab_{10}} \enspace , \quad
+      \PHfrappe{a_1}{ab_{01}}{ab_{11}} \enspace , \\
+      & \PHfrappe{a_0}{ab_{10}}{ab_{00}} \enspace , \quad
+      \PHfrappe{a_0}{ab_{11}}{ab_{01}} \enspace , \\
+      & \PHfrappe{b_1}{ab_{00}}{ab_{01}} \enspace , \quad
+      \PHfrappe{b_1}{ab_{10}}{ab_{11}} \enspace , \\
+      & \PHfrappe{b_0}{ab_{01}}{ab_{00}} \enspace , \quad
+      \PHfrappe{b_0}{ab_{11}}{ab_{10}}
+    \quad \} \\
+    \PHh^{(2)} = \{ \quad
+      & \PHfrappe{a_1}{a_1}{a_0} \enspace , \quad
+      \PHfrappe{b_0}{a_0}{a_1} \enspace , \\
+      & \PHfrappe{b_1}{b_1}{b_0} \enspace , \quad
+      \PHfrappe{a_0}{b_0}{b_1} \enspace , \\
+      & \PHfrappe{ab_{11}}{c_0}{c_1}
+    \quad \} \\
+  \end{align*}
+%   Note that: $\{ \PHhit{ab_{11}}{c_0}{c_1}, \PHhit{a_1}{a_1}{a_0}, \PHhit{a_0}{b_0}{b_1} \} \subseteq \PHh^{(2)}$.
 
 \begin{figure}[tb]
   \centering
