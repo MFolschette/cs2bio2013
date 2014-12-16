@@ -198,7 +198,8 @@ In \pref{def:restriction}, we define the $n$-reduction of a given PH as the PH w
 
 \todo{Rajouter un exemple}
 
-Cooperation between processes to make another process bounce can be expressed in PH by building a \emph{cooperative sort}, as described in \cite{PMR10-TCSB}.
+Cooperation between processes to make another process bounce can be expressed in PH by building a \emph{cooperative sort},
+which allows to encode any kind of Boolean function \cite{PMR10-TCSB}.
 \pref{fig:ph-livelock} shows an example of cooperation between processes $a_1$ and $b_1$ to make $c_0$ bounce to $c_1$:
 a cooperative sort $ab$ is defined with 4 processes (one for each sub-state of the presence of processes $a_1$ and $b_1$).
 For the sake of clarity, the processes of $ab$ are indexed using the sub-state they represent.
@@ -218,11 +219,94 @@ This “factorisation” allows to prevent the combinatorial explosion of the nu
 especially for cooperations between more than three processes.
 It may have computational consequences as the static analysis method developed in~\pref{sec:sa} does not suffer from the number of sorts but from the number of processes in each sort.
 
-The construction of cooperation in PH allows to encode any Boolean function between cooperating processes \cite{PMR10-TCSB}.
-Due to the introduction of priorities into the PH framework,
-it is possible to build cooperations with no temporal shift by defining actions updating the cooperative sorts with the highest class of priority.
-This allows to gain the same expressivity in PH than in Boolean networks, as stated in \pref{sec:dn}.
-The aim of this paper is to allow the static analysis of the dynamics to be handled on PH models involving such prioritised actions updating cooperative sorts.
+
+
+\modMF{
+\subsection{Justification of the priorities}
+}
+
+As explained previously,
+the construction of cooperation in PH allows to encode any Boolean function between cooperating processes \cite{PMR10-TCSB}.
+However, in the original version of the PH framework,
+which contained no classes of priorities
+(or, equivalently, only one class of priority),
+the representation of such Boolean functions was not accurate.
+Indeed, the lack of priorities did not allow cooperative sorts
+to always encode the \emph{current state} of several sorts, as expected,
+but only a \emph{combination of past states}.
+
+Let us for example consider the PH model 
+$\PH = (\PHs; \PHl; \PHh^{\angles{2}})$ from \pref{fig:ph-livelock},
+and the “merged” version of this model:
+$\PH' = (\PHs; \PHl; \PHh'^{\angles{1}})$,
+that is, where $\PHh'^{\angles{1}} = \PHh = \PHh^{(1)} \cup \PHh^{(2)}$.
+In other words, $\PH'$ has the same sorts and processes
+(and therefore the same states) than $\PH$,
+but the actions of the two classes of priories of the latter
+are united into one only class in the former.
+
+Starting from state $\PHstate{a_1, b_0, c_0, ab_{10}}$,
+it is not possible to reach a state where the processes $a_1$ and $b_1$
+are simultaneously active, in either $\PH$ and $\PH'$.
+Indeed, in both cases the actions hitting sorts $a$ and $b$ require that both
+$a_0$ and $b_0$ are active in order to activate $b_1$ (\resp $a_1$).
+Therefore, given the fact that the cooperative sort $ab$ represents
+the combined states of $a$ and $b$,
+and that the action $\PHhit{ab_{11}}{c_0}{c_1}$
+represents a Boolean “conjunction” between $a$ and $b$
+(that is, requires that both have process name “1” active),
+the expected behaviour is that $c_1$ cannot be reached.
+
+However, starting from state $\PHstate{a_1, b_0, c_0, ab_{10}}$,
+it is still possible to activate $c_1$ in $\PH'$
+by visiting the following sequence of states:
+\begin{align*}
+  & \PHstate{a_1, b_0, c_0, ab_{10}} \concat
+    \PHstate{a_0, b_0, c_0, ab_{10}} \concat
+    \PHstate{a_0, b_1, c_0, ab_{10}} \concat \\
+  & \qquad\qquad
+    \PHstate{a_0, b_1, c_0, ab_{11}} \concat
+    \PHstate{a_0, b_1, c_1, ab_{11}}
+\end{align*}
+This is due to the fact that after playing the action
+$\PHhit{a_1}{a_1}{a_0}$,
+the absence of priorities does not constrain the cooperative sort to be updated.
+We clearly see in this example that without priorities,
+the cooperative sort $ab$ only represents a combination of the past
+states of $a$ and $b$, without any notion of simultaneity.
+
+Adding classes of priorities allows to remove this undesired behaviour,
+especially by prioritizing all actions updating the cooperative sorts.
+Indeed, the previous behaviour is not possible in the original model $\PH$,
+where the actions of highest priority ($\PHh^{(1)}$)
+force the update of the cooperative sort before any other action of
+low priority ($\PHh^{(2)}$) can be played.
+The closest possible sequence of states is the following,
+where $ab_{11}$ can never be activated:
+\begin{align*}
+  & \PHstate{a_1, b_0, c_0, ab_{10}} \concat
+    \PHstate{a_0, b_0, c_0, ab_{10}} \concat
+    \PHstate{a_0, b_0, c_0, ab_{00}} \\
+  & \qquad\qquad
+    \PHstate{a_0, b_1, c_0, ab_{00}} \concat
+    \PHstate{a_0, b_1, c_0, ab_{01}}
+\end{align*}
+
+We conclude that the addition of priorities,
+by allowing to represent accurate Boolean gates in the form of cooperative sorts,
+thus allows to reach the same expressivity as Asynchronous Discrete Networks
+(see \pref{sec:dn}).
+Therefore, the next sections \todo{nouvelle section ?}
+formalize this use of the highest class of priority
+to force the update of cooperative sorts.
+The aim of the rest of this paper is to allow the static analysis
+of the dynamics on PH with priorities,
+and for this we rely on models involving
+such prioritised actions to update cooperative sorts.
+However, despite focusing on a sub-class of PH models,
+we show in \pref{ssec:flattening}
+that this sub-class is in fact as expressive as the class
+of all PH with classes of priorities.
 
 
 
