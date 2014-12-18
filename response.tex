@@ -1,0 +1,286 @@
+\documentclass[11pt]{article}
+
+%\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{color}
+\usepackage{fullpage}
+
+\def\BibTex{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+         T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% \newcounter{pointno}
+% \setcounter{pointno}{0}
+% \def\thepoint{\arabic{pointno}}
+% \newcommand{\ptno}[1]{\textcolor{blue}{\refstepcounter{pointno} \thepoint. \#1}}
+% \newcommand{\question}[1]{\bigskip{\it\ptno{\#1}}}
+% \def\answer{}
+
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+\newcommand{\answertodo}[1]{\textcolor{red}{\textbf{À appliquer :}} \textcolor{magenta}{#1}}
+
+\newcommand{\answer}[1]{\textcolor{blue}{#1}}
+
+%\setlength{\parindent}{0pt}
+
+% 
+% \def\V{\mathcal V}
+% \def\O{\mathcal O}
+% 
+% \def\zero{\mathbf 0}
+% \def\R{\mathbb R}
+% \def\Rpos{\R_{\geq 0}}
+% \def\Rspos{\R_{>0}}
+% \def\Q{\mathbb Q}
+% \def\Qpos{\Q_{\geq 0}}
+% \def\Qspos{\Q_{>0}}
+% \def\Z{\mathbb Z}
+% \def\Zpos{\Z_{\geq 0}}
+% \def\Zspos{\Z_{> 0}}
+% 
+% \def\mspan{\mathrm{span}}
+% \def\lp{\mathrm{lowerpoint}}
+% \def\orderings{\mathrm{orderings}}
+% 
+% \def\inner\#1\#2{\#1\#2}
+% %\def\inner\#1\#2{\langle \#1,\#2 \rangle}
+% 
+% \def\apply{\bullet}
+% 
+% \def\B{\mathcal B}
+
+\begin{document}
+
+\noindent
+Légende :\\
+\answer{Blabla} $\longleftarrow$ Réponse au reviewer\\
+\answertodo{Blabla} $\longleftarrow$ Réponse possible sur un point encore non appliqué\\
+\todo{Blabla} $\longleftarrow$ À faire / à décider
+
+\begin{center}
+  --- --- ---
+\end{center}
+
+
+
+\section*{Summary of the main changes}
+
+\todo{Résumer et lister les modifs}
+
+\begin{itemize}
+  \item Minor changes in the static analysis to make the graph more precise,
+    and the Sect.~5.1 was revised in consequence;
+  \item New explanations and examples all over the paper,
+    especially regarding the use of priorities (Sect.~2.3),
+    the lemmas (Sect.~2.4 \&~2.5)
+    and the under-approximation (Sect.~3.2);
+  \item A section was added (Sect.~3.5) about the extraction of a scenario from the graph of
+    local causality, in the case the analysis is conclusive;
+\end{itemize}
+
+
+
+\section*{Comments and answers to the reviewers}
+
+\subsection*{Reviewer \#2}
+
+[…]
+
+According to the authors, the static analysis approach presented in the paper is inspired from a previous paper ([13] Paulevé, Magnin, Roux. Static analysis of biological regulatory networks dynamics using abstract interpretation). By comparing the paper with [13], I had the impression that most of the developments in the current paper were just an exercise to borrow the techniques developed in [13] into the setting of Process Hitting with *priorities*. This is caused by the fact that in Section 2 (which introduces the PH framework to the reader) there are not enough intuitive explanations and examples to help the reader understand the concepts. (To this aim, in Section 2, a running example would be a welcome addition.)
+In particular, a weak point of the paper lies in the restrictions introduced in Sections 2.2 and 2.3, which are not motivated. Those sections should be rewritten to clearly explain why those restriction are needed, and discuss their implications with respect to the reduced modelling expressiveness which ensues (e.g. which models cannot be described anymore?).
+
+\answer{
+The intent of this paper is to adapt the static analysis methods previously developed in [13] to the case of the PH with priorities, that is, models with a new kind of dynamics and preemptions that did not exist previously.
+The method thus required adaptations that we tried to better motivate in this revision.
+We added a section (Sect.~2.3) to motivate the use of priorities in the PH.
+Furthermore, we added a running example in Sect~2.4 \& 2.5 in order to explain all the definitions and lemmas.
+}
+
+With respect to the workshop version, Section 4.2 has been added to present a translation of PH models with multiple priority classes (with restrictions from Section 2.3 assumed) into an "equivalent" (weakly-bisimilar) PH model with only two priority classes. Since the restrictions from Section 2.3 are already assumed for PH models with multiple priority classes, this strengthens the need for a discussion on those restrictions.
+
+\answer{
+This translation allows to apply the static analysis to any PH model with priorities, despite the restrictions defined in Sect. 2.4.
+We added some discussion in Sect. 4.2 in order to emphasize this.
+}
+
+As regards the biological experiments presented in Section 5.2, this section should be extended by reporting more details about the experiments carried and the results obtained. Moreover, you should compare the results with the analogous experiments from [13], in which the same model (TCR pathway) had been analysed with good results. What improvements are there?
+I also point out that the comparisons with a model-checker should be actually carried out. The fact that the test you performed caused out-of-memory errors does not allow any conclusion to be drawn, even more so considering that only 2GB of RAM have been used.
+
+\answer{
+The experiment we carried with the LibDDD model-checker led us to the conclusion that the memory needs for such a method is several orders of magnitude above our method, which we would consider a sufficient result in itself.
+Furthermore, with such a memory use, one cannot expect to be able to study bigger models (say, thousands of components) while our method has a polynomial complexity in the size of the model, and could tackle such bigger models.
+Thus, we have not performed more experiments,
+but we have added some precisions about our thoughts in the paper.
+}
+
+Beyond the above concerns, the paper would also benefit from a reorganization, since I found it sometimes difficult to follow. This is particularly relevant for Section 4, where the translations proposed are just thrown in, without discussing their relevancy to the purpose of the paper.
+
+\answertodo{
+The translations could indeed be better discussed and justified,
+we have taken this comment into account.
+}
+
+Minor comments […]
+% ----------------
+% page 1
+% - abstract: "... as it is illustrated on the model-checking of a signalling network of 94 components, which is unprecedented.": I am not convinced the such application is "unprecedented", since the same model has been already analysed with good results in [13].
+% page 5
+% - do not use \ldots for the finite set of sorts
+% - for defining prio(h), the same action $h$ must not be present in two different classes (this condition is missing)
+% - Def.2: "sub-set" --> "sub-state" (twice)
+% - Def.2 (and other places in the paper): symbol $\subset$ is usually means *strict* subset. Check its use in the paper and replace it with $\subseteq$ where appropriate.
+% - Def.3: "We also extend this definition to a set of processes given that all processes are from different sorts by the override of each process" ???
+% - Def.3: what is $\widetilde{ps}$ ?
+% 
+% page 6
+% - in Figure 1 there are too many arrows that overlap which make it difficult to read
+% - the example should be completed by listing all the actions from the two priority classes
+% - Sect.2.2: "a1 and b1 to make c0 bounce to c1": you should replace "make" with "allow", since according to the semantics c0 is not forced to go to c1 asap.
+% - Sect.2.2: "one for each sub-state of the presence of processes a1 and b1": not clear
+% 
+% page 7
+% - "... instead of independent hits from a1 and b1.": not clear
+% - (also in other places) "allows to" --> "allows <someone> to"
+% - "build cooperations with no temporal shift": please clarify what you mean with "temporal shift"
+% - $Sce|_1$ is not defined
+
+\answertodo{
+We took these comments into account
+}
+
+
+
+\subsection*{Reviewer \#3}
+
+% Minor language issues:
+% 
+% (1) In introduction first paragraph at the sixth line there is a typo with 3 full stops ...
+% (2) Second paragraph in introduction fifth line, it should be USUALLY, rather then USUAL, please change it.
+% (3) Same paragraph: Components rarely have more "that" four levels, which should be: Components rarely have more "than" four levels.
+% (4) Please add some text around the figures 1,3, and 4 so that a non technical reader (biologist) might have some idea about the interactions in the figures.
+% (5) In discussion the following sentence needs to be rewritten: "i.e., without an intermediate encoding; our objective being to increase the conclusiveness of the static analysis   approach".
+
+\answertodo{
+We took the comments about the language issues of Reviewer \#3 into account.
+}
+
+
+
+\subsection*{Reviewer \#4}
+
+[…]
+
+With respect to the workshop version of the paper I don't see a significant improvement that should justify a further publication of the results. In particular, there are several new theorems, but they do not add significant novelties to the already proposed ideas. On the contrary, aspects that could have been given more accurate treatment are left poorly addressed. In particular:
+
+\answer{
+The additions regarding the workshop paper are the following:
+\begin{itemize}
+  \item Theorem 2, which refines successive reachability;
+  \item Sect. 4.2, which allows to translate any PH model with priorities
+    into a model that can be processed by our method (thus extending its range of application);
+  \item Sect. 3.5, which returns a scenario concretizing the desired reachability,
+    when possible (this addition is new to this revision).
+\end{itemize}
+We emphasized these in the introduction.
+}
+
+- discussion on the computational gain acquired with the new approach is not formally addressed and very poorly discussed (end of page 12, see also comment below)
+
+\answer{
+The aim of our method was not to gain any computation time of memory,
+but to improve the expressivity of the PH formalism and its associated static analysis.
+We are now able to formally check Asynchronous Discrete Networks
+(also called Thomas' models)
+which was not the case before.
+This has been emphasized in Sect. 5.2.
+}
+
+- the static analyses that are proposed are based on abstract interpretation, however there is not a formal introduction of them in this framework. In particular there are abstractions and concretizations whose domains (and their relationships in terms of Galois insertion / connection) are not clearly stated. Moreover, the overall ideas of the abstractions are lost in the heavy technical presentation. This is difficult to read and does not give sufficient intuition to grasp the concepts, which remain hidden behind the notation. 
+
+\todo{À faire !}
+
+- the biological examples look interesting and appropriate, but the details that are given in the paper look not sufficient to appreciate the demonstration of the approach that they should give.
+
+\todo{Quels détails supplémentaires devrait-on donner ?}
+
+- the link to Boolean Networks and Multivalued Boolean Networks is given by a translation that is published in another paper. That is ok, but the authors mention Asynchronous Discrete Networks as an "intermediate" model between the models previously mentioned and the Process Hitting framework. This remains an obscure connection and "Asynchronous Discrete Networks" cannot be found as keyword in the literature, at least at a first general search. 
+
+\todo{Un autre terme devrait être trouvé, je propose : Discrete Networks.}
+
+- the overall presentation of the ideas and results are heavily technical and frankly difficult to read even for a reader that is used to formality. The most difficult aspect is the proliferation of notation, which forces the reader to continuously go back and forward to recall the meaning of the very large number of symbols. 
+
+\todo{Peut-être faudrait-il diminuer le nombre de symboles ? Mais lesquels enlever ?}
+
+\answer{
+We have tried to give more explanations and examples
+on most of the technical definitions all throughout the paper.
+}
+
+Comments and suggestions
+
+[…]
+
+% page 2, paragraph 1: Some general references should be given here, reference papers, overviews, and so on.
+% 
+% p 2, end of paragraph 2, it is not clear if the name "Asynchronous Discrete Networks" is introduced by the authors or it is taken from [4], where multivalued Boolean Networks are discussed. 
+% 
+% p 3, line -13 what does it mean "to decide a successive reachability property"?
+% 
+% p 4, line 12 the least fix point could be greater than $x_0$; moreover, what are the hypotheses on f? It may have not a fix point at all
+% 
+% p 5, line -16 the set of all sub-sets —> the set of all sub-states 
+% 
+% p 5, l -14 a symbol like $\preceq$ or $\sqsubseteq$ would be more intuitive than $\subseteq$ for sub-states
+% 
+% p 5, l -4 can a scenario $\delta$ be empty? This may be important in the subsequent part of the paper, for instance at page 9, Lemma 3, could the empty scenario $\delta$ be selected by the $\exists$ after the main implication?
+% 
+% p 5, l -3 the fact that there is a set of scenarios implies that there is non-determinism.  Such aspect is never mentioned explicitly in the paper. It could be explicitly addressed.
+% 
+% p 6, l 4 (caption of figure 1) in drawn -> is drawn
+% 
+% p 6, last line and page 7 first line: what does it mean "one for each sub-state of the presence of processes $a_1$ and $b_1$"?
+% 
+% p 7 section 2.3 title: Restrictions may be misleading, why don't call this section "Conditions"?
+% 
+% p 7, l -2 all actions of priority 1, which —> all actions of priority 1 from s, which
+% 
+% p 8, l 6 greater than 2 -> greater than or equal to 2
+% 
+% p 8, l 8 We note $\Gamma$ —> We denote by $\Gamma$
+% 
+% p 8 Def 7 is a well-formed component if -> is a well-formed component, and so $a \in \Gamma$
+% 
+% p 8 Def 9 is a well-formed cooperative sort if -> is a well-formed cooperative sort, and so $a \in Delta$, if 
+% 
+% p 8 Def 9, condition (iv), does it require a sort of "determinism"  of cooperative encodings?
+% 
+% p 8, l -7 "represented by", in which sense?
+% 
+% p 10, -19 we note $a_i$ —> we denote by $a_i$
+% 
+% p 10, l -10 a bounce sequence on a can be abstracted into sets of all its hitters that are not in sort a (Def 16). — Is this an idea for an abstract interpretation? If yes the mechanism of abstraction / concretization, as well as the Galois connection/insertion between the abstract and concrete domains, is not clear and the whole underlying idea I could not catch by the definitions.
+% 
+% p 10, l -8 on other sots -> on other sorts
+% 
+% p 11, l 7 we denote $\gamma_\varsigma$ -> we denote by $\gamma_\varsigma$
+% 
+% p 11, l 7 the set of scenarios concretizing an objective sequence .. (Def 17) .. again the abstract interpretation is mentioned, but not fully introduced and explained.
+% 
+% p 11, l 16 the notation $\delta_{1 \ldots \Phi(n)}$ is not introduced
+% 
+% p 11, l 23 given by $maxCont_\varsigma$ -> denoted by $maxCont_\varsigma$
+% 
+% p 12, Def 20 this looks like a definition of an abstract fixpoint semantics to derive the graph of local causality. Ok, why is it not mentioned?
+% 
+% p 12, Def 20, rule (1): $\omega$ is an objective sequence , which is neither in Obj nor in Proc or Sol. It seems there is a "type mismatch" with the definition of $V^\omega_\varsigma$.
+% 
+% p 12 Def 21 it is not clear the definition of "children process"
+% 
+% p 12 last paragraph the discussion on the complexity issue looks very limited considering that this is supposed to be one of the contributions of the whole work. It is mentioned that "it is possible to compute only a subset of $V \cap Sol$", how?
+
+\answertodo{We have taken these comments into account}
+
+\end{document}

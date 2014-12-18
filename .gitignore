@@ -16,4 +16,5 @@ abstract.pdf
 *.fdb_latexmk
 *.spl
 *.fls
+response.pdf
 
