@@ -112,7 +112,9 @@
 
 \def\aB{\mathcal{B}}
 \def\sat#1{\lceil #1\rceil}
-\def\cwB{\sat{\aB_\ctx^\w}}
+\newcommand{\thisB}[2]{\sat{\aB_{#2}^{#1}}}
+\def\cwB{\thisB{\w}{\ctx}}
+%\def\cwB{\sat{\aB_\ctx^\w}}
 \def\mycwB#1#2{\sat{\aB_{#1}^{#2}}}
 \def\Bsol{\sat{\Sol^\w_\ctx}}
 \def\Breq{\sat{\Req^\w_\ctx}}
