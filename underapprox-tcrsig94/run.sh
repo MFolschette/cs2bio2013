@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 ph="model.ph"
-outputs="sre ap1 nfkb nfat"
+outputs="sre ap1 nfkb nfat sigmab"
 mode=${1}
 
 for i in 0 1; do
 	for j in 0 1; do
 		for k in 0 1; do
-			init="cd45 $i, cd28 $j, tcrlig $k"
+			init="cd4 $i, cd28 $j, tcrlig $k"
 			echo "--- $init"
 			for z in $outputs; do
 				echo "# $z 1"

@@ -263,4 +263,8 @@ lat 0 -> malt1 1 0
 COOPERATIVITY([ikkg;camk2] -> ikkab 0 1, [[1;1]])
 COOPERATIVITY([ikkg;camk2] -> ikkab 1 0, [[0;0];[1;0];[0;1]])
 
+(* Check the reachability of several sorts in the same state: *)
+process sigmab 1
+COOPERATIVITY([sre;ap1;nfat] -> sigmab 0 1, [[1;1;1]])
+
 initial_state lckr 1, bcl10 1, rac1r 1, cd45 1, card11 1, ccblr 1, malt1 1
