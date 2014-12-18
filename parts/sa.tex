@@ -176,18 +176,62 @@ For any objective $P$ and context $\ctx$, \pref{def:maxCont} gives the set of pr
   \end{align*}
 \end{definition}
 
-The graph of local causality $\cwB = (\V, \E)$ defined in \pref{def:glc} is a graph where $\V \subseteq \Proc \cup \Obj \cup \Sol$ and $\E \subseteq \V \times \V$.
-A node in $\PHproc$ is a required process,
+\modMF{
+A graph of local causality $\aB = (\cwV, \cwE)$
+is a graph where $\cwV \subseteq \Proc \cup \Obj \cup \Sol$ is the set of vertices
+and $\cwE \subseteq \cwV \times \cwV$ is the set of oriented edges.
+Such a graph aims a describing the requirements of a given reachability
+problem, that is, the reachability of $\w$ from the initial context $\ctx$.
+Thus, a node in $\PHproc$ represents a process required to play an action,
 a node in $\Obj$ is an objective to reach a given process
-and a node in $\Sol$ is a set of processes required for the solving.
-An objective $P \in \Obj$ is solvable if the abstractions of bounce sequences $\aBS(P) \in \Sol$ (\pref{def:aBS}) can be reached (\pref{eq:ESol1}), thus leading to several required processes (\pref{eq:ESol2}).
-If $a \in \components$, the reachability of one of its process $a_i$ is approximated by the ability to solve all objectives $\PHobjp{a}{j}{i} \in \Obj$ for all $a_j$ in the initial context (\pref{eq:EReq});
-if $a \in \cs$, the reachability of $a_i$ is simply solved by the set of processes $\csState(a_i)$ (\pref{def:csState}) that it represents (\pref{eq:EPrio}).
-The solving of an objective $P$ may require a process of $\PHsort(P)$, \ie $\gCont(\PHsort(P), P) \neq \emptyset$ (\pref{def:maxCont}); in this case, $P$ is re-targeted (\pref{eq:ECont}).
-\pref{eq:Vw}, \eqref{eq:Vproc} and~\eqref{eq:VE} ensure that all required nodes are in $\cwV$.
-Finally, as the active process of every sort may evolve, $\cwB$ is obtained by iteratively saturating with every process it contains,
-\ie by overriding its initial context $\ctx$ by $\allprocs(\V, \E)$, defined by:
-\[\allprocs(\V, \E) = (V \cap \Proc) \cup \{ \PHtarget(P), \PHbounce(P) \mid P \in \V \cap \Obj \} \enspace.\]
+and a node in $\Sol$ is a set of hitter processes required for the solving
+of an objective.
+}
+
+\modMF{
+The edges of such a graph allow to draw links between these requirements.
+Thus, an objective $P \in \Obj$ is solvable if
+at least one related bounce sequence in $\BS(P)$ can be played;
+therefore, we can consider all minimal sets of hitters of these bounce sequences
+(that is, the sets of $\aBS(P) \in \Sol$, see \pref{def:aBS})
+as requirements to solve this objective (\pref{eq:ESol1}).
+Such a set can then naturally be split into as many process nodes,
+making each of them a new requirement (\pref{eq:ESol2}).
+If $a \in \components$, the reachability of a required process $a_i$
+is approximated by the ability to solve all objectives of the form
+$\PHobjp{a}{j}{i} \in \Obj$ for all $a_j$ in the initial context (\pref{eq:EReq});
+if $a \in \cs$, the reachability of $a_i$ is simply solved by the set of processes $\csState(a_i)$ (see \pref{def:csState}) that it represents (\pref{eq:EPrio}).
+Furthermore, we note that the solving of an objective $P$ may require
+a process of $\PHsort(P)$,
+\ie $\gCont(\PHsort(P), P) \neq \emptyset$ (\pref{def:maxCont});
+in this case, $P$ is re-targeted (\pref{eq:ECont}).
+Finally, \pref{eq:Vw} forces the graph to contain all the initial objectives,
+and \pref{eq:VE} ensures the consistency of $\cwV$.
+}
+
+\modMF{
+However, this graph $\aB$ alone is not sufficient to check the reachability of
+an objective sequence $\w$ from an initial context $\ctx$;
+indeed, the reachability of each intermediate required process
+is only checked starting from the context $\ctx$,
+although this context may be modified by other objectives.
+Therefore, such a reachability requires the building of the
+\emph{saturated graph of local causality} (\pref{def:glc})
+which is obtained by iteratively saturating the initial context with all
+processes referenced in the graph,
+until reaching a fixed point.
+Such a fixed point always exists because the size of the context
+is limited by the size of the initial PH model.
+The set of processes contained in a graph of local causality
+is given by:
+\begin{align*}
+  \allprocs(\cwV, \cwE) = (\cwV \cap \Proc) &\cup \{ \PHtarget(P) \mid P \in \cwV \cap \Obj \}\\
+  & \cup \{ P \neq \w \Rightarrow \PHbounce(P) \mid P \in \cwV \cap \Obj \}
+\end{align*}
+where, if the objective sequence $\w$ consists of only one element,
+then we can omit the hitter of this objective
+if it does not appear elsewhere in the graph.
+}
 
 \begin{definition}
 \label{def:glc}
@@ -197,7 +241,7 @@ Finally, as the active process of every sort may evolve, $\cwB$ is obtained by i
   so that:
   \begin{align}
     \w &\subseteq \cwV \label{eq:Vw} \\
-    P \in \cwVObj &\Rightarrow \PHbounce(P) \in \cwV \label{eq:Vproc} \\
+%    P \in \cwVObj &\Rightarrow \PHbounce(P) \in \cwV \label{eq:Vproc} \\
     (x, y) \in \cwE &\Rightarrow y \in \cwV \label{eq:VE} \\
     P \in \cwVObj \wedge ps \in \modMF{\aBS}(P) &\Rightarrow (P, ps) \in \cwE \label{eq:ESol1} \\
     ps \in \cwVSol \wedge a_i \in ps &\Rightarrow (ps, a_i) \in \cwE \label{eq:ESol2} \\
@@ -207,7 +251,9 @@ Finally, as the active process of every sort may evolve, $\cwB$ is obtained by i
   \end{align}
 \end{definition}
 
-In the graph of local causality, an edge $(p, ps) \in \Proc \times \Sol$
+\todo{“Saturated” partout}
+
+In the saturated graph of local causality, an edge $(p, ps) \in \Proc \times \Sol$
 is said to be coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the children processes of $ps$.
 Then, \pref{th:approxinf} gives a sufficient condition for the concretisation of a sequence of objectives in a given context,
 which is derived immediately from the graph of local causality.
@@ -257,8 +303,9 @@ Our method can thus be considered as efficient compared to regular model-checkin
 \begin{figure}[tp]
   \centering
   \begin{tikzpicture}[aS]
-    \node[Aproc] (c1) {$c_1$};
-    \node[Aobj,below of=c1] (c01) {$\PHobj{c_0}{c_1}$};
+%    \node[Aproc] (c1) {$c_1$};
+%    \node[Aobj,below of=c1] (c01) {$\PHobj{c_0}{c_1}$};
+    \node[Aobj] (c01) {$\PHobj{c_0}{c_1}$};
     \node[Asol,below of=c01] (c01s) {};
 
     \node[AprocPrio,below of=c01s] (ab11) {$ab_{11}$};
@@ -287,7 +334,7 @@ Our method can thus be considered as efficient compared to regular model-checkin
     \node[Asol,below of=a10] (a10s) {};
 
     \path
-    (c1) edge (c01)
+%    (c1) edge (c01)
     (c01) edge (c01s)
     (c01s) edge (ab11)
     (ab11) edge[aSPrio] (ab11s)
@@ -312,7 +359,7 @@ Our method can thus be considered as efficient compared to regular model-checkin
     \end{tikzpicture}
   \caption{
   \label{fig:sa-livelock}
-    The graph of local causality of the PH model in \pref{fig:ph-livelock}
+    The saturated graph of local causality of the PH model in \pref{fig:ph-livelock}
     for the objective $\w = \PHobj{c_0}{c_1}$ and the initial context $\ctx = \PHstate{a_1, b_0, c_0, ab_{10}}$.
     Rectangular nodes containing a single process are elements in $\Proc$,
     borderless nodes containing a couple of processes are elements in $\Obj$
