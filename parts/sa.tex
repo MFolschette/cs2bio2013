@@ -235,7 +235,8 @@ if it does not appear elsewhere in the graph.
 
 \begin{definition}
 \label{def:glc}
-  The graph of local causality $\cwB \DEF (\Bv, \Be)$ is defined as: $\cwB \DEF \lfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}$,
+  The \modMF{saturated} graph of local causality $\cwB \DEF (\Bv, \Be)$ is defined as:
+  $\cwB \DEF \lfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}$,
   where $\myB \DEF (\cwV, \cwE)$ is the smallest graph with
   $\cwV \subseteq \Proc \cup \Obj \cup \Sol$ and $\cwE \subseteq \cwV \times \cwV$
   so that:
@@ -256,7 +257,7 @@ if it does not appear elsewhere in the graph.
 In the saturated graph of local causality, an edge $(p, ps) \in \Proc \times \Sol$
 is said to be coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the children processes of $ps$.
 Then, \pref{th:approxinf} gives a sufficient condition for the concretisation of a sequence of objectives in a given context,
-which is derived immediately from the graph of local causality.
+which is derived immediately from the saturated graph of local causality.
 A proof of this theorem is given in \pref{suppl:demoapproxinf}.
 \begin{definition}[Coherent edge]
 \label{def:coherent}
@@ -275,7 +276,7 @@ a context $\ctx$ and a sequence of objectives $\w$,
   then $\uconcr(\w) \neq \emptyset$.
 \end{theorem}
 
-Computing the graph of local causality is polynomial in the number of sorts in $\PH$ and exponential in the number of processes in one sort.
+Computing the saturated graph of local causality is polynomial in the number of sorts in $\PH$ and exponential in the number of processes in one sort.
 Checking the properties allowing to apply \pref{th:approxinf} is polynomial in the size of the graph.
 Furthermore, it is possible to compute only a subset of $\V \cap \Sol$;
 in this case, the overall method turns out to be exponential in the number of solutions to each objective.
@@ -284,21 +285,30 @@ Our method can thus be considered as efficient compared to regular model-checkin
 
 
 \begin{example}
-  Let $\PH' = (\PHs, \PHl, \PHh'^{\langle 1 \rangle})$ be the “merged” version of the PH in \pref{fig:ph-livelock}, that is: $\PHh'^{\langle 1 \rangle} = \PHh^{(1)} \cup \PHh^{(2)}$,
-  which is how it would have been represented in the semantics without priorities.
-  Due to spurious behaviours inherent to the cooperative sorts in this semantics, 
-  the original under-approximation developed in~\cite{PMR12-MSCS} concludes that $c_1$ is reachable in $\PH'$ from $\ctx = \PHstate{a_1, b_0, c_0, ab_{10}}$.
+  Let $\PH' = (\PHs, \PHl, \PHh'^{\langle 1 \rangle})$ be the “merged” version of the PH
+  depicted in \pref{fig:ph-livelock}, as it was already defined in \pref{ssec:priorties},
+  that is: $\PHh'^{\langle 1 \rangle} = \PHh^{(1)} \cup \PHh^{(2)}$.
+  In other words,
+  $\PH'$ is how $\PH$ would have been represented in the semantics without priorities.
+  We showed in \pref{ssec:priorties} that,
+  due to spurious behaviours inherent to the cooperative sorts in this semantics,
+  process $c_1$ is reachable
+  from the initial context $\ctx = \PHstate{a_1, b_0, c_0, ab_{10}}$.
+%   This is confirmed by the original under-approximation
+%   developed in~\cite{PMR12-MSCS}, which gives the same conclusion.
   
   Such unwanted behaviours are palliated by the semantics of PH with priorities proposed in this paper.
   Indeed, the under-approximation given in \pref{th:approxinf} does not conclude regarding the reachability of $c_1$,
-  as one of the edges of the resulting graph of local causality is not coherent (\pref{def:coherent}),
+  as one of the edges of the resulting saturated graph of local causality is not coherent (\pref{def:coherent}),
   as shown in in \pref{fig:sa-livelock}.
   (However, from the inconclusiveness of \pref{th:approxinf}, one cannot conclude about the unreachability of $c_1$.
   Such analysis should be driven for instance with over-approximation methods developed in~\cite{PMR12-MSCS}.)
   
-  However, if $\PHhit{a_0}{b_0}{b_1}$ and $\PHhit{b_0}{a_0}{a_1}$ are replaced by the auto-actions
+  We note however that,
+  if $\PHhit{a_0}{b_0}{b_1}$ and $\PHhit{b_0}{a_0}{a_1}$ are replaced by the auto-actions
   $\PHhit{a_0}{a_0}{a_1}$ and $\PHhit{b_0}{b_0}{b_1}$,
-  then \pref{th:approxinf} concludes that $c_1$ is reachable from $\ctx$.
+  then the resulting saturated graph of local causality changes, and
+  \pref{th:approxinf} concludes that $c_1$ is then reachable from $\ctx$.
 
 \begin{figure}[tp]
   \centering
