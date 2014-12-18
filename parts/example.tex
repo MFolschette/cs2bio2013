@@ -414,7 +414,11 @@ software\footnote{Pint is freely available at \url{http://loicpauleve.name/pint}
 
 The Boolean model has been automatically encoded into a Process Hitting with 2 classes of priority%
 \footnote{Files are available at
-\url{http://maxime.folschette.name/underapprox-tcrsig94.zip}.}.
+\url{http://maxime.folschette.name/underapprox-tcrsig94.zip}.}
+\modMF{
+by using a translation equivalent to the one given in \pref{sec:dn}.
+\todo{?}
+}
 Then, we verified the reachability for the independent activation of 4 outputs of the signalling
 cascade (SRE, AP1, NFkB, NFAT) from all possible input combinations (CD4, CD28, TCRlig) using our
 new reachability under-approximation (answering either \emph{yes} or \emph{inconclusive}) and a 
@@ -424,14 +428,56 @@ All result in conclusive decisions, and the under-approximation has been satisfi
 32) proving the satisfiability of the concerned reachability property in the encoded Boolean network
 (and non-satisfiability in the other cases).
 
-Computations times are in the order of a few hundredths of a second on a 2.4GHz processor with 2GB
-of RAM.
+\modMF{
+By analysing the detail of the results, one can find out that one of the output, NFkB, can never be activated.
+In other words, FkB$_1$ is never reachable, whatever the state of the inputs,
+while some combinations the other outputs (SRE, AP1, NFAT) can be activated for some configurations of inputs.
+We thus want to check if these three outputs can be activated together,
+that is, if the activation of one of the outputs does not prevent the activation of one of the others.
+For this, as proposed in \pref{ssec:simult-ua},
+we add a new cooperative sort $\total$ between SRE, AP1 and NFAT to the model,
+and a sort $\reach$ with two processes ($\PHl_\reach = \{ \reach_0, \reach_1 \}$)
+with the action $\PHhit{\total_{111}}{\reach_0}{\reach_1}$.
+Finally, checking the reachability of $\reach_1$ in all configurations of the inputs
+is always conclusive,
+and the existence of positive answers allows to conclude that
+it is possible to reach a state where SRE, AP1 and NFAT are simultaneously active.
+}
+
+We held all these experiments on a laptop computer with a 2GHz processor
+and 1GB of RAM.
+\modMF{
+Computations times were in the order of a few hundredths to tenths of a second
+in each case (reachability of $\reach_1$ included).
+}
 To give a comparison, we did the same experiments with a standard symbolic model-checker, libDDD
 \cite{libddd}, known for its good performances, the input model being the Boolean network expressed
 as a Petri net.
 However, due to the large scale of the model, the program runs out of memory for all the experiments.
+\modMF{
+This limitation shows that studying the dynamics of models is strongly limited to the size of the model for standards model checkers,
+while our method is able to conclude with limited memory and computation time usage.
+Furthermore, given that the complexity of the static analysis presented in this paper
+is polynomial in the size of the models,
+it is expected that our work will be scalable to models that are larger,
+even by orders of magnitude.
+%---~that is, containing thousands of components.
+}
+
+\modMF{
+Finally, we note that similar experiments were conducted in~\cite{PMR12-MSCS}.
+However, if these experiments allowed to obtain some information
+on these model to some extent,
+it did not provide a formal proof of the reachabilities that have been
+checked in the example above.
+Indeed, without any priorities in the update of the cooperative sorts,
+some unwanted behaviours were possible,
+such as those described in \pref{ssec:priorities}.
+Only the method presented in this paper provides a formal proof that
+the observed behaviours are the result of the exact dynamics of the system,
+which was originally described in a format equivalent to synchronous Discrete Networks.
+}
 
 While ensuring a low complexity for the analysis of reachability in Boolean and discrete networks, our
 under-approximation method reveals to be conclusive in numerous cases when applied to real
 large-scale biological models, which were not tractable with exact model-checking.
-

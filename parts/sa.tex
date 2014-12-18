@@ -286,11 +286,11 @@ Our method can thus be considered as efficient compared to regular model-checkin
 
 \begin{example}
   Let $\PH' = (\PHs, \PHl, \PHh'^{\langle 1 \rangle})$ be the “merged” version of the PH
-  depicted in \pref{fig:ph-livelock}, as it was already defined in \pref{ssec:priorties},
+  depicted in \pref{fig:ph-livelock}, as it was already defined in \pref{ssec:priorities},
   that is: $\PHh'^{\langle 1 \rangle} = \PHh^{(1)} \cup \PHh^{(2)}$.
   In other words,
   $\PH'$ is how $\PH$ would have been represented in the semantics without priorities.
-  We showed in \pref{ssec:priorties} that,
+  We showed in \pref{ssec:priorities} that,
   due to spurious behaviours inherent to the cooperative sorts in this semantics,
   process $c_1$ is reachable
   from the initial context $\ctx = \PHstate{a_1, b_0, c_0, ab_{10}}$.
@@ -382,6 +382,7 @@ Our method can thus be considered as efficient compared to regular model-checkin
 
 
 \subsection{Reachability of a state}
+\label{ssec:simult-ua}
 
 \newcommand{\total}{\tau}
 \newcommand{\reach}{\sigma}
