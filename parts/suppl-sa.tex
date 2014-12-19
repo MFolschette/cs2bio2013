@@ -8,7 +8,7 @@ $\Bee{X}{Y} = \Be \cap (X \times Y)$, with $X, Y$ amongst $\PHproc$, $\Obj$ and 
 \begin{proofapproxinf}
 We note $max\ctx = \ctx \Cap \allprocs(\cwB)$ the context supported by $\cwB$.
 
-Let $(a_i, ps) \in \Bee{\Proc}{\Sol}$ be an edge linking the required process of a cooperative sort to a solution set and suppose all children of $ps$ are concretisable.
+Let $(a_i, ps) \in \Bee{\Proc}{\Sol}$ be an edge linking the required process of a cooperative sort to a solution set and suppose all successors of $ps$ are concretisable.
 We label all processes of $ps$ by an integer: $ps = \{ p_n \}_{n \in \indexes{ps}}$.
 Let us prove by induction that for all $n \in \indexes{ps}$, there exists a scenario $\delta_n$ so that:
 $\forall i \in \segm{1}{n}, \PHget{(s \PHplay \delta_n)}{\PHsort(p_i)} = p_i$.
@@ -37,11 +37,11 @@ $\exists \delta \in \muconcr_s(P)$.
 	\delta_{|\zeta|} \PHplay \zeta_{|\zeta|}$ is a valid sequence given by
 	\pref{lem:hcompcomp}.
 
-  \item Suppose all children objectives of $P$ are concretisable.
+  \item Suppose all successors objectives of $P$ are concretisable.
     If $\exists (P, Q) \in \Bee{\Obj}{\Obj}$, then by hypothesis,
       $\muconcr_{s}(\obj{\PHtarget(P)}{\PHtarget(Q)} \concat Q) \neq \emptyset$, thus
       $\muconcr_{s}(P) \neq \emptyset$.
-    Else, by \pref{def:maxCont}, the concretisations of the children of $P$ require no process of sort $\PHsort(P)$.
+    Else, by \pref{def:maxCont}, the concretisations of the successors of $P$ require no process of sort $\PHsort(P)$.
       Furthermore, there exists $\zeta \in \BS(P)$ so that $(P, \aZ) \in \Bee{\Obj}{\Sol}$.
       We show by induction that for all $n \in \indexes{\zeta}$, there is a scenario $\delta_n$ so that $\PHget{(s \PHplay \delta_n)}{\PHsort(P)} = \PHbounce(\zeta_n)$.
       \begin{itemize}

@@ -5,15 +5,16 @@
 Discrete modelling frameworks for biological networks is an active research field where formal methods have proved that they were very powerful.
 Such a work started in the seventies.
 It was later enriched in many directions and widely used to elucidate many biological questions.
-Among these questions, a major one is to understand precisely how biological systems evolve and behave; why and how they change their usual behaviours…
+Among these questions, a major one is to understand precisely how biological systems evolve and behave; why and how they change their usual behaviours, etc.
 This leads to questions about the reachability (possible or inevitable) of some states.
 The ultimate goal is to discover how it could be possible to prevent biological systems from reaching some pathological states.
+\todo{Ajouter des références}
 
 Of course, such formal models on which analyses are performed are abstract representations of the actual studied systems.
 They are associated with parameters that have to be synthesised %so as to be as much as possible fitting with the real systems having some observed behaviors.
 to give the most faithful representation of the real systems with their observed behaviours.
 As a matter of fact, the abstractions we get are more or less rough or accurate.
-Usual formal frameworks for such modelling activities are state-transition systems or process algebras. % Petri nets
+Prevalent formal frameworks for such modelling activities are state-transition systems or process algebras. % Petri nets
 We developed a quite similar framework named the Process Hitting \cite{PMR10-TCSB},
 consisting in a restriction where the evolution of a component is determined by the state of at most one other component that does not evolve.
 In a sense, these kind of actions are of the form $X + Y \rightarrow X + Y'$ where $X$ behaves like a catalyst molecule that “hits” another molecule $Y$ and changes it into $Y'$, without being changed itself.
@@ -22,7 +23,7 @@ Assuming catalysts are always available, this can represent any biochemical syst
 Our motivation behind this framework was to design a model and analysis techniques adapted to biological modelling.
 These analyses avoid to build the whole state space, which allows to tackle very large systems (that would have led to a huge number of states, hopelessly too huge to be analysed).
 They are based on the fact that most biological models have few levels of expression per component:
-in Boolean networks~\cite{kauffman69,Thomas73} there are only two levels per component and in their multivalued equivalent, Asynchronous Discrete Networks~\cite{deJong02}, components rarely have more that four levels.
+in Boolean networks~\cite{kauffman69,Thomas73} there are only two levels per component and in their multivalued equivalent, Asynchronous Discrete Networks~\cite{deJong02}, components rarely have more than four levels.
 
 Besides, one further objective of our work is now %to be more accurate in the description of the studied systems.
 to improve the accuracy of the description of the studied systems dynamics.
@@ -40,7 +41,7 @@ and the concept of priority relations among the transitions of a network has als
 The concept of priority is much straightforward in the approach of process algebras as it was shown by R.~Cleaveland and M.~Hennessy in \cite{Cleaveland199058,Cleaveland99prioritiesin} and their abstractions and equivalences were studied in \cite{Cleaveland:2007:PAP:1282576.1282847}.
 It was later extended for applications in the field of systems biology by M.~John \textit{et~al.} \cite{jlnu2010}.
 
-\paragraph{Contributions}
+\subsection*{Contributions}
 Since our formalism (the Process Hitting) can be considered as a subset of Calculus of Communicating Systems, %is inspired from the $\pi$-calculus,
 our work is related to such semantic ramifications of extending traditional process algebras with the concept of priority that allows for some transitions to be given precedence over others.
 The concept is derived in two directions: dynamic versus static, the difference being naturally that the former one refers to a semantics where priority values may change during execution according to some evolution rules.
@@ -56,7 +57,7 @@ One of the objectives is to reach an accurate representation of cooperating comp
 In \pref{sec:sa},
 we develop an efficient under-approximation of the reachability of the state of components on a subclass of this new framework, thus allowing to compute efficient static analysis.
 This local reachability under-approximation can be also easily extended to study the reachability of a global state.
-Furthermore, we provide a new extended under-approximation method to decide a successive reachability property.
+Furthermore, we provide a new extended under-approximation method to check a successive reachability property.
 
 Whereas the analysis presented in \pref{sec:sa} considers a particular class of
 Process Hitting with two classes of priority,
@@ -88,9 +89,11 @@ is conclusive.
 
 
 
-\paragraph*{Notations}
+\subsection*{Notations}
+\label{notations}
 %We denote: $\segm{a}{b} = \{ a, a+1, \dots, b-1, b \}$.
 
+\paragraph*{Sets}
 If $A$ is a finite set,
 $|A|$ is the cardinality of $A$
 and $\powerset(A)$ is the power set of $A$.
@@ -98,13 +101,22 @@ $\sN$ is the set of natural numbers,
 $\sN^* = \sN \setminus \{ 0 \}$ is the set of positive natural numbers,
 $\sNN = \sN \setminus \{ 0, 1 \}$ is the set of natural numbers strictly greater than 1,
 and $\segm{x}{y} = \{ x, x+1, \dots, y-1, y \}$ is the set of natural numbers from $x$ to $y$ included.
-If $x = (x_i)_{i \in \segm{1}{n}}$ is a sequence of elements indexed by $i \in \segm{1}{n}$,
+The Cartesian product is denoted $\times$;
+if $z$ is a tuple of $n$ components, $\toset{z}$ denotes the corresponding set:
+$\toset{z} = \{z_1, \cdots, z_n\}$.
+
+\paragraph*{Sequences}
+If $n \in \sN$ and
+$x = (x_i)_{i \in \segm{1}{n}}$ is a sequence of elements indexed by $i \in \segm{1}{n}$,
 %we denote %$|x| = (b-a)+1$ the size of this sequence and
-$\indexes{x} = \segm{1}{n}$ is the set of indexes of this sequence.
+then $\indexes{x} = \segm{1}{n}$ is the set of indexes of this sequence.
+Furthermore, if $a, b \in \indexes{x}$ with $a \leq b$,
+then $x_{a..b} = (x_i)_{i \in \segm{a}{b}}$ is a subsequence of $x$.
+%from element $n$ to element $m$ inclusive.
 We also denote by $\emptyseq$ the empty sequence.
+
+\paragraph*{Functions and least fixed point}
 If $A$ and $B$ are sets,
 $f : A \rightarrow B$ denotes an application $f$ that maps the elements of $A$ to elements of $B$.
+Furthermore, if $f$ is a monotonically increasing and bounded function, then
 $\lfp{x_0}{x}{x'}$ is the least fixed point of the function $x \mapsto x'$ which is greater than $x_0$.
-The Cartesian product is denoted $\times$.
-If $z$ is a tuple of $n$ components, $\toset{z}$ denotes the corresponding set
-	$\{z_1, \cdots, z_n\}$.

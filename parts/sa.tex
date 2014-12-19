@@ -93,7 +93,7 @@ only take depend on the bounces of the actions hitting the sort $a$.
 }%
 A bounce sequence on $a$ can be abstracted into the minimal sets of its hitters that are not in sort $a$ (\pref{def:aBS}).
 This abstraction is later used to propagate an objective on a given sort
-by creating new objectives on other sots.
+by creating new objectives on other sorts.
 In the following, we denote: $\Sol = \powerset(\PHproc)$.
 \begin{definition}[Bounce sequence ($\BS$)]
 \label{def:bs}
@@ -130,7 +130,7 @@ In the following, we denote: $\Sol = \powerset(\PHproc)$.
 \subsection{Under-approximation}
 \label{ssec:ua}
 
-We denote $\concr(\w)$ (\pref{def:concr}) the set of scenarios concretising an objective sequence $\w$ in the context $\ctx$.
+We denote by $\concr(\w)$ (\pref{def:concr}) the set of scenarios concretising an objective sequence $\w$ in the context $\ctx$.
 In \pref{def:uconcr}, we define $\uconcr(\w)$ as equal to $\concr(\w)$ if and only if $\concr(\w)$ contains scenarios starting from all states $s \subseteq \ctx$.
 \pref{lem:uconcr-ctx} is used to over-approximate the initial context $\ctx$.
 
@@ -148,6 +148,11 @@ context $\ctx$. It is defined as the largest set satisfying the following condit
 					\delta\neq\delta'_{1..\card{\delta}}$.
 \end{enumerate}
 \end{definition}
+
+\noindent
+The notation $\delta_{a..b}$ denotes the subsequence of $\delta$
+between indexes $a$ and $b$, as defined on page \pageref{notations}.
+
 \begin{definition}[$\uconcr: \OS \rightarrow \powerset(\Sce)$]
 \label{def:uconcr}
   \[
@@ -165,7 +170,7 @@ context $\ctx$. It is defined as the largest set satisfying the following condit
   $\ctx \subseteq \ctx' \wedge \muconcr_{\ctx'}(\w) \neq \emptyset \Longrightarrow \muconcr_{\ctx}(\w) \neq \emptyset$.
 \end{lemma}
 
-For any objective $P$ and context $\ctx$, \pref{def:maxCont} gives the set of processes of sort $\PHsort(P)$ that are required to solve $P$ in $\ctx$, given by $\gCont_\ctx(\PHsort(P), P)$.
+For any objective $P$ and context $\ctx$, \pref{def:maxCont} gives the set of processes of sort $\PHsort(P)$ that are required to solve $P$ in $\ctx$, denoted by $\gCont_\ctx(\PHsort(P), P)$.
 \begin{definition}[$\gCont_\ctx : \Sigma \times \Obj \rightarrow \powerset(\PHproc)$]
   \label{def:maxCont}
   \begin{align*}
@@ -177,7 +182,7 @@ For any objective $P$ and context $\ctx$, \pref{def:maxCont} gives the set of pr
 \end{definition}
 
 \modMF{
-A graph of local causality $\aB = (\cwV, \cwE)$
+A graph of local causality $\myB = (\cwV, \cwE)$
 is a graph where $\cwV \subseteq \Proc \cup \Obj \cup \Sol$ is the set of vertices
 and $\cwE \subseteq \cwV \times \cwV$ is the set of oriented edges.
 Such a graph aims a describing the requirements of a given reachability
@@ -210,7 +215,7 @@ and \pref{eq:VE} ensures the consistency of $\cwV$.
 }
 
 \modMF{
-However, this graph $\aB$ alone is not sufficient to check the reachability of
+However, this graph $\myB$ alone is not sufficient to check the reachability of
 an objective sequence $\w$ from an initial context $\ctx$;
 indeed, the reachability of each intermediate required process
 is only checked starting from the context $\ctx$,
@@ -241,7 +246,7 @@ if it does not appear elsewhere in the graph.
   $\cwV \subseteq \Proc \cup \Obj \cup \Sol$ and $\cwE \subseteq \cwV \times \cwV$
   so that:
   \begin{align}
-    \w &\subseteq \cwV \label{eq:Vw} \\
+    \modMF{\toset{\w}} &\subseteq \cwV \label{eq:Vw} \\
 %    P \in \cwVObj &\Rightarrow \PHbounce(P) \in \cwV \label{eq:Vproc} \\
     (x, y) \in \cwE &\Rightarrow y \in \cwV \label{eq:VE} \\
     P \in \cwVObj \wedge ps \in \modMF{\aBS}(P) &\Rightarrow (P, ps) \in \cwE \label{eq:ESol1} \\
@@ -252,17 +257,18 @@ if it does not appear elsewhere in the graph.
   \end{align}
 \end{definition}
 
-\todo{“Saturated” partout}
-
 In the saturated graph of local causality, an edge $(p, ps) \in \Proc \times \Sol$
-is said to be coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the children processes of $ps$.
+is said to be coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the successor processes of $ps$,
+\modMF{
+that is, the successors of $ps$ that are in $\Bv \cap \Proc$.
+}
 Then, \pref{th:approxinf} gives a sufficient condition for the concretisation of a sequence of objectives in a given context,
 which is derived immediately from the saturated graph of local causality.
 A proof of this theorem is given in \pref{suppl:demoapproxinf}.
 \begin{definition}[Coherent edge]
 \label{def:coherent}
   An edge $(x, y) \in \cwE$ is said to be coherent if and only if:
-  $(x, y) \in \Be \cap (\Proc \times \Sol) \Rightarrow y$ has no children process $a_j \in \Bv \cap \Proc$ so that $\exists a_i \in y$, $a_i \neq a_j$.
+  $(x, y) \in \Be \cap (\Proc \times \Sol) \Rightarrow y$ has no successor $a_j \in \Bv \cap \Proc$ so that $\exists a_i \in y$, $a_i \neq a_j$.
 \end{definition}
 
 \begin{theorem}[Under-Approximation]
@@ -276,11 +282,34 @@ a context $\ctx$ and a sequence of objectives $\w$,
   then $\uconcr(\w) \neq \emptyset$.
 \end{theorem}
 
-Computing the saturated graph of local causality is polynomial in the number of sorts in $\PH$ and exponential in the number of processes in one sort.
+\modMF{
+Regarding the complexity of the method,
+computing the saturated graph of local causality is polynomial in the number of sorts in $\PH$ and exponential in the number of processes in one sort.
 Checking the properties allowing to apply \pref{th:approxinf} is polynomial in the size of the graph.
-Furthermore, it is possible to compute only a subset of $\V \cap \Sol$;
-in this case, the overall method turns out to be exponential in the number of solutions to each objective.
+Therefore, building and checking process can be considered polynomial in the size
+of the PH model, provided that each sort only is contains a few processes.
+We note that this is particularly true for biological models, where
+each component usually contains a limited number of expression levels.
+In addition, it is possible to “factorize” cooperative sorts
+modelling more than two components,
+as explained in \pref{ssec:cooperation},
+in order to reduce their number of processes.
+}
+
+\modMF{
+We note furthermore that in case the method developed in this section is not conclusive,
+it is possible to compute only a subset of $\Bv \cap \Sol$,
+by removing some solutions from the initial graph of local causality $\myB$,
+or by removing them from the saturated graph of local causality $\cwB$ and by trimming it.
+\pref{th:approxinf} is then still valid on the partial graph obtained,
+which can lead to more conclusiveness by removing parts of the graph
+that were not necessary for the reachability
+(such as cycles for instance).
+If one wants to test each possible subset of solutions,
+the overall method then turns out to be exponential
+in the number of solutions to each objective.
 Our method can thus be considered as efficient compared to regular model-checking which is usually PSPACE-complete~\cite{Harel02}.
+}
 
 
 
@@ -375,7 +404,7 @@ Our method can thus be considered as efficient compared to regular model-checkin
     borderless nodes containing a couple of processes are elements in $\Obj$
     and circle nodes are elements in $\Sol$.
     \pref{th:approxinf} is inconclusive on this example as edge $(ab_{11}, \{ a_1, b_1 \}) \in \Proc \times \Sol$ (here represented with a double line) is not coherent (\pref{def:coherent}).
-    Indeed, $a_0 \in \Proc$ is a child of $\{ a_1, b_1 \}$, but $a_0 \neq a_1$ (and the same also stands for $b_0$).
+    Indeed, $a_0 \in \Proc$ is a successor of $\{ a_1, b_1 \}$, but $a_0 \neq a_1$ (and the same also stands for $b_0$).
   }
 \end{figure}
 \end{example}
@@ -403,8 +432,8 @@ and $\PHh'^{(2)} = \PHh^{(2)} \cup \{ \PHhit{\pfp_s(\total)}{\reach_0}{\reach_1}
 Given an initial context $\ctx$, the reachability of $s$ in $\PH$ is equivalent to the concretisation of $\PHobjp{\reach}{0}{1}$ in $\PH'$ from the initial context $\ctx \cup \{ \reach_0 \}$ (the initial state of $\total$ does not matter), which can be efficiently under-approximated using \pref{th:approxinf}.
 Indeed, the additional action $\PHhit{\pfp_s(\total)}{\reach_0}{\reach_1}$ in $\PHh'^{(2)}$ allows to conclude on the reachability of process $\pfp_s(\total)$, that is, on the reachability of the state $s$ (considering only the components).
 
-It is also possible to compute the reachability of a set of states $S \subseteq \PHl$ by creating several actions $\PHhit{\total_s}{\reach_0}{\reach_1}$ in $\PHh^{(2)}$ for each state $s \in S$,
-or on a sub-state $s \in \PHsubl[\PHl]_S$ of a set of components $S \subset \PHs$ by adapting the sort $\total$ with: $\PHl_\total = \PHsubl[\PHl]_S$
+It is also possible to compute the reachability of a set of states $\Lambda \subseteq \PHl$ by creating several actions $\PHhit{\total_s}{\reach_0}{\reach_1}$ in $\PHh^{(2)}$ for each state $s \in \Lambda$,
+or on a sub-state $s \in \PHsubl[\PHl]_S$ of a set of components $S \subseteq \PHs$ by adapting the sort $\total$ with: $\PHl_\total = \PHsubl[\PHl]_S$
 
 
 \subsection{Sequential under-approximation}
@@ -432,7 +461,7 @@ processes that may be present just after reaching $a_j$.
 From \pref{th:approxinf}, we can deduce that
 for any scenario $\delta$ in $\uconcr(P)$,
 there exists a set of processes $ps\in\lastprocs(P)$
-such that $ps \subset (s\play\delta)$.
+such that $ps \subseteq (s\play\delta)$.
 Hence, if $\muconcr_{\ctx'\Cap ps}(\w')\neq\emptyset$,
 with $\ctx'=\ctx\Cap\procs(\mycwB{\ctx}{P})$,
 there exists a scenario $\delta'$ concretising $\w'$ from the
@@ -453,7 +482,7 @@ $lps\in\powerset(\Proc)$,
 		\PHsort(\bounce{\zeta_{\card\zeta}})
 		 \Rightarrow
 		  \hitter{\zeta_{\card\zeta}}\in lps$;
-\item $\forall b_j\in lps, b\in\cs, \exists ps\in\csState(b_j), ps\subset lps$;
+\item $\forall b_j\in lps, b\in\cs, \exists ps\in\csState(b_j), ps\subseteq lps$;
 \item $\nexists lps'\in\lastprocs(\obj{a_i}{a_j}), lps'\subset lps \wedge
 									lps'\neq lps$.
 \end{enumerate}
@@ -473,16 +502,16 @@ where $\ctx' = \ctx\Cap\procs(\mycwB{\ctx}{P})$.
 \end{theorem}
 \begin{proof}
 If $\uconcr(P)\neq\emptyset$,
-for all $s\in \PHl, s\subset\ctx$,
+for all $s\in \PHl, s\subseteq\ctx$,
 there exists a scenario $\delta\in\uconcr(P)\cap\Sce(s)$;
 from \pref{def:lastprocs} and proof of \pref{th:approxinf},
 $\exists ps\in\lastprocs(P)$ such that
-$(s\play\delta)\subset\ctx'\Cap ps$.
+$(s\play\delta)\subseteq\ctx'\Cap ps$.
 Hence, if $\muconcr_{\ctx'\Cap ps}(\w')\neq\emptyset$,
 there exists a scenario $\delta'\in\muconcr_{\ctx'\Cap ps}(\w')$ such that
 $\delta'\in\Sce(s\play\delta)$.
 Hence, $\delta\concat\delta'$ is a scenario playable in $s$.
-Therefore, for all $s\in \PHl, s\subset\ctx$, there exists a scenario
+Therefore, for all $s\in \PHl, s\subseteq\ctx$, there exists a scenario
 concretising $\w$.
 Hence, $\uconcr(\w)\neq\emptyset$.
 \end{proof}

@@ -9,7 +9,7 @@ In \pref{ssec:ex-metazoan}, we apply our method to a small model of the
 metazoan segmentation process,
 and demonstrate how the flattening of \pref{ssec:flattening}
 be used in such a case.
-In \label{ssec:ex-tcrsig}, we apply our method to a large-scale model
+In \pref{ssec:ex-tcrsig}, we apply our method to a large-scale model
 of the T-cell receptor signalling pathway
 in order to show the scalability of our method.
 }
@@ -83,10 +83,15 @@ given the fact that the switches of genes $a$ and $c$ have to alternate in order
   \label{fig:metazoan-php}
     An example of PH $\oPH$ with $3$ classes of priorities,
     modelling the process of metazoan segmentation.
-    Actions of $\ov{\PHh}^{(3)}$ (lowest priority) are in thin lines,
+    Component $a$ models the pigment production, and is influenced by
+    component $c$ that has the role of a clock,
+    while $f$ represents the wavefront propagation.
+    If component $a$ oscillates (that is, its active process changes regularly)
+    then regular stripes are created on the metazoan.
+    Actions of $\ov{\PHh}^{(3)}$ (lowest priority) are represented in thin lines,
     actions of $\ov{\PHh}^{(2)}$ (intermediate priority) are in thick lines,
     and actions of $\ov{\PHh}^{(1)}$ (highest priority), whose only purpose is to update the cooperative sort $fc$,
-    are not represented but modelled by the double dashed arrows.
+    are not explicitly represented but modelled by the double dashed arrows.
   }
 \end{figure}
 
@@ -175,9 +180,15 @@ because its playability property could be simplified to $\Fop{h_1} \equiv c_1 \w
   \label{fig:metazoan-ph}
     An example of PH $\PH$ with $2$ classes of priorities,
     which is the flattening of the PH in \pref{fig:metazoan-php}.
-    Actions of $\PHh^{(2)}$ (unprioritised) are in thin lines,
+    In other words, this model has exactly the same dynamics as
+    \pref{fig:metazoan-php}, but its actions make only two classes of priorities.
+    Actions of $\PHh^{(2)}$ (unprioritised) are represented in thin lines,
     and actions of $\PHh^{(1)}$ (prioritised) which are used to update cooperative sorts,
     are abstracted by thick dashed arrows.
+    The additional cooperative sort $fa$ is used to model the previous action
+    $\PHhit{f_1}{c_0}{c_1}$,
+    which belonged to the lowest class of priority and could be preempted 
+    especially by action $\PHhit{fc_{10}}{a_0}{a_1}$.
   }
 \end{figure}
 
@@ -429,7 +440,7 @@ All result in conclusive decisions, and the under-approximation has been satisfi
 (and non-satisfiability in the other cases).
 
 \modMF{
-By analysing the detail of the results, one can find out that one of the output, NFkB, can never be activated.
+By analysing the detail of the results, one can find out that one of the outputs, NFkB, can never be activated.
 In other words, FkB$_1$ is never reachable, whatever the state of the inputs,
 while some combinations the other outputs (SRE, AP1, NFAT) can be activated for some configurations of inputs.
 We thus want to check if these three outputs can be activated together,

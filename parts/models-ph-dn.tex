@@ -1,12 +1,15 @@
 \subsection{Weak Bisimulation of Asynchronous Discrete Networks}
 \label{sec:dn}
 
-\todo{Justifier davantage l'intérêt}
-
 We exhibit an encoding of Asynchronous Discrete Networks (ADN) with the Process
 Hitting using two classes of priorities
-that respects all Conditions of \pref{ssec:hypothesis},
 and prove a weak bisimulation relation.
+This translation is important as it allows to efficiently study the dynamics ADNs
+by using the static analysis developed in \pref{sec:sa};
+indeed, the bisimulation relation ensures that the dynamics of the
+resulting PH model are accurately the same than the original.
+Furthermore, the obtained model is ensured to respect
+all Conditions of \pref{ssec:hypothesis}.
 
 A Discrete Network gathers a finite number of components $i\in\segm{1}{n}$ having a discrete finite domain
 $\mathbb F^i$ that we note $\mathbb{F}^i = \segm{1}{l_i}$.
