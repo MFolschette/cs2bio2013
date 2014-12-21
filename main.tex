@@ -145,23 +145,24 @@ that would allow to model relative time constraints between interactions.
 
 In this paper, we propose an extension of the Process Hitting framework
 by using classes of priorities in order to improve its expressivity.
-We also show that these priorities allow to represent accurate Boolean gates in order to model
-cooperations between components
-(that is, for instance, when two components are supposed to interact with a third one
-only when they are in a given configuration)
-which was not possible before.
-
-Furthermore, we develop in this paper a new refinement for the under-approximation of the static analysis
+Furthermore, we develop a new refinement for the under-approximation of the static analysis
 to give accurate results on Process Hitting models.
 This method applies to a specific sub-class of models,
 but this class turns out to be sufficiently expressive to represent any
 Process Hitting model with an arbitrary number of classes of priorities,
 thus guaranteeing a wide field of application of our method.
-Finally, we show that Process Hitting allows to accurately model
-any Asynchronous Discrete Networks, either Boolean or multivalued.
-Our static analysis method thus allows to efficiently under-approximate reachability properties
-in Asynchronous Discrete Networks,
-as it is illustrated on the model-checking of a signalling network of 94
+
+Finally, we also show that the priorities
+allow to represent accurate Boolean gates in order to model
+cooperations between components
+(that is, for instance, when two components are supposed to interact with a third one
+only when they are in a given configuration)
+which was not possible before.
+This allows to accurately model
+Asynchronous Discrete Networks, either Boolean or multivalued,
+and efficiently under-approximate reachability properties
+in these models.
+We illustrate this on the model-checking of a signalling network of 94
 components, which is unprecedented.
 \end{abstract}
 \begin{keyword}

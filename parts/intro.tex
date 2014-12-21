@@ -23,7 +23,7 @@ Assuming catalysts are always available, this can represent any biochemical syst
 Our motivation behind this framework was to design a model and analysis techniques adapted to biological modelling.
 These analyses avoid to build the whole state space, which allows to tackle very large systems (that would have led to a huge number of states, hopelessly too huge to be analysed).
 They are based on the fact that most biological models have few levels of expression per component:
-in Boolean networks~\cite{kauffman69,Thomas73} there are only two levels per component and in their multivalued equivalent, Asynchronous Discrete Networks~\cite{deJong02}, components rarely have more than four levels.
+in Boolean networks~\cite{kauffman69,Thomas73} there are only two levels per component, and in their multivalued equivalent~\cite{deJong02}, components rarely have more than four levels.
 
 Besides, one further objective of our work is now %to be more accurate in the description of the studied systems.
 to improve the accuracy of the description of the studied systems dynamics.
@@ -65,8 +65,12 @@ Process Hitting with two classes of priority,
 we provide in \pref{sec:encodings} a “flattening” of any Process Hitting model into
 this class of models,
 so that its application is not restricted to it.
-We also give in the same section a formal encodings of Asynchronous Discrete Networks,
-allowing to efficiently study this kind of widespread models.
+We also give in the same section a formal encoding of Asynchronous Discrete Networks,
+that is, the multivalued version of Asynchronous Boolean Networks.
+These models,
+which encompass variables and evolution functions with a limited number of discrete values,
+also called “Logical Networks” in~\cite{Thomas95,deJong02}.
+This encoding thus allows to efficiently study this kind of widespread models.
 
 In \pref{sec:example}, after giving an example of the encoding of a biological
 network with multiple priority classes,
