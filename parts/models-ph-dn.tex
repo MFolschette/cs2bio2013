@@ -50,36 +50,11 @@ It is then sufficient to build actions towards $a^i$
 depending on any possible state of the components in $\DNdep(f^i)$
 and the related value of the evolution function $f^i$.
 
-
-
-$f^i_\varsigma$ hits the local states of automaton $a^i$ to make them bounce to the local state
-$a^i_{k'}$ if and only if $k'=f^i(\decode \varsigma)$;
-$\decode \varsigma$ being the ADN state corresponding to the PH (partial) state $\varsigma$ (note that
-$f^i(\decode \varsigma)$ is fully defined because $\decode \varsigma$ specifies the state for all
-the components in $\DNdep(f^i)$).
-
-
-% 
-% between the components $\DNdep(f^i)$.
-% 
-% Two classes of actions are then defined:
-% $\Hits^{(1)}$ is the set of actions updating the cooperative automata according to the current state of the
-% components:
-% if $j\in\DNdep(f^i)$, $a^j_k$ hits each local state $f^i_\varsigma$ where $\get{\varsigma}{a^j}\neq
-% a^j_k$ to make it bounce to the local state $f^i_{\varsigma \Cap a^j_k}$.
-% $\Hits^{(2)}$ is the set of actions encoding the transitions in the ADN:
-% $f^i_\varsigma$ hits the local states of automaton $a^i$ to make them bounce to the local state
-% $a^i_{k'}$ if and only if $k'=f^i(\decode \varsigma)$;
-% $\decode \varsigma$ being the ADN state corresponding to the PH (partial) state $\varsigma$ (note that
-% $f^i(\decode \varsigma)$ is fully defined because $\decode \varsigma$ specifies the state for all
-% the components in $\DNdep(f^i)$).
-
-\begin{definition}
+\begin{definition}[Encoding ($\toPH$)]
 \label{def:DN2PH}
   $\toPH\DNdef=(\Sigma,\PHl,\Hits)$ is the AAN encoding the ADN $\DNdef$, with:
   \begin{itemize}
     \item $\Sigma = \{ a^1, \dots, a^n \}$;
-%      the automata representing components;
     
     \item $\PHl=\underset{i\in\segm{1}{n}}{\times} \PHl_{a^i}$, where
       $\PHl_{a^i}=\{a^i_0, \dots, a^i_{l_i}\}$;
@@ -89,25 +64,6 @@ the components in $\DNdep(f^i)$).
       \varsigma \subseteq \encode{x} \wedge
       f^i(x) = k \wedge \PHget{x}{i} = j \wedge j \neq k \wedge
       A = \toset{\varsigma} \}$ where $\encode{x}$ is defined below.
-    
-%     \item $\Hits^{(1)}= \{ \hit{a^j_k}{f^i_\varsigma}{f^i_{\varsigma'}}
-%       \mid i\in\segm{1}{n} \wedge
-%       j\in\DNdep(f^i) \wedge a^j_k\in \PHl_{a^j} \wedge f^i_\varsigma\in \PHl_{f^i}
-%       \wedge
-%       \get{\varsigma}{a^j}\neq a^j_k 
-%       \wedge \get{\varsigma'}{a^j}=a^j_k
-%       \wedge (\get{\varsigma'}{a^{l}}=\get{\varsigma}{a^l},
-%       \forall l\in\segm{1}{n},l\neq j)
-%       \}$, 
-%       the set of actions with priority $1$ that update cooperative automata;
-% 
-%     \item $\Hits^{(2)}=\{ \hit{f^i_\varsigma}{a^i_k}{a^i_{k'}} \mid i\in\segm{1}{n} \wedge
-%           f^i_\varsigma\in \PHl_{f^i} \wedge
-%           a^i_k\in \PHl_{a^i}\wedge k\neq k' \wedge f^i(\decode \varsigma) = k'
-%         \}$,
-%       the set of actions with priority $2$ for updating the components using their respective discrete
-%       maps.
-%       $\decode \varsigma$ is defined below.
   \end{itemize}
   Given a state $s \in \PHl$ of the AAN,
   $\decode s=x$ is the corresponding state in the ADN:
@@ -120,17 +76,17 @@ the components in $\DNdep(f^i)$).
 Finally,
 \pref{th:bisimDN} states the weak bisimulation relation between an ADN and its encoding in AAN.
 Intuitively, the actions follow strictly the possible transitions of the ADN.
-A detailed proof is given in \pref{suppl:proofbisimADN}.
+A detailed proof is given in \pref{suppl:proofbisimADN}. \todo{Utile ?}
 
-\begin{theorem}[$\DNdef \approx \toPH\DNdef$]~
+\begin{theorem}[$\DNdef \approx \toPH\DNdef$]
 \label{th:bisimDN}
+  If $\DNdef$ is an ADN
+  and $\PH = \toPH\DNdef = (\PHs; \PHl; \PHa)$ is its AAN encoding, then:
   \begin{enumerate}
     \item \label{adn2ph} $\forall x,x'\in\mathbb F$,
-      $x\DNtrans x' \Longrightarrow \encode x \PHPtrans^* \encode{x'}$,
-      where $\PHPtrans^*$ is a finite sequence of $\PHPtrans$ transitions.
-
+      $x\DNtrans x' \Longrightarrow \encode x \PHPtrans \encode{x'}$,
     \item \label{ph2adn} $\forall s,s'\in \PHl$,
-      $s\PHPtrans s' \Longrightarrow \decode s = \decode {s'} \vee \decode s \DNtrans
+      $s\PHPtrans s' \Longrightarrow \decode s \DNtrans
       \decode{s'}\enspace.$
   \end{enumerate}
 \end{theorem}

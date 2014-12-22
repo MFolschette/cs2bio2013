@@ -138,32 +138,37 @@
 
 
 \begin{abstract}
-The Process Hitting is a recently introduced framework designed for the modelling of concurrent systems.
-Its originality lies in a compact representation of both components of the model and its corresponding actions:
-each action can modify the status of a component, and is conditioned by the status of at most one other component.
-This allowed to define very efficient static analysis based on local causality to compute reachability properties.
-However, in some cases, this modelling lacks some preemption features
-that would allow to model relative time constraints between interactions.
+The Process Hitting is a recently introduced framework
+designed for the modelling and analysis of concurrent systems.
+The particular form of its actions (encoding the dynamics into the models)
+allowed to define very efficient static analysis
+based on local causality to compute reachability properties.
+However, this modelling shows its limits when preemption features are needed,
+and especially for cooperations
+(that is, the regulation of two components that jointly interact with a third one).
 
-In this paper, we propose an extension of the Process Hitting framework
-by using classes of priorities in order to improve its expressivity.
-Furthermore, we develop a new refinement for the under-approximation of the static analysis
-to give accurate results on Process Hitting models.
-This method applies to a specific sub-class of models,
-but this class turns out to be sufficiently expressive to represent any
-Process Hitting model with an arbitrary number of classes of priorities,
-thus guaranteeing a wide field of application of our method.
+In this paper, we focus on
+the Asynchronous Automata Network (AAN) formalism,
+which is an extension of the Process Hitting with an increased expressivity.
+Like the Process Hitting,
+the originality of AANs is the restrictions of the actions
+that have an effect limited to exactly one component;
+but unlike Process Hitting, their causality is not restricted to at most one other component.
 
-Finally, we also show that the priorities
-allow to represent accurate Boolean gates in order to model
-cooperations between components
-(that is, for instance, when two components are supposed to interact with a third one
-only when they are in a given configuration)
-which was not possible before.
-This allows to accurately model
+We then develop a new refinement for the under-approximation of the static analysis
+to efficiently compute results on the dynamics of AANs.
+Because of the expressivity improvements,
+this analysis gives more accurate results
+than the previous works carried on the Process Hitting.
+Furthermore, its complexity is still polynomial in the size of the model
+and exponential in the number of possible “branchings” during the solving.
+
+We also extend the applicability of this static analysis to
+AANs with classes of priorities and to
 Asynchronous Discrete Networks, either Boolean or multivalued,
-and efficiently under-approximate reachability properties
-in these models.
+which allows to efficiently study the dynamics of these widespread models
+% efficiently under-approximate reachability properties
+% in these widespread models.
 We illustrate this on the model-checking of a signalling network of 94
 components, which is unprecedented.
 \end{abstract}

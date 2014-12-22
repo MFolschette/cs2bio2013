@@ -3,8 +3,6 @@
 
 \todo{Replacer notre méthode par rapport aux méthodes d'interprétation abstraite en général}
 
-\todo{Gluer : explication des définitions, etc.}
-
 The aim of this section is to define the problem of reachability in an AAN,
 and propose an under-approximation allowing to efficiently solve it.
 The static analysis presented here is inspired from~\cite{PMR12-MSCS}.
@@ -610,9 +608,14 @@ smaller scenarios allowing to reach each required hitter of each action
 with the function $\thisseq$.
 Finally, $\thisseq$ calls $\res$ anew to reach the hitters
 that are necessarily contained in other automata.
+In the end, a scenario can be obtained by analysing all values of
+$\osres_s(\w)$ (\pref{def:concret})
+for all possible initial state $s \subseteq \ctx$ in the considered context,
+and all possible bounce sequences $\zeta \in \BS(P)$ that are chosen during the resolution.
 }%
 
 \begin{definition}[$\osres : \PHl \times \OS \to \Sce$]
+\label{def:concret}
 \modMF{%
 For all $s \in \PHl$ and $\w \in \OS$, we define:
 \[
@@ -633,7 +636,7 @@ and, for all $s \in \PHl$ and $P \in \Obj$:
     \osres_s(P^Q \concat Q)
       & \text{if } \exists Q \in \Obj, (P, Q) \in \Bee{\Obj}{\Obj} \\
     \rec_s(\zeta)
-      & \text{otherwise, with } \zeta \in \BS(P) \text{\todo{Selon possbilités}}
+      & \text{otherwise, with } \zeta \in \BS(P)
   \end{cases}
 \]
 with $P^Q = \PHobj{\PHtarget(P)}{\PHtarget(Q)}$.
@@ -664,5 +667,3 @@ and for all action $h \in \PHh$, $(h_i)_{i \in \segm{1}{\card{\hitter{h}}}}$
 is a sequence containing all hitters of $h$ in an arbitrary order.
 }
 \end{definition}
-
-\todo{Gérer les choix multiples possibles de $\zeta \in \BS(P)$}
