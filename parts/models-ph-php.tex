@@ -1,29 +1,70 @@
-\subsection{Process Hitting with multiple classes of priorities}
+\subsection{local state Hitting with multiple classes of priorities}
 \label{ssec:flattening}
 
-In this section, we give a translation that allows to obtain,
-from any PH model with any number of priorities,
-a PH model with 2 classes of priorities
-that respects all Conditions of \pref{ssec:hypothesis}.
-Such a translation is thus particularly useful to be able to study the dynamics of
-any kind of PH model by using the static analysis developed in \pref{sec:sa},
-which is not possible if these conditions are not met.
+In this section, we define the notion of AANs with classes of priorities,
+and give a translation from any of these AANs into
+an AAN without priorities, as defined in \pref{sec:ph}.
 
-We consider in the following a PH with $k \in \sNN$ classes of priories
-$\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$
-that respects all Conditions given in \pref{ssec:hypothesis}.
-If $\oPH$ does not respect these Conditions,
-it is then sufficient to instead consider the PH model with $k+1$ classes of priorities
-$\ov{\PH}' = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}'^{\angles{k+1}})$
-where $\ov{\PHh}'^{(1)} = \emptyset$.
-The aim of this section is to propose a translation of $\oPH$
-into a PH model with $2$ classes of priorities $\PH = (\PHs; \PHl; \PHa^{\angles{2}})$
-called \emph{flattening},
-which is weakly bisimilar
-and that also respects all Conditions of \pref{ssec:hypothesis}.
+The idea behind AANs with classes of priorities (\pref{def:php})
+is to split the set of actions into several subsets assigned to priorities,
+and adapting the behaviour of the model to make any action unplayable
+until no other action of higher priority is playable (\pref{def:playp}).
+Such model allows to model preemptions between sets of actions,
+which can be helpful to abstract time or duration properties under certain conditions.
+
+\begin{definition}[AANs with $k$ classes of priorities]
+\label{def:php}
+  If $k \in \sN^*$,
+  an \emph{Asynchronous Automata Network with $k$ classes of priorities} (AAN$k$)
+  is a triplet $\PH = (\PHs; \PHl; \PHa^{\angles{k}})$,
+  where $\PH^{\angles{k}} = (\PHh^{(1)} \dots; \PHh^{(k)})$,
+  and:
+  \begin{itemize}
+    \item $\PHs \DEF \{a, b, \dots, z\}$ is the finite set of \emph{automata};
+    \item $\PHl \DEF \underset{a \in \PHs}{\times} \PHl_a$ is the finite set of
+      (global) \emph{states},
+      where $\PHl_a = \{a_0, \ldots, a_{l_a}\}$ is the finite set of \emph{local states}
+      of automaton $a \in \PHs$, with $l_a \in \sN^*$,
+      and so that:
+      $\forall (a_i; b_j) \in \PHl_a \times \PHl_b, a \neq b \Rightarrow a_i \neq b_j$;
+    \item $\forall n \in \llbracket 1; k \rrbracket,
+      \PHa^{(n)} \DEF \{\PHfrappe{A}{b_j}{b_k} \mid
+      b \in \PHs \wedge (b_j; b_k) \in \PHl_b \times \PHl_b \wedge
+      b_j \neq b_k \wedge
+      \forall a \in \PHs, \card{A \cap \PHl_a} \leq 1 \wedge
+      A \cap \PHl_b = \emptyset \}$ is the finite set of \emph{actions of priority $n$}.
+  \end{itemize}
+  We also use the same notations as those defined in \pref{sec:ph}, when applicable.
+  Furthermore,
+  we denote by $\PHh \DEF \bigcup_{n \in \segm{1}{k}} \PHh^{(n)}$ the set of all actions
+  and, for all $h \in \PHh$,
+  by $\prio(h) \DEF \min\{ n \in \segm{1}{k} \mid h \in \PHh^{(n)} \}$
+  the priority of action $h$.
+\end{definition}
+
+\begin{definition}[Dynamics of an AAN$k$ ($\PHPtrans$)]
+\label{def:playp}
+  An action $h = \PHhit{A}{b_j}{b_k} \in \PHa^{(n)}$ of priority $n$
+  is \emph{playable} in $s \in \PHl$
+  if and only if $A \subseteq s$, $\PHget{s}{b} = b_j$ and
+  $\forall m < n, \forall g \in \PHa^{(m)},
+    \neg (\PHhitter(g) \subseteq s \wedge \PHtarget(g) \in s)$.
+  In such a case, $(s \PHplay h)$ stands for the state resulting from the play
+  of the action $h$ in $s$, which is defined by: $(s \PHplay h) = s \Cap b_k$.
+  Moreover, we denote: $s \PHPtrans (s \PHplay h)$.
+\end{definition}
+
+We consider in the following an AAN$k$ with $k \in \sNN$:
+$\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$.
+The aim of the rest this section is to propose a translation of $\oPH$
+into an AAN with $1$ class of priority $\PH = (\PHs; \PHl; \PHa^{\angles{1}})$
+called \emph{flattening}, which we also prove to be weakly bisimilar.
+This AAN with 1 class of priority is equivalent to a regular AAN without priorities;
+Therefore, such a translation is particularly useful to be able to study the dynamics of
+any kind of AAN with priorities by using the static analysis developed in \pref{sec:sa}.
 
 This translation is based on the notion of \emph{playability property} defined in \pref{def:pp}
-which is a Boolean formula where the atoms are processes of $\ov{\PH}$.
+which is a Boolean formula where the atoms are local states of $\ov{\PH}$.
 
 \begin{definition}[Playability property language ($\F$)]
   \label{def:pp}
@@ -47,27 +88,34 @@ distributivity, associativity and commutativity can be used, together with De Mo
 We also have the following property for the negation of an atom:
 \[\forall a \in \ov{\PHs}, \forall a_i \in \ov{\PHl}_a, \forall \mysigma \in \PHsubl,
   \Fsem{\neg a_i}{\mysigma} \Leftrightarrow \Fsem{\bigvee_{\substack{a_j \in \ov{\PHl}_a\\a_j \neq a_i}} a_j}{\mysigma}\]
-Indeed, if a process is not active in a state, this means that another process of the same sort is active.
+Indeed, if a local state is not active in a state, this means that another local state of the same automaton is active.
+Furthermore, we note that:
+\[\forall a \in \ov{\PHs}, \forall a_i, a_j \in \ov{\PHl}_a,
+  a_i \neq a_j \Longrightarrow a_i \wedge a_j \equiv \bot \]
+because two different processes can never be active simultaneously.
 
 In \pref{def:fop}, we define the the operator $\Fopsymbol$ which characterises the playability of an action
-given the semantics of PH (\pref{def:play}).
-This operator considers the \emph{virtual hitters} of an action,
-which are the sub-states given by $\csState$ to activate the hitter of the given action if it is a process of cooperative sort.
-Furthermore, the target of the action is not taken into account as it is not needed for the rest of the flattening.
-%
-\begin{definition}[Playability property of an action ($\Fopsymbol : \PHh \rightarrow \F$)]\label{def:fop}
-  \[\forall h \in \ov{\PHh}, \Fop{h} \equiv \virtualhitters(h) \wedge
-    \left( \bigwedge_{\substack{g \in \ov{\PHh}^{(n)}\\\modMF{1 <} n < \prio(h)}}
-    \neg \left( \target{g} \wedge \hitter{g}\right) \right)\]
-  where if we note $\hitter{h} = a_i$, then:
-  \[\virtualhitters(h) =
-    \begin{cases}
-      a_i & \text{if } a \in \components \text{ or } h \in \ov{\PHh}^{(1)} \\
-      \bigvee_{ps \in \csState(a_i)} \left( \bigwedge_{p \in ps} p \right) & \text{if } a \in \cs
-    \end{cases}\]
+given the semantics of AAN$k$s (see \pref{def:playp}).
+This operator simply states that the hitters of an action have to be active,
+and no other action of higher priority have to be playable.
+% The target of the considered action is not taken into account
+% as it is not needed for the rest of the flattening.
+
+\begin{definition}[Playability property operator ($\Fopsymbol : \PHh \rightarrow \F$)]\label{def:fop}
+  For all $h = \PHfrappe{A}{b_x}{b_y} \in \ov{\PHh}$, we define:
+  \[
+    \Fop{h} \equiv
+    b_x \wedge
+    \left(\bigwedge_{a_i \in A} a_i\right)
+    %\hitter{h}
+    \wedge
+      \left( \bigwedge_{\substack{g \in \ov{\PHh}^{(n)}\\\modMF{1 <} n < \prio(h)}}
+      \neg \left( \target{g} \wedge \left(\bigwedge_{c_l \in \hitter{g}} c_l\right)\right) \right)
+%   \moda{\bigwedge_{\substack{b_z \in \PH_b\\b_z \neq b_x}} \neg b_z}
+  \]
 \end{definition}
 %
-By construction of this operator and given the dynamics of a PH model,
+By construction of this operator and given the dynamics of a AAN$k$,
 an action $h$ is playable in a state $s \in \ov{\PHl}$ if and only if: $\Fsem{\Fop{h}}{s} \wedge \target{h} \in s$.
 
 Because we only use classical logic operators, we can compute the Disjunctive Normal Form (DNF) of any playability property.
@@ -78,15 +126,15 @@ If $\n = 0$, then $\Fop{h} \equiv \bot$; this means that $h$ can never be played
 due to preemptions by other actions with higher priorities.
 If $\Fop{h} \not\equiv \bot$, on the other hand, then in this case $\Fop{h}$
 can be seen as a disjunction of $\n$ smaller playability properties consisting only of conjunctions of atoms.
-These $\n$ conjunctions can be translated to as many prioritised cooperative sorts,
-thus creating a new PH model which is entailed in the restrictions depicted in \pref{ssec:hypothesis}.
-In this second case, we denote, for any $i \in \segm{1}{\n}$:
+These $\n$ conjunctions can be translated to as many actions,
+thus creating a new AAN$1$.
+In this case, we denote, for any $i \in \segm{1}{\n}$:
 $\PHdep{i}{h} = \{ \PHsort(p_{i,j}) \mid j \in \segm{1}{\m} \}$.
 
 With \pref{lem:ppplaysubset}, we can then characterise the playability of an action in a state only with a sub-state.
 This sub-state corresponds to one of the conjunctions of its playability property's DNF.
 Finally, \pref{def:flattening} gives the construction of the flattening of $\oPH$:
-for each action $h \in \ov{\PHh}$, several cooperative sorts $f^{h,i}$ are built to reflect each of the conjunction in $\Fop{h}$,
+for each action $h \in \ov{\PHh}$, several actions $f^{h,i}$ are built to reflect each of the conjunctions in $\Fop{h}$,
 \ie for $i \in \segm{1}{\n}$.
 This construction allows to obtain the same dynamics as $\oPH$, as stated by \pref{th:bisimPHP}.
 A detailed proof of this theorem is available in \pref{suppl:demoflattening}.
@@ -111,81 +159,48 @@ A detailed proof of this theorem is available in \pref{suppl:demoflattening}.
     and, by construction of $\PHdep{i}{h}$, $\Fsem{\Fop{h}}{\mysigma}$.
   
   ($\Leftarrow$)
-    $\Fsem{\Fop{h}}{\mysigma}$ therefore $\Fsem{\Fop{h}}{s}$; as $\target{h} \in s$, $h$ is playable in $s$.
+    $\Fsem{\Fop{h}}{\mysigma}$ therefore $\Fsem{\Fop{h}}{s}$; as $\target{h} \in s$,
+    $h$ is playable in $s$.
 \end{proof}
 
 \begin{definition}
   \label{def:flattening}
-  If $k \in \sNN$ and $\oPH = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$
-  is a PH with $k$ classes of priorities that respects all Conditions of \pref{ssec:hypothesis},
-  we note $\PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) = (\PHs; \PHl; \PHa^{\angles{2}})$
+  If $k \in \sNN$ and $\oPH = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$ is an AAN$k$,
+  we denote by
+  $\PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) = (\PHs; \PHl; \PHa)$
   the \emph{flattening} of $\oPH$, where:
   \begin{itemize}
-    \item $\PHs = \ov{\PHs} \cup \PHs_f$
-      where $\PHs_f = \{ f^{h,i} \mid h \in \ov{\PHh} \wedge \n \geq 1 \wedge i \in \segm{1}{\n} \}$;
-    \item $\PHl = \left( \bigtimes{a \in \ov{\PHs}} \PHl_{a} \right) \times
-      \left(\bigtimes{f^{h,i} \in \PHs_f} \PHl_{f^{h,i}} \right)$,
-      where $\forall a \in \ov{\PHs}, \PHl_{a} = \ov{\PHl}_{a}$, and
-      $\forall f^{h,i} \in \PHs_f,
-      \PHl_{f^{h,i}} = \{ f^{h,i}_\mysigma \mid \mysigma \in \PHsubl_{\PHdep{i}{h}} \}$;
-    \item $\PHh^{(1)} = \{ \PHhit{a_k}{f^{h,i}_\mysigma}{f^{h,i}_{\mysigma'}} \mid
-      h \in \ov{\PHh} \wedge
-      f^{h,i} \in \PHs_f \wedge
-      a \in \PHdep{i}{h} \wedge a_k \in \PHl_a \wedge
-      f^{h,i}_\mysigma , f^{h,i}_{\mysigma'} \in \PHl_{f^{h,i}} \wedge
-      \PHget{\mysigma}{a} \neq a_k \wedge \mysigma' = \mysigma \Cap \{ a_k \} \}$;
-    \item $\PHh^{(2)}=\{ \PHhit{f^{h,i}_\mysigma}{\target{h}}{\bounce{h}} \mid
-      h \in \ov{\PHh} \setminus \ov{\PHh}^{(1)} \wedge
-      f^{h,i} \in \PHs_f \wedge
-      f^{h,i}_\mysigma \in \PHl_{f^{h,i}} \wedge \Fsem{\Fop{h}}{\mysigma} \}$.
+    \item $\PHs = \ov{\PHs}$;
+    
+    \item $\PHl = \ov{\PHl}$;
+    
+    \item $\PHh = \{
+      \PHfrappe{(\toset{\mysigma} \setminus \{ \target{h} \})}{\target{h}}{\bounce{h}} \mid
+      h \in \ov{\PHh} \wedge \n \geq 1 \wedge i \in \segm{1}{\n} \wedge
+      \mysigma \in \PHsubl_{\PHdep{i}{h}} \wedge
+      \Fsem{\Fop{h}}{\mysigma} \}$.
   \end{itemize}
-  Given a state $s \in \PHl$, $\unflats{s} = \os$ is the corresponding state in $\ov{\PHl}$:
-  $\forall a \in \ov{\PHs}, \PHget{\os}{a} = \PHget{s}{a}$.
-
-  \noindent
-  Given a state $\os \in \ov{\PHl}$, $\flats{\os} = s$ is the corresponding state in $\PHl$:
-  $\forall a \in \ov{\PHs}, \PHget{s}{a} = \PHget{\os}{a}$
-  and $\forall f^{h,i} \in \PHs_f, \PHget{s}{f^{h,i}} = f^{h,i}_\mysigma$ with $f^{h,i}_\mysigma \in \PHl_{f^{h,i}}$
-  and $\forall b \in \PHdep{i}{h}, \PHget{\mysigma}{b} = \PHget{\os}{b}$.
+%   Given a state $s \in \PHl$, $\unflats{s} = \os$ is the corresponding state in $\ov{\PHl}$:
+%   $\forall a \in \ov{\PHs}, \PHget{\os}{a} = \PHget{s}{a}$.
+%   Conversely,
+%   given a state $\os \in \ov{\PHl}$, $\flats{\os} = s$ is the corresponding state in $\PHl$:
+%   $\forall a \in \ov{\PHs}, \PHget{s}{a} = \PHget{\os}{a}$.
 \end{definition}
+
+We note that the set of global states of an AAN$k$
+and the set of global states of its flattening are the same.
 
 \begin{theorem}[$(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) \approx \PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$]
 \label{th:bisimPHP}
-  Let $\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$ a PH with $k$ classes of priorities,
-  and $\PH = \PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) = (\PHs; \PHl; \PHa^{\angles{2}})$ its flattening.
-  \begin{enumerate}
-    \item \label{php2ph} $\forall \os, \os' \in \ov{\PHl}$,
-      $\os \PHPtrans[\oPH] \os' \Longrightarrow \flats{\os} \PHPtrans[\oPH]^* \flats{\os'}$,
-      where $\PHPtrans[\oPH]^*$ is a finite sequence of $\PHPtrans[\oPH]$ transitions.
-    \item \label{ph2php} $\forall s, s' \in \PHl$,
-      $s \PHPtrans s' \Longrightarrow \unflats{s} = \unflats{s'} \vee
-      \unflats{s} \PHPtrans \unflats{s'} \enspace.$
-  \end{enumerate}
+  If $\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$ is an AAN$k$
+  and $\PH = \PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) =
+    (\PHs; \PHl; \PHa)$ is its flattening, then:
+  \[ \forall s, s' \in \PHl, s \PHPtrans[\oPH] s' \Longleftrightarrow s \PHPtrans[\PH] s' \]
 \end{theorem}
 
-We showed in this subsection that it is possible to model a PH with $k$ classes of priorities as a PH
-with $2$ classes of priorities and the same dynamics.
-Furthermore, by construction, the cooperative sorts are well-formed, and $\PHflat(\oPH)$
-thus satisfies the Conditions of \pref{ssec:hypothesis}.
-We note however that the translation given in this section may not be minimal in terms of number of actions
-or cooperative sorts.
-We give here several ways to simplify the resulting model, but we do not give the proofs.
-
-\paragraph{Playability properties simplifications}
-The playability property $\Fop{h}$ of an action $h = \PHhit{a_i}{b_j}{b_k}$ can be simplified with the following properties,
-which may remove the necessity to create some useless actions (that are never playable) or cooperations (that are always true):
-\begin{itemize}
-  \item it is always possible to simplify the target because its presence is checked besides: $b_j \equiv \top$;
-  \item any process $b_l \neq b_j$ of the same sort than the target always prevents the playability, thus: $b_l \equiv \bot$;
-  \item if $c_p, c_q$ are different processes ($c_p \neq c_q$) of the same sort $c$, then $c_p \wedge c_q \equiv \bot$.
-\end{itemize}
-
-\paragraph{Removal of the unnecessary cooperative sorts}
-There are two cases where it is possible to remove a cooperative sort $f^{h,i}$ in the flattening:
-\begin{itemize}
-  \item if $\Fop{h} \equiv \top$, then the action $h$ can be translated as an auto-action
-    (as it is always playable if the target is present);
-  \item if the $i$\textsuperscript{th} conjunction of $\Fop{h}$ consists of only one element $p$,
-    then \modMF{this conjunction} can be translated as a regular action $\PHhit{p}{\target{h}}{\bounce{h}}$ instead of a cooperative sort
-    (as, apart from the target, only one process is required).
-\end{itemize}
+We showed in this subsection that it is possible to model any AAN$k$
+as an AAN (or, equivalently, as an AAN$1$).
+this translation thus extends the applicability of the static analysis developed in
+\pref{sec:sa} to any AAN$k$, with $k \in \sN^*$.
+The translation given in this section
+is exponential in the number of actions of higher priority for each action.

@@ -3,34 +3,31 @@
 
 We exhibit in this section an encoding of Asynchronous Discrete Networks (ADN),
 also called Logical Networks or equivalently René Thomas Models \cite{Thomas95,deJong02},
-with the Process Hitting using two classes of priorities
-and prove a weak bisimulation relation.
-This translation is important as it allows to efficiently study the dynamics ADNs
+into AANs and prove a weak bisimulation relation.
+This translation is important as it allows to efficiently study the dynamics of ADNs
 by using the static analysis developed in \pref{sec:sa};
 indeed, the bisimulation relation ensures that the dynamics of the
-resulting PH model are accurately the same than the original.
-Furthermore, the obtained model is ensured to respect
-all Conditions of \pref{ssec:hypothesis}.
+resulting AAN model are accurately the same than the original.
 
-A Discrete Network gathers a finite number of components $i\in\segm{1}{n}$ having a discrete finite domain
+A \emph{Discrete Network} gathers a finite number of components $i\in\segm{1}{n}$ having a discrete finite domain
 $\mathbb F^i$ that we note $\mathbb{F}^i = \segm{1}{l_i}$.
 For each component $i\in\segm{1}{n}$, a map $\mathbb F \rightarrow \mathbb F^i$ is defined, where
 $\mathbb F = \mathbb F^1 \times \cdots \times \mathbb F^n$, giving the next value of the component
 with respect to the global state of the network.
 Typically $f^i$ depends on a subset of components that we denote $\DNdep(f^i)$.
-In the case of Asynchronous Discrete Networks (ADN), a transition relation $\DNtrans\subseteq \mathbb
+In the case of \emph{Asynchronous Discrete Networks} (ADN), a transition relation $\DNtrans\subseteq \mathbb
 F\times \mathbb F$ is defined such that $x\DNtrans x'$ if and only if there exists a unique
 $i\in\segm{1}{n}$ such that $\get{x'}{i}=f^i(x)$ and $\forall j\in\segm{1}{n}, j\neq i, \get{x'}{j}
 =\get{x}{j}$, \ie one and only one component has been updated.
 This is formalised in \pref{def:DN}.
 
-\begin{definition}[Asynchronous Discrete Network (ADN)]
+\begin{definition}[Asynchronous Discrete Network]
 \label{def:DN}
-  An ADN is defined by a couple $(\mathbb F, \langle f^1, \dots, f^n \rangle)$
+  An \emph{Asynchronous Discrete Networks} (ADN) is defined by a couple $(\mathbb F, \langle f^1, \dots, f^n \rangle)$
   where $\mathbb{F} = \mathbb{F}^1\times\dots\times\mathbb{F}^n$,
   and $\forall i\in\segm{1}{n}$,
   $f^i: \mathbb{F} \rightarrow \mathbb{F}^i$ with
-  $\mathbb{F}^i = \segm{1}{l_i}$.
+  $\mathbb{F}^i = \segm{1}{l_i}$ and $l_i \in \sNN$.
   Given two states $x,x'\in\mathbb F$, the transition relation $\DNtrans$ is given by
   \[
   x\DNtrans x' \Longleftrightarrow
@@ -38,84 +35,91 @@ This is formalised in \pref{def:DN}.
     \wedge \forall j\in\segm{1}{n}, j\neq i, \get{x}{j}=\get{x'}{j}
   \enspace,
   \]
-  where $\get{x}{i}$ is the $i$-th component of $x$.
+  where $\get{x}{i}$ is the $i$\textsuperscript{th} component of $x$.
   %
   We note $\DNdep(f^i)\subseteq \segm{1}{n}$ the set of components on which the value of $f^i$
   depends: $\forall x,x'\in \mathbb F$ such that $\forall
   j\in\DNdep(f^i), \get{x}{j}=\get{x'}{j}$, necessarily $f^i(x)=f^i(x')$.
 \end{definition}
 
-Let us denote the encoding of the ADN $\DNdef$ in Process Hitting with $2$ classes
-of priorities by $\toPH\DNdef$ (\pref{def:DN2PH}).
-For each component $i\in\segm{1}{n}$ of the ADN, two sorts are built: $a^i$ acting for the component
-value, and $f^i$ acting for a cooperative sort between the components $\DNdep(f^i)$.
-Sorts $a^i$ have one process $a^i_k$ per element in $k\in\mathbb F^i$.
-Sorts $f^i$ have one process $f^i_\varsigma$ per state $\varsigma \in \underset{j\in\DNdep(f^i)}{\times}
-\PHl_{a^j}$.
-Two classes of actions are then defined:
-$\Hits^{(1)}$ is the set of actions updating the cooperative sorts according to the current state of the
-components:
-if $j\in\DNdep(f^i)$, $a^j_k$ hits each process $f^i_\varsigma$ where $\get{\varsigma}{a^j}\neq
-a^j_k$ to make it bounce to the process $f^i_{\varsigma \Cap a^j_k}$.
-$\Hits^{(2)}$ is the set of actions encoding the transitions in the ADN:
-$f^i_\varsigma$ hits the processes of sort $a^i$ to make them bounce to the process
+Let us denote the encoding of a given ADN $\DNdef$ into an AAN by $\toPH\DNdef$ (\pref{def:DN2PH}).
+For each component $i\in\segm{1}{n}$ of the ADN,
+one automaton $a^i$ is built, acting for the component value.
+Obviously, $a^i$ has one local state $a^i_k$ per element $k \in \mathbb F^i$.
+It is then sufficient to build actions towards $a^i$
+depending on any possible state of the components in $\DNdep(f^i)$
+and the related value of the evolution function $f^i$.
+
+
+
+$f^i_\varsigma$ hits the local states of automaton $a^i$ to make them bounce to the local state
 $a^i_{k'}$ if and only if $k'=f^i(\decode \varsigma)$;
 $\decode \varsigma$ being the ADN state corresponding to the PH (partial) state $\varsigma$ (note that
 $f^i(\decode \varsigma)$ is fully defined because $\decode \varsigma$ specifies the state for all
 the components in $\DNdep(f^i)$).
 
+
+% 
+% between the components $\DNdep(f^i)$.
+% 
+% Two classes of actions are then defined:
+% $\Hits^{(1)}$ is the set of actions updating the cooperative automata according to the current state of the
+% components:
+% if $j\in\DNdep(f^i)$, $a^j_k$ hits each local state $f^i_\varsigma$ where $\get{\varsigma}{a^j}\neq
+% a^j_k$ to make it bounce to the local state $f^i_{\varsigma \Cap a^j_k}$.
+% $\Hits^{(2)}$ is the set of actions encoding the transitions in the ADN:
+% $f^i_\varsigma$ hits the local states of automaton $a^i$ to make them bounce to the local state
+% $a^i_{k'}$ if and only if $k'=f^i(\decode \varsigma)$;
+% $\decode \varsigma$ being the ADN state corresponding to the PH (partial) state $\varsigma$ (note that
+% $f^i(\decode \varsigma)$ is fully defined because $\decode \varsigma$ specifies the state for all
+% the components in $\DNdep(f^i)$).
+
 \begin{definition}
 \label{def:DN2PH}
-  $\toPH\DNdef=(\Sigma,\PHl,(\Hits^{(1)},\Hits^{(2)}))$ is the Process Hitting with 2 classes of priority encoding the
-  ADN $\DNdef$, with:
+  $\toPH\DNdef=(\Sigma,\PHl,\Hits)$ is the AAN encoding the ADN $\DNdef$, with:
   \begin{itemize}
-    \item $\Sigma = \{ a^1, \dots, a^n \} \cup \{ f^1, \dots, f^n \}$,
-      the sorts for components ($a^i$) and cooperative sorts ($f^i$);
-
-    \item $\PHl=\underset{i\in\segm{1}{n}}{\times} \PHl_{a^i} \times \underset{i\in\segm{1}{n}}{\times} \PHl_{f^i}$, where
-      $\PHl_{a^i}=\{a^i_0, \dots, a^i_{l_i}\}$, and
-      $\PHl_{f^i}=\{f^i_\varsigma \mid \varsigma\in\underset{j\in\DNdep(f^i)}{\times} \PHl_{a^i} \}$
-      if $\DNdep(f^i)\neq\emptyset$, otherwise
-      $\PHl_{f^i}=\{f^i_\emptyset\}$;
-      
-    \item $\Hits^{(1)}= \{ \hit{a^j_k}{f^i_\varsigma}{f^i_{\varsigma'}}
-      \mid i\in\segm{1}{n} \wedge
-      j\in\DNdep(f^i) \wedge a^j_k\in \PHl_{a^j} \wedge f^i_\varsigma\in \PHl_{f^i}
-      \wedge
-      \get{\varsigma}{a^j}\neq a^j_k 
-      \wedge \get{\varsigma'}{a^j}=a^j_k
-      \wedge (\get{\varsigma'}{a^{l}}=\get{\varsigma}{a^l},
-      \forall l\in\segm{1}{n},l\neq j)
-      \}$, 
-      the set of actions with priority $1$ that update cooperative sorts;
-
-    \item $\Hits^{(2)}=\{ \hit{f^i_\varsigma}{a^i_k}{a^i_{k'}} \mid i\in\segm{1}{n} \wedge
-          f^i_\varsigma\in \PHl_{f^i} \wedge
-          a^i_k\in \PHl_{a^i}\wedge k\neq k' \wedge f^i(\decode \varsigma) = k'
-        \}$,
-      the set of actions with priority $2$ for updating the components using their respective discrete
-      maps.
-      $\decode \varsigma$ is defined below.
+    \item $\Sigma = \{ a^1, \dots, a^n \}$;
+%      the automata representing components;
+    
+    \item $\PHl=\underset{i\in\segm{1}{n}}{\times} \PHl_{a^i}$, where
+      $\PHl_{a^i}=\{a^i_0, \dots, a^i_{l_i}\}$;
+    
+    \item $\PHh = \{ \PHfrappe{A}{a^i_j}{a^i_k} \mid
+      \exists \varsigma \PHsubl[\PHl]_{\DNdep(f^i)}, \exists x \in \mathbb{F},
+      \varsigma \subseteq \encode{x} \wedge
+      f^i(x) = k \wedge \PHget{x}{i} = j \wedge j \neq k \wedge
+      A = \toset{\varsigma} \}$ where $\encode{x}$ is defined below.
+    
+%     \item $\Hits^{(1)}= \{ \hit{a^j_k}{f^i_\varsigma}{f^i_{\varsigma'}}
+%       \mid i\in\segm{1}{n} \wedge
+%       j\in\DNdep(f^i) \wedge a^j_k\in \PHl_{a^j} \wedge f^i_\varsigma\in \PHl_{f^i}
+%       \wedge
+%       \get{\varsigma}{a^j}\neq a^j_k 
+%       \wedge \get{\varsigma'}{a^j}=a^j_k
+%       \wedge (\get{\varsigma'}{a^{l}}=\get{\varsigma}{a^l},
+%       \forall l\in\segm{1}{n},l\neq j)
+%       \}$, 
+%       the set of actions with priority $1$ that update cooperative automata;
+% 
+%     \item $\Hits^{(2)}=\{ \hit{f^i_\varsigma}{a^i_k}{a^i_{k'}} \mid i\in\segm{1}{n} \wedge
+%           f^i_\varsigma\in \PHl_{f^i} \wedge
+%           a^i_k\in \PHl_{a^i}\wedge k\neq k' \wedge f^i(\decode \varsigma) = k'
+%         \}$,
+%       the set of actions with priority $2$ for updating the components using their respective discrete
+%       maps.
+%       $\decode \varsigma$ is defined below.
   \end{itemize}
-  Given a state $s\in \PHl$ of the Process Hitting, 
+  Given a state $s \in \PHl$ of the AAN,
   $\decode s=x$ is the corresponding state in the ADN:
   $\forall i\in\segm{1}{n}, \get{s}{a^i}=a^i_k \Rightarrow \get{x}{i}=k$.
-
-  \noindent
-  Given a state $x\in \mathbb F$ of the ADN, 
-  $\encode x=s$ is the corresponding state in the Process Hitting:
-  $\forall i\in\segm{1}{n}, \get{x}{i}=k \Rightarrow \get{s}{a^i}=a^i_k$
-  and
-  $\forall i\in\segm{1}{n}, \get{s}{f^i}=f^i_\varsigma$ with $f^i_\varsigma\in \PHl_{f^i}$
-  and $\forall j\in\DNdep(f^i), \get{\varsigma}{j}=\get{s}{a^j}$.
+  Conversely, given a state $x\in \mathbb F$ of the ADN, 
+  $\encode x=s$ is the corresponding state in the AAN:
+  $\forall i\in\segm{1}{n}, \get{x}{i}=k \Rightarrow \get{s}{a^i}=a^i_k$.
 \end{definition}
 
-By construction, the cooperative sorts are well-formed, hence $\toPH\DNdef$
-satisfies the Conditions of \pref{ssec:hypothesis}.
-\pref{th:bisimDN} states the weak bisimulation relation between an ADN and its encoding in
-PH with $2$ classes of priorities.
-Intuitively, actions updating cooperative sorts being prioritised, actions updating component
-sorts follow strictly the possible transitions of the ADN.
+Finally,
+\pref{th:bisimDN} states the weak bisimulation relation between an ADN and its encoding in AAN.
+Intuitively, the actions follow strictly the possible transitions of the ADN.
 A detailed proof is given in \pref{suppl:proofbisimADN}.
 
 \begin{theorem}[$\DNdef \approx \toPH\DNdef$]~

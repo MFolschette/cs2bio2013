@@ -9,7 +9,8 @@ This section aims at giving application examples of the static analysis method
 that we developed in \pref{sec:sa}.
 In \pref{ssec:ex-metazoan}, we apply our method to a small model of the
 metazoan segmentation process,
-and demonstrate how the flattening of \pref{ssec:flattening}
+and demonstrate how the classes of priorities help in the modelling process,
+and how the flattening of \pref{ssec:flattening}
 can be used in such a case.
 In \pref{ssec:ex-tcrsig}, we apply our method to a large-scale model
 of the T-cell receptor signalling pathway
@@ -22,218 +23,139 @@ in order to show the scalability of our method.
 \label{ssec:ex-metazoan}
 
 \modMF{
-We give in this section a detailed example of the application of the sequential
+We give in this section a detailed example of the use of classes of priorities
+in order to model a system with temporal constraints.
+This model also allows us to give a detailed example of the application of the sequential
 under-approximation proposed in \pref{ssec:ordered-ua},
 which consists of several applications of the methods developed in
 \pref{ssec:ua}.
 For this, we first have to use the flattening method presented in \pref{ssec:flattening}
-because the considered model contains 3 classes of priorities (and not only 2, as required).
+because the considered model contains 2 classes of priorities.
 }
 
 We consider in the following a model of metazoan segmentation
-inspired from a first translation to Process Hitting given in \cite{PMR10-TCSB}.
-This model was originally established in silico in \cite{MSB:MSB4100192} in a differential equations framework.
+inspired from a first translation to Process Hitting given in~\cite{PMR10-TCSB}.
+This model was originally established in silico in~\cite{MSB:MSB4100192}
+in a differential equations framework.
 It is composed of a wavefront gene $f$ that activates the gap-gene $a$ whose products are responsible for stripes formation.
 Gene $f$ also activates a gene $c$ whose products represses the gene $a$.
 The auto-inhibition of $c$ generalises a chain of repressors on $a$.
-The auto-inhibition of $f$, which terminates the stripes formation in the original model,
+The auto-inhibition of $f$, which normally terminates
+the stripes formation in the original model,
 has been removed in order to focus on the stationary dynamics of the model.
 
-The actions of the original model make $3$ classes of priorities, as represented in \pref{fig:metazoan-php}
-and listed in \pref{tab:metazoan-php-actions}.
-Thus, although the actions of the highest class of priority are only used to update a cooperative sort,
-the actions of the two other classes of priorities do have a biological meaning.
-%by representing different reaction rates.
-Indeed, they have been derived given the different reaction rates,
-given the fact that the switches of genes $a$ and $c$ have to alternate in order not to miss a stripe.
+The actions of the original model make $2$ classes of priorities, as represented in \pref{fig:metazoan-php}:
+\modMF{%
+\begin{align*}
+  \ov{\PHh}^{(1)} = \{ \quad
+    & \PHfrappes{c_1}{a_1}{a_0} \quad , \quad
+    \PHfrappes{f_1, c_0}{a_0}{a_1}
+  \quad \} \\
+  \ov{\PHh}^{(2)} = \{ \quad
+    & \PHfrappem{c_1}{c_0} \quad , \quad
+    \PHfrappes{f_1}{c_0}{c_1}
+  \quad \} \\
+\end{align*}
+Indeed, without this use of priorities,
+some unwanted behaviours emerge, allowing the formation of irregular stripes.
+In order to fix this, a high priority is affected to the actions hitting $a$,
+a low priority to the actions hitting $c$,
+in order to model the fact that the switching of $c$ has to be immediately followed by
+a switching of $a$.
+This forces the the switches of genes $a$ and $c$
+to alternate in order not to miss a stripe;
+$a$ and $c$ thus have intertwined oscillations.
+We can thus consider that these two classes of priorities
+are derived from known reaction relative rates,
+the evolution of the clock $c$ being slower and regular,
+while the evolution of $a$ has to follow the changes of $c$.
+}%
 
 \begin{figure}[p]
   \centering
   \scalebox{1}{
-  \begin{tikzpicture}
+  \begin{tikzpicture}[aan]
     \TSort{(0,4)}{c}{2}{l}
-    \TSort{(1,1)}{f}{2}{l}
-    \TSort{(6,4)}{a}{2}{r}
-
-    \TSetTick{fc}{0}{00}
-    \TSetTick{fc}{1}{01}
-    \TSetTick{fc}{2}{10}
-    \TSetTick{fc}{3}{11}
-    \TSort{(4,1)}{fc}{4}{r}
+    \TSort{(1,0)}{f}{2}{l}
+    \TSort{(5,4)}{a}{2}{r}
     
-    \THit{fc_2}{prio}{a_0}{.west}{a_1}
-    \path[bounce, bend left]
-      \TBounce{a_0}{prio}{a_1}{.south west};
+    \TAction{f_1}{c_0.west}{c_1.south west}{bend left=30, in=90}{left}
+    \TActionPlur{}{c_1.west}{c_0.north west}{}{-1,5.5}{right}
     
-    \THit{c_1}{prio}{a_1}{.west}{a_0}
-    \path[bounce, bend right]
-      \TBounce{a_1}{prio}{a_0}{.north west};
+    \TAction{c_1}{a_1.west}{a_0.north west}{prio}{right}
+    \TActionPlur{f_1, c_0}{a_0.west}{a_1.south west}{prio}{2.5,2.5}{left}
     
-    \THit{f_1}{bend left=30, in=90}{c_0}{.west}{c_1}
-    \path[bounce, bend left]
-      \TBounce{c_0}{}{c_1}{.south west};
-    
-    \THit{c_1}{selfhit}{c_1}{.west}{c_0}
-    \path[bounce, bend right]
-      \TBounce{c_1}{}{c_0}{.north west};
-    
-    \path (1.8, 1.5) edge[superprio,coopupdate] (3.2, 2);
-    \path (0.8, 4.5) edge[superprio,coopupdate] (3.2, 3);
+    \TState{f_1, a_0, c_0}
   \end{tikzpicture}
   }
   \caption{
   \label{fig:metazoan-php}
-    An example of PH $\oPH$ with $3$ classes of priorities,
+    An example of AAN$2$
     modelling the process of metazoan segmentation.
     Component $a$ models the pigment production, and is influenced by
     component $c$ that has the role of a clock,
     while $f$ represents the wavefront propagation.
-    If component $a$ oscillates (that is, its active process changes regularly)
+    If component $a$ oscillates (that is, its active local state changes regularly)
     then regular stripes are created on the metazoan.
-    Actions of $\ov{\PHh}^{(3)}$ (lowest priority) are represented in thin lines,
-    actions of $\ov{\PHh}^{(2)}$ (intermediate priority) are in thick lines,
-    and actions of $\ov{\PHh}^{(1)}$ (highest priority), whose only purpose is to update the cooperative sort $fc$,
-    are not explicitly represented but modelled by the double dashed arrows.
+    Actions of $\ov{\PHh}^{(2)}$ (low priority) are represented in thin lines
+    and actions of $\ov{\PHh}^{(1)}$ (high priority) are in thick lines.
+    The greyed local states represent a possible initial state:
+    $\PHstate{f_1, a_0, c_0}$.
   }
 \end{figure}
 
-\begin{table}[p]
-\modMF{
-\begin{align*}
-  \PHh^{(1)} = \{ \quad
-    & \PHfrappe{f_1}{fc_{00}}{fc_{10}} \quad , \quad
-    \PHfrappe{f_1}{fc_{01}}{fc_{11}} \quad , \\
-    & \PHfrappe{f_0}{fc_{10}}{fc_{00}} \quad , \quad
-    \PHfrappe{f_0}{fc_{11}}{fc_{01}} \quad , \\
-    & \PHfrappe{c_1}{fc_{00}}{fc_{01}} \quad , \quad
-    \PHfrappe{c_1}{fc_{10}}{fc_{11}} \quad , \\
-    & \PHfrappe{c_0}{fc_{01}}{fc_{00}} \quad , \quad
-    \PHfrappe{c_0}{fc_{11}}{fc_{10}}
-  \quad \} \\
-  \PHh^{(2)} = \{ \quad
-    & \PHfrappe{c_1}{a_1}{a_0} \quad , \quad
-    \PHfrappe{fc_{10}}{a_0}{a_1}
-  \quad \} \\
-  \PHh^{(3)} = \{ \quad
-    & \PHfrappe{c_1}{c_1}{c_0} \quad , \quad
-    \PHfrappe{f_1}{c_0}{c_1}
-  \quad \} \\
-\end{align*}%
-}%
-  \caption{\label{tab:metazoan-php-actions}%
-    The sets of actions of the metazoan segmentation model depicted
-    in \pref{fig:metazoan-php}.
-  }
-\end{table}
-
 \pref{fig:metazoan-ph} gives the flattening of this model,
 \modMF{
-whose actions are detailed in \pref{tab:metazoan-ph-actions}.
+that is, an AAN with the equivalent dynamics
+(but only one class of priority).
+Its actions are:
+\begin{align*}
+  \PHh = \{ \quad
+    & \PHfrappes{c_1}{a_1}{a_0} \quad , \quad
+    \PHfrappes{f_1, c_0}{a_0}{a_1} \quad , \\
+    & \PHfrappes{a_0}{c_1}{c_0} \quad , \quad
+    \PHfrappes{f_1, a_1}{c_0}{c_1}
+  \quad \}
+\end{align*}
+We note that the two actions in $\ov{\PHh}^{(2)}$ have been replaced by
+the equivalent actions
+$\PHfrappes{a_0}{c_1}{c_0}$ and $\PHfrappes{f_1, a_1}{c_0}{c_1}$,
+in order to model the preemption of the actions in $\ov{\PHh}^{(1)}$.
 }%
-It contains $2$ classes of priority, and prioritised actions are only used to update cooperative sorts.
-Note that according to the simplifications mentioned at the end of \pref{ssec:flattening},
-the auto-action $h_1 = \PHhit{c_1}{c_1}{c_0}$ in the original model has been flattened to a regular action $\PHhit{a_0}{c_1}{c_0}$
-because its playability property could be simplified to $\Fop{h_1} \equiv c_1 \wedge a_0 \equiv a_0$.
 
 \begin{figure}[p]
   \centering
   \scalebox{1}{
-  \begin{tikzpicture}
-    \TSort{(-5,4)}{c}{2}{l}
+  \begin{tikzpicture}[aan]
+    \TSort{(-3,4)}{c}{2}{l}
     \TSort{(0,1)}{f}{2}{l}
-    \TSort{(5,4)}{a}{2}{r}
-
-    \TSetTick{fc}{0}{00}
-    \TSetTick{fc}{1}{01}
-    \TSetTick{fc}{2}{10}
-    \TSetTick{fc}{3}{11}
-    \TSort{(3,0)}{fc}{4}{r}
+    \TSort{(3,4)}{a}{2}{r}
     
-    \TSetTick{fa}{0}{00}
-    \TSetTick{fa}{1}{01}
-    \TSetTick{fa}{2}{10}
-    \TSetTick{fa}{3}{11}
-    \TSort{(-3,0)}{fa}{4}{l}
+%    \TAction{f_1}{c_0.west}{c_1.south west}{bend left=30, in=90}{left}
+    \TActionPlur{f_1, a_1}{c_0.south east}{c_1.south east}{}{-1.5,3.3}{right}
+    \TAction{a_0.west}{c_1.east}{c_0.north east}{}{left}
     
-    \THit{fc_2}{}{a_0}{.west}{a_1}
-    \path[bounce, bend left]
-      \TBounce{a_0}{}{a_1}{.south west};
+    \TAction{c_1.north east}{a_1.north west}{a_0.north west}{}{right}
+    \TActionPlur{f_1, c_0}{a_0.south west}{a_1.south west}{}{1.5,3.5}{left}
     
-    \THit{fa_3}{}{c_0}{.east}{c_1}
-    \path[bounce, bend right]
-      \TBounce{c_0}{}{c_1}{.south east};
-    
-    \THit{c_1.north east}{}{a_1}{.west}{a_0}
-    \path[bounce, bend right]
-      \TBounce{a_1}{}{a_0}{.north west};
-    
-    \THit{a_0.south west}{}{c_1}{.east}{c_0}
-    \path[bounce, bend left]
-      \TBounce{c_1}{}{c_0}{.north east};
-    
-    \path (0.8, 1.5) edge[prio,coopupdate] (2.2, 1.5);
-    \path (-4.3, 4.5) edge[prio,coopupdate] (2.2, 2.5);
-    
-    \path (-0.8, 1.5) edge[prio,coopupdate] (-2.2, 1.5);
-    \path (4.3, 4.5) edge[prio,coopupdate] (-2.2, 2.5);
+    \TState{f_1, a_0, c_0}
   \end{tikzpicture}
   }
   \caption{
   \label{fig:metazoan-ph}
-    An example of PH $\PH$ with $2$ classes of priorities,
-    which is the flattening of the PH in \pref{fig:metazoan-php}.
-    In other words, this model has exactly the same dynamics as
-    \pref{fig:metazoan-php}, but its actions make only two classes of priorities.
-    Actions of $\PHh^{(2)}$ (unprioritised) are represented in thin lines,
-    and actions of $\PHh^{(1)}$ (prioritised) which are used to update cooperative sorts,
-    are abstracted by thick dashed arrows.
-    The additional cooperative sort $fa$ is used to model the previous action
-    $\PHhit{f_1}{c_0}{c_1}$,
-    which belonged to the lowest class of priority and could be preempted 
-    especially by action $\PHhit{fc_{10}}{a_0}{a_1}$.
+    An example of AAN, which is the flattening of the AAN$2$ in \pref{fig:metazoan-php};
+    in other words, this model has exactly the same dynamics as
+    \pref{fig:metazoan-php}, but its actions make only one class of priority.
+    The greyed local states represent the same initial state:
+    $\PHstate{f_1, a_0, c_0}$.
   }
 \end{figure}
-
-\begin{table}[p]
-\modMF{
-\begin{align*}
-  \PHh^{(1)} = \{ \quad
-    & \PHfrappe{f_1}{fc_{00}}{fc_{10}} \quad , \quad
-    \PHfrappe{f_1}{fc_{01}}{fc_{11}} \quad , \\
-    & \PHfrappe{f_0}{fc_{10}}{fc_{00}} \quad , \quad
-    \PHfrappe{f_0}{fc_{11}}{fc_{01}} \quad , \\
-    & \PHfrappe{c_1}{fc_{00}}{fc_{01}} \quad , \quad
-    \PHfrappe{c_1}{fc_{10}}{fc_{11}} \quad , \\
-    & \PHfrappe{c_0}{fc_{01}}{fc_{00}} \quad , \quad
-    \PHfrappe{c_0}{fc_{11}}{fc_{10}} \quad , \\
-    & \PHfrappe{f_1}{fa_{00}}{fa_{10}} \quad , \quad
-    \PHfrappe{f_1}{fa_{01}}{fa_{11}} \quad , \\
-    & \PHfrappe{f_0}{fa_{10}}{fa_{00}} \quad , \quad
-    \PHfrappe{f_0}{fa_{11}}{fa_{01}} \quad , \\
-    & \PHfrappe{a_1}{fa_{00}}{fa_{01}} \quad , \quad
-    \PHfrappe{a_1}{fa_{10}}{fa_{11}} \quad , \\
-    & \PHfrappe{a_0}{fa_{01}}{fa_{00}} \quad , \quad
-    \PHfrappe{a_0}{fa_{11}}{fa_{10}}
-  \quad \} \\
-  \PHh^{(2)} = \{ \quad
-    & \PHfrappe{c_1}{a_1}{a_0} \quad , \quad
-    \PHfrappe{fc_{10}}{a_0}{a_1} \quad , \\
-    & \PHfrappe{a_0}{c_1}{c_0} \quad , \quad
-    \PHfrappe{fa_{11}}{c_0}{c_1}
-  \quad \}
-\end{align*}%
-}%
-  \caption{\label{tab:metazoan-ph-actions}%
-    The sets of actions of the flattened metazoan segmentation model depicted
-    in \pref{fig:metazoan-ph}.
-  }
-\end{table}
 
 \modMF{
 Finally, the static analysis results presented in
 \pref{ssec:ua} and \pref{ssec:ordered-ua} can be used to check if the model is functional,
 \ie if gene $a$ can oscillate, thus leading to the formation of stripes.
-Starting from context $\ctx = \PHstate{f_1, a_0, c_0, fc_{10}, fa_{00}}$,
+Starting from context $\ctx = \PHstate{f_1, a_0, c_0}$,
 we thus want to check the reachability of
 $\w = \PHobj{a_0}{a_1} \PHconcat \PHobj{a_1}{a_0} \PHconcat \PHobj{a_0}{a_1}$.
 Rather than checking this whole objective sequence with \pref{th:approxinf},
@@ -243,25 +165,24 @@ based on the first objective, $\w_1 = \PHobj{a_0}{a_1}$, in the initial context 
 This graph is depicted in \pref{fig:metazoan-sa}(left).
 %and given \pref{tmh:approxinf}, we have:
 We have especially:
-\[\allprocs(\thisB{\w_1}{\ctx}) = \{ a_0, c_0, f_1, fc_{10} \}\]
-\[\lastprocs(\PHobj{a_0}{a_1}) = \{\{ a_1, c_0, f_1, fc_{10} \}\}\]
+\[\allprocs(\thisB{\w_1}{\ctx}) = \{ a_0, c_0, f_1 \} \enspace \text{and}\]
+\[\lastprocs(\PHobj{a_0}{a_1}) = \{\{ a_1, c_0, f_1 \}\} \enspace.\]
 Therefore, the second step consists of computing the saturated graph of local causality
 of the objective $\w_2 = \PHobj{a_1}{a_0}$
 in the context
-\[\ctx' = \ctx \Cap \allprocs(\thisB{\w_1}{\ctx}) \Cap \lastprocs(\PHobj{a_0}{a_1}) = \PHstate{a_1, c_0, f_1, fc_{10}, fa_{00}}\]
+\[\ctx' = \ctx \Cap \allprocs(\thisB{\w_1}{\ctx}) \Cap \lastprocs(\PHobj{a_0}{a_1}) = \PHstate{a_1, c_0, f_1} \enspace.\]
 This second graph is given in \pref{fig:metazoan-sa}(middle).
 Finally, because
-\[\allprocs(\thisB{\w_2}{\ctx'}) = \{ a_1, c_1, f_1, fa_{11} \}\]
-\[\lastprocs(\PHobj{a_1}{a_0}) = \{\{ a_0, c_1 \}\}\]
-The last step is then checking 
+\[\allprocs(\thisB{\w_2}{\ctx'}) = \{ a_1, c_0, c_1, f_1 \} \enspace \text{and}\]
+\[\lastprocs(\PHobj{a_1}{a_0}) = \{\{ a_0, c_1 \}\} \enspace,\]
+The last step is then checking
 the objective $\w_3 = \PHobj{a_0}{a_1}$
 in the context
-\[\ctx'' = \ctx' \Cap \allprocs(\thisB{\w_2}{\ctx'}) \Cap \lastprocs(\PHobj{a_1}{a_0}) = \PHstate{a_0, c_1, f_1, fc_{10}, fa_{11}}\]
-This last graph is depicted in 
-As all the produced \pref{fig:metazoan-sa}(right).
+\[\ctx'' = \ctx' \Cap \allprocs(\thisB{\w_2}{\ctx'}) \Cap \lastprocs(\PHobj{a_1}{a_0}) = \PHstate{a_0, c_1, f_1} \enspace.\]
+This last graph is depicted in \pref{fig:metazoan-sa}(right).
 In conclusion, by using \pref{thm:ordered-ua} on these saturated graphs of local causality,
 we can conclude that the initial objective $\w$ is reachable,
-and thus that the PH model of \pref{fig:metazoan-ph} is functional.
+and thus that the AAN of \pref{fig:metazoan-ph} is functional.
 This result can be extended to the model of \pref{fig:metazoan-php}
 because they have the same dynamics (given \pref{th:bisimPHP}).
 }
@@ -286,127 +207,134 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
     % STEP 1
     \node[Aobj] (a01) {$\PHobj{a_0}{a_1}$};
     \node[Asol,below of=a01] (a01s) {};
+    \node[Assol,below of=a01s] (a01ss) {$\{ c_0, f_1 \}$};
 
-    \node[AprocPrio,below of=a01s] (fc10) {$fc_{10}$};
-    \node[AsolPrio,below of=fc10] (fc10s) {};
-
-    \node[Aproc,below left of=fc10s] (f1) {$f_1$};
+    \node[Aproc,below right of=a01ss] (f1) {$f_1$};
     \node[Aobj,below of=f1] (f11) {$\PHobj{f_1}{f_1}$};
     \node[Asol,below of=f11] (f11s) {};
+    \node[Assol,below of=f11s] (nf11s) {$\emptyset$};
 
-    \node[Aproc,below right of=fc10s] (c0) {$c_0$};
+    \node[Aproc,below left of=a01ss] (c0) {$c_0$};
     \node[Aobj,below of=c0] (c00) {$\PHobj{c_0}{c_0}$};
     \node[Asol,below of=c00] (c00s) {};
+    \node[Assol,below of=c00s] (nc00s) {$\emptyset$};
 
     \path
     (a01) edge (a01s)
-    (a01s) edge (fc10)
-    (fc10) edge[aSPrio] (fc10s)
-    (fc10s) edge (f1) edge (c0)
+    (a01s) edge (a01ss)
+    (a01ss) edge (f1) edge (c0)
 
     (f1) edge (f11)
     (f11) edge (f11s)
+    (f11s) edge (nf11s)
 
     (c0) edge (c00)
     (c00) edge (c00s)
+    (c00s) edge (nc00s)
     ;
     
     % STEP 2
     \node[Aobj,right of=a01,node distance=3.5cm] (a10) {$\PHobj{a_1}{a_0}$};
     \node[Asol,below of=a10] (a10s) {};
+    \node[Assol,below of=a10s] (a10ss) {$\{ c_1 \}$};
 
-    \node[Aproc,below of=a10s] (c1) {$c_1$};
+    \node[Aproc,below of=a10ss] (c1) {$c_1$};
     \node[Aobj,below right of=c1] (c01) {$\PHobj{c_0}{c_1}$};
     \node[Asol,below of=c01] (c01s) {};
+    \node[Assol,below of=c01s] (c01ss) {$\{ a_1, f_1 \}$};
     \node[Aobj,below left of=c1] (c11) {$\PHobj{c_1}{c_1}$};
     \node[Asol,below of=c11] (c11s) {};
+    \node[Assol,below of=c11s] (nc11s) {$\emptyset$};
 
-    \node[AprocPrio,below of=c01s] (fa11) {$fa_{11}$};
-    \node[AsolPrio,below of=fa11] (fa11s) {};
-
-    \node[Aproc,below left of=fa11s] (a1) {$a_1$};
+    \node[Aproc,below left of=c01ss] (a1) {$a_1$};
     \node[Aobj,below of=a1] (a11) {$\PHobj{a_1}{a_1}$};
     \node[Asol,below of=a11] (a11s) {};
+    \node[Assol,below of=a11s] (na11s) {$\emptyset$};
 
-    \node[Aproc,below right of=fa11s] (f1) {$f_1$};
+    \node[Aproc,below right of=c01ss] (f1) {$f_1$};
     \node[Aobj,below of=f1] (f11) {$\PHobj{f_1}{f_1}$};
     \node[Asol,below of=f11] (f11s) {};
+    \node[Assol,below of=f11s] (nf11s) {$\emptyset$};
 
     \path
     (a10) edge (a10s)
-    (a10s) edge (c1)
+    (a10s) edge (a10ss)
+    (a10ss) edge (c1)
 
     (c1) edge (c01) edge (c11)
     (c01) edge (c01s)
+    (c01s) edge (c01ss)
+    (c01ss) edge (f1) edge (a1)
     (c11) edge (c11s)
-    (c01s) edge (fa11)
-
-    (fa11) edge[aSPrio] (fa11s)
-    (fa11s) edge (f1) edge (a1)
 
     (f1) edge (f11)
     (f11) edge (f11s)
+    (f11s) edge (nf11s)
 
     (a1) edge (a11)
     (a11) edge (a11s)
+    (a11s) edge (na11s)
     ;
     
     % STEP 3
     \node[Aobj,right of=a10,node distance=4cm] (ta01) {$\PHobj{a_0}{a_1}$};
     \node[Asol,below of=ta01] (ta01s) {};
+    \node[Assol,below of=ta01s] (ta01ss) {$\{ c_0, f_1 \}$};
 
-    \node[AprocPrio,below of=ta01s] (tfc10) {$fc_{10}$};
-    \node[AsolPrio,below of=tfc10] (tfc10s) {};
-
-    \node[Aproc,below left of=tfc10s] (tf1) {$f_1$};
+    \node[Aproc,below left of=ta01ss] (tf1) {$f_1$};
     \node[Aobj,below of=tf1] (tf11) {$\PHobj{f_1}{f_1}$};
     \node[Asol,below of=tf11] (tf11s) {};
+    \node[Assol,below of=tf11s] (tnf11s) {$\emptyset$};
 
-    \node[Aproc,below right of=tfc10s] (tc0) {$c_0$};
+    \node[Aproc,below right of=ta01ss] (tc0) {$c_0$};
     \node[Aobj,below of=tc0] (tc10) {$\PHobj{c_1}{c_0}$};
     \node[Asol,below of=tc10] (tc10s) {};
     \node[Aobj,right of=tc10] (tc00) {$\PHobj{c_0}{c_0}$};
     \node[Asol,below of=tc00] (tc00s) {};
+    \node[Assol,below of=tc00s] (tnc00s) {$\emptyset$};
 
     \node[Aproc,below of=tc10s] (ta0) {$a_0$};
     \node[Aobj,below of=ta0] (ta00) {$\PHobj{a_0}{a_0}$};
     \node[Asol,below of=ta00] (ta00s) {};
+    \node[Assol,below of=ta00s] (tna00s) {$\emptyset$};
 
     \path
     (ta01) edge (ta01s)
-    (ta01s) edge (tfc10)
-    (tfc10) edge[aSPrio] (tfc10s)
-    (tfc10s) edge (tf1) edge (tc0)
+    (ta01s) edge (ta01ss)
+    (ta01ss) edge (tf1) edge (tc0)
 
     (tf1) edge (tf11)
     (tf11) edge (tf11s)
+    (tf11s) edge (tnf11s)
 
     (tc0) edge (tc00)
     (tc00) edge (tc00s)
+    (tc00s) edge (tnc00s)
     (tc0) edge (tc10)
     (tc10) edge (tc10s)
 
     (tc10s) edge (ta0)
     (ta0) edge (ta00)
     (ta00) edge (ta00s)
+    (ta00s) edge (tna00s)
     ;
   \end{tikzpicture}
   \caption{%
   \label{fig:metazoan-sa}%
     The three successive saturated graphs of local causality
-    of the PH model in \pref{fig:metazoan-ph}
+    of the AAN in \pref{fig:metazoan-ph}
     for the objective sequence
     $\w = \PHobj{a_0}{a_1} \concat \PHobj{a_1}{a_0} \concat \PHobj{a_0}{a_1}$
     and the initial context
-    $\ctx = \PHstate{a_0, c_0, f_1, fc_{10}, fa_{10}}$.
+    $\ctx = \PHstate{a_0, c_0, f_1}$.
     The (left) graph allows to check objective $\PHobj{a_0}{a_1}$
     from the initial context $\ctx$.
     The (middle) graph is for the objective $\PHobj{a_1}{a_0}$
-    and the context $\PHstate{a_1, c_0, f_1, fc_{10}, fa_{10}}$.
+    and the context $\PHstate{a_1, c_0, f_1}$.
     The (right) graph is for the last objective, $\PHobj{a_0}{a_1}$,
-    and the context $\PHstate{a_0, c_1, f_1, fc_{10}, fa_{11}}$.
-%     Rectangular nodes containing a single process are elements in $\Proc$,
-%     borderless nodes containing a couple of processes are elements in $\Obj$
+    and the context $\PHstate{a_0, c_1, f_1}$.
+%     Rectangular nodes containing a single local state are elements in $\Proc$,
+%     borderless nodes containing a couple of local states are elements in $\Obj$
 %     and circle nodes are elements in $\Sol$.
 %     \pref{th:approxinf} is inconclusive on this example as edge $(ab_{11}, \{ a_1, b_1 \}) \in \Proc \times \Sol$ (here represented with a double line) is not coherent (\pref{def:coherent}).
 %     Indeed, $a_0 \in \Proc$ is a child of $\{ a_1, b_1 \}$, but $a_0 \neq a_1$ (and the same also stands for $b_0$).
@@ -425,15 +353,16 @@ This model gathers 94 interacting components and is specified as a Boolean netwo
 The under-approximation presented in this paper has been implemented in the existing Pint
 software\footnote{Pint is freely available at \url{http://loicpauleve.name/pint}.}.
 
-The Boolean model has been automatically encoded into a Process Hitting with 2 classes of priority%
+The Boolean model has been automatically encoded into
+a Process Hitting model with two classes of priorities,
+and a dynamics equivalent to an AAN%
 \footnote{Files are available at
 \url{http://maxime.folschette.name/underapprox-tcrsig94.zip}.}
 \modMF{
 by using a translation equivalent to the one given in \pref{sec:dn}.
-\todo{?}
 }
 Then, we verified the reachability for the independent activation of 4 outputs of the signalling
-cascade (SRE, AP1, NFkB, NFAT) from all possible input combinations (CD4, CD28, TCRlig) using our
+cascade (SRE, AP1, NFkB, NFAT) for all possible input combinations (CD4, CD28, TCRlig) using our
 new reachability under-approximation (answering either \emph{yes} or \emph{inconclusive}) and a 
 previously defined reachability over-approximation \cite{PMR12-MSCS} (answering either \emph{no} or
 \emph{inconclusive}).
@@ -443,17 +372,20 @@ All result in conclusive decisions, and the under-approximation has been satisfi
 
 \modMF{
 By analysing the detail of the results, one can find out that one of the outputs, NFkB, can never be activated.
-In other words, FkB$_1$ is never reachable, whatever the state of the inputs,
-while some combinations the other outputs (SRE, AP1, NFAT) can be activated for some configurations of inputs.
+In other words, FkB$_1$ is never reachable, whatever the initial state of the inputs,
+the other outputs (SRE, AP1, NFAT) can be independently activated
+for some configurations of inputs.
 We thus want to check if these three outputs can be activated together,
 that is, if the activation of one of the outputs does not prevent the activation of one of the others.
 For this, as proposed in \pref{ssec:simult-ua},
-we add a new cooperative sort $\total$ between SRE, AP1 and NFAT to the model,
-and a sort $\reach$ with two processes ($\PHl_\reach = \{ \reach_0, \reach_1 \}$)
-with the action $\PHhit{\total_{111}}{\reach_0}{\reach_1}$.
+we add a new automaton $\reach$ into the model
+with two local states ($\PHl_\reach = \{ \reach_0, \reach_1 \}$)
+and the action:
+\[ \PHhits{\text{SRE}_1, \text{AP1}_1, \text{NFAT}_1}{\reach_0}{\reach_1} \enspace. \]
 Finally, checking the reachability of $\reach_1$ in all configurations of the inputs
 is always conclusive,
-and the existence of positive answers allows to conclude that
+and the existence of 4 positive answers
+(amongst all 8 possible initial configurations of the inputs) allows to conclude that
 it is possible to reach a state where SRE, AP1 and NFAT are simultaneously active.
 }
 
@@ -480,17 +412,21 @@ even by orders of magnitude.
 \modMF{
 Finally, we note that similar experiments were conducted in~\cite{PMR12-MSCS}.
 However, if these experiments allowed to obtain some information
-on these model to some extent,
+on this model to some extent,
 it did not provide a formal proof of the reachabilities that have been
 checked in the example above.
-Indeed, without any priorities in the update of the cooperative sorts,
-some unwanted behaviours were possible,
-such as those described in \pref{ssec:priorities}.
-Only the method presented in this paper provides a formal proof that
-the observed behaviours are the result of the exact dynamics of the system,
+The semantics of Process Hitting does not allow to model accurate Boolean gates,
+as explained in \pref{ssec:cooperation},
+thus leading to some unwanted behaviours that take the form of temporal shifts.
+Only the adding of classes of priorities allows to remove these temporal shifts,
+as explained in~\cite{FPMR13-CS2Bio},
+with a construction that is equivalent to the AANs presented in \pref{se:ph}.
+Therefore, only the method presented in this paper provides a formal proof that
+the observed behaviours are the result of the true dynamics of the system,
 which was originally described in a format equivalent to synchronous Discrete Networks.
 }
 
-While ensuring a low complexity for the analysis of reachability in Boolean and discrete networks, our
-under-approximation method reveals to be conclusive in numerous cases when applied to real
+In conclusion,
+while ensuring a low complexity for the analysis of reachability in Boolean and discrete networks,
+our under-approximation method turns out to be conclusive in numerous cases when applied to real
 large-scale biological models, which were not tractable with exact model-checking.
