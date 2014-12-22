@@ -4,13 +4,13 @@
 %\newcommand{\ie}{\textit{i.e.} }
 
 % Notations générales pour PH
-\newcommand{\PH}{\mathcal{PH}}
+\newcommand{\AAN}{\mathcal{AAN}}
+\newcommand{\PH}{\AAN}
 %\newcommand{\PHs}{\mathcal{S}}
 \newcommand{\PHs}{\Sigma}
 %\newcommand{\PHp}{\mathcal{P}}
-\newcommand{\PHp}{\textcolor{red}{\mathcal{P}}}
 %\newcommand{\PHproc}{\mathcal{P}}
-\newcommand{\PHproc}{\mathbf{Proc}}
+\newcommand{\PHproc}{\mathbf{Loc}}
 \newcommand{\Proc}{\PHproc}
 \newcommand{\PHh}{\mathcal{H}}
 \newcommand{\PHa}{\PHh}
@@ -18,7 +18,7 @@
 \newcommand{\PHl}{\mathcal{L}}
 \newcommand{\PHn}{\mathcal{N}}
 
-\newcommand{\PHhitter}{\mathsf{hitter}}
+\newcommand{\PHhitter}{\mathsf{hitters}}
 \newcommand{\PHtarget}{\mathsf{target}}
 \newcommand{\PHbounce}{\mathsf{bounce}}
 %\newcommand{\PHsort}{\Sigma}
@@ -44,6 +44,10 @@
 %\newcommand{\PHfrappebond}[2]{\mbox{$#1\PHhitB#2$}}
 \newcommand{\PHhit}[3]{#1\PHhitA#2\PHhitB#3}
 \newcommand{\PHfrappe}{\PHhit}
+\newcommand{\PHhits}[3]{\{#1\}\PHhitA#2\PHhitB#3}
+\newcommand{\PHfrappes}{\PHhits}
+\newcommand{\PHhitm}[2]{\emptyset\PHhitA#1\PHhitB#2}
+\newcommand{\PHfrappem}{\PHhitm}
 \newcommand{\PHhbounce}[2]{#1\PHhitB#2}
 \newcommand{\PHobj}[2]{\mbox{$#1\PHhitB^*\!#2$}}
 \newcommand{\PHconcat}{::}
@@ -82,8 +86,11 @@
 \newcommand{\bigtimes}[1]{\underset{#1}{\times}}
 
 % Macros for falttening
-\newcommand{\PHsublize}[1]{#1^\diamond}
+%\newcommand{\PHsublize}[1]{#1^\diamond}
+\newcommand{\PHsublize}[1]{#1^{\diamond}}
 \newcommand{\PHsubl}[1][\ov{\PHl}]{\PHsublize{#1}}
+\newcommand{\PHsublizeset}[1]{#1^{\diamond}_{\sim}}
+\newcommand{\PHsublset}[1][\ov{\PHl}]{\PHsublizeset{#1}}
 
 %\newcommand{\ov}[1]{\widetilde{#1}}
 \newcommand{\ov}{\overline}

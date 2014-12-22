@@ -15,7 +15,9 @@
 \def\Obj{\mathbf{Obj}}
 %\def\Proc{\mathbf{Proc}}
 %\def\Sol{\mathbf{Sol}}
-\newcommand{\Sol}{\mathbf{Sol}}
+\newcommand{\Sol}{\mathbf{NSol}}
+\newcommand{\NSol}{\Sol}
+\newcommand{\sSol}{\mathbf{Sol}}
 
 \usepackage{galois}
 \newcommand{\theOSabstr}{toOS}
@@ -90,9 +92,10 @@
 
 \tikzstyle{aS}=[every edge/.style={draw,->,>=stealth}]
 \tikzstyle{Asol}=[draw,circle,minimum size=5pt,inner sep=0,node distance=1cm]
-\tikzstyle{Aproc}=[draw,node distance=1.2cm]
+\tikzstyle{Aproc}=[draw,node distance=1.5cm]
 \tikzstyle{Aobj}=[node distance=1.5cm]
 \tikzstyle{Anos}=[font=\Large]
+\tikzstyle{Assol}=[node distance=1cm]
 
 %\tikzstyle{AprocPrio}=[Aproc,double]
 \tikzstyle{AsolPrio}=[Asol,double]
@@ -158,6 +161,7 @@
 \newcommand{\cwVProc}{\cwV \cap \PHproc}
 \newcommand{\cwVObj}{\cwV \cap \Obj}
 \newcommand{\cwVSol}{\cwV \cap \Sol}
+\newcommand{\cwVsSol}{\cwV \cap \sSol}
 
 \def\Bv{\sat{\cwV}}
 \def\Be{\sat{\cwE}}

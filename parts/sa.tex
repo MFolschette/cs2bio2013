@@ -5,30 +5,28 @@
 
 \todo{Gluer : explication des définitions, etc.}
 
-The aim of this section is to define the problem of reachability in a PH,
+The aim of this section is to define the problem of reachability in an AAN,
 and propose an under-approximation allowing to efficiently solve it.
 The static analysis presented here is inspired from~\cite{PMR12-MSCS}.
-
-We consider in this section a PH model $\PH = (\PHs; \PHl; \PHa^{\langle 2 \rangle})$ with $2$ classes of priorities
-that respects all Conditions (\ref{cr:bounded} \& \ref{cr:compcs}) of \pref{ssec:hypothesis}.
+We consider in this section an AAN $\PH = (\PHs; \PHl; \PHa)$.
 
 \medskip
 
 \modMF{
 The main idea behind the static analysis presented in this section
-is to abstract the dynamics of a Process Hitting model
-by a more general and easier to analyse dynamics.
+is to abstract the dynamics of an AAN model
+by a dynamics that is more general and easier to analyse.
 For this, we focus on the notion of objective:
-an objective is a couple of processes (\eg $\PHobj{a_i}{a_j}$) whose reachability
+an objective is a couple of local states (\eg $\PHobj{a_i}{a_j}$) whose reachability
 is required to ensure the global reachability property considered;
 in other words, it is required that a set of actions hitting $a$ exists so that,
 starting from a state containing $a_i$,
 it is possible to play these actions (possibly intertwined with other actions)
 and reach a state containing $a_j$.
-Given the particular form of the actions in Process Hitting,
-the solving of such an objective raises new objectives in the general case,
-because each action can be triggered by (at most) one process from a different sort.
-Indeed, each of these processes also have to be reached before the required actions are played.
+Given the particular form of the actions in AANs,
+the solving of such an objective raises new objectives in the general case.
+%because each action can be triggered by (at most) one local state from a different automaton.
+Indeed, each of these local states also have to be reached before the required actions are played.
 However, the order of the considered actions is abstracted,
 and so is the order of the related objectives,
 thus resulting in an over-approximation of the requirements.
@@ -39,34 +37,36 @@ thus resulting in an over-approximation of the requirements.
 \subsection{Preliminary definitions}
 \label{ssec:sa-def}
 
-The reachability of a process $a_j$ of a given sort $a$ from another process $a_i$ is called an objective and is denoted $\PHobjp{a}{i}{j}$ (\pref{def:obj}).
-\begin{definition}[Objective ($\Obj$)]
+The reachability of a local state $a_j$ of a given automaton $a$,
+starting from another local state $a_i$,
+is called an objective and is denoted $\PHobjp{a}{i}{j}$ (\pref{def:obj}).
+\begin{definition}[Objective ($\Obj$) \& Objective Sequence ($\OS$)]
 \label{def:obj}
-  If $a \in \components$, the reachability of a process $a_j$ from a process $a_i$ is called an \emph{objective}, noted $\PHobj{a_i}{a_j}$.
+  If $a \in \components$, the reachability of a local state $a_j$ from a local state $a_i$ is called an \emph{objective}, noted $\PHobj{a_i}{a_j}$.
   The set of all objectives is called $\Obj \DEF \{ \PHobj{a_i}{a_j} \mid a \in \components \wedge (a_i, a_j) \in \PHl_a \times \PHl_a \}$.
   For an objective $P = \PHobj{a_i}{a_j} \in \Obj$, we define: $\PHsort(P) \DEF
   a$, $\PHtarget(P)\DEF a_i$, $\PHbounce(P)\DEF a_j$,
   and $P$ is said \emph{trivial} if $a_i = a_j$.
 
-  We define an \emph{objective sequence} as a sequence of objectives in which each objective target must be equal to the previous objective bounce of the same sort, if it exists.
+  We define an \emph{objective sequence} as a sequence of objectives in which each objective target must be equal to the previous objective bounce of the same automaton, if it exists.
   The set of all objective sequences is denoted by $\OS$.
 \end{definition}
 
 A context (\pref{def:context}) extends the notion of state to a set of possible initial states:
 \modMF{
-to each sort in the model, a context maps a set of processes in this sort.
+to each automaton in the model, a context maps a set of local states in this automaton.
 }
 We also extend the override operator to contexts (\pref{def:ctxcap}).
 \begin{definition}[Context ($\Ctx$)]
 \label{def:context}
-  A \emph{context} $\ctx$ associates to each sort in $\PHs$ a non-empty subset of its processes:
+  A \emph{context} $\ctx$ associates to each automaton in $\PHs$ a non-empty subset of its local states:
   $\forall a \in \PHs, \PHget{\ctx}{a} \subseteq \PHl_a \wedge \PHget{\ctx}{a} \neq \emptyset$.
   $\Ctx$ is the set of all contexts.
 \end{definition}
 %
 \begin{definition}[$\Cap: \Ctx \times \powerset(\PHproc) \rightarrow \Ctx$]
 \label{def:ctxcap}
-  For any $\ctx\in\Ctx$ and set of processes $ps \in \powerset(\PHproc)$,
+  For any $\ctx\in\Ctx$ and set of local states $ps \in \powerset(\PHproc)$,
   the override of $\ctx$ by $ps$ is noted $\ctx \Cap ps$ and is defined by:
   \[ \forall a \in \PHs, \PHget{(\ctx \Cap ps)}{a} \DEF
   \begin{cases}
@@ -82,19 +82,23 @@ A sequence of actions $\delta$ is \emph{playable} in a context $\ctx$ if and onl
 $\exists s \subseteq \ctx, \delta \in \Sce(s)$.
 We denote then: $\delta \in \Sce(\ctx)$,
 and the play of $\delta$ in $\ctx$ is $\ctx \PHplay \delta = \ctx \Cap \ceil(\delta)$,
-where $\ceil(\delta)$ is the set containing the last process in the sequence $\delta$ (hitter or bounce) of every sort mentioned in $\delta$.
+where $\ceil(\delta)$ is the set containing the last local state in the sequence $\delta$ (hitter or bounce) of every automaton mentioned in $\delta$.
 
-Finally, a bounce sequence on a sort $a$ (\pref{def:bs}) is a sequence of actions hitting $a$
-in which the bounce process of each action is the hitter process of the following action.
-Bounce sequences are used to find local solutions to a given objective:
+Finally, a bounce sequence on a automaton $a$ (\pref{def:bs}) is a sequence of actions hitting $a$
+in which the bounce of each action equals the hitter of the following action.
+Bounce sequences are used to find local solutions to a given objective;
 \modMF{
-indeed, the bounce sequences related to an objective $\PHobj{a_i}{a_j}$
-only take depend on the bounces of the actions hitting the sort $a$.
+indeed, the bounce sequences solving an objective $\PHobj{a_i}{a_j}$
+only depend on the bounce part of the actions hitting the automaton $a$
+and not on the hitters.
 }%
-A bounce sequence on $a$ can be abstracted into the minimal sets of its hitters that are not in sort $a$ (\pref{def:aBS}).
-This abstraction is later used to propagate an objective on a given sort
-by creating new objectives on other sorts.
-In the following, we denote: $\Sol = \powerset(\PHproc)$.
+Then, a bounce sequence on $a$ can be abstracted into
+its combinations of hitters outside automaton $a$ (\pref{def:aBS});
+% the minimal sets of its sets of hitters that are not in automaton $a$ (\pref{def:aBS}).
+This abstraction is later used to propagate an objective on a given automaton
+by creating new objectives on other automata,
+by considering the sets of hitters required by the actions involved.
+
 \begin{definition}[Bounce sequence ($\BS$)]
 \label{def:bs}
   A \emph{bounce sequence} $\zeta$ is a sequence of actions so that $\forall n \in \indexes{\zeta}, n < |\zeta|, \PHbounce(\zeta_{n}) = \PHtarget(\zeta_{n+1})$.
@@ -103,25 +107,43 @@ In the following, we denote: $\Sol = \powerset(\PHproc)$.
   \[
     \BS(\PHobj{a_i}{a_j}) \DEF \{ \zeta \in \BS \mid \PHtarget(\zeta_1)= a_i \wedge \PHbounce(\zeta_{|\zeta|}) = a_j \} \enspace.
   \]
-  $\BS(\obj{a_i}{a_j}) = \emptyset$ if there is no way to reach $a_j$ from $a_i$
+  Furthermore, $\BS(\obj{a_i}{a_j}) = \emptyset$ if there is no way to reach $a_j$ from $a_i$
   and $\emptyseq \in \BS(\obj{a_i}{a_i})$
   \modMF{
-  for a trivial objective $\PHobj{a_i}{a_i}$.
+  for any trivial objective.
   }
 \end{definition}
-%
+
+In the following, we denote: $\sSol = \powerset(\PHproc)$
+\moda{%
+and $\Sol = \powerset(\sSol)$.
+}%
+\modMF{%
+The elements of $\sSol$ are sets of local states,
+and will later represent sets of hitters of a given action
+that are required to be active simultaneously in order to play this related action.
+The elements in $\Sol$ are sets of sets of hitters,
+and represent the requirements to play a whole bounce sequence.
+}%
+
 \begin{definition}[$\aBS:\Obj \rightarrow \powerset(\Sol)$]
 \label{def:aBS}
-  The \emph{abstractions of bounce sequences} of an objective $P$, denoted by the set $\aBS(P)$, are the sets of hitters of bounce sequences solving $P$:
+  The \emph{abstractions of bounce sequences} of an objective $P$, denoted by the set $\aBS(P)$, are the minimal sets of hitters of the bounce sequences solving $P$:
   \[
-    \aBS(P) \DEF \{ \abstr{\zeta} \in \Sol \mid \zeta \in \BS(P), \nexists \zeta' \in \BS(P), \abstr{\zeta'} \subsetneq \abstr{\zeta} \} \enspace,
+    \aBS(P) \DEF \{ \abstr{\zeta} \in \Sol \mid
+      \zeta \in \BS(P) \wedge
+      \nexists \zeta' \in \BS(P), \abstr{\zeta'} \subsetneq \abstr{\zeta} \} \enspace,
   \]
   \modMF{
   where $\forall P \in \Obj, \forall \zeta \in \BS(P)$:
-  \[
-    \abstr{\zeta} \DEF \{ \PHhitter(\zeta_n) \mid
-    n \in \indexes{\zeta} \wedge \PHsort(\PHhitter(\zeta_n)) \neq \PHsort(P) \}
-  \]
+  $\abstr{\zeta} \DEF \{ \PHhitter(\zeta_n) \mid n \in \indexes{\zeta} \} \setminus \emptyset$.
+  }%
+  
+  \noindent
+  \modMF{
+  As a consequence,
+  $\aBS(\obj{a_i}{a_j}) = \emptyset$ if $\BS(\obj{a_i}{a_j}) = \emptyset$,
+  and $\BS(\obj{a_i}{a_i}) = \{ \emptyset \}$.
   }%
 \end{definition}
 
@@ -150,8 +172,9 @@ context $\ctx$. It is defined as the largest set satisfying the following condit
 \end{definition}
 
 \noindent
-The notation $\delta_{a..b}$ denotes the subsequence of $\delta$
-between indexes $a$ and $b$, as defined on page \pageref{notations}.
+The notation $\delta_{a..b}$ in the previous definition
+denotes the subsequence of $\delta$ between indexes $a$ and $b$,
+as defined on page \pageref{notations}.
 
 \begin{definition}[$\uconcr: \OS \rightarrow \powerset(\Sce)$]
 \label{def:uconcr}
@@ -170,7 +193,7 @@ between indexes $a$ and $b$, as defined on page \pageref{notations}.
   $\ctx \subseteq \ctx' \wedge \muconcr_{\ctx'}(\w) \neq \emptyset \Longrightarrow \muconcr_{\ctx}(\w) \neq \emptyset$.
 \end{lemma}
 
-For any objective $P$ and context $\ctx$, \pref{def:maxCont} gives the set of processes of sort $\PHsort(P)$ that are required to solve $P$ in $\ctx$, denoted by $\gCont_\ctx(\PHsort(P), P)$.
+For any objective $P$ and context $\ctx$, \pref{def:maxCont} gives the set of local states of automaton $\PHsort(P)$ that are required to solve $P$ in $\ctx$, denoted by $\gCont_\ctx(\PHsort(P), P)$.
 \begin{definition}[$\gCont_\ctx : \Sigma \times \Obj \rightarrow \powerset(\PHproc)$]
   \label{def:maxCont}
   \begin{align*}
@@ -183,32 +206,34 @@ For any objective $P$ and context $\ctx$, \pref{def:maxCont} gives the set of pr
 
 \modMF{
 A graph of local causality $\myB = (\cwV, \cwE)$
-is a graph where $\cwV \subseteq \Proc \cup \Obj \cup \Sol$ is the set of vertices
+is a graph where $\cwV \subseteq \Proc \cup \Obj \cup \sSol \cup \Sol$ is the set of vertices
 and $\cwE \subseteq \cwV \times \cwV$ is the set of oriented edges.
 Such a graph aims a describing the requirements of a given reachability
 problem, that is, the reachability of $\w$ from the initial context $\ctx$.
-Thus, a node in $\PHproc$ represents a process required to play an action,
-a node in $\Obj$ is an objective to reach a given process
-and a node in $\Sol$ is a set of hitter processes required for the solving
-of an objective.
+Thus, a node in $\PHproc$ represents a local state required to play an action,
+a node in $\Obj$ is an objective to reach a given local state,
+a node in $\sSol$ is a set of hitters that have to be active simultaneously
+to solve one step of a given objective,
+and a node in $\Sol$ is a set of sets of hitters,
+thus encompassing all requirement for the solving of a whole objective.
 }
 
 \modMF{
 The edges of such a graph allow to draw links between these requirements.
 Thus, an objective $P \in \Obj$ is solvable if
 at least one related bounce sequence in $\BS(P)$ can be played;
-therefore, we can consider all minimal sets of hitters of these bounce sequences
-(that is, the sets of $\aBS(P) \in \Sol$, see \pref{def:aBS})
+therefore, we can consider all minimal sets of sets of hitters of these bounce sequences
+(that is, the sets of $\aBS(P) \subseteq \Sol$, see \pref{def:aBS})
 as requirements to solve this objective (\pref{eq:ESol1}).
-Such a set can then naturally be split into as many process nodes,
-making each of them a new requirement (\pref{eq:ESol2}).
-If $a \in \components$, the reachability of a required process $a_i$
+Such a set can then naturally be split into as many sets of hitters (\pref{eq:ESol3})
+which all have to be simultaneously active.
+These sets of hitters can in turn be split into several local state nodes (\pref{eq:ESol2}).
+This creates new requirements, as the reachability of a required local state $a_i$
 is approximated by the ability to solve all objectives of the form
-$\PHobjp{a}{j}{i} \in \Obj$ for all $a_j$ in the initial context (\pref{eq:EReq});
-if $a \in \cs$, the reachability of $a_i$ is simply solved by the set of processes $\csState(a_i)$ (see \pref{def:csState}) that it represents (\pref{eq:EPrio}).
+$\PHobjp{a}{j}{i} \in \Obj$ for all $a_j$ in the initial context (\pref{eq:EReq}).
 Furthermore, we note that the solving of an objective $P$ may require
-a process of $\PHsort(P)$,
-\ie $\gCont(\PHsort(P), P) \neq \emptyset$ (\pref{def:maxCont});
+a local state of $\PHsort(P)$,
+\ie $\gCont(\PHsort(P), P) \neq \emptyset$ (see \pref{def:maxCont});
 in this case, $P$ is re-targeted (\pref{eq:ECont}).
 Finally, \pref{eq:Vw} forces the graph to contain all the initial objectives,
 and \pref{eq:VE} ensures the consistency of $\cwV$.
@@ -217,127 +242,145 @@ and \pref{eq:VE} ensures the consistency of $\cwV$.
 \modMF{
 However, this graph $\myB$ alone is not sufficient to check the reachability of
 an objective sequence $\w$ from an initial context $\ctx$;
-indeed, the reachability of each intermediate required process
+indeed, the reachability of each intermediate required local state
 is only checked starting from the context $\ctx$,
 although this context may be modified by other objectives.
 Therefore, such a reachability requires the building of the
 \emph{saturated graph of local causality} (\pref{def:glc})
 which is obtained by iteratively saturating the initial context with all
-processes referenced in the graph,
+local states referenced in the graph,
 until reaching a fixed point.
 Such a fixed point always exists because the size of the context
 is limited by the size of the initial PH model.
-The set of processes contained in a graph of local causality
+The set of local states contained in a graph of local causality
 is given by:
 \begin{align*}
   \allprocs(\cwV, \cwE) = (\cwV \cap \Proc) &\cup \{ \PHtarget(P) \mid P \in \cwV \cap \Obj \}\\
   & \cup \{ P \neq \w \Rightarrow \PHbounce(P) \mid P \in \cwV \cap \Obj \}
 \end{align*}
 where, if the objective sequence $\w$ consists of only one element,
-then we can omit the hitter of this objective
-if it does not appear elsewhere in the graph.
+we can omit the hitter of this objective
+provided that it does not appear elsewhere in the graph.
 }
 
 \begin{definition}
 \label{def:glc}
-  The \modMF{saturated} graph of local causality $\cwB \DEF (\Bv, \Be)$ is defined as:
+  The \emph{\modMF{saturated} graph of local causality} $\cwB \DEF (\Bv, \Be)$ is defined as:
   $\cwB \DEF \lfp{\aB^\w_\ctx}{\myB}{\aB^\w_{\ctx \Cap \allprocs(\myB)}}$,
   where $\myB \DEF (\cwV, \cwE)$ is the smallest graph with
-  $\cwV \subseteq \Proc \cup \Obj \cup \Sol$ and $\cwE \subseteq \cwV \times \cwV$
+  $\cwV \subseteq \Proc \cup \Obj \cup \sSol \cup \Sol$ and $\cwE \subseteq \cwV \times \cwV$
   so that:
   \begin{align}
     \modMF{\toset{\w}} &\subseteq \cwV \label{eq:Vw} \\
 %    P \in \cwVObj &\Rightarrow \PHbounce(P) \in \cwV \label{eq:Vproc} \\
     (x, y) \in \cwE &\Rightarrow y \in \cwV \label{eq:VE} \\
-    P \in \cwVObj \wedge ps \in \modMF{\aBS}(P) &\Rightarrow (P, ps) \in \cwE \label{eq:ESol1} \\
-    ps \in \cwVSol \wedge a_i \in ps &\Rightarrow (ps, a_i) \in \cwE \label{eq:ESol2} \\
-    a \in \components \wedge a_i \in \cwVProc \wedge a_j \in \ctx &\Rightarrow (a_i, \PHobjp{a}{j}{i}) \in \cwE \label{eq:EReq} \\
-    a \in \cs \wedge a_i \in \cwVProc \wedge ps \in \csState(a_i) &\Rightarrow (a_i, ps) \in \cwE \label{eq:EPrio} \\
+    P \in \cwVObj \wedge pps \in \modMF{\aBS}(P) &\Rightarrow (P, pps) \in \cwE \label{eq:ESol1} \\
+    \moda{pps \in \cwVSol \wedge A \in pps} &\moda{\Rightarrow (pps, A) \in \cwE} \label{eq:ESol3} \\
+    A \in \cwVsSol \wedge a_i \in A &\Rightarrow (A, a_i) \in \cwE \label{eq:ESol2} \\
+    a_i \in \cwVProc \wedge a_j \in \ctx &\Rightarrow (a_i, \PHobjp{a}{j}{i}) \in \cwE \label{eq:EReq} \\
+%    a \in \cs \wedge a_i \in \cwVProc \wedge ps \in \csState(a_i) &\Rightarrow (a_i, ps) \in \cwE \label{eq:EPrio} \\
     P \in \cwVObj \wedge q \in \gCont_\ctx(\PHsort(P), P) &\Rightarrow (P, \PHobj{q}{\PHbounce(P)}) \in \cwE \label{eq:ECont} \!
   \end{align}
 \end{definition}
 
-In the saturated graph of local causality, an edge $(p, ps) \in \Proc \times \Sol$
-is said to be coherent (\pref{def:coherent}) if none of the processes in $ps$ conflict with the successor processes of $ps$,
 \modMF{
-that is, the successors of $ps$ that are in $\Bv \cap \Proc$.
+In the saturated graph of local causality, a set of hitters $A \in \sSol$
+is said to be \emph{coherent} (\pref{def:coherent})
+if none of the local states in $A$ conflict with
+a successor of $A$ in $\Bv \cap \Proc$,
+that is, if there exists no local state node $a_j$ in the successors of $A$
+and no element $a_i \in A$ so that $a_i \neq a_j$.
 }
-Then, \pref{th:approxinf} gives a sufficient condition for the concretisation of a sequence of objectives in a given context,
-which is derived immediately from the saturated graph of local causality.
+Then, \pref{th:approxinf} gives a sufficient condition for the concretisation
+of an objective sequence in a given context,
+which is derived immediately from the saturated graph of local causality,
+and the condition that all sets of hitters are coherent.
 A proof of this theorem is given in \pref{suppl:demoapproxinf}.
-\begin{definition}[Coherent edge]
+\begin{definition}[Coherent node]
 \label{def:coherent}
-  An edge $(x, y) \in \cwE$ is said to be coherent if and only if:
-  $(x, y) \in \Be \cap (\Proc \times \Sol) \Rightarrow y$ has no successor $a_j \in \Bv \cap \Proc$ so that $\exists a_i \in y$, $a_i \neq a_j$.
+  \modMF{
+  In a given saturated graph of local causality $\cwB = (\Bv, \Be)$,
+  a node $x \in \Bv$ is said to be \emph{coherent} if and only if:
+  $x \in \Bv \cap \sSol \Rightarrow x$ has no successor $a_j \in \Bv \cap \Proc$
+  so that $\exists a_i \in x$, $a_i \neq a_j$.
+  }
 \end{definition}
 
 \begin{theorem}[Under-Approximation]
 \label{th:approxinf}
-Given a Process Hitting $(\PHs; \PHl; \PHa^{\langle 2 \rangle})$
-that satisfies \pref{cr:bounded} and \pref{cr:compcs},
-a context $\ctx$ and a sequence of objectives $\w$,
+  Given an AAN $(\PHs; \PHl; \PHa)$,
+  a context $\ctx$ and an objective sequence $\w$,
   if the graph $\cwB$ contains no cycle,
   all objectives have at least one solution
-  and all edges are coherent,
+  and all nodes are coherent,
   then $\uconcr(\w) \neq \emptyset$.
 \end{theorem}
 
 \modMF{
 Regarding the complexity of the method,
-computing the saturated graph of local causality is polynomial in the number of sorts in $\PH$ and exponential in the number of processes in one sort.
+computing the saturated graph of local causality is polynomial in the number of automata in $\PH$ and exponential in the number of local states in one automaton.
 Checking the properties allowing to apply \pref{th:approxinf} is polynomial in the size of the graph.
-Therefore, building and checking process can be considered polynomial in the size
-of the PH model, provided that each sort only is contains a few processes.
+Therefore, the building and checking process can be considered as polynomial in the size
+of the AAN, provided that each automaton only contains a few local states.
 We note that this is particularly true for biological models, where
 each component usually contains a limited number of expression levels.
-In addition, it is possible to “factorize” cooperative sorts
-modelling more than two components,
-as explained in \pref{ssec:cooperation},
-in order to reduce their number of processes.
 }
 
 \modMF{
-We note furthermore that in case the method developed in this section is not conclusive,
+We note furthermore that in the case where
+the method developed in this section is not conclusive,
 it is possible to compute only a subset of $\Bv \cap \Sol$,
 by removing some solutions from the initial graph of local causality $\myB$,
 or by removing them from the saturated graph of local causality $\cwB$ and by trimming it.
-\pref{th:approxinf} is then still valid on the partial graph obtained,
-which can lead to more conclusiveness by removing parts of the graph
+In other words, this consists in ignoring some of the bounce sequences
+for some of the objectives,
+which intuitively cannot create false positives.
+Indeed, \pref{th:approxinf} is then still valid on the partial graph obtained,
+and this removal can lead to more conclusiveness by trimming parts of the graph
 that were not necessary for the reachability
-(such as cycles for instance).
-If one wants to test each possible subset of solutions,
-the overall method then turns out to be exponential
+(especially cycles or unnecessary but inconclusive branches).
+If one wants to try each possible subset of solutions,
+then the overall method turns out to be exponential
 in the number of solutions to each objective.
-Our method can thus be considered as efficient compared to regular model-checking which is usually PSPACE-complete~\cite{Harel02}.
+Our method can thus still be considered as efficient
+compared to regular model-checking which is usually PSPACE-complete~\cite{Harel02}.
 }
 
 
 
 \begin{example}
-  Let $\PH' = (\PHs, \PHl, \PHh'^{\langle 1 \rangle})$ be the “merged” version of the PH
-  depicted in \pref{fig:ph-livelock}, as it was already defined in \pref{ssec:priorities},
-  that is: $\PHh'^{\langle 1 \rangle} = \PHh^{(1)} \cup \PHh^{(2)}$.
-  In other words,
-  $\PH'$ is how $\PH$ would have been represented in the semantics without priorities.
-  We showed in \pref{ssec:priorities} that,
-  due to spurious behaviours inherent to the cooperative sorts in this semantics,
-  process $c_1$ is reachable
-  from the initial context $\ctx = \PHstate{a_1, b_0, c_0, ab_{10}}$.
-%   This is confirmed by the original under-approximation
-%   developed in~\cite{PMR12-MSCS}, which gives the same conclusion.
+  \moda{%
+  If we confider the AAN of \pref{fig:ph-livelock},
+  from the initial state $\PHstate{a_1, b_0, c_0}$ depicted,
+  the under-approximation given in \pref{th:approxinf}
+  does not conclude regarding the reachability of $c_1$.
+  This is due to the fact that the node $\{ a_1, b_1 \} \in \Bv \cap \sSol$
+  is not coherent because of its successor $a_0$ (and $b_0$).
+  (However, from the inconclusiveness of \pref{th:approxinf},
+  one cannot conclude about the unreachability of $c_1$.
+  Such analysis should be driven for instance
+  with over-approximation methods developed in~\cite{PMR12-MSCS}.)
+  }%
   
-  Such unwanted behaviours are palliated by the semantics of PH with priorities proposed in this paper.
-  Indeed, the under-approximation given in \pref{th:approxinf} does not conclude regarding the reachability of $c_1$,
-  as one of the edges of the resulting saturated graph of local causality is not coherent (\pref{def:coherent}),
-  as shown in in \pref{fig:sa-livelock}.
-  (However, from the inconclusiveness of \pref{th:approxinf}, one cannot conclude about the unreachability of $c_1$.
-  Such analysis should be driven for instance with over-approximation methods developed in~\cite{PMR12-MSCS}.)
+  \moda{%
+  This result is new compared to the method proposed in~\cite{PMR12-MSCS}.
+  Indeed, the representation based on the Process Hitting that was proposed
+  in this paper only allowed to represent “over-approximated” Boolean gates
+  with the use of cooperative sorts,
+  as explained in \pref{ssec:cooperation}.
+  This especially did not allow to model the fact that $a_1$ and $b_1$ could not
+  be activated in the same state, but only in successive states.
+  Thus, $c_1$ was indeed reachable,
+  contrary to the behaviour expected from an accurate Boolean gate.
+  }%
   
-  We note however that,
-  if $\PHhit{a_0}{b_0}{b_1}$ and $\PHhit{b_0}{a_0}{a_1}$ are replaced by the auto-actions
-  $\PHhit{a_0}{a_0}{a_1}$ and $\PHhit{b_0}{b_0}{b_1}$,
+  \moda{%
+  Finally, we note however that,
+  if $\PHhits{a_0}{b_0}{b_1}$ and $\PHhits{b_0}{a_0}{a_1}$ are replaced by the actions
+  $\PHhitm{a_0}{a_1}$ and $\PHhitm{b_0}{b_1}$,
   then the resulting saturated graph of local causality changes, and
-  \pref{th:approxinf} concludes that $c_1$ is then reachable from $\ctx$.
+  \pref{th:approxinf} concludes that $c_1$ is reachable from $\ctx$.
+  }%
 
 \begin{figure}[tp]
   \centering
@@ -347,67 +390,80 @@ Our method can thus be considered as efficient compared to regular model-checkin
     \node[Aobj] (c01) {$\PHobj{c_0}{c_1}$};
     \node[Asol,below of=c01] (c01s) {};
 
-    \node[AprocPrio,below of=c01s] (ab11) {$ab_{11}$};
-    \node[AsolPrio,below of=ab11] (ab11s) {};
-
-    \node[Aproc,below left of=ab11s] (a1) {$a_1$};
+    \node[Assol,below of=c01s] (a1a1ss) {$\{ a_1, b_1 \}$};
+    \node[Aproc,below left of=a1a1ss] (a1) {$a_1$};
     \node[Aobj,below of=a1] (a11) {$\PHobj{a_1}{a_1}$};
     \node[Asol,below of=a11] (a11s) {};
+    \node[Assol,below of=a11s] (na11s) {$\emptyset$};
     \node[Aobj,below left of=a1] (a01) {$\PHobj{a_0}{a_1}$};
     \node[Asol,below of=a01] (a01s) {};
     \node[Aproc,below of=a01s] (b0) {$b_0$};
     \node[Aobj,below of=b0] (b00) {$\PHobj{b_0}{b_0}$};
     \node[Asol,below of=b00] (b00s) {};
+    \node[Assol,below of=b00s] (nb00s) {$\emptyset$};
     \node[Aobj,below left of=b0] (b10) {$\PHobj{b_1}{b_0}$};
     \node[Asol,below of=b10] (b10s) {};
+    \node[Assol,below of=b10s] (nb10s) {$\emptyset$};
 
-    \node[Aproc,below right of=ab11s] (b1) {$b_1$};
+    \node[Aproc,below right of=a1a1ss] (b1) {$b_1$};
     \node[Aobj,below of=b1] (b11) {$\PHobj{b_1}{b_1}$};
     \node[Asol,below of=b11] (b11s) {};
+    \node[Assol,below of=b11s] (nb11s) {$\emptyset$};
     \node[Aobj,below right of=b1] (b01) {$\PHobj{b_0}{b_1}$};
     \node[Asol,below of=b01] (b01s) {};
     \node[Aproc,below of=b01s] (a0) {$a_0$};
     \node[Aobj,below of=a0] (a00) {$\PHobj{a_0}{a_0}$};
     \node[Asol,below of=a00] (a00s) {};
+    \node[Assol,below of=a00s] (na00s) {$\emptyset$};
     \node[Aobj,below right of=a0] (a10) {$\PHobj{a_1}{a_0}$};
     \node[Asol,below of=a10] (a10s) {};
+    \node[Assol,below of=a10s] (na10s) {$\emptyset$};
 
     \path
 %    (c1) edge (c01)
     (c01) edge (c01s)
-    (c01s) edge (ab11)
-    (ab11) edge[aSPrio] (ab11s)
-    (ab11s) edge (a1) edge (b1)
+    (c01s) edge (a1a1ss)
+    (a1a1ss) edge (a1) edge (b1)
 
     (a1) edge (a01) edge (a11)
     (a01) edge (a01s)
     (a01s) edge (b0)
     (a11) edge (a11s)
+    (a11s) edge (na11s)
     (a0) edge (a10) edge (a00)
     (a10) edge (a10s)
+    (a10s) edge (na10s)
     (a00) edge (a00s)
+    (a00s) edge (na00s)
 
     (b0) edge (b10) edge (b00)
     (b10) edge (b10s)
+    (b10s) edge (nb10s)
     (b00) edge (b00s)
+    (b00s) edge (nb00s)
     (b1) edge (b01) edge (b11)
     (b01) edge (b01s)
     (b01s) edge (a0)
     (b11) edge (b11s)
+    (b11s) edge (nb11s)
     ;
     \end{tikzpicture}
   \caption{
   \label{fig:sa-livelock}
-    The saturated graph of local causality of the PH model in \pref{fig:ph-livelock}
-    for the objective $\w = \PHobj{c_0}{c_1}$ and the initial context $\ctx = \PHstate{a_1, b_0, c_0, ab_{10}}$.
-    Rectangular nodes containing a single process are elements in $\Proc$,
-    borderless nodes containing a couple of processes are elements in $\Obj$
-    and circle nodes are elements in $\Sol$.
-    \pref{th:approxinf} is inconclusive on this example as edge $(ab_{11}, \{ a_1, b_1 \}) \in \Proc \times \Sol$ (here represented with a double line) is not coherent (\pref{def:coherent}).
-    Indeed, $a_0 \in \Proc$ is a successor of $\{ a_1, b_1 \}$, but $a_0 \neq a_1$ (and the same also stands for $b_0$).
+    The saturated graph of local causality of the AAN in \pref{fig:ph-livelock}
+    for the objective $\w = \PHobj{c_0}{c_1}$
+    and the initial context $\ctx = \PHstate{a_1, b_0, c_0}$.
+    Elements in $\Proc$ are represented by rectangular nodes,
+    elements in $\Sol$ are represented by circle nodes,
+    and elements in $\sSol$ and $\Obj$ are the remaining borderless nodes.
+    \pref{th:approxinf} is inconclusive on this example as node $\{ a_1, b_1 \}$
+    is not coherent (see \pref{def:coherent}).
+    Indeed, $a_0 \in \Proc$ is a successor of $\{ a_1, b_1 \}$, but $a_0 \neq a_1$
+    (and the same also stands for $b_0$).
   }
 \end{figure}
 \end{example}
+
 
 
 \subsection{Reachability of a state}
@@ -416,24 +472,30 @@ Our method can thus be considered as efficient compared to regular model-checkin
 \newcommand{\total}{\tau}
 \newcommand{\reach}{\sigma}
 
-The reachability property studied so far concerns a single process at a time.
-However, we remark that the reachability of a partial or global state can be
-addressed with the very same analysis by introducing a dedicated cooperative
-sort in the scope of the PH semantics with $2$ classes of priorities.
+The reachability property studied so far concerns a single local state at a time.
+However, we remark that the reachability of a global state or a sub-state can be
+addressed with the very same analysis by introducing a dedicated automata.
+Such analysis was not possible with the Process Hitting framework,
+because of the lack of the notion of simultaneity for more than two components.
 
-Indeed, let $\PH = (\PHs, \PHl, (\PHh^{(1)}, \PHh^{(2)}))$ be a PH and suppose that we want to study the reachability of a state $s \in \PHl$.
-Let $\PH' = (\PHs', \PHl', (\PHh'^{(1)}, \PHh'^{(2)}))$
-with: $\PHs' = \PHs \cup \{ \total, \reach \}$ and $\PHl' = \PHl \times \PHl_\total \times \PHl_\reach$,
-where $\total$ is a cooperative sort on all components $\components$ of $\PH$ (thus $\PHl_\total = \underset{a \in \components}{\times} \PHl_a$)
-and $\reach$ is a component with $\PHl_\reach = \{ \reach_0, \reach_1 \}$;
-furthermore, $\PHh'^{(1)}$ is the set $\PHh^{(1)}$ completed with all actions updating the cooperative sort $\total$,
-and $\PHh'^{(2)} = \PHh^{(2)} \cup \{ \PHhit{\pfp_s(\total)}{\reach_0}{\reach_1} \}$.
+In order to check the reachability of a global state $s \in \PHl$,
+let $\PH = (\PHs, \PHl, \PHh)$ be an AAN.
+We define a new AAN $\PH' = (\PHs', \PHl', \PHh')$ with:
+$\PHs' = \PHs \cup \{ \reach \}$, $\PHl' = \PHl \times \PHl_\reach$,
+where $\PHl_\reach = \{ \reach_0, \reach_1 \}$,
+and $\PHh' = \PHh \cup \{ \PHhit{\toset{s}}{\reach_0}{\reach_1} \}$.
+Given an initial context $\ctx$, the reachability of $s$ in $\PH$
+is equivalent to the concretisation of $\PHobjp{\reach}{0}{1}$ in $\PH'$
+from the initial context $\ctx \cup \{ \reach_0 \}$,
+which can be efficiently under-approximated using \pref{th:approxinf}.
 
-Given an initial context $\ctx$, the reachability of $s$ in $\PH$ is equivalent to the concretisation of $\PHobjp{\reach}{0}{1}$ in $\PH'$ from the initial context $\ctx \cup \{ \reach_0 \}$ (the initial state of $\total$ does not matter), which can be efficiently under-approximated using \pref{th:approxinf}.
-Indeed, the additional action $\PHhit{\pfp_s(\total)}{\reach_0}{\reach_1}$ in $\PHh'^{(2)}$ allows to conclude on the reachability of process $\pfp_s(\total)$, that is, on the reachability of the state $s$ (considering only the components).
+It is of course also possible to compute the reachability
+of a sub-state $s \in \PHsubl[\PHl]_S$ of a set of components $S \subseteq \PHs$
+with the same method.
+One can also check the reachability of a set of states $\Lambda \subseteq \PHl$
+by creating several actions
+$\PHhit{\toset{s}}{\reach_0}{\reach_1}$ in $\PHh$ for each state $s \in \Lambda$.
 
-It is also possible to compute the reachability of a set of states $\Lambda \subseteq \PHl$ by creating several actions $\PHhit{\total_s}{\reach_0}{\reach_1}$ in $\PHh^{(2)}$ for each state $s \in \Lambda$,
-or on a sub-state $s \in \PHsubl[\PHl]_S$ of a set of components $S \subseteq \PHs$ by adapting the sort $\total$ with: $\PHl_\total = \PHsubl[\PHl]_S$
 
 
 \subsection{Sequential under-approximation}
@@ -441,7 +503,7 @@ or on a sub-state $s \in \PHsubl[\PHl]_S$ of a set of components $S \subseteq \P
 
 In this section, we briefly explain an alternative sufficient condition that
 progressively takes into account the successive objectives, instead of
-considering all of them at a time, as it is done in the previous sections.
+considering all of them at a time, as it is done in \pref{ssec:ua}.
 Because objectives are taken into account individually, such an approach
 considers only a subset of scenarios.
 However, because each iteration focuses on a smaller part of the network, this
@@ -452,15 +514,27 @@ $a_i\neq a_j$ and a state $s\in \PHl$ with $\get{s}{a}=a_i$.
 One can remark that any scenario reaching $a_j$ necessarily includes one of the
 bounce sequences in $\BS(\obj{a_i}{a_j})$, and, in particular,
 any minimal scenario reaching $a_j$ ends in a state where $a_j$ is present but
-also the hitter of the last bounce of one bounce sequence in $\BS(\obj{a_i}{a_j})$.
-If such hitter $b_k$ is in a cooperative sort $b\in\cs$, it also means that one of the sub-states
-in $\csState(b_k)$ is included in the ending state.
+also the hitters of the last bounce of one bounce sequence in $\BS(\obj{a_i}{a_j})$.
 \pref{def:lastprocs} defines $\lastprocs(\obj{a_i}{a_j})$ as the set of set of
-processes that may be present just after reaching $a_j$.
+local states that may be present just after reaching $a_j$.
+
+\begin{definition}[$\lastprocs : \Obj\to\Sol$]
+\label{def:lastprocs}
+  Given an objective $\obj{a_i}{a_j} \in \Obj$, $\lastprocs(\obj{a_i}{a_j})$ is
+  defined as the largest set such that, $\forall ps\in\lastprocs(\obj{a_i}{a_j})$, 
+  $ps\in\sSol$,
+  \begin{enumerate}
+    \item $a_j \in ps$;
+    \item $\exists \zeta \in \BS(\obj{a_i}{a_j}),
+      \hitter{\zeta_{\card{\zeta}}} \subseteq ps$;
+    \item $\nexists ps' \in \lastprocs(\obj{a_i}{a_j}),
+      ps' \subset ps \wedge ps' \neq ps$.
+  \end{enumerate}
+\end{definition}
 
 From \pref{th:approxinf}, we can deduce that
 for any scenario $\delta$ in $\uconcr(P)$,
-there exists a set of processes $ps\in\lastprocs(P)$
+there exists a set of local states $ps\in\lastprocs(P)$
 such that $ps \subseteq (s\play\delta)$.
 Hence, if $\muconcr_{\ctx'\Cap ps}(\w')\neq\emptyset$,
 with $\ctx'=\ctx\Cap\procs(\mycwB{\ctx}{P})$,
@@ -469,29 +543,9 @@ state $(s\play\delta)$.
 Therefore, the scenario $\delta\concat\delta'$ concretises
 $\w$.
 
-\begin{definition}[$\lastprocs$]
-\label{def:lastprocs}
-Given an objective $\obj{a_i}{a_j}$, $\lastprocs:
-\Obj\to\powerset(\powerset(\Proc))$ is
-defined as the largest set such that, $\forall lps\in\lastprocs(\obj{a_i}{a_j})$, 
-$lps\in\powerset(\Proc)$,
-\begin{enumerate}
-\item $a_j\in lps$;
-\item $\exists\zeta\in\BS(\obj{a_i}{a_j}),
-    \PHsort(\hitter{\zeta_{\card\zeta}}) \neq 
-		\PHsort(\bounce{\zeta_{\card\zeta}})
-		 \Rightarrow
-		  \hitter{\zeta_{\card\zeta}}\in lps$;
-\item $\forall b_j\in lps, b\in\cs, \exists ps\in\csState(b_j), ps\subseteq lps$;
-\item $\nexists lps'\in\lastprocs(\obj{a_i}{a_j}), lps'\subset lps \wedge
-									lps'\neq lps$.
-\end{enumerate}
-\end{definition}
-
 \begin{theorem}[Sequential under-approximation]
 \label{thm:ordered-ua}
-Given a Process Hitting $(\PHs; \PHl; \PHa^{\langle 2 \rangle})$
-that satisfies \pref{cr:bounded} and \pref{cr:compcs},
+Given an AAN $(\PHs; \PHl; \PHa)$,
 a context $\ctx$ and an objective sequence $\w =
 P\concat\w'\in\OS$,
 $\uconcr(P)\neq\emptyset \wedge
@@ -527,7 +581,7 @@ This section gives a recursive method to find a scenario that concretizes
 a given objective sequence $\w \in \OS$.
 All the definitions above are well-defined provided that
 $\uconcr(\w)\neq\emptyset$,
-which can be demonstrated by \pref{thm:ordered-ua} or \pref{th:approxinf}.
+which can be demonstrated by \pref{th:approxinf} or \pref{thm:ordered-ua}.
 The justification of these definitions can be found by analysing the demonstrations
 of these theorems.
 }
@@ -536,57 +590,79 @@ of these theorems.
 \newcommand{\osres}{\mathbf{OSres}}
 \newcommand{\autoBS}{\mathbf{autoBS}}
 \newcommand{\rec}{\mathbf{rec}}
-\newcommand{\thisobj}[1]{P_{#1}}
-\newcommand{\thisseq}[1]{\Theta_{#1}}
+% \newcommand{\thisobj}[1]{P_{#1}}
+% \newcommand{\thisseq}[1]{\Theta_{#1}}
+\newcommand{\thisobj}{P}
+\newcommand{\thisseq}{\Theta}
+\newcommand{\R}{R}
 
-\modMF{
-For all $\w \in \OS$:
+\modMF{%
+First, $\osres$ is used to split the objective sequence $\w$ to solve,
+by considering successive objectives, in the fashion of \pref{thm:ordered-ua}.
+This function calls $\res$ which allows to solve an objective $P$
+by either re-target it (if $\gCont(\PHsort(P), P) \neq \emptyset$)
+of by searching for a solution to this objective in $\BS(P)$.
+This search may require to try several objective sequences $\zeta \in \BS(P)$.
+For each trial, the chosen objective sequence $\zeta$ is solved with $\rec$,
+which recursively created a scenario to play the whole sequence.
+This scenario is itself recursively created by combining
+smaller scenarios allowing to reach each required hitter of each action
+with the function $\thisseq$.
+Finally, $\thisseq$ calls $\res$ anew to reach the hitters
+that are necessarily contained in other automata.
+}%
+
+\begin{definition}[$\osres : \PHl \times \OS \to \Sce$]
+\modMF{%
+For all $s \in \PHl$ and $\w \in \OS$, we define:
 \[
-  \osres_s(\w) = \res_s(\w_1) \concat
-    \osres_{s \play \res_s(\w_1)}(\w_2 \concat \dots \concat \w_{\card{\w}})
+  \osres_s(\w) \DEF
+    \begin{cases}
+      \emptyseq
+        & \text{ if $\w = \emptyseq$} \\
+      \res_s(\w_1) \concat
+      \osres_{s \play \res_s(\w_1)}(\w_2 \concat \dots \concat \w_{\card{\w}})
+        & \text{ otherwise} \\
+    \end{cases}
 \]
-with $\osres_s(\varepsilon) = \varepsilon$.
-For all $P \in \Obj$:
-\[\res_s(P) =
+and, for all $s \in \PHl$ and $P \in \Obj$:
+\[\res_s(P) \DEF
   \begin{cases}
     \varepsilon
       & \text{if } \target{P} = \bounce{P} \\
-%     pickone(\autoBS(P))
-%       & \text{if } \aBS(P) = \{ \emptyset \} \\
     \osres_s(P^Q \concat Q)
       & \text{if } \exists Q \in \Obj, (P, Q) \in \Bee{\Obj}{\Obj} \\
     \rec_s(\zeta)
-      & \text{otherwise, with } \zeta \in \BS(P)
+      & \text{otherwise, with } \zeta \in \BS(P) \text{\todo{Selon possbilités}}
   \end{cases}
 \]
-where:
-\[
-  \autoBS(P) = \{ \zeta \in \BS(P) \mid \forall i \in \indexes{\zeta}, \PHsort(\hitter{\zeta_i}) = \PHsort(\target{\zeta_i}) = \PHsort(P) \}
-\]
-\[
-  P^Q = \PHobj{\PHtarget(P)}{\PHtarget(Q)}
-\]
-\[
-  \rec_s(\zeta) = \thisseq{\zeta_1} \play
-    \rec_{s \play \thisseq{\zeta_1}}
-    (\zeta_2 \concat \dots \concat \zeta_{\card{\zeta}})
-\]
-with:
-\[
-  \thisseq{h} = \res_s(\thisobj{h}) \play
-    \delta^{upd}_{s \play \res_s(\thisobj{h})} \play h
-\]
-\[
-  \thisobj{h} = \PHobj{\PHget{s}{\PHsort(\hitter{h})}}{\hitter{h}}
-\]
-and $\delta^{upd}_{s'}$ is a scenario of actions in $\PHh^{(1)}$ that updates
-all cooperative sorts from state $s'$.
-Such a scenario always exists given \pref{lem:update},
-and it can be built, starting from $s'$
-by iteratively putting arbitrary prioritized actions into a sequence
-until no more prioritized action is playable.
-Indeed, the order of the actions does not matter and the final state will
-always be $\update(s')$.
+with $P^Q = \PHobj{\PHtarget(P)}{\PHtarget(Q)}$.
+Furthermore:
+\begin{align*}
+  \forall \zeta \in \BS,
+  \rec_s(\zeta) &\DEF
+    \begin{cases}
+      \emptyseq
+        & \text{ if $\zeta = \emptyseq$} \\
+      \thisseq_s(\zeta_1) \concat \zeta_1 \concat
+      \rec_{s \play \thisseq_s(\zeta_1) \concat \zeta_1}
+      (\zeta_2 \concat \dots \concat \zeta_{\card{\zeta}})
+        & \text{ otherwise}
+    \end{cases} \\
+  \forall h \in \PHh,
+  \thisseq_s(h) &\DEF
+    \begin{cases}
+      \emptyseq
+        & \text{ if $\hitter{h} = \emptyset$} \\
+      \R_s(h_1) \concat \thisseq_{s \play \R_s(h_1)}(h_2 \concat \dots \concat h_{\card{h}})
+        & \text{ otherwise}
+    \end{cases} \\
+  \forall a_i \in \Proc,
+  \R_s(a_i) &\DEF \res_s(\PHobj{\PHget{s}{\PHsort(a_i)}}{a_i})
+\end{align*}
+and for all action $h \in \PHh$, $(h_i)_{i \in \segm{1}{\card{\hitter{h}}}}$
+is a sequence containing all hitters of $h$ in an arbitrary order.
 }
+\end{definition}
 
-\todo{À terminer et gluer}
+\todo{Gérer les choix multiples possibles de $\zeta \in \BS(P)$}
