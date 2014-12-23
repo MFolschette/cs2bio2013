@@ -1,9 +1,9 @@
-\subsection{Weak Bisimulation of Asynchronous Discrete Networks}
+\subsection{Asynchronous Discrete Networks}
 \label{sec:dn}
 
 We exhibit in this section an encoding of Asynchronous Discrete Networks (ADN),
 also called Logical Networks or equivalently René Thomas Models \cite{Thomas95,deJong02},
-into AANs and prove a weak bisimulation relation.
+into AANs with a bisimulation relation.
 This translation is important as it allows to efficiently study the dynamics of ADNs
 by using the static analysis developed in \pref{sec:sa};
 indeed, the bisimulation relation ensures that the dynamics of the
@@ -74,8 +74,9 @@ and the related value of the evolution function $f^i$.
 \end{definition}
 
 Finally,
-\pref{th:bisimDN} states the weak bisimulation relation between an ADN and its encoding in AAN.
-Intuitively, the actions follow strictly the possible transitions of the ADN.
+\pref{th:bisimDN} states the bisimulation relation between an ADN and its encoding in AAN.
+Indeed, the actions follow strictly the possible transitions of the ADN,
+making the dynamics strictly equivalent.
 
 \begin{theorem}[$\DNdef \approx \toPH\DNdef$]
 \label{th:bisimDN}

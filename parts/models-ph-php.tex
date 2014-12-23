@@ -12,7 +12,7 @@ until no other action of higher priority is playable (\pref{def:playp}).
 Such model allows to model preemptions between sets of actions,
 which can be helpful to abstract time or duration properties under certain conditions.
 
-\begin{definition}[AANs with $k$ classes of priorities]
+\begin{definition}[AAN with $k$ classes of priorities]
 \label{def:php}
   If $k \in \sN^*$,
   an \emph{Asynchronous Automata Network with $k$ classes of priorities} (AAN$k$)
@@ -58,7 +58,7 @@ We consider in the following an AAN$k$ with $k \in \sNN$:
 $\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$.
 The aim of the rest this section is to propose a translation of $\oPH$
 into an AAN with $1$ class of priority $\PH = (\PHs; \PHl; \PHa^{\angles{1}})$
-called \emph{flattening}, which we also prove to be weakly bisimilar.
+called \emph{flattening}, which is bisimilar.
 This AAN with 1 class of priority is equivalent to a regular AAN without priorities;
 Therefore, such a translation is particularly useful to be able to study the dynamics of
 any kind of AAN with priorities by using the static analysis developed in \pref{sec:sa}.
