@@ -102,10 +102,10 @@ and no other action of higher priority have to be playable.
 % as it is not needed for the rest of the flattening.
 
 \begin{definition}[Playability property operator ($\Fopsymbol : \PHh \rightarrow \F$)]\label{def:fop}
-  For all $h = \PHfrappe{A}{b_x}{b_y} \in \ov{\PHh}$, we define:
+  For all $h = \PHfrappe{A}{b_j}{b_m} \in \ov{\PHh}$, we define:
   \[
     \Fop{h} \equiv
-    b_x \wedge
+    b_j \wedge
     \left(\bigwedge_{a_i \in A} a_i\right)
     %\hitter{h}
     \wedge
@@ -116,7 +116,7 @@ and no other action of higher priority have to be playable.
 \end{definition}
 %
 By construction of this operator and given the dynamics of a AAN$k$,
-an action $h$ is playable in a state $s \in \ov{\PHl}$ if and only if: $\Fsem{\Fop{h}}{s} \wedge \target{h} \in s$.
+an action $h$ is playable in a state $s \in \ov{\PHl}$ if and only if: $\Fsem{\Fop{h}}{s}$.
 
 Because we only use classical logic operators, we can compute the Disjunctive Normal Form (DNF) of any playability property.
 For any action $h \in \ov{\PHh}$, this DNF takes the form:
@@ -137,8 +137,7 @@ Finally, \pref{def:flattening} gives the construction of the flattening of $\oPH
 for each action $h \in \ov{\PHh}$, several actions $f^{h,i}$ are built to reflect each of the conjunctions in $\Fop{h}$,
 \ie for $i \in \segm{1}{\n}$.
 This construction allows to obtain the same dynamics as $\oPH$, as stated by \pref{th:bisimPHP}.
-A detailed proof of this theorem is available in \pref{suppl:demoflattening}. \todo{Utile ?}
-%
+
 \begin{lemma}
 \label{lem:ppplaysubset}
   Let $h \in \ov{\PHh}$ and $s \in \ov{\PHl}$;
@@ -197,6 +196,12 @@ and the set of global states of its flattening are the same.
     (\PHs; \PHl; \PHa)$ is its flattening, then:
   \[ \forall s, s' \in \PHl, s \PHPtrans[\oPH] s' \Longleftrightarrow s \PHPtrans[\PH] s' \]
 \end{theorem}
+
+\begin{proof}
+  By definition of $\PHflat$.
+\end{proof}
+
+
 
 We showed in this subsection that it is possible to model any AAN$k$
 as an AAN (or, equivalently, as an AAN$1$).
