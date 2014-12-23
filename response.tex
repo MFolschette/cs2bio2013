@@ -22,63 +22,46 @@
 \newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
 \newcommand{\answertodo}[1]{\textcolor{red}{\textbf{À appliquer :}} \textcolor{magenta}{#1}}
 
-\newcommand{\answer}[1]{\textcolor{blue}{#1}}
+\newcommand{\answer}[1]{\textcolor{blue}{#1}\vspace*{1em}}
 
-%\setlength{\parindent}{0pt}
+\title{Response to the reviewers --- First review of “Sufficient Conditions for Reachability in Automata Networks with Priorities”}
+\author{Maxime Folschette, Loïc Paulevé, Morgan Magnin, Olivier Roux}
+\date{}
 
-% 
-% \def\V{\mathcal V}
-% \def\O{\mathcal O}
-% 
-% \def\zero{\mathbf 0}
-% \def\R{\mathbb R}
-% \def\Rpos{\R_{\geq 0}}
-% \def\Rspos{\R_{>0}}
-% \def\Q{\mathbb Q}
-% \def\Qpos{\Q_{\geq 0}}
-% \def\Qspos{\Q_{>0}}
-% \def\Z{\mathbb Z}
-% \def\Zpos{\Z_{\geq 0}}
-% \def\Zspos{\Z_{> 0}}
-% 
-% \def\mspan{\mathrm{span}}
-% \def\lp{\mathrm{lowerpoint}}
-% \def\orderings{\mathrm{orderings}}
-% 
-% \def\inner\#1\#2{\#1\#2}
-% %\def\inner\#1\#2{\langle \#1,\#2 \rangle}
-% 
-% \def\apply{\bullet}
-% 
-% \def\B{\mathcal B}
+
 
 \begin{document}
 
-\noindent
-Légende :\\
-\answer{Blabla} $\longleftarrow$ Réponse au reviewer\\
-\answertodo{Blabla} $\longleftarrow$ Réponse possible sur un point encore non appliqué\\
-\todo{Blabla} $\longleftarrow$ À faire / à décider
+\maketitle
 
-\begin{center}
-  --- --- ---
-\end{center}
+% \noindent
+% Légende :\\
+% \answer{Blabla} $\longleftarrow$ Réponse au reviewer\\
+% \answertodo{Blabla} $\longleftarrow$ Réponse possible sur un point encore non appliqué\\
+% \todo{Blabla} $\longleftarrow$ À faire / à décider
 
 
 
 \section*{Summary of the main changes}
 
-\todo{Résumer et lister les modifs}
+We wish thank the reviewers for their comments.
+Please find a summary of the main changes brought to the paper here, and a detailed response to all comments below.
 
 \begin{itemize}
-  \item Minor changes in the static analysis to make the graph more precise,
-    and the Sect.~5.1 was revised in consequence;
-  \item New explanations and examples all over the paper,
-    especially regarding the use of priorities (Sect.~2.3),
-    the lemmas (Sect.~2.4 \&~2.5)
-    and the under-approximation (Sect.~3.2);
-  \item A section was added (Sect.~3.5) about the extraction of a scenario from the graph of
-    local causality, in the case the analysis is conclusive;
+  \item We have changed the main model representation from Process Hitting
+    with classes of priorities (PH) to Asynchronous Automata Networks (AANs).
+    This formalism is equivalent but saves a lot of over-complicated formalism,
+    thus gaining in clarity.
+    All sections have been revised in consequence
+    (some became irrelevant and were completely removed)
+    and we added a discussion about the links between PH and AAN.
+  \item We have made minor changes in the static analysis to make the graph more precise,
+    and the Sect.~5.1 was revised in consequence.
+  \item New explanations and examples have been added all over the paper,
+    especially for the under-approximation (Sect.~3.2)
+    and the detailed example (Sect.~5.1).
+  \item A section has been added (Sect.~3.5) about the extraction of a scenario
+    from the graph of local causality, in the case the analysis is conclusive.
 \end{itemize}
 
 
@@ -94,33 +77,50 @@ In particular, a weak point of the paper lies in the restrictions introduced in 
 
 \answer{
 The intent of this paper is to adapt the static analysis methods previously developed in [13] to the case of the PH with priorities, that is, models with a new kind of dynamics and preemptions that did not exist previously.
-The method thus required adaptations that we tried to better motivate in this revision.
-We added a section (Sect.~2.3) to motivate the use of priorities in the PH.
-Furthermore, we added a running example in Sect~2.4 \& 2.5 in order to explain all the definitions and lemmas.
+In this revision, we finally focus on AANs, that are equivalent models,
+but better highlights the difference with the “standard” PH of [13],
+that is, PH without priorities.
+The static analysis method thus required adaptations
+that we tried to better motivate in this revision.
 }
 
 With respect to the workshop version, Section 4.2 has been added to present a translation of PH models with multiple priority classes (with restrictions from Section 2.3 assumed) into an "equivalent" (weakly-bisimilar) PH model with only two priority classes. Since the restrictions from Section 2.3 are already assumed for PH models with multiple priority classes, this strengthens the need for a discussion on those restrictions.
 
 \answer{
-This translation allows to apply the static analysis to any PH model with priorities, despite the restrictions defined in Sect. 2.4.
-We added some discussion in Sect. 4.2 in order to emphasize this.
+The new AAN representation makes this difference clearer:
+the previously emphasized sub-class of PH models used for the static analysis
+is equivalent to AANs,
+while the whole class of PH models with any number of classes of priorities
+is equivalent to AANs with classes of priorities.
+Thus, the encoding of Sect. 4.2 actually extends the applicability
+of our static analysis; we have added some discussion to emphasize this.
 }
 
 As regards the biological experiments presented in Section 5.2, this section should be extended by reporting more details about the experiments carried and the results obtained. Moreover, you should compare the results with the analogous experiments from [13], in which the same model (TCR pathway) had been analysed with good results. What improvements are there?
+
+\answer{
+The improvements concern the expressivity of the models tackled.
+The experiments of [13] only conclude on the reachability for dynamics
+that are not exactly those of ADNs (a.k.a.~Logical Networks).
+We have added some discussion to emphasize this.
+}
+
 I also point out that the comparisons with a model-checker should be actually carried out. The fact that the test you performed caused out-of-memory errors does not allow any conclusion to be drawn, even more so considering that only 2GB of RAM have been used.
 
 \answer{
 The experiment we carried with the LibDDD model-checker led us to the conclusion that the memory needs for such a method is several orders of magnitude above our method, which we would consider a sufficient result in itself.
-Furthermore, with such a memory use, one cannot expect to be able to study bigger models (say, thousands of components) while our method has a polynomial complexity in the size of the model, and could tackle such bigger models.
+Furthermore, with such a memory use, one cannot expect to be able to study bigger models (say, thousands of components) while our method has a polynomial complexity in the size of the model or the construction of the saturated graph of local causality, and could thus tackle such bigger models.
 Thus, we have not performed more experiments,
 but we have added some precisions about our thoughts in the paper.
 }
 
 Beyond the above concerns, the paper would also benefit from a reorganization, since I found it sometimes difficult to follow. This is particularly relevant for Section 4, where the translations proposed are just thrown in, without discussing their relevancy to the purpose of the paper.
 
-\answertodo{
+\answer{
 The translations could indeed be better discussed and justified,
 we have taken this comment into account.
+We also hope that the use of AANs simplifies the formalism
+and emphasizes the use of these translations.
 }
 
 Minor comments […]
@@ -147,23 +147,23 @@ Minor comments […]
 % - "build cooperations with no temporal shift": please clarify what you mean with "temporal shift"
 % - $Sce|_1$ is not defined
 
-\answertodo{
-We took these comments into account
+\answer{
+We these comments into account.
 }
 
 
 
 \subsection*{Reviewer \#3}
 
-% Minor language issues:
-% 
+Minor language issues: […]
+
 % (1) In introduction first paragraph at the sixth line there is a typo with 3 full stops ...
 % (2) Second paragraph in introduction fifth line, it should be USUALLY, rather then USUAL, please change it.
 % (3) Same paragraph: Components rarely have more "that" four levels, which should be: Components rarely have more "than" four levels.
 % (4) Please add some text around the figures 1,3, and 4 so that a non technical reader (biologist) might have some idea about the interactions in the figures.
 % (5) In discussion the following sentence needs to be rewritten: "i.e., without an intermediate encoding; our objective being to increase the conclusiveness of the static analysis   approach".
 
-\answertodo{
+\answer{
 We took the comments about the language issues of Reviewer \#3 into account.
 }
 
@@ -178,11 +178,14 @@ With respect to the workshop version of the paper I don't see a significant impr
 \answer{
 The additions regarding the workshop paper are the following:
 \begin{itemize}
+  \item The use of AANs (new to this revision) that simplifies the formalism
+    and gives a new viewpoint to the overall work;
   \item Theorem 2, which refines successive reachability;
-  \item Sect. 4.2, which allows to translate any PH model with priorities
-    into a model that can be processed by our method (thus extending its range of application);
-  \item Sect. 3.5, which returns a scenario concretizing the desired reachability,
-    when possible (this addition is new to this revision).
+  \item Sect. 4.2, which allows to translate any AAN with classes of priorities
+    into a simple AAN (with one class of priority),
+    thus extending the range of application of the static analysis;
+  \item Sect. 3.5 (new to this revision),
+    which returns a scenario concretizing the desired reachability, when possible.
 \end{itemize}
 We emphasized these in the introduction.
 }
@@ -195,7 +198,7 @@ but to improve the expressivity of the PH formalism and its associated static an
 We are now able to formally check Asynchronous Discrete Networks
 (also called Thomas' models)
 which was not the case before.
-This has been emphasized in Sect. 5.2.
+This has been emphasized especially in Sect. 5.2.
 }
 
 - the static analyses that are proposed are based on abstract interpretation, however there is not a formal introduction of them in this framework. In particular there are abstractions and concretizations whose domains (and their relationships in terms of Galois insertion / connection) are not clearly stated. Moreover, the overall ideas of the abstractions are lost in the heavy technical presentation. This is difficult to read and does not give sufficient intuition to grasp the concepts, which remain hidden behind the notation. 
@@ -208,20 +211,26 @@ This has been emphasized in Sect. 5.2.
 
 - the link to Boolean Networks and Multivalued Boolean Networks is given by a translation that is published in another paper. That is ok, but the authors mention Asynchronous Discrete Networks as an "intermediate" model between the models previously mentioned and the Process Hitting framework. This remains an obscure connection and "Asynchronous Discrete Networks" cannot be found as keyword in the literature, at least at a first general search. 
 
-\todo{Un autre terme devrait être trouvé, je propose : Discrete Networks.}
+\answer{
+We called Asynchronous Discrete Networks (ADN) the class of Logical Models
+with discrete values of the variables,
+either Boolean or multivalued,
+and evolution functions (or, equivalently, focal parameters).
+Although the denomination “ADN” does not exist in the literature,
+there is in fact no widespread or unified term to qualify this class of models.
+We have detailed this choice in the paper and justified the use of this term,
+and emphasized references that also defined these kinds of models.
+}
 
 - the overall presentation of the ideas and results are heavily technical and frankly difficult to read even for a reader that is used to formality. The most difficult aspect is the proliferation of notation, which forces the reader to continuously go back and forward to recall the meaning of the very large number of symbols. 
 
-\todo{Peut-être faudrait-il diminuer le nombre de symboles ? Mais lesquels enlever ?}
-
 \answer{
-We have tried to give more explanations and examples
-on most of the technical definitions all throughout the paper.
+The use of AANs instead of PH with classes of priorities
+allows to greatly simplify the whole paper
+and, we hope, increase comprehension.
 }
 
-Comments and suggestions
-
-[…]
+Comments and suggestions […]
 
 % page 2, paragraph 1: Some general references should be given here, reference papers, overviews, and so on.
 % 
@@ -281,6 +290,6 @@ Comments and suggestions
 % 
 % p 12 last paragraph the discussion on the complexity issue looks very limited considering that this is supposed to be one of the contributions of the whole work. It is mentioned that "it is possible to compute only a subset of $V \cap Sol$", how?
 
-\answertodo{We have taken these comments into account}
+\answer{We have taken most of these comments into account.}
 
 \end{document}
