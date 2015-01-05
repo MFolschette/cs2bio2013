@@ -397,7 +397,8 @@ compared to regular model-checking which is usually PSPACE-complete~\cite{Harel0
     \node[Assol,below of=a11s] (na11s) {$\emptyset$};
     \node[Aobj,below left of=a1] (a01) {$\PHobj{a_0}{a_1}$};
     \node[Asol,below of=a01] (a01s) {};
-    \node[Aproc,below of=a01s] (b0) {$b_0$};
+    \node[Assol,below of=a01s] (a01ss) {$\{b_0\}$};
+    \node[Aproc,below of=a01ss] (b0) {$b_0$};
     \node[Aobj,below of=b0] (b00) {$\PHobj{b_0}{b_0}$};
     \node[Asol,below of=b00] (b00s) {};
     \node[Assol,below of=b00s] (nb00s) {$\emptyset$};
@@ -411,7 +412,8 @@ compared to regular model-checking which is usually PSPACE-complete~\cite{Harel0
     \node[Assol,below of=b11s] (nb11s) {$\emptyset$};
     \node[Aobj,below right of=b1] (b01) {$\PHobj{b_0}{b_1}$};
     \node[Asol,below of=b01] (b01s) {};
-    \node[Aproc,below of=b01s] (a0) {$a_0$};
+    \node[Assol,below of=b01s] (b01ss) {$\{a_0\}$};
+    \node[Aproc,below of=b01ss] (a0) {$a_0$};
     \node[Aobj,below of=a0] (a00) {$\PHobj{a_0}{a_0}$};
     \node[Asol,below of=a00] (a00s) {};
     \node[Assol,below of=a00s] (na00s) {$\emptyset$};
@@ -427,7 +429,8 @@ compared to regular model-checking which is usually PSPACE-complete~\cite{Harel0
 
     (a1) edge (a01) edge (a11)
     (a01) edge (a01s)
-    (a01s) edge (b0)
+    (a01s) edge (a01ss)
+    (a01ss) edge (b0)
     (a11) edge (a11s)
     (a11s) edge (na11s)
     (a0) edge (a10) edge (a00)
@@ -443,7 +446,8 @@ compared to regular model-checking which is usually PSPACE-complete~\cite{Harel0
     (b00s) edge (nb00s)
     (b1) edge (b01) edge (b11)
     (b01) edge (b01s)
-    (b01s) edge (a0)
+    (b01s) edge (b01ss)
+    (b01ss) edge (a0)
     (b11) edge (b11s)
     (b11s) edge (nb11s)
     ;
