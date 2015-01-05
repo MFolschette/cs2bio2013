@@ -41,7 +41,7 @@ Another approach consists in considering another class of models,
 that we call Asynchronous Automata Network,
 and that allows to naturally model these cooperations
 by defining several requisites for a reaction.
-Furthermore, such automata networks are still compatible with the notion of priority,
+Moreover, such automata networks are still compatible with the notion of priority,
 that can also be used to model different reaction rates in the model.
 
 Until now, such a priority scheduling of the actions was not studied extensively in the different formal modelling frameworks dedicated to systems biology.
@@ -69,11 +69,11 @@ introduced a new extension to the semantics of Process Hitting
 by partitioning actions into classes of priorities.
 One of our objectives was to reach an accurate representation of cooperating components in the model, that was not fulfilled with the initial semantics.
 Although in~\cite{FPMR13-CS2Bio} this was achieved with a particular class of high priority,
-the work presented in this paper, however, focuses on Asynchronous Automata Networks.
+the work presented in this paper focuses instead on Asynchronous Automata Networks.
 The simple version of this formalism (without classes of priorities)
 is defined in \pref{sec:ph}
-and consists of an extension of Process Hitting with classes of priorities
-that allows to simplify the formalisation with the same benefits.
+and is equivalent to an extension of Process Hitting with classes of priorities,
+but allows to simplify the formalisation with the same benefits.
 In \pref{sec:sa},
 we develop an efficient under-approximation of the reachability
 of several local states of components,
@@ -82,7 +82,7 @@ This local reachability under-approximation can be also easily extended to study
 Furthermore, we provide a new extended under-approximation method to refine this method
 in the case of a successive reachability property.
 
-Furthermore,
+Moreover,
 we define in \pref{sec:encodings} the notion of Asynchronous Automata Networks
 with classes of priorities,
 that consists of a convenient way to introduce time parameters
@@ -152,6 +152,6 @@ $\toset{x} = \{x_1, \cdots, x_{\card{x}}\}$.
 
 \paragraph*{Functions and least fixed point}
 If $A$ and $B$ are sets,
-$f : A \rightarrow B$ denotes an application $f$ that maps the elements of $A$ to elements of $B$.
-Furthermore, if $f$ is a monotonically increasing and bounded function, then
+$f : A \rightarrow B$ denotes a function $f$ that maps the elements of $A$ to elements of $B$.
+If $f$ is a monotonically increasing and bounded function, then
 $\lfp{x_0}{x}{x'}$ is the least fixed point of the function $x \mapsto x'$ which is greater than $x_0$.

@@ -89,7 +89,7 @@ We also have the following property for the negation of an atom:
 \[\forall a \in \ov{\PHs}, \forall a_i \in \ov{\PHl}_a, \forall \mysigma \in \PHsubl,
   \Fsem{\neg a_i}{\mysigma} \Leftrightarrow \Fsem{\bigvee_{\substack{a_j \in \ov{\PHl}_a\\a_j \neq a_i}} a_j}{\mysigma}\]
 Indeed, if a local state is not active in a state, this means that another local state of the same automaton is active.
-Furthermore, we note that:
+Moreover, we note that:
 \[\forall a \in \ov{\PHs}, \forall a_i, a_j \in \ov{\PHl}_a,
   a_i \neq a_j \Longrightarrow a_i \wedge a_j \equiv \bot \]
 because two different processes can never be active simultaneously.
@@ -205,7 +205,11 @@ and the set of global states of its flattening are the same.
 
 We showed in this subsection that it is possible to model any AAN$k$
 as an AAN (or, equivalently, as an AAN$1$).
-this translation thus extends the applicability of the static analysis developed in
+This translation thus extends the applicability of the static analysis developed in
 \pref{sec:sa} to any AAN$k$, with $k \in \sN^*$.
+Moreover, it allows to represent
+any Process Hitting model with classes of priorities~\cite{FPMR13-CS2Bio}
+under the form of an AAN
+(or, equivalently, of a Process Hitting model with $2$ classes of priorities).
 The translation given in this section
 is exponential in the number of actions of higher priority for each action.
