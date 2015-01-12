@@ -390,25 +390,37 @@ it is possible to reach a state where SRE, AP1 and NFAT are simultaneously activ
 
 We held all these experiments on a laptop computer with a 2GHz processor
 and 1GB of RAM.
-\modMF{
 Computations times were in the order of a few hundredths to tenths of a second
 in each case (reachability of $\reach_1$ included).
-}
 To give a comparison, we did the same experiments with a standard symbolic model-checker, libDDD
 \cite{libddd}, known for its good performances, the input model being the Boolean network expressed
 as a Petri net.
-However, due to the large scale of the model, the program runs out of memory for all the experiments.
-\modMF{
-This limitation shows that studying the dynamics of models is strongly limited to the size of the model for standards model checkers,
-while our method is able to conclude with limited memory and computation time usage.
-Furthermore, given that the complexity of the static analysis presented in this paper
-is polynomial in the size of the models,
-it is expected that our work will be scalable to models that are larger,
+However, due to the large scale of the model, the program runs out of memory for all the experiments,
+\modn{%
+showing that this method is not scalable.
+Because standard model checkers are often PSPACE-complete~\cite{Harel02},
+using them to study the dynamics of a model is strongly limited to its size.
+On the other hand,
+our method is able to conclude with limited memory and computation time usage.
+Indeed, the under-approximation developed in this paper comes in two versions:
+\begin{itemize}
+  \item One version is polynomial in the size of the model,
+    and consists in building the saturated graph of local causality once
+    and checking \pref{th:approxinf} on this graph only.
+    This version is scalable by nature by its low complexity;
+  \item The other one is exponential in the size of the model,
+    and consists in checking \pref{th:approxinf}
+    on every sub-graph obtained by considering sub-sets of the nodes in $\Sol$
+    of the saturated graph of local causality.
+    Although not as scalable, it is still efficient on this example,
+    due to an adapted enumeration of these sub-sets.%
+\end{itemize}
+It is therefore expected that our work will be scalable to models that are larger,
 even by orders of magnitude.
+}%
 %---~that is, containing thousands of components.
-}
 
-\modn{
+\modMF{
 Finally, we note that similar experiments were conducted in~\cite{PMR12-MSCS}.
 However, if these experiments allowed to obtain some information
 on this model to some extent,
