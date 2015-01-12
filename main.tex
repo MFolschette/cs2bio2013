@@ -138,39 +138,28 @@
 
 
 \begin{abstract}
-The Process Hitting is a recently introduced framework
-designed for the modelling and analysis of concurrent systems.
-The particular form of its actions (encoding the dynamics into the models)
-allowed to define very efficient static analysis
-based on local causality to compute reachability properties.
-However, this modelling shows its limits when preemption features are needed,
-and especially for cooperations
-(that is, the regulation of two components that jointly interact with a third one).
-
-In this paper, we focus on
-the Asynchronous Automata Network (AAN) formalism,
-which is an extension of the Process Hitting with an increased expressivity.
-Like the Process Hitting,
-the originality of AANs is the restrictions of the actions
-that have an effect limited to exactly one component;
-but unlike Process Hitting, their causality is not restricted to at most one other component.
-
-We then develop a new refinement for the under-approximation of the static analysis
-to efficiently compute results on the dynamics of AANs.
-Because of the expressivity improvements,
-this analysis gives more accurate results
-than the previous works carried on the Process Hitting.
-Furthermore, its complexity is still polynomial in the size of the model
+In this paper,
+we develop a new refinement for an efficient under-approximation of the dynamics of
+Asynchronous Automata Networks (AANs).
+An AAN is an Automata Network with synchronous transitions between automata,
+where each transition change the local state of exactly one automaton
+(but any number of synchronizing local states are allowed).
+The work we propose here
+is based on static analysis by abstract interpretation,
+which allows to prove that reaching a state with a given property
+is possible,
+without the same computational cost of usual model checkers.
+Furthermore, its complexity is polynomial in the size of the model
 and exponential in the number of possible “branchings” during the solving.
 
-We also extend the applicability of this static analysis to
-AANs with classes of priorities and to
-Asynchronous Discrete Networks, either Boolean or multivalued,
-which allows to efficiently study the dynamics of these widespread models
-% efficiently under-approximate reachability properties
-% in these widespread models.
-We illustrate this on the model-checking of a signalling network of 94
-components, which is unprecedented.
+The under-approximation method presented in this paper is inspired
+from the one developed specifically for the Process Hitting,
+which is a sub-class of AANs.
+Furthermore, we also introduce the notion of AANs with classes of priorities,
+and show that they have the same expressivity as AANs without priorities,
+thus extending the range of our under-approximation.
+Finally, we illustrate our method on the model-checking of a signalling network
+of 94 components, which is unprecedented.
 \end{abstract}
 \begin{keyword}
 discrete networks \sep
