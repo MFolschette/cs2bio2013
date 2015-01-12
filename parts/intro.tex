@@ -37,12 +37,28 @@ that produce a temporal shift between the presence of the reactants
 and the playability of the reaction.
 This is where the priorities become useful, if not necessary:
 the extra reactions can for example be given “infinite speed” (highest priority) so that they do not affect the behaviour of “normal” (lower priority) reactions, including the multimolecular ones.
-Another approach consists in considering another class of models,
+
+\modn{
+The approach used in this paper, however,
+consists in considering another class of models,
 that we call Asynchronous Automata Network,
 and that allows to naturally model these cooperations
 by defining several requisites for a reaction.
 Moreover, such automata networks are still compatible with the notion of priority,
 that can also be used to model different reaction rates in the model.
+Asynchronous Automata Networks
+(and, a fortiori, their restriction, the Process Hitting framework)
+can be considered as a subset of Communicating Finite State Machines
+or safe Petri Nets.
+%or Synchronous Automata Networks,
+%is inspired from the $\pi$-calculus,
+Our work is thus related to such semantic ramifications
+of extending traditional process algebras with the concept of priority
+that allows for some transitions to be given precedence over others.
+We focus here on static priorities that allow to model
+time constraints such as reaction rates or delays between regulations,
+but can also model preemptions between evolutions branches.
+}
 
 Until now, such a priority scheduling of the actions was not studied extensively in the different formal modelling frameworks dedicated to systems biology.
 Nevertheless, such an attempt has been carried out for Petri nets by F.~Bause~\cite{Bause97},
@@ -51,73 +67,92 @@ The concept of priority is much straightforward in the approach of process algeb
 It was later extended for applications in the field of systems biology by M.~John \textit{et~al.}~\cite{jlnu2010}.
 
 \subsection*{Contributions}
-Since our formalisms (the Asynchronous Automata Network and the Process Hitting)
-can be considered as a subset of Calculus of Communicating Systems,
-or Synchronous Automata Networks,
-%is inspired from the $\pi$-calculus,
-our work is related to such semantic ramifications of extending traditional process algebras with the concept of priority that allows for some transitions to be given precedence over others.
-The concept is derived in two directions: dynamic versus static, the difference being naturally that the former one refers to a semantics where priority values may change during execution according to some evolution rules.
-In our work, actions exhibit a static priority structure.
-The actions modelling biological processes are divided in several classes of priorities which stand for the different reaction rates or relative preemptions.
-Furthermore, the multiple causality of the actions in Asynchronous Automata Networks
-allow to abstract a highest class of priority that would be used
-to model particular nonbiological actions
-that encode Boolean functions inside the model.
-
-This paper is an extension of~\cite{FPMR13-CS2Bio} where we
-introduced a new extension to the semantics of Process Hitting
-by partitioning actions into classes of priorities.
-One of our objectives was to reach an accurate representation of cooperating components in the model, that was not fulfilled with the initial semantics.
-Although in~\cite{FPMR13-CS2Bio} this was achieved with a particular class of high priority,
-the work presented in this paper focuses instead on Asynchronous Automata Networks.
-The simple version of this formalism (without classes of priorities)
-is defined in \pref{sec:ph}
-and is equivalent to an extension of Process Hitting with classes of priorities,
-but allows to simplify the formalisation with the same benefits.
-In \pref{sec:sa},
-we develop an efficient under-approximation of the reachability
-of several local states of components,
-thus allowing to compute efficient static analysis of the dynamics.
-This local reachability under-approximation can be also easily extended to study the reachability of a global or partial state.
-Furthermore, we provide a new extended under-approximation method to refine this method
-in the case of a successive reachability property.
-
-Moreover,
-we define in \pref{sec:encodings} the notion of Asynchronous Automata Networks
-with classes of priorities,
-that consists of a convenient way to introduce time parameters
-into the models, under the form of preemptions.
-We also provide in \pref{sec:encodings} a “flattening”
-of any Asynchronous Automata Networks with classes of priorities
-into a model without classes of priorities,
-thus extending the range of applicability of the static analysis.
-We also give in the same section a formal encoding of Asynchronous Discrete Networks,
-that is, the multivalued version of Asynchronous Boolean Networks.
-These models,
-which encompass variables and evolution functions with a limited number of discrete values,
-are also called “Logical Networks” in~\cite{Thomas95,deJong02}.
-This encoding thus allows to efficiently study this kind of widespread models.
-
-In \pref{sec:example}, we give two examples of the use of our method.
-The first consists of a detailed application of the analysis of a biological network expressed as
-an ANN with 2 classes of priorities,
-which requires to be encoded into a simple ANN (without priorities).
-The second consists of applying our method
-on a large-scale biological model containing 94 components;
-the under-approximation turned out to be conclusive in all cases and results were computed in hundredths of seconds,
+\modn{
+This paper is an extension of~\cite{FPMR13-CS2Bio}.
+Its main contribution consists in the development of a method
+that allows to efficiently compute under-approximations of the dynamics
+of Asynchronous Automata Networks (AANs),
+based on a similar work carried out on Process Hitting~\cite{PMR12-MSCS}.
+Rather than using brute force or symbolic model checking techniques,
+our method focuses on static analysis by abstract interpretation.
+Our work aims at checking reachability properties that,
+for a given initial state $\ctx$ and a given local state $x$,
+have the form:
+“Starting from state $\ctx$, is it possible to reach
+a state in which $x$ is active?”,
+thus answering either “True”
+(in which case the reachability is formally proven)
+or “Inconclusive”
+(which however does not stand for “False”, that can be proven by other analysis tools,
+such as the over-approximation proposed in~\cite{PMR12-MSCS}).
+Moreover, the successive or simultaneous reachability of several local states
+can also be checked,
+and in the case of a “True” response,
+an execution path satisfying the property can be produced.
+Our work thus allows to efficiently analyse the dynamics
+of regulation networks,
+especially the widespread Logical Networks \cite{Thomas95,deJong02},
+which encompass variables with a limited number of discrete values
+alongside with evolution functions or focal parameters.
+To show the scalability of our method, we apply it to a
+large-scale biological model containing 94 components;
+the under-approximation turns out to be conclusive in
+all cases and results have been computed in hundredths of seconds,
 thus overtaking the efficiency of usual model-checkers.
+}
 
-\modMF{
-The main addition in this paper compared to~\cite{FPMR13-CS2Bio} is
-the representation under the form of ANNs, that allow to simplify the formalisation.
-Furthermore, we give new tools to improve the applicability of our method:
-\pref{th:bisimPHP} states that any ANN with any number of classes of priorities
-can be represented into a simple ANN (or, equivalently, with only one class of priority),
-thus extending the scope of our method to any possible Process Hitting model;
-\pref{thm:ordered-ua} gives a method to refine successive reachability,
-and obtain more conclusive results in the case of several successive objectives;
-\pref{def:concret} allows to extract a concrete scenario when our static analysis method
-is conclusive.
+\modn{
+AANs (and, a fortiori, their restriction, the Process Hitting)
+can be considered as a subset of Communicating Finite State Machines
+or safe Petri Nets.
+%or Synchronous Automata Networks,
+%is inspired from the $\pi$-calculus,
+Our work is thus related to such semantic ramifications
+of extending traditional process algebras with the concept of priority
+that allows for some transitions to be given precedence over others.
+We focus here on static priorities that allow to model
+time constraints such as reaction rates or delays between regulations,
+but can also model preemptions between evolutions branches.
+Thus, although the under-approximation method presented in this paper
+is initially developed on AANs without classes of priorities,
+we show that adding classes of priorities into AANs
+does not increase their expressivity.
+Thus, we exhibit an encoding that allows to extend the range
+of application of our method to AANs with classes of priorities.
+}
+
+\modn{
+\pref{sec:ph} presents the Asynchronous Automata Networks (AANs)
+without any notion of classes of priorities.
+In \pref{sec:sa},
+we develop our under-approximation method allowing to efficiently
+compute reachability analysis;
+we also show how to extract a valid execution path if the response is positive,
+and propose two refinements in case one needs to check
+successive or simultaneous reachability properties.
+The framework of AANs with classes of priorities is given in \pref{sec:encodings},
+alongside with an encoding into AANs without classes of priorities
+(or, equivalently, with one class of priority).
+Finally, \pref{sec:example} provides a detailed example and a large-scale example
+of the application of our method,
+and \pref{sec:ccl} gives a conclusion and a discussion about our work.
+}
+
+\modn{
+The main additions in this paper compared to~\cite{FPMR13-CS2Bio} are
+\pref{ssec:concret} that allows the extraction of a concrete trace of execution
+when our static analysis method is conclusive,
+\pref{ssec:ordered-ua} that refines our approach in the case
+of a successive reachability in order to increase the conclusiveness,
+and \pref{ssec:flattening} which states that any ANN
+with any number of classes of priorities
+can be represented into a simple ANN
+(or, equivalently, with only one class of priority),
+thus extending the scope of our method.
+We note however that the use of AANs without priorities alone
+instead of Process Hitting models
+allows to simplify the notations, but does not increase
+the range of applicability of the results.
 }
 
 
