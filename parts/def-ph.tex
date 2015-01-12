@@ -2,7 +2,7 @@
 \label{sec:ph}
 
 We give in this section the definition and the semantics of the Asynchronous Automata Networks (AAN).
-It is a restriction of the classical Synchronous Automata Networks
+It is a restriction of the classical (synchronous) Automata Networks
 where each set of transitions sharing the same label
 can only change one local state at a time.
 We also discuss how it is related to the Process Hitting framework
@@ -15,20 +15,35 @@ and show that they are equivalent to Asynchronous Discrete Networks.
 \subsection{Definition of Asynchronous Automata Networks}
 \label{ssec:PH}
 
-An AAN (\pref{def:ph}) gathers a finite number of concurrent \emph{local states} divided into a finite set of \emph{automata}, also called \emph{components}.
-A local state belongs to a unique automaton and is noted $a_i$ where $a$ is the name of the automaton and $i$ the identifier of the local state within automaton $a$.
-Each local state stands for a kind of “activity level” of its automaton; a \emph{global state} of the AAN thus corresponds to a set of local states containing exactly one local state of each automaton.
+\modn{
+We consider an AAN (\pref{def:ph})
+which gathers a finite number of \emph{automata},
+each one containing a finite number of \emph{local states}.
+A local state is noted $a_i$ where $a$ is the name of the automaton it belongs to,
+and $i$ is the identifier of this local state within automaton $a$.
+A \emph{global state} of the system is the gathering
+of exactly one local state from each automata.
+}
 
+\modn{
 The concurrent interactions between local states are defined by a set of \emph{actions}.
-Actions describe the replacement of the active local state of an automaton by another of the same automaton, conditioned by the presence of as many other local states in the model.
-An action is denoted by $\PHhit{A}{b_j}{b_k}$ where $b_j$ and $b_k$ are local states of an automata $b$, and $A$ is a set of local states.
-It is required that $b_j \neq b_k$ and that
+An action stands for a set of transitions sharing the same label,
+so that playing them changes exactly one local state.
+Therefore, an action is denoted by $\PHhit{A}{b_j}{b_k}$
+where $A$ is a set of local states
+and $b_j$ and $b_k$ are local states of a same automaton $b$,
+and it is required that $b_j \neq b_k$ and that
 $A$ does not contain a local state of $b$ or two local states of the same automaton.
-An action $h=\PHfrappe{A}{b_j}{b_k}$ is read as ``$A$ \emph{hit} $b_j$ to make it bounce to $b_k$'', and $A$, $b_j$, $b_k$ are called respectively the set of \emph{hitters}, the \emph{target} and the \emph{bounce} of the action, and can be referred to as $\PHhitter(h), \PHtarget(h), \PHbounce(h)$, respectively.
+An action $h=\PHfrappe{A}{b_j}{b_k}$ is read as
+``$A$ \emph{hit} $b_j$ to make it bounce to $b_k$'',
+and $A$, $b_j$, $b_k$ are called respectively the set of
+\emph{hitters}, the \emph{target} and the \emph{bounce} of the action,
+and can be referred to as $\PHhitter(h), \PHtarget(h), \PHbounce(h)$, respectively.
+}
 
 \begin{definition}[Asynchronous Automata Networks]
 \label{def:ph}
-  An \emph{Asynchronous Automata Networks} is a triplet $\PH = (\PHs; \PHl; \PHa)$,
+  An \emph{Asynchronous Automata Network} (AAN) is a triplet $\PH = (\PHs; \PHl; \PHa)$,
   where:
   \begin{itemize}
     \item $\PHs \DEF \{a, b, \dots, z\}$ is the finite set of \emph{automata};
@@ -56,7 +71,7 @@ If $a_i \in \PHl_a$, we define the notation $a_i \in s \EQDEF \PHget{s}{a} = a_i
 We note that a state is \textit{a fortiori} a sub-state.
 The override of a state $s$ by a local state $a_i$ (or by a set of local states)
 is defined in \pref{def:statecap} as the same state in which the local state of automaton $a$ has been replaced by $a_i$;
-this is used to define the dynamics of an AAN in \pref{def:play}.
+this is used to define the semantics of an AAN in \pref{def:play}.
 %
 \begin{definition}[Sub-states ($\PHsublize{\PHl}$)]
 \label{def:substate}
@@ -94,7 +109,7 @@ $\hitter{h} \in \PHsublset[\PHl]$.
 % (which is not a set but a tuple)
 % as defined on page~\pageref{notations}.
 
-\begin{definition}[Dynamics of an AAN ($\PHPtrans$)]
+\begin{definition}[Semantics of an AAN ($\PHPtrans$)]
 \label{def:play}
   An action $h = \PHhit{A}{b_j}{b_k} \in \PHa$ is \emph{playable} in $s \in \PHl$
   if and only if $A \subseteq s$ and $\PHget{s}{b} = b_j$.
@@ -164,73 +179,18 @@ $\hitter{h} \in \PHsublset[\PHl]$.
 
 
 
-\subsection{Comparison with the Process Hitting and Modelling of Cooperations}
-\label{ssec:cooperation}
-
-The AAN formalism can be seen as an extension of the Process Hitting framework
-previously introduced in~\cite{PMR10-TCSB}.
-Indeed, the representation of Process Hitting models is also based on automata
-(called “sorts”), local states (called “processes”) and actions.
-The particularity of Process Hitting lies in the following restriction:
-each action can have at most one hitter;
-in other words, a Process Hitting model is an AAN so that
-$\forall h \in \PHh, 0 \leq \card{\hitter{h}} \leq 1$.
-Conversely, any Process Hitting model can obviously be encoded into an AAN.
-% In \pref{ssec:flattening}, we also show that Process Hitting models with
-% classes of priorities~\cite{FPMR13-CS2Bio}
-% can also be encoded into AANs.
-
-The difference between AAN and Process Hitting especially appears when one
-needs to represent cooperations between components.
-%are a very common in biological systems.
-A cooperations represents the fact that
-a given regulation is not conditioned by only one condition,
-such as the presence of a given concentration of one substance,
-represented in the model by the activity of the one related local state.
-Instead, in the case of a cooperation, two conditions or more have to be bet.
-For example, in the example of \pref{fig:ph-livelock},
-the activation of component $c$ requires the cooperation of $a$ and $b$;
-in practice, this is naturally expressed by a set of two hitters for action
-$\PHfrappes{a_1, b_1}{c_0}{c_1}$.
-
-Such a cooperation can also be represented in Process Hitting
-by using a “cooperative sort”~\cite{PMR10-TCSB},
-which is an additional automata
-whose aim is to represent a Boolean formula.
-The different local states of a cooperative sort represent the possible configurations
-of a set of automata,
-and actions allow to “update” the active local state of the cooperative sort
-in order to have it match the configuration of these automata.
-Then, one or several actions can be added from the desired local states of the cooperative sort
-in order to abstract multiple requirements.
-Cooperative sorts have the advantage to not require any supplementary semantics
-than those of standard Process Hitting
-(that is, not more that one hitter per action),
-but at the cost of slightly over-approximating the expected dynamics of a true Boolean gate.
-Indeed, nothing forces the updating actions to be played as soon as possible,
-thus resulting in a possible temporal shift between the evolution
-of the active process of the cooperative sorts and those of the automata it represents.
-In other words, a cooperative sorts does not necessarily represent the current configuration
-of a given set of automata, but only a combination of their past states.
-AAN thus fixes this temporal shift by removing the need for cooperative sorts,
-but at the cost of changing the semantics of the formalism.
-
-In~\cite{FPMR13-CS2Bio}, the formalization of classes of priorities into the Process Hitting
-was proposed in order to add some missing features,
-such as the possibility to abstract time properties of regulation or reaction rates.
-Another consequence of the addition of priorities was the possibility to fix
-the aforementioned temporal shift, and thus be able to model accurate Boolean gates,
-by prioritizing the actions used to update the cooperative sorts.
-The AAN formalism proposed in this paper has in fact the same expressivity than
-Process Hitting with classes of priorities.
-Indeed, the actions with multiple hitters play the role of cooperative sorts,
-and the classes of priorities can be encoded into AAN without priorities,
-as detailed in \pref{ssec:flattening}.
-% 
-% We note that obviously, Process Hitting~\cite{PMR10-TCSB} being a restriction of AANs,
-% one can easily encode any Process Hitting model as an AAN by using only actions
-% $\PHfrappe{A}{b_j}{b_k}$ so that $0 \leq \card{A} \leq 1$.
-% Process Hitting with classes of priorities~\cite{FPMR13-CS2Bio} can also be encoded as AANs
-% with priorities, as defined in \pref{ssec:flattening},
-% by using the same priorities for each action,
-% and possibly translate them into simple AANs.
+\modn{
+\begin{remark}[Comparison with the Process Hitting]
+  The Process Hitting framework
+  previously introduced in~\cite{PMR10-TCSB}
+  is a restriction of the AAN formalism;
+  indeed, a Process Hitting model is an AAN so that
+  $\forall h \in \PHh, 0 \leq \card{\hitter{h}} \leq 1$.
+  However, the AANs defined in this paper have the same expressivity than
+  the Process Hitting with classes of priorities, as previously
+  introduced in~\cite{FPMR13-CS2Bio}.
+  Indeed, in the Process Hitting with at least classes of priorities
+  it is possible to use additional sorts, called “cooperative sorts”,
+  in order to model the actions of any AAN that have more than one hitter.
+\end{remark}
+}
