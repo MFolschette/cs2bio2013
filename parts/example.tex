@@ -8,7 +8,7 @@ that we developed in \pref{sec:sa}.
 In \pref{ssec:ex-metazoan}, we apply our method to a small model of the
 metazoan segmentation process,
 and demonstrate how the classes of priorities help in the modelling process,
-and how the flattening of \pref{ssec:flattening}
+and how the flattening of \pref{sec:flattening}
 can be used in such a case.
 In \pref{ssec:ex-tcrsig}, we apply our method to a large-scale model
 of the T-cell receptor signalling pathway
@@ -27,7 +27,7 @@ This model also allows us to give a detailed example of the application of the s
 under-approximation proposed in \pref{ssec:ordered-ua},
 which consists of several applications of the methods developed in
 \pref{ssec:ua}.
-For this, we first have to use the flattening method presented in \pref{ssec:flattening}
+For this, we first have to use the flattening method presented in \pref{sec:flattening}
 because the considered model contains 2 classes of priorities.
 }
 
@@ -354,12 +354,12 @@ software\footnote{Pint is freely available at \url{http://loicpauleve.name/pint}
 
 The Boolean model has been automatically encoded into
 a Process Hitting model with two classes of priorities,
-and a dynamics equivalent to an AAN%
+whose dynamics is equivalent to an AAN%
 \footnote{Files are available at
-\url{http://maxime.folschette.name/underapprox-tcrsig94.zip}.}
-\modMF{
-by using a translation equivalent to the one given in \pref{sec:dn}.
-}
+\url{http://maxime.folschette.name/underapprox-tcrsig94.zip}.}.
+\modn{%
+Logical Networks being a subclass of AANs, this translation is straightforward.
+}%
 Then, we verified the reachability for the independent activation of 4 outputs of the signalling
 cascade (SRE, AP1, NFkB, NFAT) for all possible input combinations (CD4, CD28, TCRlig) using our
 new reachability under-approximation (answering either \emph{yes} or \emph{inconclusive}) and a 
