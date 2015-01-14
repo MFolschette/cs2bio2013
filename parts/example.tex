@@ -203,7 +203,8 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
   \centering
   \begin{tikzpicture}[aS]
     % STEP 1
-    \node[Aobj] (a01) {$\PHobj{a_0}{a_1}$};
+    \node[Aproc] (a1) {$a_1$};
+    \node[Aobj,below of=a1] (a01) {$\PHobj{a_0}{a_1}$};
     \node[Asol,below of=a01] (a01s) {};
     \node[Assol,below of=a01s] (a01ss) {$\{ c_0, f_1 \}$};
 
@@ -218,6 +219,7 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
     \node[Assol,below of=c00s] (nc00s) {$\emptyset$};
 
     \path
+    (a1) edge (a01)
     (a01) edge (a01s)
     (a01s) edge (a01ss)
     (a01ss) edge (f1) edge (c0)
@@ -232,7 +234,8 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
     ;
     
     % STEP 2
-    \node[Aobj,right of=a01,node distance=3.5cm] (a10) {$\PHobj{a_1}{a_0}$};
+    \node[Aproc,right of=a1,node distance=3.5cm] (a0) {$a_0$};
+    \node[Aobj,below of=a0] (a10) {$\PHobj{a_1}{a_0}$};
     \node[Asol,below of=a10] (a10s) {};
     \node[Assol,below of=a10s] (a10ss) {$\{ c_1 \}$};
 
@@ -255,6 +258,7 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
     \node[Assol,below of=f11s] (nf11s) {$\emptyset$};
 
     \path
+    (a0) edge (a10)
     (a10) edge (a10s)
     (a10s) edge (a10ss)
     (a10ss) edge (c1)
@@ -276,7 +280,8 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
     ;
     
     % STEP 3
-    \node[Aobj,right of=a10,node distance=4cm] (ta01) {$\PHobj{a_0}{a_1}$};
+    \node[Aproc,right of=a0,node distance=4cm] (ta1) {$a_1$};
+    \node[Aobj,below of=ta1] (ta01) {$\PHobj{a_0}{a_1}$};
     \node[Asol,below of=ta01] (ta01s) {};
     \node[Assol,below of=ta01s] (ta01ss) {$\{ c_0, f_1 \}$};
 
@@ -298,6 +303,7 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
     \node[Assol,below of=ta00s] (tna00s) {$\emptyset$};
 
     \path
+    (ta1) edge (ta01)
     (ta01) edge (ta01s)
     (ta01s) edge (ta01ss)
     (ta01ss) edge (tf1) edge (tc0)

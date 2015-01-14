@@ -233,7 +233,9 @@ Furthermore, we note that the solving of an objective $P$ may require
 a local state of $\PHsort(P)$,
 \ie $\gCont(\PHsort(P), P) \neq \emptyset$ (see \pref{def:maxCont});
 in this case, $P$ is re-targeted (\pref{eq:ECont}).
-Finally, \pref{eq:Vw} forces the graph to contain all the initial objectives,
+Finally, \pref{eq:Vw} and \eqref{eq:Vproc}
+force the graph to contain all the initial objectives
+and the related local states,
 and \pref{eq:VE} ensures the consistency of $\cwV$.
 }
 
@@ -254,7 +256,7 @@ The set of local states contained in a graph of local causality
 is given by:
 \begin{align*}
   \allprocs(\cwV, \cwE) = (\cwV \cap \Proc) &\cup \{ \PHtarget(P) \mid P \in \cwV \cap \Obj \}\\
-  & \cup \{ P \neq \w \Rightarrow \PHbounce(P) \mid P \in \cwV \cap \Obj \}
+  & \cup \{ \PHbounce(P) \mid P \in \cwV \cap \Obj \wedge P \neq \w \}
 \end{align*}
 where, if the objective sequence $\w$ consists of only one element,
 we can omit the hitter of this objective
@@ -270,7 +272,7 @@ provided that it does not appear elsewhere in the graph.
   so that:
   \begin{align}
     \modMF{\toset{\w}} &\subseteq \cwV \label{eq:Vw} \\
-%    P \in \cwVObj &\Rightarrow \PHbounce(P) \in \cwV \label{eq:Vproc} \\
+    P \in \cwVObj &\Rightarrow \PHbounce(P) \in \cwV \label{eq:Vproc} \\
     (x, y) \in \cwE &\Rightarrow y \in \cwV \label{eq:VE} \\
     P \in \cwVObj \wedge pps \in \modMF{\aBS}(P) &\Rightarrow (P, pps) \in \cwE \label{eq:ESol1} \\
     \moda{pps \in \cwVSol \wedge A \in pps} &\moda{\Rightarrow (pps, A) \in \cwE} \label{eq:ESol3} \\
@@ -384,9 +386,9 @@ compared to regular model-checking which is usually PSPACE-complete~\cite{Harel0
 \begin{figure}[tp]
   \centering
   \begin{tikzpicture}[aS]
-%    \node[Aproc] (c1) {$c_1$};
-%    \node[Aobj,below of=c1] (c01) {$\PHobj{c_0}{c_1}$};
-    \node[Aobj] (c01) {$\PHobj{c_0}{c_1}$};
+    \node[Aproc] (c1) {$c_1$};
+    \node[Aobj,below of=c1] (c01) {$\PHobj{c_0}{c_1}$};
+%    \node[Aobj] (c01) {$\PHobj{c_0}{c_1}$};
     \node[Asol,below of=c01] (c01s) {};
 
     \node[Assol,below of=c01s] (a1a1ss) {$\{ a_1, b_1 \}$};
@@ -421,7 +423,7 @@ compared to regular model-checking which is usually PSPACE-complete~\cite{Harel0
     \node[Assol,below of=a10s] (na10s) {$\emptyset$};
 
     \path
-%    (c1) edge (c01)
+    (c1) edge (c01)
     (c01) edge (c01s)
     (c01s) edge (a1a1ss)
     (a1a1ss) edge (a1) edge (b1)
