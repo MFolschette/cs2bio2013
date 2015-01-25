@@ -115,12 +115,12 @@ $\w\ltw\w' \Longrightarrow \concr(\w)\subseteq\concr(\w')$\enspace.
 
 \subsubsection{Local Causality for Objectives}
 
-The aim of searching for the existence of a scenario from a state $s$ leading to a state
+The existence of a scenario from a state $s$ leading to a state
 where a given local state of an automaton $a_j$ is present
 can be reformulated as the checking for the non-emptiness of $\concr(\obj{a_i}{a_j})$, where
 $a_i=\get{s}{a}$.
 A first hint for checking this emptiness is to look for actions that have to be played in order to
-reach the state $i$ from $0$ within the automaton $a$.
+reach the state $j$ from $i$ within the automaton $a$.
 
 Given an objective $P = \obj{a_i}{a_j} \in\Obj$, we define $\BS(P)$ the \emph{bounce sequences} of
 $P$ as the set of minimal sequences of actions hitting $a$ in which the bounce of each action is
@@ -162,6 +162,7 @@ $\forall n\in\indexes{\zeta}$, $\zeta_n = \delta_{\phi(n)}$.
 \label{lem:bs-concr}
 \end{lemma}
 
+\begin{comment}
 \todo{revise}
 In the following, we denote: $\sSol = \powerset(\PHproc)$
 \moda{%
@@ -195,7 +196,7 @@ and represent the requirements to play a whole bounce sequence.
   and $\BS(\obj{a_i}{a_i}) = \{ \emptyset \}$.
   }%
 \end{definition}
-
+\end{comment}
 
 \subsubsection{Local Causality Graph}
 
@@ -207,64 +208,39 @@ the generalisation of the refinement to an objective sequence would require to c
 interleaving between the refinements.
 
 These refinements can be summarized compactly with a so-called Local Causality Graph (LCG).
-A LCG $\myB = (\cwV, \cwE)$
-is a digraph where $\cwV \subseteq \Proc \cup \Obj \cup \sSol \cup \Sol$ is the set of vertices
-and $\cwE \subseteq \cwV \times \cwV$ is the set of oriented edges.
-\todo{explain nodes}
-Such a graph aims a describing the requirements of a given reachability
-problem, that is, the reachability of $\w$ from the initial context $\ctx$.
-Thus, a node in $\PHproc$ represents a local state required to play an action,
-a node in $\Obj$ is an objective to reach a given local state,
-a node in $\sSol$ is a set of hitters that have to be active simultaneously
-to solve one step of a given objective,
-and a node in $\Sol$ is a set of sets of hitters,
-thus encompassing all requirement for the solving of a whole objective.
-
-\todo{explain edges}
-The edges of such a graph allow to draw links between these requirements.
-Thus, an objective $P \in \Obj$ is solvable if
-at least one related bounce sequence in $\BS(P)$ can be played;
-therefore, we can consider all minimal sets of sets of hitters of these bounce sequences
-(that is, the sets of $\aBS(P) \subseteq \Sol$, see \pref{def:aBS})
-as requirements to solve this objective (\pref{eq:ESol1}).
-Such a set can then naturally be split into as many sets of hitters (\pref{eq:ESol3})
-which all have to be simultaneously active.
-These sets of hitters can in turn be split into several local state nodes (\pref{eq:ESol2}).
-This creates new requirements, as the reachability of a required local state $a_i$
-is approximated by the ability to solve all objectives of the form
-$\PHobjp{a}{j}{i} \in \Obj$ for all $a_j$ in the initial context (\pref{eq:EReq}).
-Furthermore, we note that the solving of an objective $P$ may require
-a local state of $\PHsort(P)$,
-\ie $\gCont(\PHsort(P), P) \neq \emptyset$ (see \pref{def:maxCont});
-in this case, $P$ is re-targeted (\pref{eq:ECont}).
-Finally, \pref{eq:Vw} and \eqref{eq:Vproc}
-force the graph to contain all the initial objectives
-and the related local states,
-and \pref{eq:VE} ensures the consistency of $\cwV$.
-
-\todo{motivate context}
-A context (\pref{def:context}) extends the notion of state to a set of possible initial states:
-\modMF{
-to each automaton in the model, a context maps a set of local states in this automaton.
-}
-\begin{definition}[Context ($\Ctx$)]
-\label{def:context}
-  A \emph{context} $\ctx$ associates to each automaton in $\PHs$ a non-empty subset of its local states:
-  $\forall a \in \PHs, \PHget{\ctx}{a} \subseteq \PHl_a \wedge \PHget{\ctx}{a} \neq \emptyset$.
-  $\Ctx$ is the set of all contexts.
-\end{definition}
-
-Given a context $\ctx$ and an objective sequence $\w$, the corresponding LCG can be built
-recursively starting from the objectives in $\w$ and recursively adding their possible refinements
-following $\BS$ (\pref{def:glc}).
+Given an initial context $\ctx$ and a local state $p\in\Proc$,
+A LCG $\cwB = (\cwV, \cwE)$
+is a digraph where $\cwV \subseteq \Proc\cup \Obj \cup \Sol \cup \sSol$ is the set of vertices
+where $\sSol=\powerset(\Proc)$ and $\Sol=\Obj\times\powerset(\sSol)$
+and $\cwE \subseteq \cwV \times \cwV$ is the set of oriented edges
+(\pref{def:lcg}).
+A node in $\Obj$ represents an objective that have to be refined.
+Such a node can then be related to nodes in $\Sol$ which represents a set of hitter set of a
+bounce sequence of the objective:
+given an objective $P$, if $\zeta\in\BS(P)$, $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid
+n\in\indexes\zeta \}$, then $P$ is related to $\langle P, \abstr\zeta\rangle\in\Sol$
+(\pref{def:lcg}-3).
+Given a node $\langle P,\abstr\zeta\rangle\in\cwV\cap\Sol$, for each $ps\in\abstr\zeta$,
+it is related to a node $ps\in\sSol$
+(\pref{def:lcg}-4).
+A node $ps\in\sSol$ is then related to each $a\in\Proc$
+(\pref{def:lcg}-5).
+Given a node $a_i\in\cwV\cap\Proc$, for each $a_j\in\ctx$ or $a_j\in\cwV\cap\Proc$,
+it is related to an objective $\obj{a_j}{a_i}$
+(\pref{def:lcg}-2).
+Finally, given a node $\obj{a_j}{a_i}\in\cwV\cap\Obj$,
+if a local state $a_k\neq a_i$ is in its descendants (given by
+$\conn_{(\cwBNodes,\cwBEdges)}(\obj{a_j}{a_i})$), then
+$\obj{a_j}{a_i}$ is related to $\obj{a_k}{a_i}$ in the LCG
+(\pref{def:lcg}-6).
 
 \begin{definition}
-\label{def:glc}
+\label{def:lcg}
 Given a context $\ctx$ and a local state $p\in \Proc$,
 the Local Causality Graph (LCG) for reachability under-approximation
 $\cwB \DEF (\Bv, \Be)$
 with
-$\cwBNodes \subseteq \Proc \cup \Obj \cup \NSol \cup \powerset(\Proc)$
+$\cwBNodes \subseteq \Proc \cup \Obj \cup \NSol \cup \sSol$
 and
 $\cwBEdges \subseteq \cwBNodes \times \cwBNodes$,
 is the smallest graph such that:
@@ -273,105 +249,98 @@ is the smallest graph such that:
 $p \in \cwBNodes$
 \item
 $a_i\in\cwBNodes\cap\Proc \Leftrightarrow \{ (a_i,\obj{a_j}{a_i}) \mid
-a_j\in\ctx$ \\
-\hspace*{3cm}
-$\vee (a_j\neq a_i\wedge a_j\neq\w\wedge a_j\in\cwBNodes\cap\Proc)
+a_j\in\ctx \vee a_j\in\cwBNodes\cap\Proc)
 \}\subseteq\cwBEdges$
 \item
 $P\in\cwBNodes\cap\Obj \Leftrightarrow 
-	\{ (P,\langle P,nls\rangle) \mid nls\in\nsol(P) \}\subseteq\cwBEdges$
+	\{ (P,\langle P,\abstr \zeta\rangle) \mid \zeta\in\BS(P) \}\subseteq\cwBEdges$
 \item
 $\langle P, nls \rangle\in\cwBNodes\cap\NSol \Leftrightarrow
 	\{ (\langle P,nls\rangle, ls) \mid ls\in nls \}\subseteq\cwBEdges$
 \item
-$ls \in\cwBNodes\cap\powerset(\Proc) \Leftrightarrow
+$ls \in\cwBNodes\cap\sSol \Leftrightarrow
 	\{ (ls, a_i) \mid a_i\in ls \}\subseteq\cwBEdges$
 \item
 $\obj{a_i}{a_j}\in \cwBNodes\cap\Obj \Rightarrow 
 	\{(\obj{a_i}{a_j},\obj{a_k}{a_j}) \mid a_k\neq a_j,$
 \\
 \hspace*{4cm}
-$a_k\in \conn_{(\cwBNodes,\cwBEdges)}(\langle\obj{a_i}{a_j},nls\rangle),$
+$a_k\in \conn_{(\cwBNodes,\cwBEdges)}(\langle\obj{a_i}{a_j},\abstr\zeta\rangle),$
 \\
 \hspace*{4cm}
-$nls\in\nsol(\obj{a_i}{a_j}) \}\subset\cwBEdges$
+$\zeta\in\BS(\obj{a_i}{a_j}) \}\subset\cwBEdges$
 \end{enumerate}
-
-\todo{def conn, nsol}
+with $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid n\in\indexes\zeta \}$.
 \end{definition}
 
-
-%
-\begin{comment}
-\noindent
-For a given context $\ctx$, we note $a_i \in \ctx$ if and only if $a_i \in \PHget{\ctx}{a}$,
-and for all $ps \in \powerset(\PHproc)$ or $ps \in \PHl$, $ps \subseteq \ctx \EQDEF \forall a_i \in ps, a_i \in \ctx$.
-A sequence of actions $\delta$ is \emph{playable} in a context $\ctx$ if and only if 
-$\exists s \subseteq \ctx, \delta \in \Sce(s)$.
-We denote then: $\delta \in \Sce(\ctx)$,
-and the play of $\delta$ in $\ctx$ is $\ctx \PHplay \delta = \ctx \Cap \ceil(\delta)$,
-where $\ceil(\delta)$ is the set containing the last local state in the sequence $\delta$ (hitter or bounce) of every automaton mentioned in $\delta$.
-
-\end{comment}
 
 
 \subsection{Sufficient condition for reachability of a local state}
 \label{ssec:ua}
 
-\todo{explain rational}
-\begin{itemize}
-\item we want to identify an objective sequence that for sure has a concrete scenario
-\item LCG is abstract representation of a set of objective sequences
-\item we prove that if LCG has no cycle, and all its local states synchronizations are independent,
-then such a sequence exists.
-\item Note: as we are under-approximating, we de not require that this set is complete.
-\end{itemize}
+Given a context $\ctx$ and a local state $p\in\Proc$, the LCG $\cwB$ contains a set of objectives
+that can be used to build a concrete scenario reaching $p$.
+Because we are focused on sufficient conditions for reachability, we do not require that all
+possible scenarios can be derived from the LCG.
 
-\todo{motivate $\uconcr$}
-\begin{definition}[$\uconcr: \OS \rightarrow \powerset(\Sce)$]
-\label{def:uconcr}
-  \[
-  \modMF{\forall \w \in \OS,}
-  \uconcr(\w) \DEF
-  \begin{cases}
-    \concr(\w) & \text{if } \forall s \in \PHl, \concr(\w)\neq\emptyset\\
-    \emptyset & \text{else.}
-  \end{cases}
-  \]
-\end{definition}
+In this section, we prove that if the LCG has no cycle, if all its nodes in $\Obj$ have at least one
+child, and if all its nodes in $\sSol$ satisfy a
+particular criteria, so-called independence, then from any state
+delimited by the context $\ctx$, there exists a scenario that reaches $p$
+(\pref{th:approxinf}).
 
-\todo{revise}
-\modMF{
-In the saturated graph of local causality, a set of hitters $A \in \sSol$
-is said to be \emph{coherent} (\pref{def:coherent})
-if none of the local states in $A$ conflict with
-a successor of $A$ in $\Bv \cap \Proc$,
-that is, if there exists no local state node $a_j$ in the successors of $A$
-and no element $a_i \in A$ so that $a_i \neq a_j$.
-}
-\begin{definition}[Independant synchronisations]
+A node $x$ of the LCG in $\sSol$ is \emph{independent} (\pref{def:coherent}) if for each local state
+$a_i\in x$, none of the other local state $b_j\in x$ have a local state of automaton $a$ different
+than $a_i$ in their descendants.
+This criteria ensures that once a local state in $x$ has been reached, reaching another local state
+in $x$ should not require to change the first local state.
+
+\begin{definition}[Independent synchronisations]
 \label{def:coherent}
   In a LCG $\cwB = (\Bv, \Be)$,
-  a node $x \in \Bv\cap\sSol$ is an \emph{independent synchronisation} if and only if
-  $x$ has no successor $a_j \in \Bv \cap \Proc$ such that $\exists a_i \in x$, $a_i \neq a_j$.
+  a node $x \in \Bv\cap\sSol$ is \emph{independent} if and only if
+  for each $a_i\in x$,
+  for each $b_j\in x, b_j\neq a_i$,
+  $a_k \in\conn_{\cwB}(x) \cap \Proc \Rightarrow a_k = a_i$.
 \end{definition}
 
-\todo{intuition on sufficient condition}
-Then, \pref{th:approxinf} gives a sufficient condition for the reachability of 
-a local state in a given context
-of an objective sequence in a given context
-which is derived immediately from the saturated graph of local causality,
-and the condition that all sets of hitters are coherent.
-A proof of this theorem is given in \pref{suppl:demoapproxinf}.
+The intuition is the following.
+Given a state $s\subset\ctx$, we recursively refine the initial objective (reaching $p$ from the initial
+state) according to its children.
+As the LCG is acyclic, such a recursion always terminates, and as all the objective nodes have at
+least one child, it never get stuck.
+The refinement of an objective node $\obj{a_i}{a_j}$ acts as follows:
+if the node has another objective node $\obj{a_k}{a_j}$ as child, we first refine the objective
+$\obj{a_i}{a_k}$ (which, by construction, is necessarily in the LCG)
+and then will refine the objective $\obj{a_k}{a_j}$.
+If the objective nodes has only nodes in $\Sol$ (bounce sequences), one is picked arbitrarily.
+If $\langle P, nls\rangle$ is the chosen node,
+by construction there exists $\zeta\in\BS(P)$ such that $\abstr\zeta = nls \in \powerset(\sSol)$.
+If $\zeta = \emptyseq$ (for instance in the case when $a_i = a_j$), the recursion stops and we
+continue to the next stage.
+Otherwise, for each $n\in\indexes\zeta$,
+for each $b_i \in\PHhitter(\zeta_n)$,
+we refine the objective $\obj{b_j}{b_i}$ where $b_j$ is the state of $b$ in the current state.
+By induction, $\obj{b_j}{b_i}$ is a child of $b_i$ in the LCG of \pref{def:lcg}.
+Then, we know (by induction) that the current state of $b$ is $b_i$.
+After having repeated this procedure for each $b_i\in\PHhitter(\zeta_n)$,
+because all the nodes in $\sSol$, and in particular $\PHhitter(\zeta_n)$, are independent,
+we know that all the local states in $\PHhitter(\zeta_n)$ are in the current state.
+In addition, we know that the state of automaton $a$ has remained unchanged, otherwise
+$\obj{a_i}{a_j}$ would have an objective child.
+Hence, the action $\zeta_n$ is playable in the current state.
+We apply this action, modifying the state of $a$ to $a_j$ and continue to the next stage.
+At the end, this recursive procedures builds a scenario from $s\subset\ctx$ to a state containing $p$.
 
 \begin{theorem}[Under-approximation]
 \label{th:approxinf}
   Given an AAN $(\PHs; \PHl; \PHa)$,
   a context $\ctx$ and an objective sequence $\w$,
   if the LCG $\cwB$ contains no cycle,
-  all objective nodes have at least one child,
-  and all the synchronisations are independent,
-  then $\uconcr(\w) \neq \emptyset$.
+  all nodes in $\Obj$ have at least one child,
+  and all nodes in $\sSol$ are independent,
+  then for any state $s\in\PHl$ such that $s\subset\ctx$,
+  there exists a scenario $\delta\in\Sce$ with $p\in s\play\delta$.
 \end{theorem}
 
 \modMF{
@@ -384,23 +353,13 @@ We note that this is particularly true for biological models, where
 each component usually contains a limited number of expression levels.
 }
 
-\modMF{
-We note furthermore that in the case where
-the method developed in this section is not conclusive,
-it is possible to compute only a subset of $\Bv \cap \Sol$,
-by removing some solutions from the initial graph of local causality $\myB$,
-or by removing them from the saturated graph of local causality $\cwB$ and by trimming it.
-In other words, this consists in ignoring some of the bounce sequences
-for some of the objectives,
-which intuitively cannot create false positives.
-Indeed, \pref{th:approxinf} is then still valid on the partial graph obtained,
-and this removal can lead to more conclusiveness by trimming parts of the graph
-that were not necessary for the reachability
-(especially cycles or unnecessary but inconclusive branches).
-If one wants to try each possible subset of solutions,
-then the overall method turns out to be exponential
-in the number of solutions to each objective.
-}
+We note furthermore that the method does not require any completeness of the bounce sequences
+$\BS$.
+Therefore, in order to reduce the number of bounce sequences to consider, and potentially removing
+cycles and non-satisfying nodes,
+one can consider only a sub-set of, or single, bounce sequences for each objectives.
+However, such an approach would imply to enumerate all possible combinations of bounce sequences
+subsets, hence being exponential in the number of objectives having at least two bounce sequences.
 
 
 \begin{example}
@@ -557,93 +516,23 @@ by creating several actions
 $\PHhit{\toset{s}}{\reach_0}{\reach_1}$ in $\PHh$ for each state $s \in \Lambda$.
 
 
-
 \subsection{Sequential Under-approximation}
 \label{ssec:ordered-ua}
 
 In this section, we briefly explain an alternative sufficient condition that
-progressively takes into account the successive objectives, instead of
-considering all of them at a time, as it is done in \pref{ssec:ua}.
-Because objectives are taken into account individually, such an approach
-considers only a subset of scenarios.
-However, because each iteration focuses on a smaller part of the network, this
-sequential under-approximation may be more conclusive.
+can be applied when looking for scenarios that successively reach a sequence of local states (e.g.,
+first reach $a_j$, then later $b_k$, \ldots).
 
-Let us define a sequence of objectives $\w=\obj{a_i}{a_j}\concat\w'$ with
-$a_i\neq a_j$ and a state $s\in \PHl$ with $\get{s}{a}=a_i$.
-One can remark that any scenario reaching $a_j$ necessarily includes one of the
-bounce sequences in $\BS(\obj{a_i}{a_j})$, and, in particular,
-any minimal scenario reaching $a_j$ ends in a state where $a_j$ is present but
-also the hitters of the last bounce of one bounce sequence in $\BS(\obj{a_i}{a_j})$.
-\pref{def:lastprocs} defines $\lastprocs(\obj{a_i}{a_j})$ as the set of set of
-local states that may be present just after reaching $a_j$.
+The approach proposed in this sub-section essentially applies the previous under-approximation for
+the first local states, and then computes a set of contexts that may be considered as the starting
+point for the next local states.
+In that way, the local states to reach are taken into account separately, which implies that only a
+subset of scenarios can be captured.
+%However, because each iteration focuses on a smaller part of the network, this
+%sequential under-approximation may be more conclusive.
 
-\begin{definition}[$\lastprocs : \Obj\to\Sol$]
-\label{def:lastprocs}
-  Given an objective $\obj{a_i}{a_j} \in \Obj$, $\lastprocs(\obj{a_i}{a_j})$ is
-  defined as the largest set such that, $\forall ps\in\lastprocs(\obj{a_i}{a_j})$, 
-  $ps\in\sSol$,
-  \begin{enumerate}
-    \item $a_j \in ps$;
-    \item $\exists \zeta \in \BS(\obj{a_i}{a_j}),
-      \hitter{\zeta_{\card{\zeta}}} \subseteq ps$;
-    \item $\nexists ps' \in \lastprocs(\obj{a_i}{a_j}),
-      ps' \subset ps \wedge ps' \neq ps$.
-  \end{enumerate}
-\end{definition}
 
-\todo{integrate}
-We also extend the override operator to contexts (\pref{def:ctxcap}).
-\begin{definition}[$\Cap: \Ctx \times \powerset(\PHproc) \rightarrow \Ctx$]
-\label{def:ctxcap}
-  For any $\ctx\in\Ctx$ and set of local states $ps \in \powerset(\PHproc)$,
-  the override of $\ctx$ by $ps$ is noted $\ctx \Cap ps$ and is defined by:
-  \[ \forall a \in \PHs, \PHget{(\ctx \Cap ps)}{a} \DEF
-  \begin{cases}
-    \{ p \in ps \mid \PHsort(p)=a \} & \text{if } \exists p \in ps, \PHsort(p)=a,\\
-    \PHget{\ctx}{a} & \text{else.}
-  \end{cases}
-  \]
-\end{definition}
-
-From \pref{th:approxinf}, we can deduce that
-for any scenario $\delta$ in $\uconcr(P)$,
-there exists a set of local states $ps\in\lastprocs(P)$
-such that $ps \subseteq (s\play\delta)$.
-Hence, if $\muconcr_{\ctx'\Cap ps}(\w')\neq\emptyset$,
-with $\ctx'=\ctx\Cap\procs(\mycwB{\ctx}{P})$,
-there exists a scenario $\delta'$ concretising $\w'$ from the
-state $(s\play\delta)$.
-Therefore, the scenario $\delta\concat\delta'$ concretises
-$\w$.
-
-\begin{theorem}[Sequential under-approximation]
-\label{thm:ordered-ua}
-Given an AAN $(\PHs; \PHl; \PHa)$,
-a context $\ctx$ and an objective sequence $\w =
-P\concat\w'\in\OS$,
-$\uconcr(P)\neq\emptyset \wedge
-	\forall ps \in\lastprocs(P),
-	\muconcr_{\ctx'\Cap ps}(\w')\neq\emptyset
-	\Longrightarrow \uconcr(\w)\neq\emptyset$,
-where $\ctx' = \ctx\Cap\procs(\mycwB{\ctx}{P})$.
-\end{theorem}
-\begin{proof}
-If $\uconcr(P)\neq\emptyset$,
-for all $s\in \PHl, s\subseteq\ctx$,
-there exists a scenario $\delta\in\uconcr(P)\cap\Sce(s)$;
-from \pref{def:lastprocs} and proof of \pref{th:approxinf},
-$\exists ps\in\lastprocs(P)$ such that
-$(s\play\delta)\subseteq\ctx'\Cap ps$.
-Hence, if $\muconcr_{\ctx'\Cap ps}(\w')\neq\emptyset$,
-there exists a scenario $\delta'\in\muconcr_{\ctx'\Cap ps}(\w')$ such that
-$\delta'\in\Sce(s\play\delta)$.
-Hence, $\delta\concat\delta'$ is a scenario playable in $s$.
-Therefore, for all $s\in \PHl, s\subseteq\ctx$, there exists a scenario
-concretising $\w$.
-Hence, $\uconcr(\w)\neq\emptyset$.
-\end{proof}
-
+\todo{computes possible outcomes from the LCG, gives it as context for the next stage}.
 
 
 \modMF{

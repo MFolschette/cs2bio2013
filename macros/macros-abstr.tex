@@ -15,9 +15,9 @@
 \def\Obj{\mathbf{Obj}}
 %\def\Proc{\mathbf{Proc}}
 %\def\Sol{\mathbf{Sol}}
-\newcommand{\Sol}{\mathbf{NSol}}
+\newcommand{\Sol}{\mathbf{Sol}}
 \newcommand{\NSol}{\Sol}
-\newcommand{\sSol}{\mathbf{Sol}}
+\newcommand{\sSol}{\mathbf{Sync}}
 
 \usepackage{galois}
 \newcommand{\theOSabstr}{toOS}
@@ -114,16 +114,17 @@
 \def\newprocs{\mathsf{newProcs}}
 
 \def\aB{\mathcal{B}}
-\def\sat#1{\lceil #1\rceil}
+\def\sat#1{{#1}}
+%\def\sat#1{\lceil #1\rceil}
 \newcommand{\thisB}[2]{\sat{\aB_{#2}^{#1}}}
-\def\cwB{\thisB{\w}{\ctx}}
+\def\cwB{\thisB{p}{\ctx}}
 %\def\cwB{\sat{\aB_\ctx^\w}}
 \def\mycwB#1#2{\sat{\aB_{#1}^{#2}}}
 \def\Bsol{\sat{\Sol^\w_\ctx}}
 \def\Breq{\sat{\Req^\w_\ctx}}
 \def\Bcont{\sat{\Cont^\w_\ctx}}
 
-\def\myB{\aB^\w_\ctx}
+\def\myB{\aB^p_\ctx}
 \def\mysol{\overline{\Sol^\w_\ctx}}
 \def\myreq{\overline{\Req^\w_\ctx}}
 \def\mycont{\overline{\Cont^\w_\ctx}}
@@ -149,8 +150,8 @@
 
 \newcommand{\V}{V}
 \newcommand{\E}{E}
-\newcommand{\cwV}{\V_\ctx^\w}
-\newcommand{\cwE}{\E_\ctx^\w}
+\newcommand{\cwV}{\V_\ctx^p}
+\newcommand{\cwE}{\E_\ctx^p}
 %\newcommand{\VProc}{\textcolor{red}{\V_\PHproc}}
 %\newcommand{\VObj}{\textcolor{red}{\V_\Obj}}
 %\newcommand{\VSol}{\V_{Sol}}

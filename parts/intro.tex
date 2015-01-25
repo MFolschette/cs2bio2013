@@ -185,8 +185,23 @@ then $x_{a..b} = (x_i)_{i \in \segm{a}{b}}$ is a subsequence of $x$.
 Finally, if $x$ is a sequence, $\toset{x}$ also denotes the corresponding set:
 $\toset{x} = \{x_1, \cdots, x_{\card{x}}\}$.
 
-\paragraph*{Functions and least fixed point}
-If $A$ and $B$ are sets,
-$f : A \rightarrow B$ denotes a function $f$ that maps the elements of $A$ to elements of $B$.
-If $f$ is a monotonically increasing and bounded function, then
-$\lfp{x_0}{x}{x'}$ is the least fixed point of the function $x \mapsto x'$ which is greater than $x_0$.
+\paragraph*{Digraph}
+If $(V,E)$ is a directed graph, $V$ are the nodes, $E \subset V\times V$ the edges,
+the children of a node $n$ are given by
+$\childs: V \to \powerset(V)$, with
+$\childs(n) \DEF \{ m\in V\mid (n,m)\in E\}$;
+its parents are given by
+$\parents: V \to \powerset(V)$ with
+$\parents(n) \DEF \{ m\in N\mid (m,n)\in E\}$;
+and its descendants are give by
+$\conn_{(V,E)}(n)$ which is the least fixed point containing $n$
+of the function
+$\f{f}\conn:\powerset(N)\to \powerset(N)$
+with $\f{f}\conn(W) \DEF \bigcup_{m\in W} \childs(m)$.
+
+%\paragraph*{Functions and least fixed point}
+%If $A$ and $B$ are sets,
+%$f : A \rightarrow B$ denotes a function $f$ that maps the elements of $A$ to elements of $B$.
+%If $f$ is a monotonically increasing and bounded function, then
+%$\lfp{x_0}{x}{x'}$ is the least fixed point of the function $x \mapsto x'$ which is greater than $x_0$.
+
