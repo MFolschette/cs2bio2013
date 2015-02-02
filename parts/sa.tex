@@ -4,7 +4,7 @@
 \modLP{%
 We present a static analysis that takes as input an AAN
 $\PH = (\PHs; \PHl; \PHa)$,
-an initial state, and a local state of an automata in $\PHs$, for identifying sufficient conditions
+an initial state, and a local state of an automaton in $\PHs$, for identifying sufficient conditions
 that ensure the existence of a scenario starting from the initial state and leading to a state
 where the given local state is present.}
 
@@ -204,7 +204,7 @@ Given one initial objective, one could then recursively refine the objective int
 sequences following its bounce sequences \cite{PMR12-MSCS}:
 the refinement of objective $P$ with $\zeta\in\BS(P)$ would consists in prepending to $P$ the
 objectives leading to the hitters of the actions in $\zeta$, in the same sequential order;
-the generalisation of the refinement to an objective sequence would require to consider all possible
+the generalization of the refinement to an objective sequence would require to consider all possible
 interleaving between the refinements.
 
 These refinements can be summarized compactly with a so-called Local Causality Graph (LCG).
@@ -219,20 +219,20 @@ Such a node can then be related to nodes in $\Sol$ which represents a set of hit
 bounce sequence of the objective:
 given an objective $P$, if $\zeta\in\BS(P)$, $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid
 n\in\indexes\zeta \}$, then $P$ is related to $\langle P, \abstr\zeta\rangle\in\Sol$
-(\pref{def:lcg}-3).
+(\pref{def:lcg}-\ref{lcg-obj-sol}).
 Given a node $\langle P,\abstr\zeta\rangle\in\cwV\cap\Sol$, for each $ps\in\abstr\zeta$,
 it is related to a node $ps\in\sSol$
-(\pref{def:lcg}-4).
+(\pref{def:lcg}-\ref{lcg-sol-sync}).
 A node $ps\in\sSol$ is then related to each $a\in\Proc$
-(\pref{def:lcg}-5).
+(\pref{def:lcg}-\ref{lcg-sync-ls}).
 Given a node $a_i\in\cwV\cap\Proc$, for each $a_j\in\ctx$ or $a_j\in\cwV\cap\Proc$,
 it is related to an objective $\obj{a_j}{a_i}$
-(\pref{def:lcg}-2).
+(\pref{def:lcg}-\ref{lcg-ls-obj}).
 Finally, given a node $\obj{a_j}{a_i}\in\cwV\cap\Obj$,
-if a local state $a_k\neq a_i$ is in its descendants (given by
+if a local state $a_k\neq a_i$ is in its successors (given by
 $\conn_{(\cwBNodes,\cwBEdges)}(\obj{a_j}{a_i})$), then
 $\obj{a_j}{a_i}$ is related to $\obj{a_k}{a_i}$ in the LCG
-(\pref{def:lcg}-6).
+(\pref{def:lcg}-\ref{lcg-conn}).
 
 \begin{definition}
 \label{def:lcg}
@@ -251,18 +251,23 @@ $p \in \cwBNodes$
 $a_i\in\cwBNodes\cap\Proc \Leftrightarrow \{ (a_i,\obj{a_j}{a_i}) \mid
 a_j\in\ctx \vee a_j\in\cwBNodes\cap\Proc)
 \}\subseteq\cwBEdges$
+\label{lcg-ls-obj}
 \item
 $P\in\cwBNodes\cap\Obj \Leftrightarrow 
 	\{ (P,\langle P,\abstr \zeta\rangle) \mid \zeta\in\BS(P) \}\subseteq\cwBEdges$
+\label{lcg-obj-sol}
 \item
 $\langle P, nls \rangle\in\cwBNodes\cap\NSol \Leftrightarrow
 	\{ (\langle P,nls\rangle, ls) \mid ls\in nls \}\subseteq\cwBEdges$
+\label{lcg-sol-sync}
 \item
 $ls \in\cwBNodes\cap\sSol \Leftrightarrow
 	\{ (ls, a_i) \mid a_i\in ls \}\subseteq\cwBEdges$
+\label{lcg-sync-ls}
 \item
 $\obj{a_i}{a_j}\in \cwBNodes\cap\Obj \Rightarrow 
 	\{(\obj{a_i}{a_j},\obj{a_k}{a_j}) \mid a_k\neq a_j,$
+\label{lcg-conn}
 \\
 \hspace*{4cm}
 $a_k\in \conn_{(\cwBNodes,\cwBEdges)}(\langle\obj{a_i}{a_j},\abstr\zeta\rangle),$
@@ -291,29 +296,29 @@ delimited by the context $\ctx$, there exists a scenario that reaches $p$
 
 A node $x$ of the LCG in $\sSol$ is \emph{independent} (\pref{def:coherent}) if for each local state
 $a_i\in x$, none of the other local state $b_j\in x$ have a local state of automaton $a$ different
-than $a_i$ in their descendants.
+than $a_i$ in their successors.
 This criteria ensures that once a local state in $x$ has been reached, reaching another local state
 in $x$ should not require to change the first local state.
 
-\begin{definition}[Independent synchronisations]
+\begin{definition}[Independent synchronizations]
 \label{def:coherent}
   In a LCG $\cwB = (\Bv, \Be)$,
   a node $x \in \Bv\cap\sSol$ is \emph{independent} if and only if
   for each $a_i\in x$,
   for each $b_j\in x, b_j\neq a_i$,
-  $a_k \in\conn_{\cwB}(x) \cap \Proc \Rightarrow a_k = a_i$.
+  $a_k \in\conn_{\cwB}(b_j) \cap \Proc \Rightarrow a_k = a_i$.
 \end{definition}
 
 The intuition is the following.
-Given a state $s\subset\ctx$, we recursively refine the initial objective (reaching $p$ from the initial
-state) according to its children.
+Given a state $s\subset\ctx$, we recursively refine the initial objective
+(which is: reaching $p$ from the initial state) according to its children.
 As the LCG is acyclic, such a recursion always terminates, and as all the objective nodes have at
-least one child, it never get stuck.
+least one child, it never gets stuck.
 The refinement of an objective node $\obj{a_i}{a_j}$ acts as follows:
 if the node has another objective node $\obj{a_k}{a_j}$ as child, we first refine the objective
 $\obj{a_i}{a_k}$ (which, by construction, is necessarily in the LCG)
-and then will refine the objective $\obj{a_k}{a_j}$.
-If the objective nodes has only nodes in $\Sol$ (bounce sequences), one is picked arbitrarily.
+and then we refine the objective $\obj{a_k}{a_j}$.
+If the objective node has only successors in $\Sol$ (bounce sequences), one is picked arbitrarily.
 If $\langle P, nls\rangle$ is the chosen node,
 by construction there exists $\zeta\in\BS(P)$ such that $\abstr\zeta = nls \in \powerset(\sSol)$.
 If $\zeta = \emptyseq$ (for instance in the case when $a_i = a_j$), the recursion stops and we
@@ -329,8 +334,8 @@ we know that all the local states in $\PHhitter(\zeta_n)$ are in the current sta
 In addition, we know that the state of automaton $a$ has remained unchanged, otherwise
 $\obj{a_i}{a_j}$ would have an objective child.
 Hence, the action $\zeta_n$ is playable in the current state.
-We apply this action, modifying the state of $a$ to $a_j$ and continue to the next stage.
-At the end, this recursive procedures builds a scenario from $s\subset\ctx$ to a state containing $p$.
+We can thus apply this action, modifying the state of $a$ to $a_j$ and continue to the next stage.
+In the end, this recursive procedures builds a scenario from $s\subset\ctx$ to a state containing $p$.
 
 \begin{theorem}[Under-approximation]
 \label{th:approxinf}
@@ -357,9 +362,11 @@ We note furthermore that the method does not require any completeness of the bou
 $\BS$.
 Therefore, in order to reduce the number of bounce sequences to consider, and potentially removing
 cycles and non-satisfying nodes,
-one can consider only a sub-set of, or single, bounce sequences for each objectives.
+one can consider only a sub-set of bounce sequences
+(and in particular: a single bounce sequence) for each objective.
 However, such an approach would imply to enumerate all possible combinations of bounce sequences
 subsets, hence being exponential in the number of objectives having at least two bounce sequences.
+
 
 
 \begin{example}
@@ -369,7 +376,7 @@ subsets, hence being exponential in the number of objectives having at least two
   the under-approximation given in \pref{th:approxinf}
   does not conclude regarding the reachability of $c_1$.
   This is due to the fact that the node $\{ a_1, b_1 \} \in \Bv \cap \sSol$
-  is not coherent because of its successor $a_0$ (and $b_0$).
+  is not independent because of its successor $a_0$ (and $b_0$).
   (However, from the inconclusiveness of \pref{th:approxinf},
   one cannot conclude about the unreachability of $c_1$.
   Such analysis should be driven for instance
@@ -476,7 +483,7 @@ subsets, hence being exponential in the number of objectives having at least two
     elements in $\Sol$ are represented by circle nodes,
     and elements in $\sSol$ and $\Obj$ are the remaining borderless nodes.
     \pref{th:approxinf} is inconclusive on this example as node $\{ a_1, b_1 \}$
-    is not coherent (see \pref{def:coherent}).
+    is not independent (see \pref{def:coherent}).
     Indeed, $a_0 \in \Proc$ is a successor of $\{ a_1, b_1 \}$, but $a_0 \neq a_1$
     (and the same also stands for $b_0$).
   }
@@ -504,7 +511,7 @@ $\PHs' = \PHs \cup \{ \reach \}$, $\PHl' = \PHl \times \PHl_\reach$,
 where $\PHl_\reach = \{ \reach_0, \reach_1 \}$,
 and $\PHh' = \PHh \cup \{ \PHhit{\toset{s}}{\reach_0}{\reach_1} \}$.
 Given an initial context $\ctx$, the reachability of $s$ in $\PH$
-is equivalent to the concretisation of $\PHobjp{\reach}{0}{1}$ in $\PH'$
+is equivalent to the concretization of $\PHobjp{\reach}{0}{1}$ in $\PH'$
 from the initial context $\ctx \cup \{ \reach_0 \}$,
 which can be efficiently under-approximated using \pref{th:approxinf}.
 

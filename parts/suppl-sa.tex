@@ -1,6 +1,8 @@
 \section{Proof of Under-approximation (\pref{ssec:ua})}
 \label{suppl:demoapproxinf}
 
+\todo{Check with the new notations ($\muconcr$, $\procs$)}
+
 In the following, we denote:
 $\Bee{X}{Y} = \Be \cap (X \times Y)$, with $X, Y$
 amongst $\PHproc$, $\Obj$, $\sSol$ and $\Sol$.
@@ -10,7 +12,7 @@ amongst $\PHproc$, $\Obj$, $\sSol$ and $\Sol$.
 We note $max\ctx = \ctx \Cap \allprocs(\cwB)$ the context supported by $\cwB$.
 
 Let $ps \in \Bv \cap \sSol$ be a set of hitters
-and suppose all of its successors are concretisable.
+and suppose all of its successors are concretizable.
 We first want to demonstrate that
 there exists a scenario that activate all the local states it contains.
 We label all local states of $ps$ by an integer: $ps = \{ p_n \}_{n \in \indexes{ps}}$.
@@ -19,8 +21,8 @@ $\forall i \in \segm{1}{n}, \PHget{(s \PHplay \delta_n)}{\PHsort(p_i)} = p_i$.
 \begin{itemize}
   \item It is straightforward for $\delta_0 = \varepsilon$.
   \item Suppose such $\delta_n$ exists and let $q = \PHget{(s \PHplay \delta_n)}{\PHsort(p_{n+1})}$.
-    By construction, $p_{n+1} \in \Bv \cap \Proc$ is a direct successor of $ps$.
-    Furthermore, by hypothesis, $ps$ is coherent (see \pref{def:coherent}).
+    By construction, $p_{n+1} \in \Bv \cap \Proc$ is a child of $ps$.
+    Furthermore, by hypothesis, $ps$ is independent (see \pref{def:coherent}).
     This means that amongst all the successors in $\Proc$ of $p_{n+1}$,
     there does not exist a local state $b_j$ to that
     $\exists b_k \in ps, \PHsort(b_j) = \PHsort(b_k) \wedge b_j \neq b_k$;
@@ -43,18 +45,18 @@ $\forall s\in L, s\subseteq max\ctx, \forall P \in \Bv \cap \Obj,
       \forall i \in \indexes{\zeta}, \hitter{\zeta_i} = \emptyset$
     and in this case, $\delta = \zeta$ is a valid scenario in $s$.
 
-  \item Suppose all successors objectives of $P$ are concretisable.
+  \item Suppose all successors objectives of $P$ are concretizable.
     If $\exists (P, Q) \in \Bee{\Obj}{\Obj}$, then by hypothesis,
       $\muconcr_{s}(\obj{\PHtarget(P)}{\PHtarget(Q)} \concat Q) \neq \emptyset$, thus
       $\muconcr_{s}(P) \neq \emptyset$.
-    Else, by \pref{def:maxCont}, the concretisations of the successors of $P$ require no local state of automaton $\PHsort(P)$.
+    Else, by \pref{def:lcg}-\ref{lcg-conn}, the concretizations of the successors of $P$ require no local state of automaton $\PHsort(P)$.
       Furthermore, there exists $\zeta \in \BS(P)$ so that $(P, \aZ) \in \Bee{\Obj}{\Sol}$.
       We show by induction that for all $n \in \indexes{\zeta}$, there is a scenario $\delta_n$ so that $\PHget{(s \PHplay \delta_n)}{\PHsort(P)} = \PHbounce(\zeta_n)$.
       \begin{itemize}
 %        \item[$\circ$] If $\zeta = \emptyseq$, then trivially, $\delta = \emptyseq$.
         \item[$\circ$] Suppose that $\delta_n$ exists and let $\zeta_n = \PHhit{A}{a_j}{a_k}$.
         By construction, there exists $A \in \Bv \cap \sSol$
-        amongst the direct successors of $\aZ$.
+        amongst the children of $\aZ$.
         By the first result of this demonstration,
         there exists a scenario $\delta'$ in $s \play \delta_n$ so that
         $\forall a_i \in A, \PHget{(s \play \delta_n \PHplay \delta')}{a} = a_i$.
