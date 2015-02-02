@@ -208,8 +208,8 @@ the generalization of the refinement to an objective sequence would require to c
 interleaving between the refinements.
 
 These refinements can be summarized compactly with a so-called Local Causality Graph (LCG).
-Given an initial context $\ctx$ and a local state $p\in\Proc$,
-A LCG $\cwB = (\cwV, \cwE)$
+Given an initial context $\ctx$ and a local state $\myp\in\Proc$,
+an LCG $\cwB = (\cwV, \cwE)$
 is a digraph where $\cwV \subseteq \Proc\cup \Obj \cup \Sol \cup \sSol$ is the set of vertices
 where $\sSol=\powerset(\Proc)$ and $\Sol=\Obj\times\powerset(\sSol)$
 and $\cwE \subseteq \cwV \times \cwV$ is the set of oriented edges
@@ -236,7 +236,7 @@ $\obj{a_j}{a_i}$ is related to $\obj{a_k}{a_i}$ in the LCG
 
 \begin{definition}
 \label{def:lcg}
-Given a context $\ctx$ and a local state $p\in \Proc$,
+Given a context $\ctx$ and a local state $\myp\in \Proc$,
 the Local Causality Graph (LCG) for reachability under-approximation
 $\cwB \DEF (\Bv, \Be)$
 with
@@ -246,7 +246,7 @@ $\cwBEdges \subseteq \cwBNodes \times \cwBNodes$,
 is the smallest graph such that:
 \begin{enumerate}
 \item
-$p \in \cwBNodes$
+$\myp \in \cwBNodes$
 \item
 $a_i\in\cwBNodes\cap\Proc \Leftrightarrow \{ (a_i,\obj{a_j}{a_i}) \mid
 a_j\in\ctx \vee a_j\in\cwBNodes\cap\Proc)
@@ -283,15 +283,15 @@ with $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid n\in\indexes\zeta \}$.
 \subsection{Sufficient condition for reachability of a local state}
 \label{ssec:ua}
 
-Given a context $\ctx$ and a local state $p\in\Proc$, the LCG $\cwB$ contains a set of objectives
-that can be used to build a concrete scenario reaching $p$.
+Given a context $\ctx$ and a local state $\myp\in\Proc$, the LCG $\cwB$ contains a set of objectives
+that can be used to build a concrete scenario reaching $\myp$.
 Because we are focused on sufficient conditions for reachability, we do not require that all
 possible scenarios can be derived from the LCG.
 
 In this section, we prove that if the LCG has no cycle, if all its nodes in $\Obj$ have at least one
 child, and if all its nodes in $\sSol$ satisfy a
 particular criteria, so-called independence, then from any state
-delimited by the context $\ctx$, there exists a scenario that reaches $p$
+delimited by the context $\ctx$, there exists a scenario that reaches $\myp$
 (\pref{th:approxinf}).
 
 A node $x$ of the LCG in $\sSol$ is \emph{independent} (\pref{def:coherent}) if for each local state
@@ -311,7 +311,7 @@ in $x$ should not require to change the first local state.
 
 The intuition is the following.
 Given a state $s\subset\ctx$, we recursively refine the initial objective
-(which is: reaching $p$ from the initial state) according to its children.
+(which is: reaching $\myp$ from the initial state) according to its children.
 As the LCG is acyclic, such a recursion always terminates, and as all the objective nodes have at
 least one child, it never gets stuck.
 The refinement of an objective node $\obj{a_i}{a_j}$ acts as follows:
@@ -335,7 +335,7 @@ In addition, we know that the state of automaton $a$ has remained unchanged, oth
 $\obj{a_i}{a_j}$ would have an objective child.
 Hence, the action $\zeta_n$ is playable in the current state.
 We can thus apply this action, modifying the state of $a$ to $a_j$ and continue to the next stage.
-In the end, this recursive procedures builds a scenario from $s\subset\ctx$ to a state containing $p$.
+In the end, this recursive procedures builds a scenario from $s\subset\ctx$ to a state containing $\myp$.
 
 \begin{theorem}[Under-approximation]
 \label{th:approxinf}
@@ -345,7 +345,7 @@ In the end, this recursive procedures builds a scenario from $s\subset\ctx$ to a
   all nodes in $\Obj$ have at least one child,
   and all nodes in $\sSol$ are independent,
   then for any state $s\in\PHl$ such that $s\subset\ctx$,
-  there exists a scenario $\delta\in\Sce$ with $p\in s\play\delta$.
+  there exists a scenario $\delta\in\Sce$ with $\myp\in s\play\delta$.
 \end{theorem}
 
 \modMF{

@@ -117,14 +117,15 @@
 \def\sat#1{{#1}}
 %\def\sat#1{\lceil #1\rceil}
 \newcommand{\thisB}[2]{\sat{\aB_{#2}^{#1}}}
-\def\cwB{\thisB{p}{\ctx}}
+\newcommand{\myp}{u}
+\def\cwB{\thisB{\myp}{\ctx}}
 %\def\cwB{\sat{\aB_\ctx^\w}}
 \def\mycwB#1#2{\sat{\aB_{#1}^{#2}}}
 \def\Bsol{\sat{\Sol^\w_\ctx}}
 \def\Breq{\sat{\Req^\w_\ctx}}
 \def\Bcont{\sat{\Cont^\w_\ctx}}
 
-\def\myB{\aB^p_\ctx}
+\def\myB{\aB^\myp_\ctx}
 \def\mysol{\overline{\Sol^\w_\ctx}}
 \def\myreq{\overline{\Req^\w_\ctx}}
 \def\mycont{\overline{\Cont^\w_\ctx}}
@@ -150,8 +151,8 @@
 
 \newcommand{\V}{V}
 \newcommand{\E}{E}
-\newcommand{\cwV}{\V_\ctx^p}
-\newcommand{\cwE}{\E_\ctx^p}
+\newcommand{\cwV}{\V_\ctx^\myp}
+\newcommand{\cwE}{\E_\ctx^\myp}
 %\newcommand{\VProc}{\textcolor{red}{\V_\PHproc}}
 %\newcommand{\VObj}{\textcolor{red}{\V_\Obj}}
 %\newcommand{\VSol}{\V_{Sol}}
