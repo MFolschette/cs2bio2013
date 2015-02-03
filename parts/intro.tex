@@ -38,7 +38,6 @@ and the playability of the reaction.
 This is where the priorities become useful, if not necessary:
 the extra reactions can for example be given “infinite speed” (highest priority) so that they do not affect the behaviour of “normal” (lower priority) reactions, including the multimolecular ones.
 
-\modn{
 The approach used in this paper, however,
 consists in considering another class of models,
 that we call Asynchronous Automata Network,
@@ -58,7 +57,6 @@ that allows for some transitions to be given precedence over others.
 We focus here on static priorities that allow to model
 time constraints such as reaction rates or delays between regulations,
 but can also model preemptions between evolutions branches.
-}
 
 Until now, such a priority scheduling of the actions was not studied extensively in the different formal modelling frameworks dedicated to systems biology.
 Nevertheless, such an attempt has been carried out for Petri nets by F.~Bause~\cite{Bause97},
@@ -67,7 +65,6 @@ The concept of priority is much straightforward in the approach of process algeb
 It was later extended for applications in the field of systems biology by M.~John \textit{et~al.}~\cite{jlnu2010}.
 
 \subsection*{Contributions}
-\modn{
 This paper is an extension of~\cite{FPMR13-CS2Bio}.
 Its main contribution consists in the development of a method
 that allows to efficiently compute under-approximations of the dynamics
@@ -99,9 +96,7 @@ large-scale biological model containing 94 components;
 the under-approximation turns out to be conclusive in
 all cases and results have been computed in hundredths of seconds,
 thus overtaking the efficiency of usual model-checkers.
-}
 
-\modn{
 AANs (and, a fortiori, their restriction, the Process Hitting)
 can be considered as a subset of Communicating Finite State Machines
 or safe Petri Nets.
@@ -119,9 +114,7 @@ we show that adding classes of priorities into AANs
 does not increase their expressivity.
 Thus, we exhibit an encoding that allows to extend the range
 of application of our method to AANs with classes of priorities.
-}
 
-\modn{
 \pref{sec:ph} presents the Asynchronous Automata Networks (AANs)
 without any notion of classes of priorities.
 In \pref{sec:sa},
@@ -136,9 +129,7 @@ alongside with an encoding into AANs without classes of priorities
 Finally, \pref{sec:example} provides a detailed example and a large-scale example
 of the application of our method,
 and \pref{sec:ccl} gives a conclusion and a discussion about our work.
-}
 
-\modn{
 The main additions in this paper compared to~\cite{FPMR13-CS2Bio} are
 \pref{ssec:concret} that allows the extraction of a concrete trace of execution
 when our static analysis method is conclusive,
@@ -153,7 +144,6 @@ We note however that the use of AANs without priorities alone
 instead of Process Hitting models
 allows to simplify the notations, but does not increase
 the range of applicability of the results.
-}
 
 
 

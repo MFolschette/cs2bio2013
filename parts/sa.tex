@@ -1,12 +1,11 @@
 % vi:spell spelllang=en:
 \section{Under-approximation of Reachability}\label{sec:sa}
 
-\modLP{%
 We present a static analysis that takes as input an AAN
 $\PH = (\PHs; \PHl; \PHa)$,
 an initial state, and a local state of an automaton in $\PHs$, for identifying sufficient conditions
 that ensure the existence of a scenario starting from the initial state and leading to a state
-where the given local state is present.}
+where the given local state is present.
 
 A classical approach for determining if a local state of an automaton can be reach from a
 given initial state is to build sequences of transitions from the initial state until a state
@@ -162,41 +161,7 @@ $\forall n\in\indexes{\zeta}$, $\zeta_n = \delta_{\phi(n)}$.
 \label{lem:bs-concr}
 \end{lemma}
 
-\begin{comment}
-\todo{revise}
-In the following, we denote: $\sSol = \powerset(\PHproc)$
-\moda{%
-and $\Sol = \powerset(\sSol)$.
-}%
-\modMF{%
-The elements of $\sSol$ are sets of local states,
-and will later represent sets of hitters of a given action
-that are required to be active simultaneously in order to play this related action.
-The elements in $\Sol$ are sets of sets of hitters,
-and represent the requirements to play a whole bounce sequence.
-}%
 
-\begin{definition}[$\aBS:\Obj \rightarrow \powerset(\Sol)$]
-\label{def:aBS}
-  The \emph{abstractions of bounce sequences} of an objective $P$, denoted by the set $\aBS(P)$, are the minimal sets of hitters of the bounce sequences solving $P$:
-  \[
-    \aBS(P) \DEF \{ \abstr{\zeta} \in \Sol \mid
-      \zeta \in \BS(P) \wedge
-      \nexists \zeta' \in \BS(P), \abstr{\zeta'} \subsetneq \abstr{\zeta} \} \enspace,
-  \]
-  \modMF{
-  where $\forall P \in \Obj, \forall \zeta \in \BS(P)$:
-  $\abstr{\zeta} \DEF \{ \PHhitter(\zeta_n) \mid n \in \indexes{\zeta} \} \setminus \emptyset$.
-  }%
-  
-  \noindent
-  \modMF{
-  As a consequence,
-  $\aBS(\obj{a_i}{a_j}) = \emptyset$ if $\BS(\obj{a_i}{a_j}) = \emptyset$,
-  and $\BS(\obj{a_i}{a_i}) = \{ \emptyset \}$.
-  }%
-\end{definition}
-\end{comment}
 
 \subsubsection{Local Causality Graph}
 
@@ -348,7 +313,6 @@ In the end, this recursive procedures builds a scenario from $s\subset\ctx$ to a
   there exists a scenario $\delta\in\Sce$ with $\myp\in s\play\delta$.
 \end{theorem}
 
-\modMF{
 Regarding the complexity of the method,
 computing the LCG is polynomial in the number of automata in $\PH$ and exponential in the number of local states in one automaton.
 Checking the properties allowing to apply \pref{th:approxinf} is polynomial in the size of the graph.
@@ -356,7 +320,6 @@ Therefore, the building and checking process can be considered as polynomial in 
 of the AAN, provided that each automaton only contains a few local states.
 We note that this is particularly true for biological models, where
 each component usually contains a limited number of expression levels.
-}
 
 We note furthermore that the method does not require any completeness of the bounce sequences
 $\BS$.
@@ -370,7 +333,6 @@ subsets, hence being exponential in the number of objectives having at least two
 
 
 \begin{example}
-  \moda{%
   If we confider the AAN of \pref{fig:ph-livelock},
   from the initial state $\PHstate{a_1, b_0, c_0}$ depicted,
   the under-approximation given in \pref{th:approxinf}
@@ -381,9 +343,7 @@ subsets, hence being exponential in the number of objectives having at least two
   one cannot conclude about the unreachability of $c_1$.
   Such analysis should be driven for instance
   with over-approximation methods developed in~\cite{PMR12-MSCS}.)
-  }%
   
-  \modMF{%
   This result is new compared to the method proposed in~\cite{PMR12-MSCS}.
   Indeed, the representation based on the Process Hitting that was proposed
   in this paper only allowed to represent “over-approximated” Boolean gates
@@ -392,9 +352,7 @@ subsets, hence being exponential in the number of objectives having at least two
   be activated in the same state, but only in successive states.
   Thus, when using Process Hitting, $c_1$ was indeed reachable,
   contrary to the behaviour expected from an accurate Boolean gate.
-  }%
   
-  \moda{%
   Finally, we note however that,
   if $\PHhits{a_0}{b_0}{b_1}$ and $\PHhits{b_0}{a_0}{a_1}$ are replaced by the actions
   $\PHhitm{a_0}{a_1}$ and $\PHhitm{b_0}{b_1}$,
@@ -402,7 +360,6 @@ subsets, hence being exponential in the number of objectives having at least two
   \pref{th:approxinf} concludes that $c_1$ is reachable from $\ctx$.
   The reader can also refer to \pref{ssec:ex-metazoan}
   for a detailed conclusive example.
-  }%
 
 \begin{figure}[tp]
   \centering
@@ -542,12 +499,9 @@ subset of scenarios can be captured.
 \todo{computes possible outcomes from the LCG, gives it as context for the next stage}.
 
 
-\modMF{
 \subsection{Extraction of a Scenario}
 \label{ssec:concret}
-}
 
-\modMF{
 This section gives a recursive method to find a scenario that concretizes
 a given objective sequence $\w \in \OS$.
 All the definitions above are well-defined provided that
@@ -555,7 +509,6 @@ $\uconcr(\w)\neq\emptyset$,
 which can be demonstrated by \pref{th:approxinf} or \pref{thm:ordered-ua}.
 The justification of these definitions can be found by analysing the demonstrations
 of these theorems.
-}
 
 \newcommand{\res}{\mathbf{res}}
 \newcommand{\osres}{\mathbf{OSres}}
@@ -567,7 +520,6 @@ of these theorems.
 \newcommand{\thisseq}{\Theta}
 \newcommand{\R}{R}
 
-\modMF{%
 First, $\osres$ is used to split the objective sequence $\w$ to solve,
 by considering successive objectives, in the fashion of \pref{thm:ordered-ua}.
 This function calls $\res$ which allows to solve an objective $P$
@@ -585,11 +537,9 @@ In the end, a scenario can be obtained by analysing all values of
 $\osres_s(\w)$ (\pref{def:concret})
 for all possible initial state $s \subseteq \ctx$ in the considered context,
 and all possible bounce sequences $\zeta \in \BS(P)$ that are chosen during the resolution.
-}%
 
 \begin{definition}[$\osres : \PHl \times \OS \to \Sce$]
 \label{def:concret}
-\modMF{%
 For all $s \in \PHl$ and $\w \in \OS$, we define:
 \[
   \osres_s(\w) \DEF
@@ -638,5 +588,4 @@ Furthermore:
 \end{align*}
 and for all action $h \in \PHh$, $(h_i)_{i \in \segm{1}{\card{\hitter{h}}}}$
 is a sequence containing all hitters of $h$ in an arbitrary order.
-}
 \end{definition}

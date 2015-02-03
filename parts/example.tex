@@ -2,7 +2,6 @@
 
 \section{Biological Examples}\label{sec:example}
 
-\modMF{
 This section aims at giving application examples of the static analysis method
 that we developed in \pref{sec:sa}.
 In \pref{ssec:ex-metazoan}, we apply our method to a small model of the
@@ -13,7 +12,6 @@ can be used in such a case.
 In \pref{ssec:ex-tcrsig}, we apply our method to a large-scale model
 of the T-cell receptor signalling pathway
 in order to show the scalability of our method.
-}
 
 
 
@@ -22,7 +20,6 @@ in order to show the scalability of our method.
 
 \todo{Check section and remove $\procs$ and $\lastprocs$.}
 
-\modMF{
 We give in this section a detailed example of the use of classes of priorities
 in order to model a system with temporal constraints.
 This model also allows us to give a detailed example of the application of the sequential
@@ -31,7 +28,6 @@ which consists of several applications of the methods developed in
 \pref{ssec:ua}.
 For this, we first have to use the flattening method presented in \pref{sec:flattening}
 because the considered model contains 2 classes of priorities.
-}
 
 We consider in the following a model of metazoan segmentation
 inspired from a first translation to Process Hitting given in~\cite{PMR10-TCSB}.
@@ -45,7 +41,6 @@ the stripes formation in the original model,
 has been removed in order to focus on the stationary dynamics of the model.
 
 The actions of the original model make $2$ classes of priorities, as represented in \pref{fig:metazoan-php}:
-\modMF{%
 \begin{align*}
   \ov{\PHh}^{(1)} = \{ \quad
     & \PHfrappes{c_1}{a_1}{a_0} \quad , \quad
@@ -69,7 +64,6 @@ We can thus consider that these two classes of priorities
 are derived from known reaction relative rates,
 the evolution of the clock $c$ being slower and regular,
 while the evolution of $a$ has to follow the changes of $c$.
-}%
 
 \begin{figure}[p]
   \centering
@@ -105,7 +99,6 @@ while the evolution of $a$ has to follow the changes of $c$.
 \end{figure}
 
 \pref{fig:metazoan-ph} gives the flattening of this model,
-\modMF{
 that is, an AAN with the equivalent dynamics
 (but only one class of priority).
 Its actions are:
@@ -121,7 +114,6 @@ We note that the two actions in $\ov{\PHh}^{(2)}$ have been replaced by
 the equivalent actions
 $\PHfrappes{a_0}{c_1}{c_0}$ and $\PHfrappes{f_1, a_1}{c_0}{c_1}$,
 in order to model the preemption of the actions in $\ov{\PHh}^{(1)}$.
-}%
 
 \begin{figure}[p]
   \centering
@@ -151,7 +143,6 @@ in order to model the preemption of the actions in $\ov{\PHh}^{(1)}$.
   }
 \end{figure}
 
-\modMF{
 Finally, the static analysis results presented in
 \pref{ssec:ua} and \pref{ssec:ordered-ua} can be used to check if the model is functional,
 \ie if gene $a$ can oscillate, thus leading to the formation of stripes.
@@ -185,21 +176,6 @@ we can conclude that the initial objective $\w$ is reachable,
 and thus that the AAN of \pref{fig:metazoan-ph} is functional.
 This result can be extended to the model of \pref{fig:metazoan-php}
 because they have the same dynamics (given \pref{th:bisimPHP}).
-}
-
-% $\w = \PHobj{a_0}{a_1} \PHconcat \PHobj{c_0}{c_1} \PHconcat \PHobj{a_1}{a_0} \PHconcat \PHobj{c_1}{c_0}$.
-% Rather than checking this whole objective sequence,
-% we decompose it into the following ones:
-% \begin{align*}
-%   \ctx^1 &= \PHstate{f_1, a_0, c_0} \text{ and } P_1 = \PHobj{a_0}{a_1} &
-%   \ctx^3 &= \PHstate{f_1, a_1, c_1} \text{ and } P_2 = \PHobj{a_1}{a_0} \\
-%   \ctx^2 &= \PHstate{f_1, a_1, c_0} \text{ and } P_3 = \PHobj{c_0}{c_1} &
-%   \ctx^4 &= \PHstate{f_1, a_0, c_1} \text{ and } P_4 = \PHobj{c_1}{c_0}
-% \end{align*}
-% Given \pref{th:approxinf}, we have: $\forall i \in \segm{1}{4}, \muconcr_{\ctx^i}(P_i) \neq \emptyset$.
-% Finally, after checking that it can be applied for $i = 3$ down to $i = 1$,
-% \pref{thm:ordered-ua} gives: $\uconcr(\w) \neq \emptyset$.
-% Thus the model is functional.
 
 \begin{figure}[tp]
   \centering
@@ -340,11 +316,6 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
     and the context $\PHstate{a_1, c_0, f_1}$.
     The (right) graph is for the last objective, $\PHobj{a_0}{a_1}$,
     and the context $\PHstate{a_0, c_1, f_1}$.
-%     Rectangular nodes containing a single local state are elements in $\Proc$,
-%     borderless nodes containing a couple of local states are elements in $\Obj$
-%     and circle nodes are elements in $\Sol$.
-%     \pref{th:approxinf} is inconclusive on this example as edge $(ab_{11}, \{ a_1, b_1 \}) \in \Proc \times \Sol$ (here represented with a double line) is not coherent (\pref{def:coherent}).
-%     Indeed, $a_0 \in \Proc$ is a child of $\{ a_1, b_1 \}$, but $a_0 \neq a_1$ (and the same also stands for $b_0$).
   }
 \end{figure}
 
@@ -365,9 +336,7 @@ a Process Hitting model with two classes of priorities,
 whose dynamics is equivalent to an AAN%
 \footnote{Files are available at
 \url{http://maxime.folschette.name/underapprox-tcrsig94.zip}.}.
-\modn{%
 Logical Networks being a subclass of AANs, this translation is straightforward.
-}%
 Then, we verified the reachability for the independent activation of 4 outputs of the signalling
 cascade (SRE, AP1, NFkB, NFAT) for all possible input combinations (CD4, CD28, TCRlig) using our
 new reachability under-approximation (answering either \emph{yes} or \emph{inconclusive}) and a 
@@ -377,7 +346,6 @@ All result in conclusive decisions, and the under-approximation has been satisfi
 32) proving the satisfiability of the concerned reachability property in the encoded Boolean network
 (and non-satisfiability in the other cases).
 
-\modMF{
 By analysing the detail of the results, one can find out that one of the outputs, NFkB, can never be activated.
 In other words, FkB$_1$ is never reachable, whatever the initial state of the inputs,
 the other outputs (SRE, AP1, NFAT) can be independently activated
@@ -394,7 +362,6 @@ is always conclusive,
 and the existence of 4 positive answers
 (amongst all 8 possible initial configurations of the inputs) allows to conclude that
 it is possible to reach a state where SRE, AP1 and NFAT are simultaneously active.
-}
 
 We held all these experiments on a laptop computer with a 2GHz processor
 and 1GB of RAM.
@@ -404,7 +371,6 @@ To give a comparison, we did the same experiments with a standard symbolic model
 \cite{libddd}, known for its good performances, the input model being the Boolean network expressed
 as a Petri net.
 However, due to the large scale of the model, the program runs out of memory for all the experiments,
-\modn{%
 showing that this method is not scalable.
 Because standard model checkers are often PSPACE-complete~\cite{Harel02},
 using them to study the dynamics of a model is strongly limited to its size.
@@ -425,10 +391,7 @@ Indeed, the under-approximation developed in this paper comes in two versions:
 \end{itemize}
 It is therefore expected that our work will be scalable to models that are larger,
 even by orders of magnitude.
-}%
-%---~that is, containing thousands of components.
 
-\modMF{
 Finally, we note that similar experiments were conducted in~\cite{PMR12-MSCS}.
 However, if these experiments allowed to obtain some information
 on this model to some extent,
@@ -443,7 +406,6 @@ with a construction that is equivalent to the AANs presented in \pref{sec:ph}.
 Therefore, only the method presented in this paper provides a formal proof that
 the observed behaviours are the result of the true dynamics of the system,
 which was originally described in a format equivalent to Logical Networks.
-}
 
 In conclusion,
 while ensuring a low complexity for the analysis of reachability in Boolean and discrete networks,

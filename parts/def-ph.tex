@@ -15,7 +15,6 @@ where we also show that they have the same expressivity as AANs.
 
 
 
-\modn{
 We consider an AAN (\pref{def:ph})
 which gathers a finite number of \emph{automata},
 each one containing a finite number of \emph{local states}.
@@ -23,9 +22,7 @@ A local state is noted $a_i$ where $a$ is the name of the automaton it belongs t
 and $i$ is the identifier of this local state within automaton $a$.
 A \emph{global state} of the system is the gathering
 of exactly one local state from each automata.
-}
 
-\modn{
 The concurrent interactions between local states are defined by a set of \emph{actions}.
 An action stands for a set of transitions sharing the same label,
 so that playing them changes exactly one local state.
@@ -39,7 +36,6 @@ An action $h=\PHfrappe{A}{b_j}{b_k}$ is read as
 and $A$, $b_j$, $b_k$ are called respectively the set of
 \emph{hitters}, the \emph{target} and the \emph{bounce} of the action,
 and can be referred to as $\PHhitter(h), \PHtarget(h), \PHbounce(h)$, respectively.
-}
 
 \begin{definition}[Asynchronous Automata Networks]
 \label{def:ph}
@@ -178,9 +174,7 @@ $\hitter{h} \in \PHsublset[\PHl]$.
 \end{example}
 
 A context (\pref{def:context}) extends the notion of state to a set of possible initial states:
-\modMF{
 to each automaton in the model, a context maps a set of local states in this automaton.
-}
 \begin{definition}[Context ($\Ctx$)]
 \label{def:context}
   A \emph{context} $\ctx$ associates to each automaton in $\PHs$ a non-empty subset of its local states:
@@ -247,7 +241,6 @@ This also means that: $\suppf{\zeta} \in \PHsublset[\PHl]$.
 
 
 
-\modn{
 \begin{remark}[Comparison with the Process Hitting]
   The Process Hitting framework
   previously introduced in~\cite{PMR10-TCSB}
@@ -261,4 +254,3 @@ This also means that: $\suppf{\zeta} \in \PHsublset[\PHl]$.
   it is possible to use additional automata, called “cooperative sorts”,
   in order to model the actions of any AAN that have more than one hitter.
 \end{remark}
-}
