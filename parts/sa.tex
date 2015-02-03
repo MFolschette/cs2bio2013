@@ -449,57 +449,6 @@ subsets, hence being exponential in the number of objectives having at least two
 
 
 
-\subsection{Reachability of a State}
-\label{ssec:simult-ua}
-
-\newcommand{\total}{\tau}
-\newcommand{\reach}{\sigma}
-
-The reachability property studied so far concerns a single local state at a time.
-However, we remark that the reachability of a global state or a sub-state can be
-addressed with the very same analysis by introducing a dedicated automata.
-Such analysis was not possible with the Process Hitting framework,
-because of the lack of the notion of simultaneity for more than two components.
-
-In order to check the reachability of a global state $s \in \PHl$,
-let $\PH = (\PHs, \PHl, \PHh)$ be an AAN.
-We define a new AAN $\PH' = (\PHs', \PHl', \PHh')$ with:
-$\PHs' = \PHs \cup \{ \reach \}$, $\PHl' = \PHl \times \PHl_\reach$,
-where $\PHl_\reach = \{ \reach_0, \reach_1 \}$,
-and $\PHh' = \PHh \cup \{ \PHhit{\toset{s}}{\reach_0}{\reach_1} \}$.
-Given an initial context $\ctx$, the reachability of $s$ in $\PH$
-is equivalent to the concretization of $\PHobjp{\reach}{0}{1}$ in $\PH'$
-from the initial context $\ctx \cup \{ \reach_0 \}$,
-which can be efficiently under-approximated using \pref{th:approxinf}.
-
-It is of course also possible to compute the reachability
-of a sub-state $s \in \PHsubl[\PHl]_S$ of a set of components $S \subseteq \PHs$
-with the same method.
-One can also check the reachability of a set of states $\Lambda \subseteq \PHl$
-by creating several actions
-$\PHhit{\toset{s}}{\reach_0}{\reach_1}$ in $\PHh$ for each state $s \in \Lambda$.
-
-
-\subsection{Sequential Under-approximation}
-\label{ssec:ordered-ua}
-
-In this section, we briefly explain an alternative sufficient condition that
-can be applied when looking for scenarios that successively reach a sequence of local states (e.g.,
-first reach $a_j$, then later $b_k$, \ldots).
-
-The approach proposed in this sub-section essentially applies the previous under-approximation for
-the first local states, and then computes a set of contexts that may be considered as the starting
-point for the next local states.
-In that way, the local states to reach are taken into account separately, which implies that only a
-subset of scenarios can be captured.
-%However, because each iteration focuses on a smaller part of the network, this
-%sequential under-approximation may be more conclusive.
-
-
-\todo{computes possible outcomes from the LCG, gives it as context for the next stage}.
-
-
-
 \subsection{Extraction of a Scenario}
 \label{ssec:concret}
 
@@ -570,3 +519,55 @@ and the initial output is the empty sequence $\emptyseq$.
           and start descending.
     \end{itemize}
 \end{itemize}
+
+
+
+\subsection{Sequential Under-approximation}
+\label{ssec:ordered-ua}
+
+In this section, we briefly explain an alternative sufficient condition that
+can be applied when looking for scenarios that successively reach a sequence of local states (e.g.,
+first reach $a_j$, then later $b_k$, \ldots).
+
+The approach proposed in this sub-section essentially applies the previous under-approximation for
+the first local states, and then computes a set of contexts that may be considered as the starting
+point for the next local states.
+In that way, the local states to reach are taken into account separately, which implies that only a
+subset of scenarios can be captured.
+%However, because each iteration focuses on a smaller part of the network, this
+%sequential under-approximation may be more conclusive.
+
+
+\todo{computes possible outcomes from the LCG, gives it as context for the next stage}.
+
+
+
+\subsection{Reachability of a State}
+\label{ssec:simult-ua}
+
+\newcommand{\total}{\tau}
+\newcommand{\reach}{\sigma}
+
+The reachability property studied so far concerns a single local state at a time.
+However, we remark that the reachability of a global state or a sub-state can be
+addressed with the very same analysis by introducing a dedicated automata.
+Such analysis was not possible with the Process Hitting framework,
+because of the lack of the notion of simultaneity for more than two components.
+
+In order to check the reachability of a global state $s \in \PHl$,
+let $\PH = (\PHs, \PHl, \PHh)$ be an AAN.
+We define a new AAN $\PH' = (\PHs', \PHl', \PHh')$ with:
+$\PHs' = \PHs \cup \{ \reach \}$, $\PHl' = \PHl \times \PHl_\reach$,
+where $\PHl_\reach = \{ \reach_0, \reach_1 \}$,
+and $\PHh' = \PHh \cup \{ \PHhit{\toset{s}}{\reach_0}{\reach_1} \}$.
+Given an initial context $\ctx$, the reachability of $s$ in $\PH$
+is equivalent to the concretization of $\PHobjp{\reach}{0}{1}$ in $\PH'$
+from the initial context $\ctx \cup \{ \reach_0 \}$,
+which can be efficiently under-approximated using \pref{th:approxinf}.
+
+It is of course also possible to compute the reachability
+of a sub-state $s \in \PHsubl[\PHl]_S$ of a set of components $S \subseteq \PHs$
+with the same method.
+One can also check the reachability of a set of states $\Lambda \subseteq \PHl$
+by creating several actions
+$\PHhit{\toset{s}}{\reach_0}{\reach_1}$ in $\PHh$ for each state $s \in \Lambda$.
