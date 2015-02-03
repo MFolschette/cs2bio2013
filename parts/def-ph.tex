@@ -177,7 +177,7 @@ $\hitter{h} \in \PHsublset[\PHl]$.
 
 \end{example}
 
-Finally, a context (\pref{def:context}) extends the notion of state to a set of possible initial states:
+A context (\pref{def:context}) extends the notion of state to a set of possible initial states:
 \modMF{
 to each automaton in the model, a context maps a set of local states in this automaton.
 }
@@ -211,6 +211,40 @@ We also extend the override operator to contexts (\pref{def:ctxcap}).
   \end{cases}
   \]
 \end{definition}
+
+Finally, we define the support (\pref{def:supp}) of a sequence of actions $\zeta$
+as the set containing the first local state of each automata appearing in $\zeta$,
+that is, as a hitter or as a target.
+For this, we first define the \emph{first appearance} of an automata
+in this sequence.
+
+\begin{definition}[$\supp$ \& $\first$]
+\label{def:supp}
+  For all sequences of actions $\zeta$, we define:
+  \[
+    \suppf{\zeta} = \bigcup_{a \in \PHs} \firstf{a}{\zeta}
+  \]
+  where:
+  \begin{align*}
+  \forall a \in \PHs, \firstf{a}{\zeta} &=
+    \begin{cases}
+      \emptyset &
+        \text{if } \forall n \in \indexes{\zeta},
+        B^\zeta_n \cap \PHl_a \neq \emptyset \\
+      B^\zeta_m \cap \PHl_a &
+        \text{else, if } m =
+        \min\{ n \in \indexes{\zeta} \mid B^\zeta_n \cap \PHl_a \neq \emptyset \}
+    \end{cases} \\
+  \forall n \in \indexes{\zeta}, B^\zeta_n &= \hitter{\zeta_n} \cup \{ \target{\zeta_n} \}.
+  \end{align*}
+\end{definition}
+
+We note that for all sequence of actions $\zeta$,
+$\forall a \in \PHs, 0 \leq \card{\firstf{a}{\zeta}} \leq 1$,
+because given the particular for of the actions of an AAN (see \pref{def:ph}),
+$\forall n \in \indexes{\zeta}, B_n \in \PHsublset[\PHl]$.
+This also means that: $\suppf{\zeta} \in \PHsublset[\PHl]$.
+
 
 
 \modn{
