@@ -470,6 +470,8 @@ depend on the current state, the type of node, the markers on this node
 and the state of the traversal which can be either “descending” (D) or “ascending” (A).
 Nodes in $\Sol$ can be marked with a sequence of actions
 and nodes in $\sSol$ can be marked with a set of local states.
+When ascending, the traversal always ascend into the node it previously descended from
+(in order to cover the same path backwards).
 The traversal starts in node $\myp$ in descending mode,
 the starting state is $s = s_0$
 and the initial output is the empty sequence $\emptyseq$.
@@ -486,19 +488,20 @@ and the initial output is the empty sequence $\emptyseq$.
   
   \item In a node $\PHobj{a_j}{a_k} \in \Obj$:
     \begin{itemize}
-      \item[D)] Descend in an arbitrarily chosen $\sSol$ node,
-        and mark it with a sequence $\zeta \in \BS$ so that $\abstr{\zeta} = pps$.
+      \item[D)] Descend in an arbitrarily chosen node $\langle P, pps \rangle \in \Sol$,
+        and mark it with an arbitrarily chosen sequence
+        $\zeta \in \BS(P)$ so that $\abstr{\zeta} = pps$.
       \item[A)] Ascend in the parent $\Proc$ or $\Obj$ node.
     \end{itemize}
   
-  \item In a node $pps \in \Sol$ with the current marking $\zeta$:
+  \item In a node $\langle P, pps \rangle \in \Sol$ with the current marking $\zeta$:
     \begin{itemize}
       \item If $\zeta \neq \emptyseq$,
         descend in the node $ps \in \sSol$
         so that $ps = \hitter{\zeta_1}$
         and mark it with the set $ps$.
       \item If $\zeta = \emptyseq$,
-        ascend in the parent $\Obj$ node and carry on ascending.
+        ascend in the parent node $P \in \Obj$ and carry on ascending.
     \end{itemize}
   
   \item In a $\sSol$ node with the current marking $m$:
