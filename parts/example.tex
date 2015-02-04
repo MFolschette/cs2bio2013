@@ -271,11 +271,12 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
     \node[Aproc,below right of=ta01ss] (tc0) {$c_0$};
     \node[Aobj,below of=tc0] (tc10) {$\PHobj{c_1}{c_0}$};
     \node[Asol,below of=tc10] (tc10s) {};
+    \node[Assol,below of=tc10s] (tnc10s) {$\{ a_0 \}$};
     \node[Aobj,right of=tc10] (tc00) {$\PHobj{c_0}{c_0}$};
     \node[Asol,below of=tc00] (tc00s) {};
     \node[Assol,below of=tc00s] (tnc00s) {$\emptyset$};
 
-    \node[Aproc,below of=tc10s] (ta0) {$a_0$};
+    \node[Aproc,below of=tnc10s] (ta0) {$a_0$};
     \node[Aobj,below of=ta0] (ta00) {$\PHobj{a_0}{a_0}$};
     \node[Asol,below of=ta00] (ta00s) {};
     \node[Assol,below of=ta00s] (tna00s) {$\emptyset$};
@@ -296,7 +297,8 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
     (tc0) edge (tc10)
     (tc10) edge (tc10s)
 
-    (tc10s) edge (ta0)
+    (tc10s) edge (tnc10s)
+    (tnc10s) edge (ta0)
     (ta0) edge (ta00)
     (ta00) edge (ta00s)
     (ta00s) edge (tna00s)

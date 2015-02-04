@@ -214,7 +214,7 @@ is the smallest graph such that:
 $\myp \in \cwBNodes$
 \item
 $a_i\in\cwBNodes\cap\Proc \Leftrightarrow \{ (a_i,\obj{a_j}{a_i}) \mid
-a_j\in\ctx \vee a_j\in\cwBNodes\cap\Proc)
+a_j \neq \myp \wedge (a_j\in\ctx \vee a_j\in\cwBNodes\cap\Proc)
 \}\subseteq\cwBEdges$
 \label{lcg-ls-obj}
 \item
@@ -238,7 +238,7 @@ $\obj{a_i}{a_j}\in \cwBNodes\cap\Obj \Rightarrow
 $a_k\in \conn_{(\cwBNodes,\cwBEdges)}(\langle\obj{a_i}{a_j},\abstr\zeta\rangle),$
 \\
 \hspace*{4cm}
-$\zeta\in\BS(\obj{a_i}{a_j}) \}\subset\cwBEdges$
+$\zeta\in\BS(\obj{a_i}{a_j}) \}\subseteq\cwBEdges$
 \end{enumerate}
 with $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid n\in\indexes\zeta \}$.
 \end{definition}
@@ -507,7 +507,7 @@ and the initial output is the empty sequence $\emptyseq$.
         descend in a child node $a_k \in \Proc$ arbitrarily chosen,
         so that $a_k \in m$ and carry on descending.
       \item If $m = \emptyset$,
-        ascend in the parent $\sSol$ node.
+        ascend in the parent $\Sol$ node.
         Let $\zeta$ be the current marking of this node.
         If $\zeta_1$ is playable in $s$:
           append $\zeta_1$ to the output,
