@@ -222,12 +222,12 @@ $P\in\cwBNodes\cap\Obj \Leftrightarrow
 	\{ (P,\langle P,\abstr \zeta\rangle) \mid \zeta\in\BS(P) \}\subseteq\cwBEdges$
 \label{lcg-obj-sol}
 \item
-$\langle P, nls \rangle\in\cwBNodes\cap\NSol \Leftrightarrow
-	\{ (\langle P,nls\rangle, ls) \mid ls\in nls \}\subseteq\cwBEdges$
+$\langle P, pps \rangle\in\cwBNodes\cap\NSol \Leftrightarrow
+	\{ (\langle P,pps\rangle, ps) \mid ps\in pps \}\subseteq\cwBEdges$
 \label{lcg-sol-sync}
 \item
-$ls \in\cwBNodes\cap\sSol \Leftrightarrow
-	\{ (ls, a_i) \mid a_i\in ls \}\subseteq\cwBEdges$
+$ps \in\cwBNodes\cap\sSol \Leftrightarrow
+	\{ (ps, a_i) \mid a_i\in ps \}\subseteq\cwBEdges$
 \label{lcg-sync-ls}
 \item
 $\obj{a_i}{a_j}\in \cwBNodes\cap\Obj \Rightarrow 
@@ -284,8 +284,8 @@ if the node has another objective node $\obj{a_k}{a_j}$ as child, we first refin
 $\obj{a_i}{a_k}$ (which, by construction, is necessarily in the LCG)
 and then we refine the objective $\obj{a_k}{a_j}$.
 If the objective node has only successors in $\Sol$ (bounce sequences), one is picked arbitrarily.
-If $\langle P, nls\rangle$ is the chosen node,
-by construction there exists $\zeta\in\BS(P)$ such that $\abstr\zeta = nls \in \powerset(\sSol)$.
+If $\langle P, pps\rangle$ is the chosen node,
+by construction there exists $\zeta\in\BS(P)$ such that $\abstr\zeta = pps \in \powerset(\sSol)$.
 If $\zeta = \emptyseq$ (for instance in the case when $a_i = a_j$), the recursion stops and we
 continue to the next stage.
 Otherwise, for each $n\in\indexes\zeta$,
