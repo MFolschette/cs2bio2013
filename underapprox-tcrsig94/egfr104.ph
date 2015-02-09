@@ -295,5 +295,5 @@ COOPERATIVITY(
 				and [nrg4;nrg1a;nrg1b;nrg3] in [[0;0;0;0]]),
 	erbb44, 1, 0)
 
-initial_state sos1r 1, eps8r 1, csrc 1, pi3kr 1, pten 1, ship2 1, pdk1 1, pp2a 0, mtorr 1, mkp 0, pp2b 0
+initial_state erbb1 1, erbb2 1, erbb3 1, erbb4 1, ar 0, bir 0, btc 0, egf 0, epr 0, hbegf 0, nrg1a 0, nrg1b 0, nrg2a 0, nrg2b 0, nrg3 0, nrg4 0, tgfa 0, sos1r 1, eps8r 1, csrc 1, pi3kr 1, pten 1, ship2 1, pdk1 1, pp2a 0, mtorr 1, mkp 0, pp2b 0
 

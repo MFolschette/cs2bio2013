@@ -264,6 +264,8 @@ COOPERATIVITY([ikkg;camk2] -> ikkab 0 1, [[1;1]])
 COOPERATIVITY([ikkg;camk2] -> ikkab 1 0, [[0;0];[1;0];[0;1]])
 
 (* Dummy sorts used to check the reachability of several sorts in the same state *)
+process sigma 1
+COOPERATIVITY([sre;ap1;nfkb;nfat] -> sigma 0 1, [[1;1;1;1]])
 process sigmab 1
 COOPERATIVITY([sre;ap1;nfat] -> sigmab 0 1, [[1;1;1]])
 

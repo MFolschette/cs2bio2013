@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Max CPU time in seconds
+ulimit -t 4
+
 mode=$1; shift
 name=$1; shift
 

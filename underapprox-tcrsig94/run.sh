@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 ph="model.ph"
 outputs="sre ap1 nfkb nfat sigmab"
+#outputs="sigmab"
+#outputs="sre ap1 nfkb nfat"
 mode=${1}
 
 for i in 0 1; do
