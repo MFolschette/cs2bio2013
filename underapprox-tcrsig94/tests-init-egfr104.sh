@@ -9,7 +9,7 @@
 # The following inputs seem to have an influence:
 #   erbb3 = 1 \/
 #   bir = 1 \/ btc = 1 \/ egf = 1 \/ epr = 1 \/
-#   nrg1a = 1 \/ nrg1b = 1 \/ nrg2b = 1 \/ nrg4 = 1 \/ tgfa 1
+#   nrg1a = 1 \/ nrg1b = 1 \/ nrg2b = 1 \/ nrg4 = 1 \/ tgfa = 1
 # The activation of the following outputs is then compromised:
 #   elk1, creb, ap1, actin_reorg, cmyc
 
