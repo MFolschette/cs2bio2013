@@ -150,7 +150,9 @@ Starting from context $\ctx = \PHstate{f_1, a_0, c_0}$,
 we thus want to check the reachability of
 $\w = \PHobj{a_0}{a_1} \PHconcat \PHobj{a_1}{a_0} \PHconcat \PHobj{a_0}{a_1}$.
 Rather than checking this whole objective sequence with \pref{th:approxinf},
-we break it using \pref{ssec:ordered-ua}.
+we split it following \pref{ssec:ordered-ua}.
+\todo{update method: extract a witness scenario, and use the resulting state for
+the rest - remove $\Cap$, $\allprocs$, $\lastprocs$, etc.}
 We first build the first saturated graph of local causality
 based on the first objective, $\w_1 = \PHobj{a_0}{a_1}$, in the initial context $\ctx$.
 This graph is depicted in \pref{fig:metazoan-sa}(left).

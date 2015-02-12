@@ -96,6 +96,7 @@ $\hitter{h} \in \PHsublset[\PHl]$.
 
 \end{comment}
 
+\begin{comment}
 \begin{definition}[$\Cap : \PHl \times \PHproc \rightarrow \PHl$]
 \label{def:statecap}
   Given a state $s \in \PHl$ and a local state $a_i \in \PHproc$, $(s \Cap a_i)$ is the state defined by:
@@ -105,6 +106,7 @@ $\hitter{h} \in \PHsublset[\PHl]$.
   by the override of each local state independently:
   $\forall ps \in \PHsublset[\PHl], s \Cap ps = s \underset{a_i \in ps}{\Cap} a_i$.
 \end{definition}
+\end{comment}
 % The notation $\toset{ps}$ represents the set of all elements in $ps$
 % (which is not a set but a tuple)
 % as defined on page~\pageref{notations}.
@@ -113,7 +115,10 @@ $\hitter{h} \in \PHsublset[\PHl]$.
 \label{def:play}
   An action $h = \PHhit{A}{b_j}{b_k} \in \PHa$ is \emph{playable} in $s \in \PHl$
   if and only if $A \subseteq s$ and $\PHget{s}{b} = b_j$.
-  In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$, which is defined by: $(s \PHplay h) = s \Cap b_k$.
+  In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$, which is defined by:
+    $(s \PHplay h)_b = b_k$
+	and
+	$\forall a\in\PHs, a\neq b, (s\PHplay h)_a = s_a$.
   Moreover, we denote: $s \PHPtrans (s \PHplay h)$.
 
   If $s \in \PHl$,
@@ -197,6 +202,7 @@ where $\ceil(\delta)$ is the set containing the last local state in the sequence
 
 \end{comment}
 
+\begin{comment}
 We also extend the override operator to contexts (\pref{def:ctxcap}).
 \begin{definition}[$\Cap: \Ctx \times \powerset(\PHproc) \rightarrow \Ctx$]
 \label{def:ctxcap}
@@ -209,6 +215,7 @@ We also extend the override operator to contexts (\pref{def:ctxcap}).
   \end{cases}
   \]
 \end{definition}
+\end{comment}
 
 \begin{comment}
 Finally, we define the support (\pref{def:supp}) of a sequence of actions $\zeta$
