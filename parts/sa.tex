@@ -14,13 +14,17 @@ This is essentially what model-checkers do, and the complexity of such analysis 
 \cite{Harel02}) makes it intractable on large systems, even with advanced symbolic approaches
 \cite{PMR12-MSCS}.
 
-Our approach relies on abstractions of scenarios that have been introduced in
+Our approach relies on abstractions of scenarios (\pref{ssec:abstr-sce}) that have been introduced in
 \cite{PMR12-MSCS} for the static analysis of reachability in the Process Hitting framework,
 a particular sub-class of AAN (see the Remark at the end of the previous section).
 In this paper, we generalize the static analysis for the case of the under-approximation of
-reachability in any AAN.
+reachability in any AAN (\pref{ssec:ua}).
 
-\todo{outline}
+In \pref{ssec:concret}, we detail a procedure to extract a witness scenario
+concretizing a given local state reachability property.
+Finally, we discuss in \pref{ssec:ordered-ua} how the static analysis can be
+extended to sequential (sub)states reachability properties.
+
 
 \subsection{Abstractions for Scenarios}
 \label{ssec:abstr-sce}
@@ -46,19 +50,23 @@ Successive objectives are described with objective sequences (\pref{def:obj}).
 
   We define an \emph{objective sequence} as a sequence of objectives in which each objective target must be equal to the previous objective bounce of the same automaton, if it exists.
   The set of all objective sequences is denoted by $\OS$.
+  Given $\w\in\OS$, $\PHsort(\w) \DEF \{\PHsort(\w_i)\mid i\in\indexes{\w}\}$.
+For each automaton $a\in\PHsort(\w)$,  the first local state of $a$ referenced in
+$\w$ is denoted by $\first_a(\w) \DEF \target{\w_m}$, where $m=\min\{n\in\indexes{\w}\mid \PHsort(\w)=a\}$.
 \end{definition}
+
 
 We define the partial ordering relation $\ltw$ between two objective sequences (\pref{def:ltw}) as
 follows:
 $w\ltw w'$ if and only if there exists a mapping between all the objective bounces of $w'$ in $w$
-that preserve the sequentiality.
-
-\todo{support compatibility}
+that preserve the sequentiality, provided that each automaton starts in the same
+local state.
 
 \begin{definition}[$\ltw \subset \OS\times\OS$]\label{def:ltw}
 $\w\ltw\w'$ if and only if
-$|\w|\geq|\w'|$ and
-there exists a mapping $\phi: \indexes{\w'}\mapsto \indexes{\w}$ such that
+$|\w|\geq|\w'|$,
+$\forall a\in\PHsort(\w'), a\in\PHsort(\w) \wedge \first_a(\w')=\first_a(\w)$;
+and there exists a mapping $\phi: \indexes{\w'}\mapsto \indexes{\w}$ such that
 $\forall n,m \in\indexes{\w'}, n<m \Leftrightarrow \phi(n)<\phi(m)$,
 and
 $\forall n\in\indexes{\w'}, \bounce{\w'_n}=\bounce{\w_{\phi(n)}}$
@@ -75,16 +83,15 @@ $\forall n\in\indexes{\w'}, \bounce{\w'_n}=\bounce{\w_{\phi(n)}}$
 
 An objective sequence can be seen as an abstract representation of a set of scenarios that describe
 (part of) the successive state changes of the automata.
-We denote by $\concr(\w)$ (\pref{def:concr}) the set of scenarios concretising an objective sequence
+We denote by $\concr(\w)$ (\pref{def:concr}) the set of scenarios matching with an objective sequence
 $\w$ in the state $s\in\PHs$.
 It is essentially all the scenarios for which there exists a mapping from the bounces of each
 objective to the bounce of an action in the scenario which preserve the sequential ordering.
 
-\todo{compatibility of $\w$ with $s$}
-
 \begin{definition}[$\concr: \OS \to \powerset(\Sce)$]\label{def:concr}
-Given $\w\in\OS$, $\concr(\w)$ is the set of scenarios concretising $\w$ in the
-state $s$:
+Given a state $s\in\PHl$ and an objective sequence
+$\w\in\OS$ such that $\forall a\in\PHsort(\w), \first_a(\w)\in s$,
+$\concr(\w)$ is the set of scenarios matching with $\w$:
 \begin{align*}
 \concr(\w) \DEF \{ \delta\in\Sce(s)\mid & (\w^\vartriangle=\emptyseq \wedge
 \delta=\emptyseq)  \vee (
@@ -145,9 +152,14 @@ $\BS(\obj{a_i}{a_i}) = \{\emptyseq\}$; and
 $\BS(\obj{a_i}{a_j}) = \emptyset$ if there is no possibility to reach $a_j$ from
 $a_i$.
 
-\todo{example}
+\begin{example}
+Given the AAN of \pref{fig:ph-livelock},
+$\BS(\obj{c_0}{c_1}) = \{\PHfrappes{a_1,b_1}{c_0}{c_1}\}$;
+and 
+$\BS(\obj{a_0}{a_1}) = \{\PHfrappes{b_0}{a_0}{a_1}\}$.
+\end{example}
 
-From \pref{def:bs}, we can derive that any scenario concretising an objective includes all the
+From \pref{def:bs}, we can derive that any scenario matching with an objective includes all the
 actions of one of the bounce sequences of the objective (\pref{lem:bs-concr}).
 \begin{lemma}
 Given a state $s\in \PHl$ and an objective $\obj{a_i}{a_j}$ with $\get{s}{a}=a_i$,
@@ -476,6 +488,9 @@ The traversal starts in node $\myp$ in descending mode,
 the starting state is $s = s_0$
 and the initial output is the empty sequence $\emptyseq$.
 
+\todo{the procedure is non-deterministic, make it deterministic? (list all the
+scenarios}
+
 \begin{itemize}
   \item In a node $a_k \in \Proc$:
     \begin{itemize}
@@ -523,54 +538,52 @@ and the initial output is the empty sequence $\emptyseq$.
     \end{itemize}
 \end{itemize}
 
+\todo{name + prototype of the procedure}
 
+\todo{example}
 
-\subsection{Sequential Under-approximation}
+\subsection{Addressing Sequential and Sub-state Reachability}
 \label{ssec:ordered-ua}
-
-In this section, we briefly explain an alternative sufficient condition that
-can be applied when looking for scenarios that successively reach a sequence of local states (e.g.,
-first reach $a_j$, then later $b_k$, \ldots).
-
-The approach proposed in this sub-section essentially applies the previous under-approximation for
-the first local states, and then computes a set of contexts that may be considered as the starting
-point for the next local states.
-In that way, the local states to reach are taken into account separately, which implies that only a
-subset of scenarios can be captured.
-%However, because each iteration focuses on a smaller part of the network, this
-%sequential under-approximation may be more conclusive.
-
-
-\todo{computes possible outcomes from the LCG, gives it as context for the next stage}.
-
-
-
-\subsection{Reachability of a State}
 \label{ssec:simult-ua}
 
 \newcommand{\total}{\tau}
 \newcommand{\reach}{\sigma}
 
-The reachability property studied so far concerns a single local state at a time.
-However, we remark that the reachability of a global state or a sub-state can be
-addressed with the very same analysis by introducing a dedicated automata.
+In this section, we briefly discuss how the presented static analysis for local
+state reachability properties can be extended to sequential (sub)states
+reachability properties.
+
+\paragraph{Sub-state reachability.}
+Given an AAN $\PH = (\PHs, \PHl, \PHh)$,
+a sub-set of automata local states
+$ps = \{ a_i \in\Proc\mid a\in\PHs, a_i\in\PHl(a)\}$,
+the reachability from $s\in\PHl$ of a state $s'\in\PHl$ such that
+$ps\subset s'$ is equivalent to the reachability of the local state
+$\reach_1$ from a state $s\uplus\langle\reach_0\rangle$
+in the AAN
+$\PH' = (\PHs', \PHl', \PHh')$ with:
+$\PHs' = \PHs \cup \{ \reach \}$, $\PHl' = \PHl \times \PHl_\reach$,
+where $\PHl_\reach = \{ \reach_0, \reach_1 \}$,
+and $\PHh' = \PHh \cup \{ \PHhit{ps}{\reach_0}{\reach_1} \}$.
+
 Such analysis was not possible with the Process Hitting framework,
 because of the lack of the notion of simultaneity for more than two components.
 
-In order to check the reachability of a global state $s \in \PHl$,
-let $\PH = (\PHs, \PHl, \PHh)$ be an AAN.
-We define a new AAN $\PH' = (\PHs', \PHl', \PHh')$ with:
-$\PHs' = \PHs \cup \{ \reach \}$, $\PHl' = \PHl \times \PHl_\reach$,
-where $\PHl_\reach = \{ \reach_0, \reach_1 \}$,
-and $\PHh' = \PHh \cup \{ \PHhit{\toset{s}}{\reach_0}{\reach_1} \}$.
-Given an initial context $\ctx$, the reachability of $s$ in $\PH$
-is equivalent to the concretization of $\PHobjp{\reach}{0}{1}$ in $\PH'$
-from the initial context $\ctx \cup \{ \reach_0 \}$,
-which can be efficiently under-approximated using \pref{th:approxinf}.
 
-It is of course also possible to compute the reachability
-of a sub-state $s \in \PHsubl[\PHl]_S$ of a set of components $S \subseteq \PHs$
-with the same method.
-One can also check the reachability of a set of states $\Lambda \subseteq \PHl$
-by creating several actions
-$\PHhit{\toset{s}}{\reach_0}{\reach_1}$ in $\PHh$ for each state $s \in \Lambda$.
+\paragraph{Sequential reachability.}
+Given a sequence of local state to reach (e.g., reach $a_i$, then $b_j$),
+one can use the same approach as for sub-state reachability by introducing
+a new automaton $\reach$ having $n+1$ local states where $n$ is the size of the
+sequence of reachability and $n$ actions making it bounce from $\reach_0$ to
+$\reach_n$ with hitters corresponding the successive local states
+(e.g., $\PHfrappes{a_i}{\reach_0}{\reach_1}$ and
+$\PHfrappes{b_j}{\reach_0}{\reach_1}$).
+
+An alternative approach is to use the extraction of a scenario of the previous
+sub-section:
+given the initial state, and a first local state reachability property, one
+compute a possible scenario witnessing this reachability.
+Then the next local state reachability properties is computed from the
+state that outcomes from the latter scenario.
+
+

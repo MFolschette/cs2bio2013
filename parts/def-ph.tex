@@ -63,6 +63,8 @@ and can be referred to as $\PHhitter(h), \PHtarget(h), \PHbounce(h)$, respective
 The automaton that a local state $a_i$ belongs to is referred to as $\PHsort(a_i) = a$.
 Given a state $s\in \PHl$, the local state of automaton $a \in \PHs$ present in $s$ is denoted by $\PHget{s}{a}$, that is, the $a$-coordinate of the state $s$.
 If $a_i \in \PHl_a$, we define the notation $a_i \in s \EQDEF \PHget{s}{a} = a_i$.
+
+\begin{comment}
 \pref{def:substate} defines the notion of sub-state on a set of automata, that is used to focus on the interesting part of a complete state.
 We note that a state is \textit{a fortiori} a sub-state.
 The override of a state $s$ by a local state $a_i$ (or by a set of local states)
@@ -91,6 +93,8 @@ $\forall s \in \PHl, \forall ps \in \PHsublset[\PHl],
   ps \subseteq s \EQDEF \forall a_i \in ps, a_i \in s$.
 We note also that for all action $h \in \PHh$, by definition of an AAN, we have:
 $\hitter{h} \in \PHsublset[\PHl]$.
+
+\end{comment}
 
 \begin{definition}[$\Cap : \PHl \times \PHproc \rightarrow \PHl$]
 \label{def:statecap}
@@ -129,9 +133,9 @@ $\hitter{h} \in \PHsublset[\PHl]$.
       & \PHl_c &= \{ c_0, c_1 \} \enspace, \\
     \PHh = \{ \quad
       & \PHfrappem{a_1}{a_0} \enspace , \quad
-        \PHfrappem{a_0}{a_1} \enspace , \\
+        \PHfrappes{b_0}{a_0}{a_1} \enspace , \\
       & \PHfrappem{b_1}{b_0} \enspace , \quad
-        \PHfrappem{b_0}{b_1} \enspace , \\
+        \PHfrappes{a_0}{b_0}{b_1} \enspace , \\
       & \PHfrappes{a_1, b_1}{c_0}{c_1} \enspace \quad \qquad \qquad
       \quad \}
   \end{align*}
@@ -206,6 +210,7 @@ We also extend the override operator to contexts (\pref{def:ctxcap}).
   \]
 \end{definition}
 
+\begin{comment}
 Finally, we define the support (\pref{def:supp}) of a sequence of actions $\zeta$
 as the set containing the first local state of each automata appearing in $\zeta$,
 that is, as a hitter or as a target.
@@ -238,6 +243,8 @@ $\forall a \in \PHs, 0 \leq \card{\firstf{a}{\zeta}} \leq 1$,
 because given the particular for of the actions of an AAN (see \pref{def:ph}),
 $\forall n \in \indexes{\zeta}, B_n \in \PHsublset[\PHl]$.
 This also means that: $\suppf{\zeta} \in \PHsublset[\PHl]$.
+
+\end{comment}
 
 
 
