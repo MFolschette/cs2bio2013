@@ -7,8 +7,8 @@ an initial state, and a local state of an automaton in $\PHs$, for identifying s
 that ensure the existence of a scenario starting from the initial state and leading to a state
 where the given local state is present.
 
-A classical approach for determining if a local state of an automaton can be reach from a
-given initial state is to build sequences of transitions from the initial state until a state
+A classical approach for determining if a local state of an automaton can be
+reached from a given initial state is to build sequences of transitions from the initial state until a state
 containing the given local state is reached.
 This is essentially what model-checkers do, and the complexity of such analysis (PSPACE-complete
 \cite{Harel02}) makes it intractable on large systems, even with advanced symbolic approaches
@@ -38,7 +38,7 @@ that are intertwined in so-called \emph{Local Causality Graphs}.
 An \emph{objective} (\pref{def:obj}) denotes the reachability of a local state (e.g., $a_j$) of a given automaton $a$
 from the initial local state of that automaton (e.g., $a_i$).
 Such an objective is written $\PHobjp{a}{i}{j}$.
-Successive objectives are described with objective sequences (\pref{def:obj}).
+Successive objectives are described with objective sequences.
 
 \begin{definition}[Objective ($\Obj$) \& Objective Sequence ($\OS$)]
 \label{def:obj}
