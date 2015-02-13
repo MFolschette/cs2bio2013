@@ -64,53 +64,6 @@ The automaton that a local state $a_i$ belongs to is referred to as $\PHsort(a_i
 Given a state $s\in \PHl$, the local state of automaton $a \in \PHs$ present in $s$ is denoted by $\PHget{s}{a}$, that is, the $a$-coordinate of the state $s$.
 If $a_i \in \PHl_a$, we define the notation $a_i \in s \EQDEF \PHget{s}{a} = a_i$.
 
-\begin{comment}
-\pref{def:substate} defines the notion of sub-state on a set of automata, that is used to focus on the interesting part of a complete state.
-We note that a state is \textit{a fortiori} a sub-state.
-The override of a state $s$ by a local state $a_i$ (or by a set of local states)
-is defined in \pref{def:statecap} as the same state in which the local state of automaton $a$ has been replaced by $a_i$;
-this is used to define the semantics of an AAN in \pref{def:play}.
-%
-\begin{definition}[Sub-states ($\PHsublize{\PHl}$)]
-\label{def:substate}
-  If $S \subseteq \PHs$ is a set of automata, a sub-state on $S$ is an element of:
-  $\PHsubl[\PHl]_S \DEF \bigtimes{a \in S} \PHl_a$.
-  The set of all sub-states is:
-  $\PHsubl[\PHl] \DEF \bigcup_{S \in\powerset(\PHs)} \PHsubl[\PHl]_S$.
-  
-  \noindent
-  Furthermore, if $\mysigma \in \PHsubl[\PHl]$ and $s \in \PHl$, we note:
-    \[\mysigma \subseteq s \EQDEF \forall a_i \in \Proc, a_i \in \toset{\mysigma} \Rightarrow a_i \in s\]
-  where the notation $\toset{\mysigma}$ represents
-  the set of components of the Cartesian product $\mysigma$,
-  as defined on page~\pageref{notations}.
-\end{definition}
-
-In the following, we will also use the notation:
-$\PHsublset[\PHl] = \{ \toset{ps} \subseteq \Proc \mid ps \in \PHsubl[\PHl] \}$
-and, by extension:
-$\forall s \in \PHl, \forall ps \in \PHsublset[\PHl],
-  ps \subseteq s \EQDEF \forall a_i \in ps, a_i \in s$.
-We note also that for all action $h \in \PHh$, by definition of an AAN, we have:
-$\hitter{h} \in \PHsublset[\PHl]$.
-
-\end{comment}
-
-\begin{comment}
-\begin{definition}[$\Cap : \PHl \times \PHproc \rightarrow \PHl$]
-\label{def:statecap}
-  Given a state $s \in \PHl$ and a local state $a_i \in \PHproc$, $(s \Cap a_i)$ is the state defined by:
-  $\PHget{(s \Cap a_i)}{a} = a_i \wedge \forall b \neq a, \PHget{(s \Cap a_i)}{b} = \PHget{s}{b}$.
-  We can also extend this definition to a set $ps$ of local states,
-  under the condition that all local states of $ps$ are from different automata,
-  by the override of each local state independently:
-  $\forall ps \in \PHsublset[\PHl], s \Cap ps = s \underset{a_i \in ps}{\Cap} a_i$.
-\end{definition}
-\end{comment}
-% The notation $\toset{ps}$ represents the set of all elements in $ps$
-% (which is not a set but a tuple)
-% as defined on page~\pageref{notations}.
-
 \begin{definition}[Semantics of an AAN ($\PHPtrans$)]
 \label{def:play}
   An action $h = \PHhit{A}{b_j}{b_k} \in \PHa$ is \emph{playable} in $s \in \PHl$
@@ -193,65 +146,6 @@ to each automaton in the model, a context maps a set of local states in this aut
 \noindent
 For a given context $\ctx$, we note $a_i \in \ctx$ if and only if $a_i \in \PHget{\ctx}{a}$,
 and for all $ps \in \powerset(\PHproc)$ or $ps \in \PHl$, $ps \subseteq \ctx \EQDEF \forall a_i \in ps, a_i \in \ctx$.
-\begin{comment}
-A sequence of actions $\delta$ is \emph{playable} in a context $\ctx$ if and only if 
-$\exists s \subseteq \ctx, \delta \in \Sce(s)$.
-We denote then: $\delta \in \Sce(\ctx)$,
-and the play of $\delta$ in $\ctx$ is $\ctx \PHplay \delta = \ctx \Cap \ceil(\delta)$,
-where $\ceil(\delta)$ is the set containing the last local state in the sequence $\delta$ (hitter or bounce) of every automaton mentioned in $\delta$.
-
-\end{comment}
-
-\begin{comment}
-We also extend the override operator to contexts (\pref{def:ctxcap}).
-\begin{definition}[$\Cap: \Ctx \times \powerset(\PHproc) \rightarrow \Ctx$]
-\label{def:ctxcap}
-  For any $\ctx\in\Ctx$ and set of local states $ps \in \powerset(\PHproc)$,
-  the override of $\ctx$ by $ps$ is noted $\ctx \Cap ps$ and is defined by:
-  \[ \forall a \in \PHs, \PHget{(\ctx \Cap ps)}{a} \DEF
-  \begin{cases}
-    \{ p \in ps \mid \PHsort(p)=a \} & \text{if } \exists p \in ps, \PHsort(p)=a,\\
-    \PHget{\ctx}{a} & \text{else.}
-  \end{cases}
-  \]
-\end{definition}
-\end{comment}
-
-\begin{comment}
-Finally, we define the support (\pref{def:supp}) of a sequence of actions $\zeta$
-as the set containing the first local state of each automata appearing in $\zeta$,
-that is, as a hitter or as a target.
-For this, we first define the \emph{first appearance} of an automata
-in this sequence.
-
-\begin{definition}[$\supp$ \& $\first$]
-\label{def:supp}
-  For all sequences of actions $\zeta$, we define:
-  \[
-    \suppf{\zeta} = \bigcup_{a \in \PHs} \firstf{a}{\zeta}
-  \]
-  where:
-  \begin{align*}
-  \forall a \in \PHs, \firstf{a}{\zeta} &=
-    \begin{cases}
-      \emptyset &
-        \text{if } \forall n \in \indexes{\zeta},
-        B^\zeta_n \cap \PHl_a \neq \emptyset \\
-      B^\zeta_m \cap \PHl_a &
-        \text{else, if } m =
-        \min\{ n \in \indexes{\zeta} \mid B^\zeta_n \cap \PHl_a \neq \emptyset \}
-    \end{cases} \\
-  \forall n \in \indexes{\zeta}, B^\zeta_n &= \hitter{\zeta_n} \cup \{ \target{\zeta_n} \}.
-  \end{align*}
-\end{definition}
-
-We note that for all sequence of actions $\zeta$,
-$\forall a \in \PHs, 0 \leq \card{\firstf{a}{\zeta}} \leq 1$,
-because given the particular for of the actions of an AAN (see \pref{def:ph}),
-$\forall n \in \indexes{\zeta}, B_n \in \PHsublset[\PHl]$.
-This also means that: $\suppf{\zeta} \in \PHsublset[\PHl]$.
-
-\end{comment}
 
 
 
