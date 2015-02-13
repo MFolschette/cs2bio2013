@@ -142,36 +142,113 @@ in order to model the preemption of the actions in $\ov{\PHh}^{(1)}$.
   }
 \end{figure}
 
-Finally, the static analysis results presented in
-\pref{ssec:ua} and \pref{ssec:ordered-ua} can be used to check if the model is functional,
+\medskip
+
+At this point, the static analysis results presented in
+\pref{ssec:ua} can be used to check if the model is functional,
 \ie if gene $a$ can oscillate, thus leading to the formation of stripes.
-Starting from context $\ctx = \PHstate{f_1, a_0, c_0}$,
-we thus want to check the reachability of
-$\w = \PHobj{a_0}{a_1} \PHconcat \PHobj{a_1}{a_0} \PHconcat \PHobj{a_0}{a_1}$.
-Rather than checking this whole objective sequence with \pref{th:approxinf},
-we break it using \pref{thm:ordered-ua}.
-We first build the first saturated graph of local causality
-based on the first objective, $\w_1 = \PHobj{a_0}{a_1}$, in the initial context $\ctx$.
+Starting from context $\ctx^1 = \PHstate{f_1, a_0, c_0}$,
+we thus want to check the reachability of $\myp^1 = a_1$;
+then, starting from any new state obtained,
+we want to check the reachability of $\myp^2 = a_0$,
+and finally $\myp^3 = a_1$ once again to ensure that we entered a cycle.
+This consists in using \pref{th:approxinf} several times
+to check these reachabilities successively.
+
+We first build the local causality graph $\thisB{\myp^1}{\ctx^1}$
+related to the reachability of $\myp^1 = a_1$ from the initial state $\ctx^1$.
 This graph is depicted in \pref{fig:metazoan-sa}(left).
-%and given \pref{tmh:approxinf}, we have:
-We have especially:
-\[\allprocs(\thisB{\w_1}{\ctx}) = \{ a_0, c_0, f_1 \} \enspace \text{and}\]
-\[\lastprocs(\PHobj{a_0}{a_1}) = \{\{ a_1, c_0, f_1 \}\} \enspace.\]
-Therefore, the second step consists of computing the saturated graph of local causality
-of the objective $\w_2 = \PHobj{a_1}{a_0}$
-in the context
-\[\ctx' = \ctx \Cap \allprocs(\thisB{\w_1}{\ctx}) \Cap \lastprocs(\PHobj{a_0}{a_1}) = \PHstate{a_1, c_0, f_1} \enspace.\]
-This second graph is given in \pref{fig:metazoan-sa}(middle).
-Finally, because
-\[\allprocs(\thisB{\w_2}{\ctx'}) = \{ a_1, c_0, c_1, f_1 \} \enspace \text{and}\]
-\[\lastprocs(\PHobj{a_1}{a_0}) = \{\{ a_0, c_1 \}\} \enspace,\]
-The last step is then checking
-the objective $\w_3 = \PHobj{a_0}{a_1}$
-in the context
-\[\ctx'' = \ctx' \Cap \allprocs(\thisB{\w_2}{\ctx'}) \Cap \lastprocs(\PHobj{a_1}{a_0}) = \PHstate{a_0, c_1, f_1} \enspace.\]
-This last graph is depicted in \pref{fig:metazoan-sa}(right).
-In conclusion, by using \pref{thm:ordered-ua} on these saturated graphs of local causality,
-we can conclude that the initial objective $\w$ is reachable,
+\pref{th:approxinf} allows to conclude that this reachability is true.
+One can thus extract a concretizing scenario from this local causality graph
+with a traversal of the graph, as explained in \pref{ssec:concret}.
+Such a traversal is detailed in \pref{tab:concret-metazoan};
+the scenario extracted from this example is:
+$\emptyseq \concat \emptyseq \concat \PHfrappes{c_0, f_1}{a_0}{a_1} =
+\PHfrappes{c_0, f_1}{a_0}{a_1}$.
+Another traversal would consist in visiting node $f_1$ before node $c_0$
+when first descending from node $\{ c_0, f_1 \}$;
+however, the same scenario would be extracted.
+As there exists no other traversal, we thus have in this case:
+$\Delta(\thisB{\myp^1}{\ctx^1}) = \{ \PHfrappes{c_0, f_1}{a_0}{a_1} \}$.
+
+\newcommand{\xproc}[1]{#1}
+%\newcommand{\xsol}[1]{\circ^{{#1}}}
+\newcommand{\xsol}{\circ}
+
+\begin{table}[htp]
+  \centering
+  \begin{tabular}{|c|c|c|l|l|l|}
+    \hline
+    \# & Dir. & Node & Marking & Output & State \\\hline\hline
+    1  & $\searrow$ & $\xproc{a_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    2  & $\searrow$ & $\PHobj{a_0}{a_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    3  & $\searrow$ & $\xsol$ & $\PHfrappes{c_0, f_1}{a_0}{a_1}$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    4  & $\searrow$ & $\{ c_0, f_1 \}$ & $\{ c_0, f_1 \}$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    \phantom{*}%
+    5* & $\searrow$ & $\xproc{c_0}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    6  & $\searrow$ & $\PHobj{c_0}{c_0}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    7  & $\searrow$ & $\xsol$ & $\emptyseq$ & $\emptyseq$ & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    8  & $\nearrow$ & $\PHobj{c_0}{c_0}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    9  & $\nearrow$ & $\xproc{c_0}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    10 & $\nearrow$ & $\{ c_0, f_1 \}$ & $\{ f_1 \}$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+%    \phantom{*}%
+    11 & $\searrow$ & $\xproc{f_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    12 & $\searrow$ & $\PHobj{f_1}{f_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    13 & $\searrow$ & $\xsol$ & $\emptyseq$ & $\emptyseq$ & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    14 & $\nearrow$ & $\PHobj{f_1}{f_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    15 & $\nearrow$ & $\xproc{f_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    16 & $\nearrow$ & $\{ c_0, f_1 \}$ & $\emptyset$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    17 & $\nearrow$ & $\xsol$ & $\emptyseq$ & $\PHfrappes{c_0, f_1}{a_0}{a_1}$ & $\PHstate{f_1, a_1, c_0}$ \\\hline
+    18 & $\nearrow$ & $\PHobj{a_0}{a_1}$ &  &  & $\PHstate{f_1, a_1, c_0}$ \\\hline
+    19 & $\nearrow$ & $\xproc{a_1}$ &  &  & $\PHstate{f_1, a_1, c_0}$ \\\hline
+  \end{tabular}
+  \caption{\label{tab:concret-metazoan}%
+    Example of the extraction of a concretizing scenario
+    from the local causality graph of \pref{fig:metazoan-sa}(left),
+    by using the algorithm of \pref{ssec:concret}.
+    The first column denotes the step number in the traversal,
+    the second depicts the direction of traversal,
+    either “$\searrow$” for descending or “$\nearrow$” for ascending,
+    the third one is the name of the node,
+    the fourth one gives the marking when the node is left,
+    the fifth one gives the actions output by the algorithm
+    and the last column gives the current state of the model when leaving each node.
+    In step \#5, marked with an asterisk,
+    the traversal visits node $c_0$, but this was arbitrarily chosen
+    amongst the set $\{ c_0, f_1 \}$.
+    Another traversal thus consists in visiting node $f_1$ first,
+    although in this example it does not change the result.
+  }
+\end{table}
+
+We denote in the following:
+$\ctx^2 = \PHstate{f_1, c_0, a_0} \play \PHfrappes{c_0, f_1}{a_0}{a_1} =
+\PHstate{f_1, c_0, a_1}$
+the state resulting from the play of a scenario concretizing
+$\myp^1$ in $\ctx^1$.
+As explained in \todo{ref succ-reach},
+One can use this resulting state in order to carry on with another
+successive reachability,
+such as the reachability of $\myp^2 = a_0$ in this case.
+The local causality graph used to check the reachability of $\myp^2$
+from $ctx^2$ is given in \pref{fig:metazoan-sa}(middle).
+The same reasoning allows to conclude that this reachability is true, and
+to extract the following set of concretizing scenarios:
+$\Delta(\thisB{\myp^2}{\ctx^2}) =
+\{ \PHfrappem{a_1, f_1}{c_0}{c_1} \concat \PHfrappem{c_1}{a_1}{a_0} \}$.
+We note that once again, two traversals are possible
+(by visiting node $a_1$ before or after note $f_1$)
+but both output the same scenario, and therefore end up in the same sate
+$\ctx^3 = \PHstate{f_1, a_0, c_1}$.
+Finally, the last local causality graph $\thisB{\myp^3}{\ctx^3}$,
+depicted in \pref{fig:metazoan-sa}(right),
+allows to conclude that this final reachability is true.
+
+In conclusion, by using \pref{th:approxinf} on these local causality graphs,
+and the traversal of \pref{ssec:concret} to determine
+the starting states of the following reachability step,
+we showed that it is possible to reach successively
+$a_1$, $a_0$ and $a_1$
 and thus that the AAN of \pref{fig:metazoan-ph} is functional.
 This result can be extended to the model of \pref{fig:metazoan-php}
 because they have the same dynamics (given \pref{th:bisimPHP}).
