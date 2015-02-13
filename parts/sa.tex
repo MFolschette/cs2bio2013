@@ -207,28 +207,31 @@ the objective $\obj{c_0}{c_1}$ can be refined in the objective sequence
 $\obj{a_0}{a_1}\concat\obj{b_0}{b_1}\concat\obj{c_0}{c_1}$
 or
 $\obj{b_0}{b_1}\concat\obj{a_0}{a_1}\concat\obj{c_0}{c_1}$
-(which can be further refined).
+(which can then be further refined).
 
-These refinements can be summarized compactly with a so-called Local Causality Graph (LCG).
+These refinements can be summarized with a so-called Local Causality Graph (LCG).
 Given an initial context $\ctx$ and a local state $\myp\in\Proc$,
 an LCG $\cwB = (\cwV, \cwE)$
 is a digraph where $\cwV \subseteq \Proc\cup \Obj \cup \Sol \cup \sSol$ is the set of vertices
 where $\sSol=\powerset(\Proc)$ and $\Sol=\Obj\times\powerset(\sSol)$
 and $\cwE \subseteq \cwV \times \cwV$ is the set of oriented edges
 (\pref{def:lcg}).
-A node in $\Obj$ represents an objective that have to be refined.
-Such a node can then be related to nodes in $\Sol$ which represents a set of hitter set of a
-bounce sequence of the objective:
+A node in $\cwV\cap\Obj$ represents an objective to refine.
+Such a node is related to nodes in $\cwV\cap\Sol$ which represent sets of hitter set of a
+bounce sequence of the objective (one for each bounce sequence in $\BS(P)$):
 given an objective $P$, if $\zeta\in\BS(P)$, $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid
 n\in\indexes\zeta \}$, then $P$ is related to $\langle P, \abstr\zeta\rangle\in\Sol$
 (\pref{def:lcg}-\ref{lcg-obj-sol}).
-Given a node $\langle P,\abstr\zeta\rangle\in\cwV\cap\Sol$, for each $ps\in\abstr\zeta$,
-it is related to a node $ps\in\sSol$
+For each hitter set $ps\in\abstr\zeta$,
+the node $\langle P,\abstr\zeta\rangle\in\cwV\cap\Sol$ is
+related to the node $ps\in\sSol$
 (\pref{def:lcg}-\ref{lcg-sol-sync}).
-A node $ps\in\sSol$ is then related to each $a\in\Proc$
+Then, each node $ps\in\sSol$ is related to each local state $a\in\Proc$
 (\pref{def:lcg}-\ref{lcg-sync-ls}).
-Given a node $a_i\in\cwV\cap\Proc$, for each $a_j\in\ctx$ or $a_j\in\cwV\cap\Proc$,
-it is related to an objective $\obj{a_j}{a_i}$
+Each local state node $a_i\in\cwV\cap\Proc$,
+is related to each objective $\obj{a_j}{a_i}$ where
+$a_j$ is either in the initial context $\ctx$, or
+is a local state node in the LCG
 (\pref{def:lcg}-\ref{lcg-ls-obj}).
 Finally, given a node $\obj{a_j}{a_i}\in\cwV\cap\Obj$,
 if a local state $a_k\neq a_i$ is in its successors (given by
