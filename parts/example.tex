@@ -153,7 +153,8 @@ then, starting from any new state obtained,
 we want to check the reachability of $\myp^2 = a_0$,
 and finally $\myp^3 = a_1$ once again to ensure that we entered a cycle.
 This consists in using \pref{th:approxinf} several times
-to check these reachabilities successively.
+to check these reachabilities successively,
+by splitting it following \pref{ssec:ordered-ua}.
 
 We first build the local causality graph $\thisB{\myp^1}{\ctx^1}$
 related to the reachability of $\myp^1 = a_1$ from the initial state $\ctx^1$.
@@ -244,9 +245,7 @@ Finally, the last local causality graph $\thisB{\myp^3}{\ctx^3}$,
 depicted in \pref{fig:metazoan-sa}(right),
 allows to conclude that this final reachability is true.
 
-In conclusion, by using \pref{th:approxinf} on these local causality graphs,
-and the traversal of \pref{ssec:concret} to determine
-the starting states of the following reachability step,
+In conclusion, by following \pref{ssec:ordered-ua},
 we showed that it is possible to reach successively
 $a_1$, $a_0$ and $a_1$
 and thus that the AAN of \pref{fig:metazoan-ph} is functional.

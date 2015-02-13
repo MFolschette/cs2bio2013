@@ -50,7 +50,10 @@ which can be helpful to abstract time or duration properties under certain condi
   $\forall m < n, \forall g \in \PHa^{(m)},
     \neg (\PHhitter(g) \subseteq s \wedge \PHtarget(g) \in s)$.
   In such a case, $(s \PHplay h)$ stands for the state resulting from the play
-  of the action $h$ in $s$, which is defined by: $(s \PHplay h) = s \Cap b_k$.
+  of the action $h$ in $s$, which is defined by: 
+    $(s \PHplay h)_b = b_k$
+	and
+	$\forall a\in\PHs, a\neq b, (s\PHplay h)_a = s_a$.
   Moreover, we denote: $s \PHPtrans (s \PHplay h)$.
 \end{definition}
 
