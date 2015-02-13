@@ -66,7 +66,27 @@ This AAN with 1 class of priority is equivalent to a regular AAN without priorit
 Therefore, such a translation is particularly useful to be able to study the dynamics of
 any kind of AAN with priorities by using the static analysis developed in \pref{sec:sa}.
 
-This translation is based on the notion of \emph{playability property} defined in \pref{def:pp}
+The translation given in the following relies on the notion of \emph{sub-state},
+which is a set of local states containing at most one local state of each automata.
+Thus, a sub-state can be considered as a partial state.
+This notion if formally expressed in \pref{def:substate}.
+
+\begin{definition}[Sub-state ($\PHsublize{\PHl}$)]
+\label{def:substate}
+  If $S \subseteq \PHs$ is a set of automata, a sub-state on $S$ is an element of:
+  $\PHsubl[\PHl]_S \DEF \{ \toset{\rho} \subseteq \Proc \mid
+    \rho \in \bigtimes{a \in S} \PHl_a \}$
+  where the notation $\toset{\rho}$ represents
+  the set of components of the Cartesian product $\rho$,
+  as defined on page~\pageref{notations}.
+  The set of all sub-states is denoted by:
+  $\PHsubl[\PHl] \DEF \bigcup_{S \in \powerset(\PHs)} \PHsubl[\PHl]_S$.
+  Furthermore, if $\mysigma \in \PHsubl[\PHl]$ and $s \in \PHl$, we note:
+    \[\mysigma \subseteq s \EQDEF \forall a_i \in \Proc, a_i \in \mysigma \Rightarrow a_i \in s\]
+\end{definition}
+
+The translation of an AAN$k$ into an AAN
+is based on the notion of \emph{playability property} defined in \pref{def:pp}
 which is a Boolean formula where the atoms are local states of $\ov{\PH}$.
 
 \begin{definition}[Playability property language ($\F$)]
@@ -144,7 +164,8 @@ This construction allows to obtain the same dynamics as $\oPH$, as stated by \pr
 \label{lem:ppplaysubset}
   Let $h \in \ov{\PHh}$ and $s \in \ov{\PHl}$;
   $h$ is playable in $s$ if and only if:
-  \[\target{h} \in s \wedge \exists \mysigma \subseteq s, \Fsem{\Fop{h}}{\mysigma} \enspace.\]
+  \[\target{h} \in s \wedge \exists  \mysigma \in \PHsubl,
+    \mysigma \subseteq s \wedge \Fsem{\Fop{h}}{\mysigma} \enspace.\]
 \end{lemma}
 %
 \begin{proof}
@@ -176,7 +197,7 @@ This construction allows to obtain the same dynamics as $\oPH$, as stated by \pr
     \item $\PHl = \ov{\PHl}$;
     
     \item $\PHh = \{
-      \PHfrappe{(\toset{\mysigma} \setminus \{ \target{h} \})}{\target{h}}{\bounce{h}} \mid
+      \PHfrappe{(\mysigma \setminus \{ \target{h} \})}{\target{h}}{\bounce{h}} \mid
       h \in \ov{\PHh} \wedge \n \geq 1 \wedge i \in \segm{1}{\n} \wedge
       \mysigma \in \PHsubl_{\PHdep{i}{h}} \wedge
       \Fsem{\Fop{h}}{\mysigma} \}$.
