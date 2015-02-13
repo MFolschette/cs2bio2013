@@ -9,8 +9,7 @@ metazoan segmentation process,
 and demonstrate how the classes of priorities help in the modelling process,
 and how the flattening of \pref{sec:flattening}
 can be used in such a case.
-In \pref{ssec:ex-tcrsig}, we apply our method to a large-scale model
-of the T-cell receptor signalling pathway
+In \pref{ssec:ex-tcrsig}, we apply our method to two large-scale models
 in order to show the scalability of our method.
 
 
@@ -323,37 +322,85 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
 
 
 
-\subsection{Large-scale Application: T-cell Receptor}
+\subsection{Large-scale Applications}
 \label{ssec:ex-tcrsig}
 
 In order to support the scalability and applicability of our under-approximation of reachability, we
-apply our new approach to the analysis of a large-scale model of the T-cell receptor (TCR)
-signalling pathway \cite{tcrsig94}.
-This model gathers 94 interacting components and is specified as a Boolean network.
-The under-approximation presented in this paper has been implemented in the existing Pint
-software\footnote{Pint is freely available at \url{http://loicpauleve.name/pint}.}.
-
-The Boolean model has been automatically encoded into
+apply our new approach to the analysis of two large-scale models:
+a T-cell receptor (TCR) signalling pathway~\cite{tcrsig94}
+and an epidermal growth factor receptor (EGFR) signalling pathway~\cite{Samaga2009}.
+These models both gather around a hundred components and are detailed below.
+They are originally specified as Boolean networks,
+and have been automatically encoded into
 a Process Hitting model with two classes of priorities,
 whose dynamics is equivalent to an AAN%
 \footnote{Files are available at
-\url{http://maxime.folschette.name/underapprox-tcrsig94.zip}.}.
-Logical Networks being a subclass of AANs, this translation is straightforward.
-Then, we verified the reachability for the independent activation of 4 outputs of the signalling
-cascade (SRE, AP1, NFkB, NFAT) for all possible input combinations (CD4, CD28, TCRlig) using our
-new reachability under-approximation (answering either \emph{yes} or \emph{inconclusive}) and a 
-previously defined reachability over-approximation \cite{PMR12-MSCS} (answering either \emph{no} or
-\emph{inconclusive}).
-All result in conclusive decisions, and the under-approximation has been satisfied in 12 cases (over
+\url{http://maxime.folschette.name/underapprox-aan.zip}. \todo{Mettre en ligne}}.
+Boolean networks being a subclass of AANs, this translation is straightforward.
+In the following, we first present the Pint implementation,
+then the two models that were used for our tests,
+and the finally summarise the quantitative results of these tests.
+
+\subsubsection*{The Pint Implementation}
+
+The under-approximation presented in \pref{sec:sa} has been implemented
+in the existing Pint software%
+\footnote{Pint gathers tools related to the Process Hitting
+and is freely available at \url{http://loicpauleve.name/pint}.
+The release “2015-02-11” was used for these experiments.}.
+It comes in two versions:
+\begin{itemize}
+  \item One version consists in building the local causality graph once
+    and checking \pref{th:approxinf} on this graph only.
+    This version is polynomial in the size of the model,
+    and therefore scalable by nature by its low complexity.
+    However, it may be non-conclusive due to the presence of cycles
+    or dependent synchronizations that could be avoided.
+  \item The other version consists in checking \pref{th:approxinf}
+    on every sub-graph obtained by considering sub-sets of the nodes in $\Sol$
+    of the local causality graph.
+    This enumeration of “sub-solutions” may allow to find conclusive
+    responses by removing cycles or unnecessary local states in the graph.
+    However, due to its exhaustive nature,
+    it is exponential in the number of solutions of each objective,
+    and thus not as scalable.
+\end{itemize}
+In other words, when this implementation is unable to conclude with the
+local causality graph alone, it tries to enumerate sub-solutions
+in order to reach a conclusion.
+Although this search is guided in order to remove in priority
+the solutions that could create cycles or depended synchronizations,
+\todo{à confirmer}
+in the worst case all combinations have to be checked.
+Therefore, for the following tests, we capped the execution time
+of each call to Pint to 3 seconds,
+considering that the implementation is inconclusive above this threshold.
+
+The under-approximation presented in this paper can therefore answer
+either \emph{True} or \emph{Inconclusive} regarding the reachability
+of a given local state.
+We used it together with a previously defined
+reachability over-approximation~\cite{PMR12-MSCS}
+that allows to answer either \emph{False} or \emph{Inconclusive},
+but which was not tailored specifically, but still valid, for AANs.
+
+\subsubsection*{The T-cell Receptor Model}
+
+The TCR signalling pathway consists of 94 components.
+We checked the reachability for the independent activation of
+4 outputs of the signalling cascade (SRE, AP1, NFkB, NFAT)
+for all possible combinations of the 3 inputs (CD4, CD28, TCRlig).
+All result in conclusive decisions,
+and our under-approximation has been satisfied in 12 cases (over
 32) proving the satisfiability of the concerned reachability property in the encoded Boolean network
-(and non-satisfiability in the other cases).
+(and non-satisfiability in the other cases, using the previously existing over-approximation).
 
 By analysing the detail of the results, one can find out that one of the outputs, NFkB, can never be activated.
 In other words, FkB$_1$ is never reachable, whatever the initial state of the inputs,
-the other outputs (SRE, AP1, NFAT) can be independently activated
+while the other outputs (SRE, AP1, NFAT) can be independently activated
 for some configurations of inputs.
 We thus want to check if these three outputs can be activated together,
-that is, if the activation of one of the outputs does not prevent the activation of one of the others.
+that is, if the activation of one of the outputs does not prevent the activation another one.
 For this, as proposed in \pref{ssec:simult-ua},
 we add a new automaton $\reach$ into the model
 with two local states ($\PHl_\reach = \{ \reach_0, \reach_1 \}$)
@@ -365,49 +412,114 @@ and the existence of 4 positive answers
 (amongst all 8 possible initial configurations of the inputs) allows to conclude that
 it is possible to reach a state where SRE, AP1 and NFAT are simultaneously active.
 
-We held all these experiments on a laptop computer with a 2GHz processor
-and 1GB of RAM.
-Computations times were in the order of a few hundredths to tenths of a second
-in each case (reachability of $\reach_1$ included).
+\subsubsection*{The Epidermal Growth Factor Receptor Model}
+
+The EGFR signalling pathway gathers 104 components, amongst which one can distinguish
+21 inputs and 12 outputs.
+Analysing the consequences of the variations of all inputs
+would require too many tests;
+therefore, we selected 13 of them
+(erbb1, erbb2, erbb3, erbb4, bir, btc, egf, epr, nrg1a, nrg1b, nrg2b, nrg4, tgfa)
+and observed the impact of their variations on all outputs
+(elk1, creb, ap1, hsp27, actin\_reorg, cmyc, pro\_apoptotic, p70s6\_2, pkc, stat1, stat3, stat5).
+We note that some of the experiments trigger the exponential search
+of sub-solutions described above, and are cut after 3 seconds of computation
+(thus leading to \emph{Inconclusive} cases).
+These experiments represent about 10\% of all tests,
+amongst the remaining 90\%, while all the others are conclusive.
+We note that none of the tests terminated normally (without being cut after 3 seconds)
+with an inconclusive answer, which is however theoretically possible.
+
+\subsubsection*{Synthesis of the Results}
+
+The results of all tests performed with the implementation of our under-approximation
+are summarised in \pref{tab:results} (columns “AAN”).
+We held all these experiments on a personal computer,
+and computations times were in the order of a few tenths of a second to about one second.
 To give a comparison, we did the same experiments with a standard symbolic model-checker, libDDD
 \cite{libddd}, known for its good performances, the input model being the Boolean network expressed
 as a Petri net.
-However, due to the large scale of the model, the program runs out of memory for all the experiments,
-showing that this method is not scalable.
+However, due to the large scale of the model,
+this program takes at least several minutes to terminate,
+and runs out of memory for the majority of all experiments.
+%showing that this method is not scalable.
 Because standard model checkers are often PSPACE-complete~\cite{Harel02},
-using them to study the dynamics of a model is strongly limited to its size.
+using them to study the dynamics of a model is strongly limited by its size.
 On the other hand,
-our method is able to conclude with limited memory and computation time usage.
-Indeed, the under-approximation developed in this paper comes in two versions:
-\begin{itemize}
-  \item One version is polynomial in the size of the model,
-    and consists in building the saturated graph of local causality once
-    and checking \pref{th:approxinf} on this graph only.
-    This version is scalable by nature by its low complexity;
-  \item The other one is exponential in the size of the model,
-    and consists in checking \pref{th:approxinf}
-    on every sub-graph obtained by considering sub-sets of the nodes in $\Sol$
-    of the saturated graph of local causality.
-    Although not as scalable, it is still efficient on this example,
-    due to an adapted enumeration of these sub-sets.%
-\end{itemize}
-It is therefore expected that our work will be scalable to models that are larger,
+our method is able to conclude with limited memory and computation time usage
+in the majority of the cases,
+and is expected to be scalable to models that are even larger,
 even by orders of magnitude.
 
 Finally, we note that similar experiments were conducted in~\cite{PMR12-MSCS}.
 However, if these experiments allowed to obtain some information
-on this model to some extent,
-it did not provide a formal proof of the reachabilities that have been
-checked in the example above.
+on the TCR and EGFR models to some extent,
+they did not provide a formal proof of the reachabilities that have been
+checked in the examples above.
 Indeed, the semantics of Process Hitting (without classes of priorities)
-do not allow to model accurate Boolean gates,
-thus leading to some unwanted behaviours that take the form of temporal shifts.
-Only the adding of classes of priorities allows to remove these temporal shifts,
+does not allow to model accurate Boolean gates,
+thus leading to some unwanted spurious behaviours
+that especially take the form of temporal shifts.
+The adding of classes of priorities allows to remove these temporal shifts,
 as explained in~\cite{FPMR13-CS2Bio},
 with a construction that is equivalent to the AANs presented in \pref{sec:ph}.
 Therefore, only the method presented in this paper provides a formal proof that
-the observed behaviours are the result of the true dynamics of the system,
-which was originally described in a format equivalent to Logical Networks.
+the observed behaviours are the result of the true dynamics of the systems.
+The same experiments have been conducted with the previous version
+of the under-approximation and reported alongside in \pref{tab:results}
+(in columns “PH”).
+We note that indeed, about 10\% of the positive results regarding the EGFR model
+could not be proven with our new under-approximation,
+and are thus still formally uncertain.
+
+\definecolor{lightgraycell}{gray}{0.8}
+\newcommand{\grcl}{\cellcolor{lightgraycell}}
+
+\begin{table}[htp]
+  \centering
+  \begin{tabular}{|c||c|c||c|c|}
+  \hline
+    & \multicolumn{2}{c||}{TCR} & \multicolumn{2}{c|}{EGFR} \\
+  \hline
+  \hline
+    Inputs & \multicolumn{2}{c||}{3} & \multicolumn{2}{c|}{13} \\
+  \hline
+    Outputs & \multicolumn{2}{c||}{4 + $\reach$} & \multicolumn{2}{c|}{12} \\
+  \hline
+    Total tests & \multicolumn{2}{c||}{40} & \multicolumn{2}{c|}{98'304} \\
+  \hline
+  \hline
+               & PH        & AAN       & PH               & AAN              \\
+  \hline
+  \hline
+    True       & 16 (40\%) & \grcl 16 (40\%) & 74'268 (75,55\%) & \grcl 64'282 (65,39\%) \\
+  \hline
+    Inconclusive & 0 (0\%) & \grcl 0 (0\%)   & 0 (0\%)          & \grcl 9'986 (10,16\%)  \\
+  \hline
+    False      & \multicolumn{2}{c||}{24 (60\%)} & \multicolumn{2}{c|}{24'036 (24,45\%)} \\
+  \hline
+  \hline
+    Max time   & 0.043s    & \grcl 0.20s     & 0.37s            & \grcl 0.87s            \\
+  \hline
+    Total time & <1s       & \grcl <1s       & 45min            & \grcl 9h50min          \\
+  \hline
+  \end{tabular}
+  \caption{\label{tab:results}%
+    Results of the tests on large-scale examples.
+    The “AAN” column gives the related results on AAN models,
+    using the under-approximation presented in this paper,
+    while the “PH” column gives the results for PH models
+    using cooperative sorts to model actions with multiple hitters,
+    and using the under-approximation of~\cite{PMR12-MSCS}.
+    The lines labelled “True”, “Inconclusive” and “False” lines give respectively
+    the number of positive, cut and negative answers,
+    while “Max time” and “Total time” depict respectively
+    the maximum time of the individual computations (except those cut after 3 seconds)
+    and the overall execution time of all tests (including those cut after 3 seconds).
+    The greyed cells highlight the results that are proper to the
+    under-approximation presented in this paper.
+  }
+\end{table}
 
 In conclusion,
 while ensuring a low complexity for the analysis of reachability in Boolean and discrete networks,
