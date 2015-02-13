@@ -53,6 +53,8 @@ Successive objectives are described with objective sequences.
   Given $\w\in\OS$, $\PHsort(\w) \DEF \{\PHsort(\w_i)\mid i\in\indexes{\w}\}$.
 For each automaton $a\in\PHsort(\w)$,  the first local state of $a$ referenced in
 $\w$ is denoted by $\first_a(\w) \DEF \target{\w_m}$, where $m=\min\{n\in\indexes{\w}\mid \PHsort(\w)=a\}$.
+  The set of objective sequences starting in a state $s\in\PHl$ are denoted by
+  $\OS(s)\DEF \{\w\in\OS\mid\forall a\in\PHsort(\w), \first_a(\w)\in s\}$.
 \end{definition}
 
 
@@ -69,7 +71,7 @@ $\forall a\in\PHsort(\w'), a\in\PHsort(\w) \wedge \first_a(\w')=\first_a(\w)$;
 and there exists a mapping $\phi: \indexes{\w'}\mapsto \indexes{\w}$ such that
 $\forall n,m \in\indexes{\w'}, n<m \Leftrightarrow \phi(n)<\phi(m)$,
 and
-$\forall n\in\indexes{\w'}, \bounce{\w'_n}=\bounce{\w_{\phi(n)}}$
+$\forall n\in\indexes{\w'}, \bounce{\w'_n}=\bounce{\w_{\phi(n)}}$.
 \end{definition}
 
 \begin{example}
@@ -90,12 +92,11 @@ objective to the bounce of an action in the scenario which preserve the sequenti
 
 \begin{definition}[$\concr: \OS \to \powerset(\Sce)$]\label{def:concr}
 Given a state $s\in\PHl$ and an objective sequence
-$\w\in\OS$ such that $\forall a\in\PHsort(\w), \first_a(\w)\in s$,
-$\concr(\w)$ is the set of scenarios matching with $\w$:
+$\w\in\OS(s)$, $\concr(\w)$ is the set of scenarios matching with $\w$:
 \begin{align*}
-\concr(\w) \DEF \{ \delta\in\Sce(s)\mid & (\w^\vartriangle=\emptyseq \wedge
-\delta=\emptyseq)  \vee (
-\w^\vartriangle\neq \emptyseq\wedge
+\concr(\w) \DEF \{ \delta\in\Sce(s)\mid &
+\w^\vartriangle\neq \emptyseq\Rightarrow
+\bounce{\delta_{\card\delta}} = \bounce{\w_{\card\w}}
 \\ &
  \wedge \exists \phi:\indexes{\w}\mapsto\indexes{\delta},
     (\forall n,m\in\indexes{\w}, n<m \Leftrightarrow \phi(n)\leq\phi(m))
@@ -117,6 +118,19 @@ $w\ltw w'$, then $\concr(w)\subseteq\concr(\w')$ (\pref{lem:ltw}).
 \begin{lemma}\label{lem:ltw}
 $\w\ltw\w' \Longrightarrow \concr(\w)\subseteq\concr(\w')$\enspace.
 \end{lemma}
+
+Given a non-empty set $\Delta\subseteq\Sce(s)$ of non-empty scenarios that have a common last bounce
+($\exists a_i\in\Proc, \forall\delta\in\Delta,
+\bounce{\delta_{\card\delta}}=a_i$), one can define an abstraction $\alpha_s$ of
+such a set as the smallest objective sequence $\w\in\OS(s)$ such that
+$\bounce{\w_{\card\w}} = \bounce{\delta_{\card\delta}}, \delta\in\Delta$
+and
+$\forall\delta\in\Delta, \exists \phi:\indexes{\w}\mapsto\indexes{\delta}
+    (\forall n,m\in\indexes{\w}, n<m \Leftrightarrow \phi(n)\leq\phi(m))
+	\wedge \forall n\in\indexes{\w},
+	  \bounce{\w_n} \in s\play\delta_{1..\phi(n)})$.
+In such a setting, $\alpha_s$ and $\concr$ form a Galois connection between sets
+of scenarios and objective sequences.
 
 
 \subsubsection{Local Causality for Objectives}
@@ -177,12 +191,23 @@ $\forall n\in\indexes{\zeta}$, $\zeta_n = \delta_{\phi(n)}$.
 
 \subsubsection{Local Causality Graph}
 
-Given one initial objective, one could then recursively refine the objective into objective
-sequences following its bounce sequences \cite{PMR12-MSCS}:
+Given one initial objective, one could then iteratively refine the objective into objective
+sequences following its bounce sequences:
 the refinement of objective $P$ with $\zeta\in\BS(P)$ would consists in prepending to $P$ the
 objectives leading to the hitters of the actions in $\zeta$, in the same sequential order;
 the generalization of the refinement to an objective sequence would require to consider all possible
-interleaving between the refinements.
+interleaving between the refinements \cite{PMR12-MSCS}.
+
+For example, given the AAN of \pref{fig:ph-livelock},
+in the state $\langle a_0,b_0,c_0\rangle$,
+the objective $\obj{a_0}{a_1}$ can be refined in the objective sequence
+$\obj{b_0}{b_0}\concat\obj{a_0}{a_1}$
+and
+the objective $\obj{c_0}{c_1}$ can be refined in the objective sequence
+$\obj{a_0}{a_1}\concat\obj{b_0}{b_1}\concat\obj{c_0}{c_1}$
+or
+$\obj{b_0}{b_1}\concat\obj{a_0}{a_1}\concat\obj{c_0}{c_1}$
+(which can be further refined).
 
 These refinements can be summarized compactly with a so-called Local Causality Graph (LCG).
 Given an initial context $\ctx$ and a local state $\myp\in\Proc$,

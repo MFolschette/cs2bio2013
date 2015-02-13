@@ -178,14 +178,13 @@ With respect to the workshop version of the paper I don't see a significant impr
 \answer{
 The additions regarding the workshop paper are the following:
 \begin{itemize}
-  \item The use of AANs (new to this revision) that simplifies the formalism
-    and gives a new viewpoint to the overall work;
-  \item Theorem 2, which refines successive reachability;
-  \item Sect. 4.2, which allows to translate any AAN with classes of priorities
-    into a simple AAN (with one class of priority),
-    thus extending the range of application of the static analysis;
-  \item Sect. 3.5 (new to this revision),
-    which returns a scenario concretizing the desired reachability, when possible.
+  \item In this revision, we generalised the results to Asynchronous Automata
+  Networks (AANs) which also simplies the formalism;
+  \item In this revision, we also included a new section (3.3) which give a
+  procedures to extract a witness scenario satisfying a given reachability
+  property.
+  \item The encoding of AANs with classes of priorities into simple AANs
+  (section 4).
 \end{itemize}
 We emphasized these in the introduction.
 }
@@ -203,7 +202,20 @@ This has been emphasized especially in Sect. 5.2.
 
 - the static analyses that are proposed are based on abstract interpretation, however there is not a formal introduction of them in this framework. In particular there are abstractions and concretizations whose domains (and their relationships in terms of Galois insertion / connection) are not clearly stated. Moreover, the overall ideas of the abstractions are lost in the heavy technical presentation. This is difficult to read and does not give sufficient intuition to grasp the concepts, which remain hidden behind the notation. 
 
-\todo{À faire !}
+\answer{With this revision, we removed and simplies a lot a notations, and added
+more explanations for the under-approximation of reachability properties in AANs
+(section 3).
+More details on the abstract domain (objective sequences) and their
+interconnections with concrete scenarios are given in section 3.1.
+The relationship of Local Causality Graphs with objective sequences is also
+better motivated (collecting semantics for the possible refinements of the
+objective sequences).
+However, the goal of this section being at building particular cases of
+scenarios, no completness of the collection is required.
+We believe that the revision of this section brings sufficient intuition to
+capture the main concepts of the analysis, while avoiding un-necessary technical
+definitions.
+}
 
 - the biological examples look interesting and appropriate, but the details that are given in the paper look not sufficient to appreciate the demonstration of the approach that they should give.
 
