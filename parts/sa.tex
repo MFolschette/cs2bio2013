@@ -122,7 +122,7 @@ $\w\ltw\w' \Longrightarrow \concr(\w)\subseteq\concr(\w')$\enspace.
 Given a non-empty set $\Delta\subseteq\Sce(s)$ of non-empty scenarios that have a common last bounce
 ($\exists a_i\in\Proc, \forall\delta\in\Delta,
 \bounce{\delta_{\card\delta}}=a_i$), one can define an abstraction $\alpha_s$ of
-such a set as the smallest objective sequence $\w\in\OS(s)$ such that
+such a set as the smallest (according to $\ltw$) objective sequence $\w\in\OS(s)$ such that
 $\bounce{\w_{\card\w}} = \bounce{\delta_{\card\delta}}, \delta\in\Delta$
 and
 $\forall\delta\in\Delta, \exists \phi:\indexes{\w}\mapsto\indexes{\delta}
@@ -136,7 +136,7 @@ of scenarios and objective sequences.
 \subsubsection{Local Causality for Objectives}
 
 The existence of a scenario from a state $s$ leading to a state
-where a given local state of an automaton $a_j$ is present
+where a given local state $a_j$ is present
 can be reformulated as the checking for the non-emptiness of $\concr(\obj{a_i}{a_j})$, where
 $a_i=\get{s}{a}$.
 A first hint for checking this emptiness is to look for actions that have to be played in order to
@@ -300,7 +300,7 @@ delimited by the context $\ctx$, there exists a scenario that reaches $\myp$
 (\pref{th:approxinf}).
 
 A node $x$ of the LCG in $\sSol$ is \emph{independent} (\pref{def:coherent}) if for each local state
-$a_i\in x$, none of the other local states $b_j\in x$ have in their accessors a local state of automaton $a$ different
+$a_i\in x$, none of the other local states $b_j\in x$ have in their successors a local state of automaton $a$ different
 than $a_i$.
 This criteria ensures that once a local state in $x$ has been reached, reaching another local state
 in $x$ should not require to change the first local state.
@@ -376,6 +376,7 @@ subsets, hence being exponential in the number of objectives having at least two
   If we confider the AAN of \pref{fig:ph-livelock},
   from the initial state $\PHstate{a_1, b_0, c_0}$ depicted,
   the under-approximation given in \pref{th:approxinf}
+  concludes that $a_1$ is reachable, as well as $b_1$, but
   does not conclude regarding the reachability of $c_1$.
   This is due to the fact that the node $\{ a_1, b_1 \} \in \Bv \cap \sSol$
   is not independent because of its successor $a_0$ (and $b_0$).
@@ -585,7 +586,7 @@ In this section, we briefly discuss how the presented static analysis for local
 state reachability properties can be extended to sequential (sub)states
 reachability properties.
 
-\paragraph{Sub-state reachability.}
+\paragraph{Sub-state reachability}
 Given an AAN $\PH = (\PHs, \PHl, \PHh)$,
 a sub-set of automata local states
 $ps = \{ a_i \in\Proc\mid a\in\PHs, a_i\in\PHl_a\}$,
@@ -602,7 +603,7 @@ Such analysis was not possible with the Process Hitting framework,
 because of the lack of the notion of simultaneity for more than two components.
 
 
-\paragraph{Sequential reachability.}
+\paragraph{Sequential reachability}
 Given a sequence of local state to reach (e.g., reach $a_i$, then $b_j$),
 one can use the same approach as for sub-state reachability by introducing
 a new automaton $\reach$ having $n+1$ local states where $n$ is the size of the

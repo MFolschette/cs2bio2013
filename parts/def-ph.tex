@@ -62,7 +62,8 @@ and can be referred to as $\PHhitter(h), \PHtarget(h), \PHbounce(h)$, respective
 \noindent
 The automaton that a local state $a_i$ belongs to is referred to as $\PHsort(a_i) = a$.
 Given a state $s\in \PHl$, the local state of automaton $a \in \PHs$ present in $s$ is denoted by $\PHget{s}{a}$, that is, the $a$-coordinate of the state $s$.
-If $a_i \in \PHl_a$, we define the notation $a_i \in s \EQDEF \PHget{s}{a} = a_i$.
+If $a_i \in \PHproc$, we define the notation $a_i \in s \EQDEF \PHget{s}{a} = a_i$;
+and if $A\subseteq\PHproc$, $A\subseteq s\EQDEF \forall a_i\in A, \PHget{s}{a} = a_i$.
 
 \begin{definition}[Semantics of an AAN ($\PHPtrans$)]
 \label{def:play}

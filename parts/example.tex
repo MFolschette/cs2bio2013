@@ -444,7 +444,6 @@ local causality graph alone, it tries to enumerate sub-solutions
 in order to reach a conclusion.
 Although this search is guided in order to remove in priority
 the solutions that could create cycles or depended synchronizations,
-\todo{à confirmer}
 in the worst case all combinations have to be checked.
 Therefore, for the following tests, we capped the execution time
 of each call to Pint to 3 seconds,
@@ -516,9 +515,6 @@ as a Petri net.
 However, due to the large scale of the model,
 this program takes at least several minutes to terminate,
 and runs out of memory for the majority of all experiments.
-%showing that this method is not scalable.
-Because standard model checkers are often PSPACE-complete~\cite{Harel02},
-using them to study the dynamics of a model is strongly limited by its size.
 On the other hand,
 our method is able to conclude with limited memory and computation time usage
 in the majority of the cases,

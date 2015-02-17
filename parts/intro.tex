@@ -2,7 +2,8 @@
 \section{Introduction}
 \label{sec:intro}
 
-Discrete modelling frameworks for biological networks is an active research field where formal methods have proven that they were very
+Discrete modelling frameworks for biological networks is an active research field where formal
+methods have be proven very
 powerful~\cite{thomas1990biological,deJong02,snoussi_logical_1993}.
 Such a work started in the seventies, with~\cite{kauffman69,Thomas73}.
 It was later enriched in many directions and widely used to elucidate many biological questions.
@@ -38,11 +39,11 @@ and the playability of the reaction.
 This is where the priorities become useful, if not necessary:
 the extra reactions can for example be given “infinite speed” (highest priority) so that they do not affect the behaviour of “normal” (lower priority) reactions, including the multimolecular ones.
 
-The approach used in this paper, however,
-consists in considering another class of models,
+The approach used in this paper, 
+consists in considering a broader class of models,
 that we call Asynchronous Automata Network,
 and that allows to naturally model these cooperations
-by defining several requisites for a reaction.
+by defining several requisites for a transition.
 Moreover, such automata networks are still compatible with the notion of priority,
 that can also be used to model different reaction rates in the model.
 Asynchronous Automata Networks
@@ -65,17 +66,16 @@ The concept of priority is much straightforward in the approach of process algeb
 It was later extended for applications in the field of systems biology by M.~John \textit{et~al.}~\cite{jlnu2010}.
 
 \subsection*{Contributions}
-This paper is an extension of~\cite{FPMR13-CS2Bio}.
-Its main contribution consists in the development of a method
+In this paper, we develop a method
 that allows to efficiently compute under-approximations of the dynamics
 of Asynchronous Automata Networks (AANs),
-based on a similar work carried out on Process Hitting~\cite{PMR12-MSCS}.
+generalising a prior work carried out on Process Hitting~\cite{PMR12-MSCS}.
 Rather than using brute force or symbolic model checking techniques,
 our method focuses on static analysis by abstract interpretation.
 Our work aims at checking reachability properties that,
-for a given initial state $\ctx$ and a given local state $x$,
+for a given initial state $s$ and a given local state $x$,
 have the form:
-“Starting from state $\ctx$, is it possible to reach
+“Starting from state $x$, is it possible to reach
 a state in which $x$ is active?”,
 thus answering either “True”
 (in which case the reachability is formally proven)
@@ -86,34 +86,15 @@ Moreover, the successive or simultaneous reachability of several local states
 can also be checked,
 and in the case of a “True” response,
 an execution path satisfying the property can be produced.
+Extensions of AANs where transitions are split in priority classes are addressed with an encoding in
+AANs without classes of priorities.
 Our work thus allows to efficiently analyse the dynamics
 of regulation networks,
 especially the widespread Logical Networks \cite{Thomas95,deJong02},
 which encompass variables with a limited number of discrete values
 alongside with evolution functions or focal parameters.
 To show the scalability of our method, we apply it to a
-large-scale biological model containing 94 components;
-the under-approximation turns out to be conclusive in
-all cases and results have been computed in hundredths of seconds,
-thus overtaking the efficiency of usual model-checkers.
-
-AANs (and, a fortiori, their restriction, the Process Hitting)
-can be considered as a subset of Communicating Finite State Machines
-or safe Petri Nets.
-%or Synchronous Automata Networks,
-%is inspired from the $\pi$-calculus,
-Our work is thus related to such semantic ramifications
-of extending traditional process algebras with the concept of priority
-that allows for some transitions to be given precedence over others.
-We focus here on static priorities that allow to model
-time constraints such as reaction rates or delays between regulations,
-but can also model preemptions between evolutions branches.
-Thus, although the under-approximation method presented in this paper
-is initially developed on AANs without classes of priorities,
-we show that adding classes of priorities into AANs
-does not increase their expressivity.
-Thus, we exhibit an encoding that allows to extend the range
-of application of our method to AANs with classes of priorities.
+large-scale biological models with around 100 components.
 
 \pref{sec:ph} presents the Asynchronous Automata Networks (AANs)
 without any notion of classes of priorities.

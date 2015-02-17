@@ -130,27 +130,23 @@
 
 \begin{abstract}
 In this paper,
-we develop a new refinement for an efficient under-approximation of the dynamics of
+we develop a framework for an efficient under-approximation of the dynamics of
 Asynchronous Automata Networks (AANs).
-An AAN is an Automata Network with synchronous transitions between automata,
+An AAN is an Automata Network with synchronised transitions between automata,
 where each transition change the local state of exactly one automaton
 (but any number of synchronizing local states are allowed).
 The work we propose here
 is based on static analysis by abstract interpretation,
 which allows to prove that reaching a state with a given property
 is possible,
-without the same computational cost of usual model checkers.
-Furthermore, its complexity is polynomial in the size of the model
-and exponential in the number of possible “branchings” during the solving.
-
-The under-approximation method presented in this paper is inspired
-from the one developed specifically for the Process Hitting,
-which is a sub-class of AANs.
-Furthermore, we also introduce the notion of AANs with classes of priorities,
-and show that they have the same expressivity as AANs without priorities,
-thus extending the range of our under-approximation.
-Finally, we illustrate our method on the model-checking of a signalling network
-of 94 components, which is unprecedented.
+without the same computational cost of usual model checkers:
+the complexity is polynomial with the total number of local states and exponential with the number of
+local states within a single automaton.
+Furthermore, we address AANs with classes of priorities,
+and show that an encoding in AANs without priorities,
+thus extending the application range of our under-approximation.
+Finally, we illustrate our method for the model-checking of
+large-scale biological networks.
 \end{abstract}
 \begin{keyword}
 discrete networks \sep
