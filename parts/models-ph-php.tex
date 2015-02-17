@@ -2,12 +2,12 @@
 \label{sec:flattening}
 
 In this section, we define the notion of AANs with classes of priorities,
-and give a translation from any of these AANs into
-an AAN without priorities, as defined in \pref{sec:ph}.
+and give a translation from these into
+AANs without priorities, as defined in \pref{sec:ph}.
 
 The idea behind AANs with classes of priorities (\pref{def:php})
 is to split the set of actions into several subsets assigned to priorities,
-and adapting the behaviour of the model to make any action unplayable
+and to adapt the behaviour of the model to make any action unplayable
 until no other action of higher priority is playable (\pref{def:playp}).
 Such model allows to model preemptions between sets of actions,
 which can be helpful to abstract time or duration properties under certain conditions.
@@ -34,13 +34,15 @@ which can be helpful to abstract time or duration properties under certain condi
       \forall a \in \PHs, \card{A \cap \PHl_a} \leq 1 \wedge
       A \cap \PHl_b = \emptyset \}$ is the finite set of \emph{actions of priority $n$}.
   \end{itemize}
-  We also use the same notations as those defined in \pref{sec:ph}, when applicable.
-  Furthermore,
-  we denote by $\PHh \DEF \bigcup_{n \in \segm{1}{k}} \PHh^{(n)}$ the set of all actions
-  and, for all $h \in \PHh$,
-  by $\prio(h) \DEF \min\{ n \in \segm{1}{k} \mid h \in \PHh^{(n)} \}$
-  the priority of action $h$.
 \end{definition}
+
+\paragraph{Notations}
+We use the same notations as those defined in \pref{sec:ph}, when applicable.
+Furthermore,
+we denote by $\PHh = \bigcup_{n \in \segm{1}{k}} \PHh^{(n)}$ the set of all actions
+and, for all $h \in \PHh$,
+by $\prio(h) = \min\{ n \in \segm{1}{k} \mid h \in \PHh^{(n)} \}$
+the priority of action $h$.
 
 \begin{definition}[Semantics of an AAN$k$ ($\PHPtrans$)]
 \label{def:playp}
@@ -51,42 +53,45 @@ which can be helpful to abstract time or duration properties under certain condi
     \neg (\PHhitter(g) \subseteq s \wedge \PHtarget(g) \in s)$.
   In such a case, $(s \PHplay h)$ stands for the state resulting from the play
   of the action $h$ in $s$, which is defined by: 
-    $(s \PHplay h)_b = b_k$
-	and
-	$\forall a\in\PHs, a\neq b, (s\PHplay h)_a = s_a$.
+    $\PHget{(s \PHplay h)}{b} = b_k$
+  and
+    $\forall a \in \PHs, a \neq b, \PHget{(s\PHplay h)}{a} = \PHget{s}{a}$.
   Moreover, we denote: $s \PHPtrans (s \PHplay h)$.
 \end{definition}
 
-We consider in the following an AAN$k$ with $k \in \sNN$:
-$\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$.
+We consider in the following an AAN$k$:
+$\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$
+with $k \in \sN$, $k > 1$.
 The aim of the rest this section is to propose a translation of $\oPH$
 into an AAN with $1$ class of priority $\PH = (\PHs; \PHl; \PHa^{\angles{1}})$
 called \emph{flattening}, which is bisimilar.
-This AAN with 1 class of priority is equivalent to a regular AAN without priorities;
-Therefore, such a translation is particularly useful to be able to study the dynamics of
+As an AAN with 1 class of priority is equivalent to a regular AAN without priorities,
+such a translation is particularly useful to be able to study the dynamics of
 any kind of AAN with priorities by using the static analysis developed in \pref{sec:sa}.
 
-The translation given in the following relies on the notion of \emph{sub-state},
+The translation given in the following relies on the notion of \emph{sub-state}
+(\pref{def:substate}),
 which is a set of local states containing at most one local state of each automata.
 Thus, a sub-state can be considered as a partial state.
-This notion if formally expressed in \pref{def:substate}.
 
 \begin{definition}[Sub-state ($\PHsublize{\PHl}$)]
 \label{def:substate}
   If $S \subseteq \PHs$ is a set of automata, a sub-state on $S$ is an element of:
   $\PHsubl[\PHl]_S \DEF \{ \toset{\rho} \subseteq \Proc \mid
     \rho \in \bigtimes{a \in S} \PHl_a \}$
-  where the notation $\toset{\rho}$ represents
+  (where the notation $\toset{\rho}$ represents
   the set of components of the Cartesian product $\rho$,
-  as defined on page~\pageref{notations}.
+  as defined on page~\pageref{notations}).
   The set of all sub-states is denoted by:
   $\PHsubl[\PHl] \DEF \bigcup_{S \in \powerset(\PHs)} \PHsubl[\PHl]_S$.
-  Furthermore, if $\mysigma \in \PHsubl[\PHl]$ and $s \in \PHl$, we note:
-    \[\mysigma \subseteq s \EQDEF \forall a_i \in \Proc, a_i \in \mysigma \Rightarrow a_i \in s\]
+  Furthermore, we recall the notation from \pref{sec:ph},
+  if $\mysigma \in \PHsubl[\PHl]$ and $s \in \PHl$:
+    \[\mysigma \subseteq s \Leftrightarrow \forall a_i \in \mysigma, \PHget{s}{a} = a_i\]
+%    \[\mysigma \subseteq s \EQDEF \forall a_i \in \Proc, a_i \in \mysigma \Rightarrow a_i \in s\]
 \end{definition}
 
 The translation of an AAN$k$ into an AAN
-is based on the notion of \emph{playability property} defined in \pref{def:pp}
+is based on the notion of \emph{playability property} (\pref{def:pp})
 which is a Boolean formula where the atoms are local states of $\ov{\PH}$.
 
 \begin{definition}[Playability property language ($\F$)]
@@ -97,11 +102,14 @@ which is a Boolean formula where the atoms are local states of $\ov{\PH}$.
     \item if $a \in \ov{\PHs}$ and $a_i \in \ov{\PHl}_a$, then $a_i \in \F$ and we call it an \emph{atom};
     \item if $P \in \F$ and $Q \in \F$, then $\neg P \in \F$, $P \wedge Q \in \F$ and $P \vee Q \in \F$.
   \end{itemize}
-  If $P \in \F$ is a playability property and $\mysigma \in \PHsubl$ is a sub-state of $\oPH$,
+  If $P \in \F$ is a playability property, we denote by: $\PHsortf{P}$
+  the set of sorts whom at least one local state is mentioned in $P$.
+  Then, if $\mysigma \in \PHsubl$
+  with $\PHsortf{P} \subseteq \PHsortf{\mysigma}$,
   we note $\Fsem{P}{\mysigma}$ the \emph{evaluation} of $P$ in $\mysigma$:
   \begin{itemize}
     \item if $P = a_i \in \ov{\PHl}_a$ is an atom, with $a \in \ov{\PHs}$, then $\Fsem{a_i}{\mysigma}$ is true iff $a_i \in \mysigma$;
-    \item if $P$ is not an atom, then $\Fsem{P}{\mysigma}$ is true iff all its subformulas are inductively true in $\mysigma$
+    \item if $P$ is not an atom, then $\Fsem{P}{\mysigma}$ is evaluated in $\mysigma$
       with the classical semantics for the logic operators $\top$, $\bot$, $\neg$, $\wedge$ and $\vee$.
   \end{itemize}
 \end{definition}
@@ -109,8 +117,11 @@ which is a Boolean formula where the atoms are local states of $\ov{\PH}$.
 Because we only use classical logic operators, the formulas of Boolean logic on 
 distributivity, associativity and commutativity can be used, together with De Morgan's laws on negation.
 We also have the following property for the negation of an atom:
-\[\forall a \in \ov{\PHs}, \forall a_i \in \ov{\PHl}_a, \forall \mysigma \in \PHsubl,
-  \Fsem{\neg a_i}{\mysigma} \Leftrightarrow \Fsem{\bigvee_{\substack{a_j \in \ov{\PHl}_a\\a_j \neq a_i}} a_j}{\mysigma}\]
+% \[\forall a \in \ov{\PHs}, \forall a_i \in \ov{\PHl}_a, \forall \mysigma \in \PHsubl,
+%   a \in \PHsortf{\mysigma},
+%   \Fsem{\neg a_i}{\mysigma} \Leftrightarrow \Fsem{\bigvee_{\substack{a_j \in \ov{\PHl}_a\\a_j \neq a_i}} a_j}{\mysigma}\]
+\[\forall a \in \ov{\PHs}, \forall a_i \in \ov{\PHl}_a,
+  \neg a_i \Longleftrightarrow \bigvee_{\substack{a_j \in \ov{\PHl}_a\\a_j \neq a_i}} a_j\]
 Indeed, if a local state is not active in a state, this means that another local state of the same automaton is active.
 Moreover, we note that:
 \[\forall a \in \ov{\PHs}, \forall a_i, a_j \in \ov{\PHl}_a,
@@ -120,7 +131,7 @@ because two different processes can never be active simultaneously.
 In \pref{def:fop}, we define the the operator $\Fopsymbol$ which characterises the playability of an action
 given the semantics of AAN$k$s (see \pref{def:playp}).
 This operator simply states that the hitters of an action have to be active,
-and no other action of higher priority have to be playable.
+and every other action of higher priority has to be not playable.
 % The target of the considered action is not taken into account
 % as it is not needed for the rest of the flattening.
 
@@ -132,7 +143,7 @@ and no other action of higher priority have to be playable.
     \left(\bigwedge_{a_i \in A} a_i\right)
     %\hitter{h}
     \wedge
-      \left( \bigwedge_{\substack{g \in \ov{\PHh}^{(n)}\\1 < n < \prio(h)}}
+      \left( \bigwedge_{\substack{g \in \ov{\PHh}^{(n)}\\1 \leq n < \prio(h)}}
       \neg \left( \target{g} \wedge \left(\bigwedge_{c_l \in \hitter{g}} c_l\right)\right) \right)
   \]
 \end{definition}
@@ -164,7 +175,7 @@ This construction allows to obtain the same dynamics as $\oPH$, as stated by \pr
 \label{lem:ppplaysubset}
   Let $h \in \ov{\PHh}$ and $s \in \ov{\PHl}$;
   $h$ is playable in $s$ if and only if:
-  \[\target{h} \in s \wedge \exists  \mysigma \in \PHsubl,
+  \[\target{h} \in s \wedge \exists \n \in \sN, \exists \mysigma \in \PHsubl_{\PHdep{i}{h}},
     \mysigma \subseteq s \wedge \Fsem{\Fop{h}}{\mysigma} \enspace.\]
 \end{lemma}
 %
@@ -187,7 +198,7 @@ This construction allows to obtain the same dynamics as $\oPH$, as stated by \pr
 
 \begin{definition}[Flattening ($\PHflat$)]
   \label{def:flattening}
-  If $k \in \sNN$ and $\oPH = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$ is an AAN$k$,
+  If $k \in \sNN$, $k > 1$ and $\oPH = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$ is an AAN$k$,
   we denote by
   $\PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) = (\PHs; \PHl; \PHa)$
   the \emph{flattening} of $\oPH$, where:

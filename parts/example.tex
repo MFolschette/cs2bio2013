@@ -21,13 +21,13 @@ We give in this section a detailed example of the use of classes of priorities
 in order to model a system with temporal constraints.
 This model also allows us to give a detailed example of the application of the sequential
 under-approximation proposed in \pref{ssec:ordered-ua},
-which consists of several applications of the methods developed in
+which consists of several applications of the method developed in
 \pref{ssec:ua}.
 For this, we first have to use the flattening method presented in \pref{sec:flattening}
 because the considered model contains 2 classes of priorities.
 
 We consider in the following a model of metazoan segmentation
-inspired from a first translation to Process Hitting given in~\cite{PMR10-TCSB}.
+inspired from a first translation to Process Hitting model given in~\cite{PMR10-TCSB}.
 This model was originally established in silico in~\cite{MSB:MSB4100192}
 in a differential equations framework.
 It is composed of a wavefront gene $f$ that activates the gap-gene $a$ whose products are responsible for stripes formation.
@@ -50,15 +50,15 @@ The actions of the original model make $2$ classes of priorities, as represented
 \end{align*}
 Indeed, without this use of priorities,
 some unwanted behaviours emerge, allowing the formation of irregular stripes.
-In order to fix this, a high priority is affected to the actions hitting $a$,
-a low priority to the actions hitting $c$,
+In order to fix this, a high priority is affected to the actions hitting $a$
+and a low priority to the actions hitting $c$,
 in order to model the fact that the switching of $c$ has to be immediately followed by
 a switching of $a$.
-This forces the the switches of genes $a$ and $c$
+This forces the the evolution of genes $a$ and $c$
 to alternate in order not to miss a stripe;
 $a$ and $c$ thus have intertwined oscillations.
 We can thus consider that these two classes of priorities
-are derived from known reaction relative rates,
+are derived from known relative reaction rates,
 the evolution of the clock $c$ being slower and regular,
 while the evolution of $a$ has to follow the changes of $c$.
 
@@ -152,7 +152,7 @@ we want to check the reachability of $\myp^2 = a_0$,
 and finally $\myp^3 = a_1$ once again to ensure that we entered a cycle.
 This consists in using \pref{th:approxinf} several times
 to check these reachabilities successively,
-by splitting it following \pref{ssec:ordered-ua}.
+by splitting it following the method given in \pref{ssec:ordered-ua}.
 
 We first build the local causality graph $\thisB{\myp^1}{\ctx^1}$
 related to the reachability of $\myp^1 = a_1$ from the initial state $\ctx^1$.
@@ -161,80 +161,30 @@ This graph is depicted in \pref{fig:metazoan-sa}(left).
 One can thus extract a concretizing scenario from this local causality graph
 with a traversal of the graph, as explained in \pref{ssec:concret}.
 Such a traversal is detailed in \pref{tab:concret-metazoan};
-the scenario extracted from this example is:
-$\emptyseq \concat \emptyseq \concat \PHfrappes{c_0, f_1}{a_0}{a_1} =
-\PHfrappes{c_0, f_1}{a_0}{a_1}$.
-Another traversal would consist in visiting node $f_1$ before node $c_0$
+the scenario extracted from this example consists of only one action:
+$\PHfrappes{c_0, f_1}{a_0}{a_1}$.
+Another traversal of the same graph
+would consist in visiting node $f_1$ before node $c_0$
 when first descending from node $\{ c_0, f_1 \}$;
 however, the same scenario would be extracted.
 As there exists no other traversal, we thus have in this case:
 $\Delta(\thisB{\myp^1}{\ctx^1}) = \{ \PHfrappes{c_0, f_1}{a_0}{a_1} \}$.
 
-\newcommand{\xproc}[1]{#1}
-%\newcommand{\xsol}[1]{\circ^{{#1}}}
-\newcommand{\xsol}{\circ}
-
-\begin{table}[htp]
-  \centering
-  \begin{tabular}{|c|c|c|l|l|l|}
-    \hline
-    \# & Dir. & Node & Marking & Output & State \\\hline\hline
-    1  & $\searrow$ & $\xproc{a_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    2  & $\searrow$ & $\PHobj{a_0}{a_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    3  & $\searrow$ & $\xsol$ & $\PHfrappes{c_0, f_1}{a_0}{a_1}$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    4  & $\searrow$ & $\{ c_0, f_1 \}$ & $\{ c_0, f_1 \}$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    \phantom{*}%
-    5* & $\searrow$ & $\xproc{c_0}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    6  & $\searrow$ & $\PHobj{c_0}{c_0}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    7  & $\searrow$ & $\xsol$ & $\emptyseq$ & $\emptyseq$ & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    8  & $\nearrow$ & $\PHobj{c_0}{c_0}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    9  & $\nearrow$ & $\xproc{c_0}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    10 & $\nearrow$ & $\{ c_0, f_1 \}$ & $\{ f_1 \}$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-%    \phantom{*}%
-    11 & $\searrow$ & $\xproc{f_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    12 & $\searrow$ & $\PHobj{f_1}{f_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    13 & $\searrow$ & $\xsol$ & $\emptyseq$ & $\emptyseq$ & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    14 & $\nearrow$ & $\PHobj{f_1}{f_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    15 & $\nearrow$ & $\xproc{f_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    16 & $\nearrow$ & $\{ c_0, f_1 \}$ & $\emptyset$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
-    17 & $\nearrow$ & $\xsol$ & $\emptyseq$ & $\PHfrappes{c_0, f_1}{a_0}{a_1}$ & $\PHstate{f_1, a_1, c_0}$ \\\hline
-    18 & $\nearrow$ & $\PHobj{a_0}{a_1}$ &  &  & $\PHstate{f_1, a_1, c_0}$ \\\hline
-    19 & $\nearrow$ & $\xproc{a_1}$ &  &  & $\PHstate{f_1, a_1, c_0}$ \\\hline
-  \end{tabular}
-  \caption{\label{tab:concret-metazoan}%
-    Example of the extraction of a concretizing scenario
-    from the local causality graph of \pref{fig:metazoan-sa}(left),
-    by using the algorithm of \pref{ssec:concret}.
-    The first column denotes the step number in the traversal,
-    the second depicts the direction of traversal,
-    either “$\searrow$” for descending or “$\nearrow$” for ascending,
-    the third one is the name of the node,
-    the fourth one gives the marking when the node is left,
-    the fifth one gives the actions output by the algorithm
-    and the last column gives the current state of the model when leaving each node.
-    In step \#5, marked with an asterisk,
-    the traversal visits node $c_0$, but this was arbitrarily chosen
-    amongst the set $\{ c_0, f_1 \}$.
-    Another traversal thus consists in visiting node $f_1$ first,
-    although in this example it does not change the result.
-  }
-\end{table}
-
 We denote in the following:
-$\ctx^2 = \PHstate{f_1, c_0, a_0} \play \PHfrappes{c_0, f_1}{a_0}{a_1} =
-\PHstate{f_1, c_0, a_1}$
-the state resulting from the play of a scenario concretizing
+$\ctx^2 = \PHstate{f_1, a_0, c_0} \play \PHfrappes{c_0, f_1}{a_0}{a_1} =
+\PHstate{f_1, a_1, c_0}$
+the state resulting from the play of the scenario concretizing
 $\myp^1$ in $\ctx^1$.
 As explained in \pref{ssec:ordered-ua},
-One can use this resulting state in order to carry on with another
+one can use this resulting state in order to carry on with another
 successive reachability,
-such as the reachability of $\myp^2 = a_0$ in this case.
+such as the reachability of $\myp^2 = a_0$ in our case.
 The local causality graph used to check the reachability of $\myp^2$
-from $ctx^2$ is given in \pref{fig:metazoan-sa}(middle).
+from $\ctx^2$ is given in \pref{fig:metazoan-sa}(middle).
 The same reasoning allows to conclude that this reachability is true, and
-to extract the following set of concretizing scenarios:
+to extract the following set containing only one concretizing scenario:
 $\Delta(\thisB{\myp^2}{\ctx^2}) =
-\{ \PHfrappem{a_1, f_1}{c_0}{c_1} \concat \PHfrappem{c_1}{a_1}{a_0} \}$.
+\{ \PHfrappes{a_1, f_1}{c_0}{c_1} \concat \PHfrappes{c_1}{a_1}{a_0} \}$.
 We note that once again, two traversals are possible
 (by visiting node $a_1$ before or after note $f_1$)
 but both output the same scenario, and therefore end up in the same sate
@@ -381,18 +331,67 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
   \label{fig:metazoan-sa}%
     The three successive saturated graphs of local causality
     of the AAN in \pref{fig:metazoan-ph}
-    for the objective sequence
-    $\w = \PHobj{a_0}{a_1} \concat \PHobj{a_1}{a_0} \concat \PHobj{a_0}{a_1}$
-    and the initial context
-    $\ctx = \PHstate{a_0, c_0, f_1}$.
-    The (left) graph allows to check objective $\PHobj{a_0}{a_1}$
+    for the successive reachability of $a_0$, $a_1$ and $a_0$
+    from the initial context
+    $\ctx = \PHstate{f_1, a_0, c_0}$.
+    The (left) graph allows to check the reachability of $a_1$
     from the initial context $\ctx$.
-    The (middle) graph is for the objective $\PHobj{a_1}{a_0}$
-    and the context $\PHstate{a_1, c_0, f_1}$.
-    The (right) graph is for the last objective, $\PHobj{a_0}{a_1}$,
-    and the context $\PHstate{a_0, c_1, f_1}$.
+    The (middle) graph is for the reachability of $a_0$
+    and the context $\PHstate{f_1, a_1, c_0}$.
+    The (right) graph is for the last reachability, $a_1$,
+    and the context $\PHstate{f_1, a_0, c_1}$.
   }
 \end{figure}
+
+\newcommand{\xproc}[1]{#1}
+%\newcommand{\xsol}[1]{\circ^{{#1}}}
+\newcommand{\xsol}{\circ}
+
+\begin{table}[p]
+  \centering
+  \begin{tabular}{|c|c|c|l|l|l|}
+    \hline
+    \# & Dir. & Node & Marking & Output & State \\\hline\hline
+    1  & $\searrow$ & $\xproc{a_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    2  & $\searrow$ & $\PHobj{a_0}{a_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    3  & $\searrow$ & $\xsol$ & $\PHfrappes{c_0, f_1}{a_0}{a_1}$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    4  & $\searrow$ & $\{ c_0, f_1 \}$ & $\{ c_0, f_1 \}$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    \phantom{*}%
+    5* & $\searrow$ & $\xproc{c_0}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    6  & $\searrow$ & $\PHobj{c_0}{c_0}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    7  & $\searrow$ & $\xsol$ & $\emptyseq$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    8  & $\nearrow$ & $\PHobj{c_0}{c_0}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    9  & $\nearrow$ & $\xproc{c_0}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    10 & $\nearrow$ & $\{ c_0, f_1 \}$ & $\{ f_1 \}$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+%    \phantom{*}%
+    11 & $\searrow$ & $\xproc{f_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    12 & $\searrow$ & $\PHobj{f_1}{f_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    13 & $\searrow$ & $\xsol$ & $\emptyseq$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    14 & $\nearrow$ & $\PHobj{f_1}{f_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    15 & $\nearrow$ & $\xproc{f_1}$ &  &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    16 & $\nearrow$ & $\{ c_0, f_1 \}$ & $\emptyset$ &  & $\PHstate{f_1, a_0, c_0}$ \\\hline
+    17 & $\nearrow$ & $\xsol$ & $\emptyseq$ & $\PHfrappes{c_0, f_1}{a_0}{a_1}$ & $\PHstate{f_1, a_1, c_0}$ \\\hline
+    18 & $\nearrow$ & $\PHobj{a_0}{a_1}$ &  &  & $\PHstate{f_1, a_1, c_0}$ \\\hline
+    19 & $\nearrow$ & $\xproc{a_1}$ &  &  & $\PHstate{f_1, a_1, c_0}$ \\\hline
+  \end{tabular}
+  \caption{\label{tab:concret-metazoan}%
+    Example of the extraction of a concretizing scenario
+    from the local causality graph of \pref{fig:metazoan-sa}(left),
+    by using the algorithm of \pref{ssec:concret}.
+    The first column denotes the step number in the traversal,
+    the second depicts the direction of traversal,
+    either “$\searrow$” for descending or “$\nearrow$” for ascending,
+    the third one is the name of the current node,
+    the fourth one gives the marking of this node when it is left,
+    the fifth one gives the actions output by the algorithm
+    and the last column gives the current state of the model when leaving each node.
+    In step \#5, marked with an asterisk,
+    the traversal visits node $c_0$, but this was arbitrarily chosen
+    amongst the set $\{ c_0, f_1 \}$.
+    Another traversal thus consists in visiting node $f_1$ first,
+    although in this example it does not change the result.
+  }
+\end{table}
 
 
 
@@ -403,7 +402,7 @@ In order to support the scalability and applicability of our under-approximation
 apply our new approach to the analysis of two large-scale models:
 a T-cell receptor (TCR) signalling pathway~\cite{tcrsig94}
 and an epidermal growth factor receptor (EGFR) signalling pathway~\cite{Samaga2009}.
-These models both gather around a hundred components and are detailed below.
+These models both gather about a hundred components and are detailed below.
 They are originally specified as Boolean networks,
 and have been automatically encoded into
 a Process Hitting model with two classes of priorities,
@@ -429,7 +428,7 @@ It comes in two versions:
     This version is polynomial in the size of the model,
     and therefore scalable by nature by its low complexity.
     However, it may be non-conclusive due to the presence of cycles
-    or dependent synchronizations that could be avoided.
+    or non-independent synchronizations that could be avoided.
   \item The other version consists in checking \pref{th:approxinf}
     on every sub-graph obtained by considering sub-sets of the nodes in $\Sol$
     of the local causality graph.
@@ -461,7 +460,7 @@ but which was not tailored specifically, but still valid, for AANs.
 
 The TCR signalling pathway consists of 94 components.
 We checked the reachability for the independent activation of
-4 outputs of the signalling cascade (SRE, AP1, NFkB, NFAT)
+the 4 outputs of the signalling cascade (SRE, AP1, NFkB, NFAT)
 for all possible combinations of the 3 inputs (CD4, CD28, TCRlig).
 All result in conclusive decisions,
 and our under-approximation has been satisfied in 12 cases (over

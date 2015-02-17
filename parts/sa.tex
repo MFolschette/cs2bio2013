@@ -46,7 +46,7 @@ Successive objectives are described with objective sequences.
   The set of all objectives is called $\Obj \DEF \{ \PHobj{a_i}{a_j} \mid a \in \components \wedge (a_i, a_j) \in \PHl_a \times \PHl_a \}$.
   For an objective $P = \PHobj{a_i}{a_j} \in \Obj$, we define: $\PHsort(P) \DEF
   a$, $\PHtarget(P)\DEF a_i$, $\PHbounce(P)\DEF a_j$,
-  and $P$ is said \emph{trivial} if $a_i = a_j$.
+  and $P$ is said \emph{trivial} iff $a_i = a_j$.
 
   We define an \emph{objective sequence} as a sequence of objectives in which each objective target must be equal to the previous objective bounce of the same automaton, if it exists.
   The set of all objective sequences is denoted by $\OS$.
@@ -80,7 +80,9 @@ $\forall n\in\indexes{\w'}, \bounce{\w'_n}=\bounce{\w_{\phi(n)}}$.
 \obj{a_0}{a_1}\concat\obj{b_0}{b_2}
 \ltw
 \obj{b_0}{b_2}\]
-\[\obj{b_0}{b_1}\not\ltw\obj{b_0}{b_2}\]
+\[\obj{b_0}{b_1}\not\ltw\obj{b_0}{b_2}
+\quad\text{and}\quad
+\obj{b_0}{b_2}\not\ltw\obj{b_0}{b_1}\]
 \end{example}
 
 An objective sequence can be seen as an abstract representation of a set of scenarios that describe
@@ -94,12 +96,12 @@ objective to the bounce of an action in the scenario which preserve the sequenti
 Given a state $s\in\PHl$ and an objective sequence
 $\w\in\OS(s)$, $\concr(\w)$ is the set of scenarios matching with $\w$:
 \begin{align*}
-\concr(\w) \DEF \{ \delta\in\Sce(s)\mid &
+\concr(\w) \DEF \{ \delta\in\Sce(s)\mid &\ 
 \w^\vartriangle\neq \emptyseq\Rightarrow
 \bounce{\delta_{\card\delta}} = \bounce{\w_{\card\w}}
 \\ &
  \wedge \exists \phi:\indexes{\w}\mapsto\indexes{\delta},
-    (\forall n,m\in\indexes{\w}, n<m \Leftrightarrow \phi(n)\leq\phi(m))
+    (\forall n,m\in\indexes{\w}, n<m \Leftrightarrow \phi(n)\leq\phi(m)
 \\ & \qquad
 	\wedge \forall n\in\indexes{\w},
 	  \bounce{\w_n} \in s\play\delta_{1..\phi(n)})
@@ -114,7 +116,7 @@ as defined on page \pageref{notations}.
 \end{definition}
 
 From \pref{def:ltw} and \pref{def:concr}, we derive that if 
-$w\ltw w'$, then $\concr(w)\subseteq\concr(\w')$ (\pref{lem:ltw}).
+$\w \ltw \w'$, then $\concr(\w)\subseteq\concr(\w')$ (\pref{lem:ltw}).
 \begin{lemma}\label{lem:ltw}
 $\w\ltw\w' \Longrightarrow \concr(\w)\subseteq\concr(\w')$\enspace.
 \end{lemma}
@@ -150,7 +152,7 @@ the target of the following action (\pref{def:bs}).
 A \emph{bounce sequence} $\zeta$  is a sequence of actions such that
 $\forall n\in\indexes{\zeta}, n<|\zeta|,
 \bounce{\zeta_{n}} = \target{\zeta_{n+1}}$.
-$\BS$ denotes the set of bounce sequences.
+$\BS$ denotes the set of minimal bounce sequences.
 We refer to the set of bounce sequences \emph{resolving} the objective $P$ as
 $\BS(P)$:
 \begin{align*}
@@ -217,20 +219,23 @@ where $\sSol=\powerset(\Proc)$ and $\Sol=\Obj\times\powerset(\sSol)$
 and $\cwE \subseteq \cwV \times \cwV$ is the set of oriented edges
 (\pref{def:lcg}).
 A node in $\cwV\cap\Obj$ represents an objective to refine.
-Such a node is related to nodes in $\cwV\cap\Sol$ which represent sets of hitter set of a
-bounce sequence of the objective (one for each bounce sequence in $\BS(P)$):
-given an objective $P$, if $\zeta\in\BS(P)$, $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid
+Such a node is related to nodes in $\cwV\cap\Sol$ which represent
+sets of hitter sets extracted from a
+bounce sequence of the objective
+(that is, one for each bounce sequence in $\BS(P)$): indeed,
+given an objective $P$, if $\zeta\in\BS(P)$
+and $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid
 n\in\indexes\zeta \}$, then $P$ is related to $\langle P, \abstr\zeta\rangle\in\Sol$
 (\pref{def:lcg}-\ref{lcg-obj-sol}).
 For each hitter set $ps\in\abstr\zeta$,
 the node $\langle P,\abstr\zeta\rangle\in\cwV\cap\Sol$ is
 related to the node $ps\in\sSol$
 (\pref{def:lcg}-\ref{lcg-sol-sync}).
-Then, each node $ps\in\sSol$ is related to each local state $a\in\Proc$
+Then, a node $ps\in\cwV\cap\sSol$ is related to each local state $a_i \in ps$ is contains
 (\pref{def:lcg}-\ref{lcg-sync-ls}).
-Each local state node $a_i\in\cwV\cap\Proc$,
-is related to each objective $\obj{a_j}{a_i}$ where
-$a_j$ is either in the initial context $\ctx$, or
+A local state node $a_i\in\cwV\cap\Proc$
+is related to each objective $\obj{a_j}{a_i} \in \Obj$, where
+$a_j$ is either in the initial context $\ctx$ or
 is a local state node in the LCG
 (\pref{def:lcg}-\ref{lcg-ls-obj}).
 Finally, given a node $\obj{a_j}{a_i}\in\cwV\cap\Obj$,
@@ -314,8 +319,8 @@ in $x$ should not require to change the first local state.
   $a_k \in\conn_{\cwB}(b_j) \cap \Proc \Rightarrow a_k = a_i$.
 \end{definition}
 
-The intuition is the following.
-Given a state $s\subset\ctx$, we recursively refine the initial objective
+The intuition of the under-approximation is the following.
+Given a state $s\subseteq\ctx$, we recursively refine the initial objective
 (which is: reaching $\myp$ from the initial state) according to its children.
 As the LCG is acyclic, such a recursion always terminates, and as all the objective nodes have at
 least one child, it never gets stuck.
@@ -340,7 +345,7 @@ In addition, we know that the state of automaton $a$ has remained unchanged, oth
 $\obj{a_i}{a_j}$ would have an objective child.
 Hence, the action $\zeta_n$ is playable in the current state.
 We can thus apply this action, modifying the state of $a$ to $a_j$ and continue to the next stage.
-In the end, this recursive procedures builds a scenario from $s\subset\ctx$ to a state containing $\myp$.
+In the end, this recursive procedures builds a scenario from $s\subseteq\ctx$ to a state containing $\myp$.
 
 \begin{theorem}[Under-approximation]
 \label{th:approxinf}
@@ -349,14 +354,14 @@ In the end, this recursive procedures builds a scenario from $s\subset\ctx$ to a
   if the LCG $\cwB$ contains no cycle,
   all nodes in $\Obj$ have at least one child,
   and all nodes in $\sSol$ are independent,
-  then for any state $s\in\PHl$ such that $s\subset\ctx$,
+  then for any state $s\in\PHl$ such that $s\subseteq\ctx$,
   there exists a scenario $\delta\in\Sce$ with $\myp\in s\play\delta$.
 \end{theorem}
 
 Regarding the complexity of the method,
 computing the LCG is polynomial in the number of automata in $\PH$ and exponential in the number of local states in one automaton.
 Checking the properties allowing to apply \pref{th:approxinf} is polynomial in the size of the graph.
-Therefore, the building and checking process can be considered as polynomial in the size
+Therefore, the building and checking processes can be considered as polynomial in the size
 of the AAN, provided that each automaton only contains a few local states.
 We note that this is particularly true for biological models, where
 each component usually contains a limited number of expression levels.
@@ -379,7 +384,8 @@ subsets, hence being exponential in the number of objectives having at least two
   concludes that $a_1$ is reachable, as well as $b_1$, but
   does not conclude regarding the reachability of $c_1$.
   This is due to the fact that the node $\{ a_1, b_1 \} \in \Bv \cap \sSol$
-  is not independent because of its successor $a_0$ (and $b_0$).
+  is not independent because of its successor $a_0$ (and $b_0$)
+  as we can see in the LCG of \pref{fig:sa-livelock}.
   (However, from the inconclusiveness of \pref{th:approxinf},
   one cannot conclude about the unreachability of $c_1$.
   Such analysis should be driven for instance
@@ -394,11 +400,12 @@ subsets, hence being exponential in the number of objectives having at least two
   Thus, when using Process Hitting, $c_1$ was indeed reachable,
   contrary to the behaviour expected from an accurate Boolean gate.
   
-  Finally, we note however that,
-  if $\PHhits{a_0}{b_0}{b_1}$ and $\PHhits{b_0}{a_0}{a_1}$ are replaced by the actions
+  Finally, we note however that
+  if actions $\PHhits{a_0}{b_0}{b_1}$ and $\PHhits{b_0}{a_0}{a_1}$
+  are replaced respectively by
   $\PHhitm{a_0}{a_1}$ and $\PHhitm{b_0}{b_1}$,
   then the resulting saturated graph of local causality changes, and
-  \pref{th:approxinf} concludes that $c_1$ is reachable from $\ctx$.
+  \pref{th:approxinf} concludes that $c_1$ is reachable from $\PHstate{a_1, b_0, c_0}$.
   The reader can also refer to \pref{ssec:ex-metazoan}
   for a detailed conclusive example.
 
@@ -474,16 +481,17 @@ subsets, hence being exponential in the number of objectives having at least two
     \end{tikzpicture}
   \caption{
   \label{fig:sa-livelock}
-    The saturated graph of local causality of the AAN in \pref{fig:ph-livelock}
-    for the objective $\w = \PHobj{c_0}{c_1}$
-    and the initial context $\ctx = \PHstate{a_1, b_0, c_0}$.
+    The local causality graph $\cwB$ on the AAN in \pref{fig:ph-livelock}
+    for the reachability of $\myp = c_1$
+    from the initial context $\ctx = \PHstate{a_1, b_0, c_0}$.
     Elements in $\Proc$ are represented by rectangular nodes,
-    elements in $\Sol$ are represented by circle nodes,
+    elements in $\Sol$ are represented by small circles,
     and elements in $\sSol$ and $\Obj$ are the remaining borderless nodes.
-    \pref{th:approxinf} is inconclusive on this example as node $\{ a_1, b_1 \}$
+    \pref{th:approxinf} is inconclusive on this example as
+    node $\{ a_1, b_1 \} \in \sSol$
     is not independent (see \pref{def:coherent}).
-    Indeed, $a_0 \in \Proc$ is a successor of $\{ a_1, b_1 \}$, but $a_0 \neq a_1$
-    (and the same also stands for $b_0$).
+    Indeed, $a_0$ is a successor of $b_1$, but $a_0 \neq a_1$
+    (and the same also stands for $b_0$, which is a successor of $a_1$).
   }
 \end{figure}
 \end{example}
@@ -558,18 +566,17 @@ and the initial output is the empty sequence $\emptyseq$.
           change the current state to $s \play \zeta_1$
           and mark this node with $\zeta_{2..|\zeta|}$.
         If $\zeta_1$ is not playable
-        (which means that $\target{\zeta_1}$ has changed):
-          go to the node $\PHobj{\PHget{s}{\PHsort(\bounce{\zeta_1})}}{\bounce{\zeta_1}} \in \Obj$
+        (which means that $\target{\zeta_1}$ has changed),
+          then go to the node $\PHobj{\PHget{s}{\PHsort(\bounce{\zeta_1})}}{\bounce{\zeta_1}} \in \Obj$
           and start descending.
     \end{itemize}
 \end{itemize}
 
-The execution of such a traversal outputs a scenario.
-We denote $\Delta(\cwB)$ the set of all scenarios extracted from the
+The execution of such a traversal outputs a scenario from $s_0$.
+In the following, we denote by $\Delta(\cwB)$ the set of all scenarios extracted from the
 local causality graph $\cwB$.
 Indeed, several scenarios may exist for a same graph,
-generated by the successors that can be arbitrarily chosen
-in this algorithm.
+generated by the arbitrary choices that exist in this algorithm.
 An example of such a traversal is given on a small example
 in \pref{ssec:ex-metazoan}.
 
@@ -586,13 +593,13 @@ In this section, we briefly discuss how the presented static analysis for local
 state reachability properties can be extended to sequential (sub)states
 reachability properties.
 
-\paragraph{Sub-state reachability}
-Given an AAN $\PH = (\PHs, \PHl, \PHh)$,
+\subsubsection*{Sub-state reachability}
+Given an AAN $\PH = (\PHs, \PHl, \PHh)$ and
 a sub-set of automata local states
 $ps = \{ a_i \in\Proc\mid a\in\PHs, a_i\in\PHl_a\}$,
 the reachability from $s\in\PHl$ of a state $s'\in\PHl$ such that
 $ps\subset s'$ is equivalent to the reachability of the local state
-$\reach_1$ from a state $s\uplus\langle\reach_0\rangle$
+$\reach_1$ from a state $s \times \{ \reach_0 \}$
 in the AAN
 $\PH' = (\PHs', \PHl', \PHh')$ with:
 $\PHs' = \PHs \cup \{ \reach \}$, $\PHl' = \PHl \times \PHl_\reach$,
@@ -603,20 +610,20 @@ Such analysis was not possible with the Process Hitting framework,
 because of the lack of the notion of simultaneity for more than two components.
 
 
-\paragraph{Sequential reachability}
-Given a sequence of local state to reach (e.g., reach $a_i$, then $b_j$),
+\subsubsection*{Sequential reachability}
+Given a sequence of local state to reach (e.g., reach $a_i$, then $b_j$, etc.),
 one can use the same approach as for sub-state reachability by introducing
 a new automaton $\reach$ having $n+1$ local states where $n$ is the size of the
-sequence of reachability and $n$ actions making it bounce from $\reach_0$ to
+sequence of reachability, and $n$ actions making it bounce gradually from $\reach_0$ to
 $\reach_n$ with hitters corresponding the successive local states
-(e.g., $\PHfrappes{a_i}{\reach_0}{\reach_1}$ and
-$\PHfrappes{b_j}{\reach_1}{\reach_2}$).
+(e.g., $\PHfrappes{a_i}{\reach_0}{\reach_1}$,
+$\PHfrappes{b_j}{\reach_1}{\reach_2}$, etc.).
 
-An alternative approach is to use the extraction of a scenario of the previous
-sub-section:
-given the initial state, and a first local state reachability property, one
-compute a possible scenario witnessing this reachability.
-Then the next local state reachability properties is computed from the
-state that outcomes from the latter scenario.
-
-
+An alternative approach is to use the extraction of a scenario of
+\pref{ssec:concret}:
+given an initial state $s_0$, and a first local state reachability property $\myp_1$,
+one can compute a possible scenario $\delta \in \Delta(\mycwB{s_0}{\myp})$
+witnessing this reachability;
+then the next local state reachability properties ($\myp_2$, $\myp_3$, etc.)
+are computed from the
+state $s_0 \play \delta$ that outcomes from the latter scenario.

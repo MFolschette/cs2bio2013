@@ -18,7 +18,7 @@ As a matter of fact, the abstractions we get are more or less rough or accurate.
 Prevalent formal frameworks for such modelling activities are state-transition systems or process algebras. % Petri nets
 We developed a quite similar framework named the Process Hitting~\cite{PMR10-TCSB},
 consisting in a restriction of these frameworks where the evolution of a component is determined by the state of at most one other component that does not evolve.
-In a sense, these kind of actions are of the form $X + Y \rightarrow X + Y'$ where $X$ behaves like a catalyst molecule that “hits” another molecule $Y$ and changes it into $Y'$, without being changed itself.
+This is modelled by actions are of the form $X + Y \rightarrow X + Y'$ where $X$ behaves like a catalyst molecule that “hits” another molecule $Y$ and changes it into $Y'$, without being changed itself.
 Assuming catalysts are always available, this can represent any biochemical system made of monomolecular reactions, and can also represent catalytic networks such as metabolic networks.
 %, with the aim of avoiding to build the whole state space in order to be able to tackle very large systems
 Our motivation behind this framework was to design a model and analysis techniques adapted to biological modelling.
@@ -39,7 +39,7 @@ and the playability of the reaction.
 This is where the priorities become useful, if not necessary:
 the extra reactions can for example be given “infinite speed” (highest priority) so that they do not affect the behaviour of “normal” (lower priority) reactions, including the multimolecular ones.
 
-The approach used in this paper, 
+The approach used in this paper
 consists in considering a broader class of models,
 that we call Asynchronous Automata Network,
 and that allows to naturally model these cooperations
@@ -57,7 +57,7 @@ of extending traditional process algebras with the concept of priority
 that allows for some transitions to be given precedence over others.
 We focus here on static priorities that allow to model
 time constraints such as reaction rates or delays between regulations,
-but can also model preemptions between evolutions branches.
+but can also model preemptions between evolution branches.
 
 Until now, such a priority scheduling of the actions was not studied extensively in the different formal modelling frameworks dedicated to systems biology.
 Nevertheless, such an attempt has been carried out for Petri nets by F.~Bause~\cite{Bause97},
@@ -93,21 +93,21 @@ of regulation networks,
 especially the widespread Logical Networks \cite{Thomas95,deJong02},
 which encompass variables with a limited number of discrete values
 alongside with evolution functions or focal parameters.
-To show the scalability of our method, we apply it to a
+To show the scalability of our method, we apply it to two
 large-scale biological models with around 100 components.
 
 \pref{sec:ph} presents the Asynchronous Automata Networks (AANs)
 without any notion of classes of priorities.
 In \pref{sec:sa},
 we develop our under-approximation method allowing to efficiently
-compute reachability analysis;
+compute reachability analyses;
 we also show how to extract a valid execution path if the response is positive,
 and propose two refinements in case one needs to check
 successive or simultaneous reachability properties.
 The framework of AANs with classes of priorities is given in \pref{sec:flattening},
 alongside with an encoding into AANs without classes of priorities
 (or, equivalently, with one class of priority).
-Finally, \pref{sec:example} provides a detailed example and a large-scale example
+Finally, \pref{sec:example} provides a detailed example and two large-scale examples
 of the application of our method,
 and \pref{sec:ccl} gives a conclusion and a discussion about our work.
 
@@ -134,13 +134,12 @@ the range of applicability of the results.
 
 \paragraph*{Sets}
 If $A$ is a finite set,
-$|A|$ is the cardinality of $A$
+$\card{A}$ is the cardinality of $A$
 and $\powerset(A)$ is the power set of $A$.
 $\sN$ is the set of natural numbers,
-$\sN^* = \sN \setminus \{ 0 \}$ is the set of positive natural numbers,
-$\sNN = \sN \setminus \{ 0, 1 \}$ is the set of natural numbers strictly greater than 1,
+$\sN^* = \sN \setminus \{ 0 \}$ is the set of positive natural numbers
 and $\segm{x}{y} = \{ x, x+1, \dots, y-1, y \}$ is the set of natural numbers from $x$ to $y$ included.
-The Cartesian product of sets is denoted by $\times$;
+The Cartesian product of sets is denoted by $\times$ and
 if $z$ is a tuple of $n$ components, $\toset{z}$ denotes the corresponding set:
 $\toset{z} = \{z_1, \cdots, z_n\}$.
 
@@ -148,27 +147,29 @@ $\toset{z} = \{z_1, \cdots, z_n\}$.
 We denote by $\emptyseq$ the empty sequence.
 If $n \in \sN$ and
 $x = (x_i)_{i \in \segm{1}{n}}$ is a sequence of elements indexed by $i \in \segm{1}{n}$,
+then $\card{x} = n$ is the size of $x$
 %we denote %$|x| = (b-a)+1$ the size of this sequence and
-then $\indexes{x} = \segm{1}{n}$ is the set of indexes of this sequence.
+and $\indexes{x} = \segm{1}{n}$ is the set of indexes of this sequence.
 Furthermore, if $a, b \in \indexes{x}$ with $a \leq b$,
-then $x_{a..b} = (x_i)_{i \in \segm{a}{b}}$ is a subsequence of $x$.
+then $x_{a..b} = (x_i)_{i \in \segm{a}{b}}$ is the subsequence of $x$
+between indexes $a$ and $b$ included.
 %from element $n$ to element $m$ inclusive.
 Finally, if $x$ is a sequence, $\toset{x}$ also denotes the corresponding set:
 $\toset{x} = \{x_1, \cdots, x_{\card{x}}\}$.
 
-\paragraph*{Digraph}
-If $(V,E)$ is a directed graph whose $V$ are the nodes and $E \subseteq V\times V$ the edges,
+\paragraph*{Digraphs}
+If $(V,E)$ is a directed graph whose set of nodes is $V$ and whose set of edges is $E \subseteq V\times V$,
 the children of a node $n$ are given by
 $\childs: V \to \powerset(V)$, with
-$\childs(n) \DEF \{ m\in V\mid (n,m)\in E\}$;
+$\childs(n) = \{ m\in V\mid (n,m)\in E\}$;
 its parents are given by
 $\parents: V \to \powerset(V)$ with
-$\parents(n) \DEF \{ m\in N\mid (m,n)\in E\}$;
+$\parents(n) = \{ m\in N\mid (m,n)\in E\}$;
 and its successors are given by
 $\conn_{(V,E)}(n)$ which is the least fixed point containing $n$
 of the function
 $\f{f}\conn:\powerset(V)\to \powerset(V)$
-with $\f{f}\conn(W) \DEF \bigcup_{m\in W} \childs(m)$.
+with $\f{f}\conn(W) = \bigcup_{m\in W} \childs(m)$.
 
 %\paragraph*{Functions and least fixed point}
 %If $A$ and $B$ are sets,

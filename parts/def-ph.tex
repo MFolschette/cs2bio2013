@@ -28,14 +28,14 @@ An action stands for a set of transitions sharing the same label,
 so that playing them changes exactly one local state.
 Therefore, an action is denoted by $\PHhit{A}{b_j}{b_k}$
 where $A$ is a set of local states
-and $b_j$ and $b_k$ are local states of a same automaton $b$,
-and it is required that $b_j \neq b_k$ and that
+and $b_j$ and $b_k$ are local states of a same automaton $b$;
+it is moreover required that $b_j \neq b_k$ and that
 $A$ does not contain a local state of $b$ or two local states of the same automaton.
 An action $h=\PHfrappe{A}{b_j}{b_k}$ is read as
-``$A$ \emph{hit} $b_j$ to make it bounce to $b_k$'',
-and $A$, $b_j$, $b_k$ are called respectively the set of
+``$A$ \emph{hits} $b_j$ to make it bounce to $b_k$'',
+and $A$, $b_j$, $b_k$ are called respectively the (set of)
 \emph{hitters}, the \emph{target} and the \emph{bounce} of the action,
-and can be referred to as $\PHhitter(h), \PHtarget(h), \PHbounce(h)$, respectively.
+and can be referred to as $\PHhitter(h)$, $\PHtarget(h)$ and $\PHbounce(h)$, respectively.
 
 \begin{definition}[Asynchronous Automata Networks]
 \label{def:ph}
@@ -58,21 +58,24 @@ and can be referred to as $\PHhitter(h), \PHtarget(h), \PHbounce(h)$, respective
   Furthermore,
   we call $\PHproc \DEF \bigcup_{a \in \PHs} \PHl_a$ the set of all local states in the model.
 \end{definition}
-%
-\noindent
-The automaton that a local state $a_i$ belongs to is referred to as $\PHsort(a_i) = a$.
+
+\paragraph{Notations}
+The automaton that a local state $a_i$ belongs to is referred to as $\PHsort(a_i) = a$,
+and if $A \subseteq \PHproc$, we denote:
+$\PHsortf{A} = \{ \PHsortf{a_i} \in \PHs \mid a_i \in A \}$.
 Given a state $s\in \PHl$, the local state of automaton $a \in \PHs$ present in $s$ is denoted by $\PHget{s}{a}$, that is, the $a$-coordinate of the state $s$.
-If $a_i \in \PHproc$, we define the notation $a_i \in s \EQDEF \PHget{s}{a} = a_i$;
-and if $A\subseteq\PHproc$, $A\subseteq s\EQDEF \forall a_i\in A, \PHget{s}{a} = a_i$.
+If $a_i \in \PHproc$, we denote $a_i \in s \Leftrightarrow \PHget{s}{a} = a_i$;
+and if $A\subseteq\PHproc$, $A\subseteq s \Leftrightarrow \forall a_i\in A, \PHget{s}{a} = a_i$.
 
 \begin{definition}[Semantics of an AAN ($\PHPtrans$)]
 \label{def:play}
-  An action $h = \PHhit{A}{b_j}{b_k} \in \PHa$ is \emph{playable} in $s \in \PHl$
+  If $\PH = (\PHs; \PHl; \PHa)$ is an AAN,
+  an action $h = \PHhit{A}{b_j}{b_k} \in \PHa$ is \emph{playable} in $s \in \PHl$
   if and only if $A \subseteq s$ and $\PHget{s}{b} = b_j$.
   In such a case, $(s \PHplay h)$ stands for the state resulting from the play of the action $h$ in $s$, which is defined by:
-    $(s \PHplay h)_b = b_k$
-	and
-	$\forall a\in\PHs, a\neq b, (s\PHplay h)_a = s_a$.
+    $\PHget{(s \PHplay h)}{b} = b_k$
+  and
+    $\forall a \in \PHs, a \neq b, \PHget{(s\PHplay h)}{a} = \PHget{s}{a}$.
   Moreover, we denote: $s \PHPtrans (s \PHplay h)$.
 
   If $s \in \PHl$,
@@ -120,17 +123,17 @@ and if $A\subseteq\PHproc$, $A\subseteq s\EQDEF \forall a_i\in A, \PHget{s}{a} =
   \caption{%
   \label{fig:ph-livelock}%
     An example of AAN.
-    This model represents the interaction of two exclusive components $a$ and $b$,
-    that cannot be active simultaneously, and that degrade over time.
+    This model represents the interaction of two components $a$ and $b$,
+    whose production is mutually exclusive and that degrade over time.
     Moreover, these two components can cooperate to activate $c$
     if their “active” states ($a_1$ and $b_1$)
     are present in the same state.
     Automata are represented by labelled boxes
     and local states by circles with their identifier on the side.
     Actions are represented by a dot connected by an edge to every hitter
-    and by an arrows to the target, followed by another dotted arrow towards the bounce.
+    and by an arrow to the target, followed by another dotted arrow towards the bounce.
     Greyed local states stand for the following possible global state:
-    $\PHstate{a_1, b_0, c_0, ab_{10}}$.
+    $\PHstate{a_1, b_0, c_0}$.
   }
 \end{figure}
 
@@ -144,9 +147,10 @@ to each automaton in the model, a context maps a set of local states in this aut
   $\forall a \in \PHs, \PHget{\ctx}{a} \subseteq \PHl_a \wedge \PHget{\ctx}{a} \neq \emptyset$.
   $\Ctx$ is the set of all contexts.
 \end{definition}
-\noindent
+
+\paragraph{Notations}
 For a given context $\ctx$, we note $a_i \in \ctx$ if and only if $a_i \in \PHget{\ctx}{a}$,
-and for all $ps \in \powerset(\PHproc)$ or $ps \in \PHl$, $ps \subseteq \ctx \EQDEF \forall a_i \in ps, a_i \in \ctx$.
+and for all $ps \in \powerset(\PHproc)$ or $ps \in \PHl$, $ps \subseteq \ctx \Leftrightarrow \forall a_i \in ps, a_i \in \ctx$.
 
 
 
