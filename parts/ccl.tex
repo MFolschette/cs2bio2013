@@ -1,35 +1,43 @@
 % vi:spell spelllang=en:
 \section{Discussion \& Conclusion}\label{sec:ccl}
 
-In this paper, we focused on the Asynchronous Automata Networks (AANs),
-which is a restriction of classical Automata Networks
-and is equivalent to the Process Hitting with classes of priorities~\cite{FPMR13-CS2Bio}.
+In this paper, we focused on Asynchronous Automata Networks (AANs),
+which are a restriction of classical Automata Networks
+and are equivalent to Process Hitting models with classes of priorities~\cite{FPMR13-CS2Bio}.
 This formalism proves useful to model accurate Boolean gates, which was not possible
 with the standard form of the Process Hitting,
 and avoid an unwanted over-approximation of the dynamics.
 Furthermore, we proposed an extension of this formalism with classes of priorities,
-which prove convenient to abstract time parameters into these kinds of models,
-or more simply to add preemption relations between actions.
+which prove convenient to abstract time parameters into these kinds of models
+or more simply to add preemption relations between actions,
+and showed that any AAN with priorities can be translated into
+an equivalent AAN without priorities.
 
 Then, we developed a method to perform a reachability analysis
-of a sequence of objectives in an AAN,
+of a local state in an AAN,
 based on an under-approximation of the true reachability solutions.
-The checked objectives can take the form of local states, global states
-or partial states, making the analysis more convenient.
-This method can be considered efficient,
-because it is exponential in the number of possible solutions,
-and each step is only polynomial in the size of the model.
-Moreover, AANs with classes of priorities can also be studied in this way,
-at the cost of a translation that we gave in this paper.
+We also extended this analysis to global and
+partial states, and to the successive reachability of several local states.
+The method can be considered efficient,
+because it is polynomial in the size of the model.
+A more conclusive analysis also exists,
+but at the price of being exponential in the number of local solutions.
+Finally, AANs with classes of priorities can also be studied in this way,
+at the cost of an exponential translation that we gave in this paper.
+We applied it to a large number of experiments on two large-scale
+biological models, and obtained in the worst case a ratio of
+%65\% of positively responding cases, growing to
+90\% of conclusive cases
+with the joint use of a previously proposed over-approximation,
+although limiting the computation time to 3 seconds for each test.
 
-Finally, we also showed that AANs are also equivalent to Asynchronous Discrete Networks,
-that is, the multivalued version of the classical Asynchronous Boolean Networks
-with discrete expression levels and evolution functions.
-This framework is also equivalent to Thomas' models with Snoussi parameters
-instead of evolution functions.
+AANs are also equivalent to Logical Networks, that is,
+either multivalued or Boolean networks
+with evolution functions or focal parameters,
+such as Thomas' models with Snoussi parameters.
 This especially allows to efficiently compute reachability results
 on large biological models,
-provided that they are equivalent to Asynchronous Discrete Networks,
+provided that they are equivalent to Logical Networks,
 which ensures that a translation to AANs is possible.
 For example,
 such a translation for generalized Interaction Graphs,
@@ -38,15 +46,16 @@ was proposed in~\cite{PMR10-TCSB}.
 
 Further work can be derived from what have been presented in this paper.
 The over-approximation on Process Hitting models without priorities proposed in~\cite{PMR12-MSCS}
-is still accurate in the framework with priorities (by “merging” all actions),
-but may be refined given the restrictions proposed in this paper,
-and a specific search of key processes or cut sets \cite{PAK13-CAV} may be derived.
+and that was used in this work
+is still accurate on AANs (by over-approximating dynamics)
+but may be refined given the particular for of AANs proposed in this paper.
+A specific search of key processes or cut sets \cite{PAK13-CAV} may especially be derived.
 %but turns out to be too wide even in some obvious cases that are consequently not conclusive.
 %This approximation may be refined in order to better fit the introduction of priorities, and mak the overall approximation approach 
 %and mode precisely the class of models studied in this paper.
 Furthermore, we are investigating alternative under-approximations that can be
-applied directly to the whole class of Process Hitting models with priorities,
-and not only to a sub-class with particular restrictions;
+applied directly to the whole class of AANs or Process Hitting models with priorities,
+and not only to a sub-class with only one class of priority or particular restrictions;
 such improvement may allow to increase the conclusiveness of the static analysis
 while allowing to analyse any model without the need of a translation.
 Finally, in order to take into account quantitative data in transition delays, the overall approximation method could be extended to handle evolutions that are chronometric instead of only chronologic.

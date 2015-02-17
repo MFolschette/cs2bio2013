@@ -464,22 +464,22 @@ the 4 outputs of the signalling cascade (SRE, AP1, NFkB, NFAT)
 for all possible combinations of the 3 inputs (CD4, CD28, TCRlig).
 All result in conclusive decisions,
 and our under-approximation has been satisfied in 12 cases (over
-32) proving the satisfiability of the concerned reachability property in the encoded Boolean network
+32) proving the satisfiability of the concerned reachability properties in the encoded Boolean network
 (and non-satisfiability in the other cases, using the previously existing over-approximation).
 
 By analysing the detail of the results, one can find out that one of the outputs, NFkB, can never be activated.
 In other words, FkB$_1$ is never reachable, whatever the initial state of the inputs,
 while the other outputs (SRE, AP1, NFAT) can be independently activated
 for some configurations of inputs.
-We thus want to check if these three outputs can be activated together,
-that is, if the activation of one of the outputs does not prevent the activation another one.
+We thus wanted to check if these three outputs could be activated together,
+that is, if the activation of one of the outputs did not prevent the activation another one.
 For this, as proposed in \pref{ssec:simult-ua},
-we add a new automaton $\reach$ into the model
+we have added a new automaton $\reach$ into the model
 with two local states ($\PHl_\reach = \{ \reach_0, \reach_1 \}$)
 and the action:
 \[ \PHhits{\text{SRE}_1, \text{AP1}_1, \text{NFAT}_1}{\reach_0}{\reach_1} \enspace. \]
 Finally, checking the reachability of $\reach_1$ in all configurations of the inputs
-is always conclusive,
+has always been conclusive,
 and the existence of 4 positive answers
 (amongst all 8 possible initial configurations of the inputs) allows to conclude that
 it is possible to reach a state where SRE, AP1 and NFAT are simultaneously active.
@@ -488,27 +488,27 @@ it is possible to reach a state where SRE, AP1 and NFAT are simultaneously activ
 
 The EGFR signalling pathway gathers 104 components, amongst which one can distinguish
 21 inputs and 12 outputs.
-Analysing the consequences of the variations of all inputs
-would require too many tests;
-therefore, we selected 13 of them
+We selected 13 of all inputs
 (erbb1, erbb2, erbb3, erbb4, bir, btc, egf, epr, nrg1a, nrg1b, nrg2b, nrg4, tgfa)
 and observed the impact of their variations on all outputs
 (elk1, creb, ap1, hsp27, actin\_reorg, cmyc, pro\_apoptotic, p70s6\_2, pkc, stat1, stat3, stat5).
 We note that some of the experiments trigger the exponential search
 of sub-solutions described above, and are cut after 3 seconds of computation
 (thus leading to \emph{Inconclusive} cases).
-These experiments represent about 10\% of all tests,
-amongst the remaining 90\%, while all the others are conclusive.
-We note that none of the tests terminated normally (without being cut after 3 seconds)
-with an inconclusive answer, which is however theoretically possible.
+These “interrupted” experiments represent about 10\% of all tests.
+%amongst the remaining 90\%, while all the others are conclusive.
+We note that amongst all tests that terminated “normally” (without being cut after 3 seconds)
+%none of the tests terminated normally (without being cut after 3 seconds)
+none of them responded with an inconclusive answer, which is however theoretically possible.
 
 \subsubsection*{Synthesis of the Results}
 
 The results of all tests performed with the implementation of our under-approximation
 are summarised in \pref{tab:results} (columns “AAN”).
 We held all these experiments on a personal computer,
-and computations times were in the order of a few tenths of a second to about one second.
-To give a comparison, we did the same experiments with a standard symbolic model-checker, libDDD
+and regarding the experiments that were not cut at the 3 seconds limit,
+computations times were in the order of a few tenths of a second to about one second.
+To give a comparison, we did the same experiments with a standard symbolic model-checker, LibDDD
 \cite{libddd}, known for its good performances, the input model being the Boolean network expressed
 as a Petri net.
 However, due to the large scale of the model,
@@ -523,7 +523,7 @@ even by orders of magnitude.
 Finally, we note that similar experiments were conducted in~\cite{PMR12-MSCS}.
 However, if these experiments allowed to obtain some information
 on the TCR and EGFR models to some extent,
-they did not provide a formal proof of the reachabilities that have been
+they did not provide a formal “True” response regarding the reachabilities that have been
 checked in the examples above.
 Indeed, the semantics of Process Hitting (without classes of priorities)
 does not allow to model accurate Boolean gates,
@@ -534,14 +534,15 @@ as explained in~\cite{FPMR13-CS2Bio},
 with a construction that is equivalent to the AANs presented in \pref{sec:ph}.
 Therefore, only the method presented in this paper provides a formal proof that
 the observed behaviours are the result of the true dynamics of the systems.
-The same experiments have been conducted with the previous version
-of the under-approximation and reported alongside in \pref{tab:results}
+Thus, additionally to the experiments previously mentioned,
+we conducted similar experiments with the previous version
+of the under-approximation, that are reported alongside in \pref{tab:results}
 (in columns “PH”).
-We note that indeed, about 10\% of the positive results regarding the EGFR model
+We note that indeed, about 15\% of the positive results regarding the EGFR model
 could not be proven with our new under-approximation,
 and are thus still formally uncertain.
 
-\definecolor{lightgraycell}{gray}{0.8}
+\definecolor{lightgraycell}{gray}{0.85}
 \newcommand{\grcl}{\cellcolor{lightgraycell}}
 
 \begin{table}[htp]
@@ -580,11 +581,12 @@ and are thus still formally uncertain.
     while the “PH” column gives the results for PH models
     using cooperative sorts to model actions with multiple hitters,
     and using the under-approximation of~\cite{PMR12-MSCS}.
-    The lines labelled “True”, “Inconclusive” and “False” lines give respectively
-    the number of positive, cut and negative answers,
+    The lines labelled “True”, “Inconclusive” and “False” give respectively
+    the number of positive answers,
+    experiments cut after 3 seconds and negative answers;
     while “Max time” and “Total time” depict respectively
-    the maximum time of the individual computations (except those cut after 3 seconds)
-    and the overall execution time of all tests (including those cut after 3 seconds).
+    the maximum time of the individual computations (except those cut at 3 seconds)
+    and the overall execution time of all tests (including those cut at 3 seconds).
     The greyed cells highlight the results that are proper to the
     under-approximation presented in this paper.
   }
@@ -593,4 +595,4 @@ and are thus still formally uncertain.
 In conclusion,
 while ensuring a low complexity for the analysis of reachability in Boolean and discrete networks,
 our under-approximation method turns out to be conclusive in numerous cases when applied to real
-large-scale biological models, which were not tractable with exact model-checking.
+large-scale biological models, which were not tractable in most cases with exact model-checking.
