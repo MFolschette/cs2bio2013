@@ -13,9 +13,10 @@ we note $max\ctx = \{a\mapsto \cwV\cap\PHl_a \mid a\in\PHs\}$ the context suppor
 Let $ps \in \Bv \cap \sSol$ be a set of hitters
 and suppose all of its successors are concretizable.
 We first want to demonstrate that
-there exists a scenario that activate all the local states it contains.
-We label all local states of $ps$ by an integer: $ps = \{ p_n \}_{n \in \indexes{ps}}$.
-Let us prove by induction that for all $n \in \indexes{ps}$, there exists a scenario $\delta_n$ so that:
+there exists a scenario that activates all the local states it contains.
+We label all local states of $ps$ by an integer: $ps = \{ p_m \}_{m \in \indexes{ps}}$.
+Let us prove by induction that for all $n \in \{ 0 \} \cup \indexes{ps}$,
+there exists a scenario $\delta_n$ so that:
 $\forall i \in \segm{1}{n}, \PHget{(s \PHplay \delta_n)}{\PHsort(p_i)} = p_i$.
 \begin{itemize}
   \item It is straightforward for $\delta_0 = \varepsilon$.
@@ -38,7 +39,7 @@ As there is no cycle in $\cwB$, we show by induction in the following that
 $\forall s\in \PHl, s\subseteq max\ctx, \forall P \in \Bv \cap \Obj,
 \PHtarget(P) \in s \Longrightarrow \exists \delta \in \mconcr_s(P)$.
 \begin{itemize}
-  \item If $(P, \{ \emptyset \}) \in \Bee{\Obj}{\Sol}$,
+  \item If $(P, \langle P, \{ \emptyset \} \rangle) \in \Bee{\Obj}{\Sol}$,
     either $\PHtarget(P) = \PHbounce(P)$ and $\delta = \emptyseq$;
     or $\exists \zeta \in \BS(P), \zeta \in \Sce(s) \wedge
       \forall i \in \indexes{\zeta}, \hitter{\zeta_i} = \emptyset$
