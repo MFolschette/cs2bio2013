@@ -6,7 +6,7 @@ This section aims at giving application examples of the static analysis method
 that we developed in \pref{sec:sa}.
 In \pref{ssec:ex-metazoan}, we apply our method to a small model of the
 metazoan segmentation process,
-and demonstrate how the classes of priorities help in the modelling process,
+and demonstrate how classes of priorities help in the modelling process,
 and how the flattening of \pref{sec:flattening}
 can be used in such a case.
 In \pref{ssec:ex-tcrsig}, we apply our method to two large-scale models
@@ -37,7 +37,7 @@ The auto-inhibition of $f$, which normally terminates
 the stripes formation in the original model,
 has been removed in order to focus on the stationary dynamics of the model.
 
-The actions of the original model make $2$ classes of priorities, as represented in \pref{fig:metazoan-php}:
+The actions of the original model are split into $2$ classes of priorities, as represented in \pref{fig:metazoan-php}:
 \begin{align*}
   \ov{\PHh}^{(1)} = \{ \quad
     & \PHfrappes{c_1}{a_1}{a_0} \quad , \quad
@@ -52,8 +52,8 @@ Indeed, without this use of priorities,
 some unwanted behaviours emerge, allowing the formation of irregular stripes.
 In order to fix this, a high priority is affected to the actions hitting $a$
 and a low priority to the actions hitting $c$,
-in order to model the fact that the switching of $c$ has to be immediately followed by
-a switching of $a$.
+in order to model the fact that the switch of $c$ has to be immediately followed by
+a switch of $a$.
 This forces the the evolution of genes $a$ and $c$
 to alternate in order not to miss a stripe;
 $a$ and $c$ thus have intertwined oscillations.

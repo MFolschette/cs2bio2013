@@ -62,7 +62,7 @@ but can also model preemptions between evolution branches.
 Until now, such a priority scheduling of the actions was not studied extensively in the different formal modelling frameworks dedicated to systems biology.
 Nevertheless, such an attempt has been carried out for Petri nets by F.~Bause~\cite{Bause97},
 and the concept of priority relations among the transitions of a network has also more recently been introduced by A.~K.~Wagler \textit{et~al.}~\cite{waw,WaglerW12} in order to allow modelling deterministic systems for biological applications.
-The concept of priority is much straightforward in the approach of process algebras as it was shown by R.~Cleaveland and M.~Hennessy in~\cite{Cleaveland199058,Cleaveland99prioritiesin} and their abstractions and equivalences were studied in~\cite{Cleaveland:2007:PAP:1282576.1282847}.
+The concept of priority is much straightforward in the approach of process algebras as it was shown by R.~Cleaveland and M.~Hennessy in~\cite{Cleaveland199058} and their abstractions and equivalences were studied in~\cite{Cleaveland:2007:PAP:1282576.1282847}.
 It was later extended for applications in the field of systems biology by M.~John \textit{et~al.}~\cite{jlnu2010}.
 
 \subsection*{Contributions}
@@ -73,10 +73,11 @@ generalising a prior work carried out on Process Hitting~\cite{PMR12-MSCS}.
 Rather than using brute force or symbolic model checking techniques,
 our method focuses on static analysis by abstract interpretation.
 Our work aims at checking reachability properties that,
-for a given initial state $s$ and a given local state $x$,
+for a given initial state $s$ and the discrete expression level $n$
+of a given component $x$,
 have the form:
-“Starting from state $x$, is it possible to reach
-a state in which $x$ is active?”,
+“Starting from state $s$, is it possible to reach
+a state in which $x$ is at level $n$?”,
 thus answering either “True”
 (in which case the reachability is formally proven)
 or “Inconclusive”

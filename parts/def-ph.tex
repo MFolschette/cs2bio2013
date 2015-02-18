@@ -20,8 +20,8 @@ which gathers a finite number of \emph{automata},
 each one containing a finite number of \emph{local states}.
 A local state is noted $a_i$ where $a$ is the name of the automaton it belongs to,
 and $i$ is the identifier of this local state within automaton $a$.
-A \emph{global state} of the system is the gathering
-of exactly one local state from each automata.
+A \emph{global state} of the system is a Cartesian product
+with exactly one local state from each automata.
 
 The concurrent interactions between local states are defined by a set of \emph{actions}.
 An action stands for a set of transitions sharing the same label,
@@ -130,7 +130,7 @@ and if $A\subseteq\PHproc$, $A\subseteq s \Leftrightarrow \forall a_i\in A, \PHg
     are present in the same state.
     Automata are represented by labelled boxes
     and local states by circles with their identifier on the side.
-    Actions are represented by a dot connected by an edge to every hitter
+    Actions are represented by a dot connected by an edge to the set of hitters
     and by an arrow to the target, followed by another dotted arrow towards the bounce.
     Greyed local states stand for the following possible global state:
     $\PHstate{a_1, b_0, c_0}$.
@@ -163,7 +163,7 @@ and for all $ps \in \powerset(\PHproc)$ or $ps \in \PHl$, $ps \subseteq \ctx \Le
   However, the AANs defined in this paper have the same expressivity than
   the Process Hitting with classes of priorities, as previously
   introduced in~\cite{FPMR13-CS2Bio}.
-  Indeed, in the Process Hitting with at least 2 classes of priorities
-  it is possible to use additional automata, called “cooperative sorts”,
-  in order to model the actions of any AAN that have more than one hitter.
+  Indeed, in the Process Hitting with at least 2 classes of priorities,
+  it is possible to use additional automata called “cooperative sorts”
+  in order to model the actions in an AAN that have more than one hitter.
 \end{remark}

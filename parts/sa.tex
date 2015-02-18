@@ -8,8 +8,9 @@ that ensure the existence of a scenario starting from the initial state and lead
 where the given local state is present.
 
 A classical approach for determining if a local state of an automaton can be
-reached from a given initial state is to build sequences of transitions from the initial state until a state
-containing the given local state is reached.
+reached from a given initial state is to build sequences of transitions from the initial state
+until reaching a state in which the given local state is active.
+%containing the given local state is reached.
 This is essentially what model-checkers do, and the complexity of such analysis (PSPACE-complete
 \cite{Harel02}) makes it intractable on large systems, even with advanced symbolic approaches
 \cite{PMR12-MSCS}.
@@ -61,7 +62,7 @@ $\w$ is denoted by $\first_a(\w) \DEF \target{\w_m}$, where $m=\min\{n\in\indexe
 We define the partial ordering relation $\ltw$ between two objective sequences (\pref{def:ltw}) as
 follows:
 $w\ltw w'$ if and only if there exists a mapping between all the objective bounces of $w'$ in $w$
-that preserve the sequentiality, provided that each automaton starts in the same
+that preserves the sequentiality, provided that each automaton starts in the same
 local state.
 
 \begin{definition}[$\ltw \subset \OS\times\OS$]\label{def:ltw}
