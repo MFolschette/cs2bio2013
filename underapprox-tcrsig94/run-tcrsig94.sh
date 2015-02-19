@@ -30,7 +30,7 @@ init="cd4 $cd4, cd28 $cd28, tcrlig $tcrlig"
 echo "--- $init"
 for z in $outputs; do
   echo "# $z 1"
-  ./unitrun.sh $mode "x" --no-debug --initial-state "$init" -i $ph $z 1
+  ./unitrun.sh $mode "$cd4$cd28$tcrlig" --no-debug --initial-state "$init" -i $ph $z 1
   [ $? -eq 137 ] && echo '*** Killed ***'
 done
 

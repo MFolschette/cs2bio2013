@@ -74,7 +74,14 @@ echo "\"" >> $runfile
 echo "echo \"--- \$init\"" >> $runfile
 echo "for z in \$outputs; do" >> $runfile
 echo "  echo \"# \$z 1\"" >> $runfile
-echo "  ./unitrun.sh \$mode \"x\" --no-debug --initial-state \"\$init\" -i \$ph \$z 1" >> $runfile
+echo -n "  ./unitrun.sh \$mode \"" >> $runfile
+
+# Initial state name
+for curinput in $inputs; do
+  echo -n "\$$curinput" >> $runfile
+done
+
+echo "\" --no-debug --initial-state \"\$init\" -i \$ph \$z 1" >> $runfile
 echo "  [ \$? -eq 137 ] && echo '*** Killed ***'" >> $runfile
 echo "done" >> $runfile
 echo '' >> $runfile

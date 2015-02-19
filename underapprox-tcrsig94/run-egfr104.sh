@@ -40,7 +40,7 @@ init="erbb1 $erbb1, erbb2 $erbb2, erbb3 $erbb3, erbb4 $erbb4, bir $bir, btc $btc
 echo "--- $init"
 for z in $outputs; do
   echo "# $z 1"
-  ./unitrun.sh $mode "x" --no-debug --initial-state "$init" -i $ph $z 1
+  ./unitrun.sh $mode "$erbb1$erbb2$erbb3$erbb4$bir$btc$egf$epr$nrg1a$nrg1b$nrg2b$nrg4$tgfa" --no-debug --initial-state "$init" -i $ph $z 1
   [ $? -eq 137 ] && echo '*** Killed ***'
 done
 
