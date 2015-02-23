@@ -59,16 +59,6 @@ the priority of action $h$.
   Moreover, we denote: $s \PHPtrans (s \PHplay h)$.
 \end{definition}
 
-We consider in the following an AAN$k$:
-$\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$
-with $k \in \sN$, $k > 1$.
-The aim of the rest this section is to propose a translation of $\oPH$
-into an AAN with $1$ class of priority $\PH = (\PHs; \PHl; \PHa^{\angles{1}})$
-called \emph{flattening}, which is bisimilar.
-As an AAN with 1 class of priority is equivalent to a regular AAN without priorities,
-such a translation is particularly useful to be able to study the dynamics of
-any kind of AAN with priorities by using the static analysis developed in \pref{sec:sa}.
-
 The translation given in the following relies on the notion of \emph{sub-state}
 (\pref{def:substate}),
 which is a set of local states containing at most one local state of each automata.
@@ -90,6 +80,16 @@ Thus, a sub-state can be considered as a partial state.
 %    \[\mysigma \subseteq s \EQDEF \forall a_i \in \Proc, a_i \in \mysigma \Rightarrow a_i \in s\]
 \end{definition}
 
+We consider in the following an AAN$k$:
+$\ov{\PH} = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$
+with $k \in \sN$, $k > 1$.
+The aim of the rest this section is to propose a translation of $\oPH$
+into an AAN with $1$ class of priority $\PH = (\PHs; \PHl; \PHa^{\angles{1}})$
+called \emph{flattening}, which is bisimilar.
+As an AAN with 1 class of priority is equivalent to a regular AAN without priorities,
+such a translation is particularly useful to be able to study the dynamics of
+any kind of AAN with priorities by using the static analysis developed in \pref{sec:sa}.
+
 The translation of an AAN$k$ into an AAN
 is based on the notion of \emph{playability property} (\pref{def:pp})
 which is a Boolean formula where the atoms are local states of $\ov{\PH}$.
@@ -102,28 +102,70 @@ which is a Boolean formula where the atoms are local states of $\ov{\PH}$.
     \item if $a \in \ov{\PHs}$ and $a_i \in \ov{\PHl}_a$, then $a_i \in \F$ and we call it an \emph{atom};
     \item if $P \in \F$ and $Q \in \F$, then $\neg P \in \F$, $P \wedge Q \in \F$ and $P \vee Q \in \F$.
   \end{itemize}
-  If $P \in \F$ is a playability property, we denote by: $\PHsortf{P}$
-  the set of sorts whom at least one local state is mentioned in $P$.
-  Then, if $\mysigma \in \PHsubl$
-  with $\PHsortf{P} \subseteq \PHsortf{\mysigma}$,
-  we note $\Fsem{P}{\mysigma}$ the \emph{evaluation} of $P$ in $\mysigma$:
+  If $P \in \F$ is a playability property and $\mysigma \in \PHsubl$ is a sub-state of $\oPH$,
+  we note $\Fsem{P}{\mysigma}$ the \emph{evaluation} of $P$ in $\mysigma$
+  in a three-valued Kleene logic (\emph{true}, \emph{undecided} or \emph{false})
+  which is given by:
   \begin{itemize}
-    \item if $P = a_i \in \ov{\PHl}_a$ is an atom, with $a \in \ov{\PHs}$, then $\Fsem{a_i}{\mysigma}$ is true iff $a_i \in \mysigma$;
+    \item if $P = a_i \in \ov{\PHl}_a$ is an atom,
+%      with $a \in \ov{\PHs}$, 
+      then $\Fsem{a_i}{\mysigma}$ is
+    $\begin{cases}
+       \text{true}      & \text{if } a_i \in \mysigma \\
+       \text{undecided} & \text{if } \mysigma \cap \ov{\PHl}_a = \emptyset \\
+       \text{false}     & \text{otherwise }
+     \end{cases}$ \enspace;
+%    true iff $a_i \in \mysigma$;
     \item if $P$ is not an atom, then $\Fsem{P}{\mysigma}$ is evaluated in $\mysigma$
-      with the classical semantics for the logic operators $\top$, $\bot$, $\neg$, $\wedge$ and $\vee$.
+      with the classical semantics for the logic operators $\top$, $\bot$, $\neg$, $\wedge$ and $\vee$, which is recalled in \pref{fig:kleene}.
   \end{itemize}
+  Furthermore, in the following, we will use $\Fsem{\Fop{h}}{s}$ as a shorthand for
+  $\Fsem{\Fop{h}}{\toset{s}}$.
 \end{definition}
 
-Because we only use classical logic operators, the formulas of Boolean logic on 
+\begin{figure}[ht]
+  For all playability properties $P, Q \in \F$ that are not atoms,
+  and for all sub-state $\mysigma \in \PHsubl$:
+  \begin{itemize}
+    \item $\Fsem{\top}{\mysigma}$ is always true;
+    \item $\Fsem{\bot}{\mysigma}$ is always false;
+    \item $\Fsem{\neg P}{\mysigma}$ is
+      $\begin{cases}
+        \text{true} & \text{if $\Fsem{P}{\mysigma}$ is false} \\
+        \text{false} & \text{if $\Fsem{P}{\mysigma}$ is true} \\
+        \text{undecided} & \text{if $\Fsem{P}{\mysigma}$ is undecided}
+      \end{cases}$ \enspace;
+    \item $\Fsem{P \wedge Q}{\mysigma}$ is
+      $\begin{cases}
+        \text{true} & \text{if both $\Fsem{P}{\mysigma}$ and $\Fsem{Q}{\mysigma}$ are true} \\
+        \text{false} & \text{if $\Fsem{P}{\mysigma}$ is false or $\Fsem{Q}{\mysigma}$ is false} \\
+        \text{undecided} & \text{otherwise}
+      \end{cases}$ \enspace;
+    \item $\Fsem{P \vee Q}{\mysigma}$ is
+      $\begin{cases}
+        \text{true} & \text{if $\Fsem{P}{\mysigma}$ is true or $\Fsem{Q}{\mysigma}$ is true} \\
+        \text{false} & \text{if both $\Fsem{P}{\mysigma}$ and $\Fsem{Q}{\mysigma}$ are false} \\
+        \text{undecided} & \text{otherwise}
+      \end{cases}$ \enspace.
+  \end{itemize}
+  \caption{\label{fig:kleene}%
+    Explicit semantics of the evaluation of playability properties in the
+    three-valued Kleene logic.
+  }
+\end{figure}
+
+
+
+Because we only use classical logic operators, the formulas of Boolean logic on
 distributivity, associativity and commutativity can be used, together with De Morgan's laws on negation.
 We also have the following property for the negation of an atom:
-% \[\forall a \in \ov{\PHs}, \forall a_i \in \ov{\PHl}_a, \forall \mysigma \in \PHsubl,
-%   a \in \PHsortf{\mysigma},
-%   \Fsem{\neg a_i}{\mysigma} \Leftrightarrow \Fsem{\bigvee_{\substack{a_j \in \ov{\PHl}_a\\a_j \neq a_i}} a_j}{\mysigma}\]
 \[\forall a \in \ov{\PHs}, \forall a_i \in \ov{\PHl}_a,
   \neg a_i \Longleftrightarrow \bigvee_{\substack{a_j \in \ov{\PHl}_a\\a_j \neq a_i}} a_j\]
 Indeed, if a local state is not active in a state, this means that another local state of the same automaton is active.
-Moreover, we note that:
+Moreover,
+provided that in the following we are only interested in properties that are true
+and thus we make no distinction between false and undecided results,
+playability properties can be simplified with the following result:
 \[\forall a \in \ov{\PHs}, \forall a_i, a_j \in \ov{\PHl}_a,
   a_i \neq a_j \Longrightarrow a_i \wedge a_j \equiv \bot \]
 because two different processes can never be active simultaneously.
@@ -131,9 +173,7 @@ because two different processes can never be active simultaneously.
 In \pref{def:fop}, we define the the operator $\Fopsymbol$ which characterises the playability of an action
 given the semantics of AAN$k$s (see \pref{def:playp}).
 This operator simply states that the hitters of an action have to be active,
-and every other action of higher priority has to be not playable.
-% The target of the considered action is not taken into account
-% as it is not needed for the rest of the flattening.
+and every other action of higher priority must not be playable.
 
 \begin{definition}[Playability property operator ($\Fopsymbol : \PHh \rightarrow \F$)]\label{def:fop}
   For all $h = \PHfrappe{A}{b_j}{b_m} \in \ov{\PHh}$, we define:
@@ -149,7 +189,8 @@ and every other action of higher priority has to be not playable.
 \end{definition}
 %
 By construction of this operator and given the dynamics of a AAN$k$,
-an action $h$ is playable in a state $s \in \ov{\PHl}$ if and only if: $\Fsem{\Fop{h}}{s}$.
+an action $h$ is playable in a state $s \in \ov{\PHl}$ if and only if
+$\Fsem{\Fop{h}}{s}$ is true.
 
 Because we only use classical logic operators, we can compute the Disjunctive Normal Form (DNF) of any playability property.
 For any action $h \in \ov{\PHh}$, this DNF takes the form:
@@ -176,12 +217,12 @@ This construction allows to obtain the same dynamics as $\oPH$, as stated by \pr
   Let $h \in \ov{\PHh}$ and $s \in \ov{\PHl}$;
   $h$ is playable in $s$ if and only if:
   \[\target{h} \in s \wedge \exists \n \in \sN, \exists \mysigma \in \PHsubl_{\PHdep{i}{h}},
-    \mysigma \subseteq s \wedge \Fsem{\Fop{h}}{\mysigma} \enspace.\]
+    \mysigma \subseteq s \wedge \Fsem{\Fop{h}}{\mysigma} \text{ is true} \enspace.\]
 \end{lemma}
 %
 \begin{proof}
   ($\Rightarrow$)
-    If $h$ is playable in $s$, then $\target{h} \in s$ and $\Fsem{\Fop{h}}{s}$.
+    If $h$ is playable in $s$, then $\target{h} \in s$ and $\Fsem{\Fop{h}}{s}$ is true.
     Thus, $\Fop{h} \not\equiv \bot$ and, by property of a DNF,
     at least one of the $\n$ conjunctions of $\Fop{h}$ is true in $s$.
     Suppose the $i$\textsuperscript{th} conjunction is true in $s$, with $i \in \segm{1}{\n}$;
@@ -189,16 +230,16 @@ This construction allows to obtain the same dynamics as $\oPH$, as stated by \pr
     Let $\mysigma \in \PHsubl_{\PHdep{i}{h}}$
     with $\forall b \in \PHdep{i}{h}, \PHget{\mysigma}{b} = \PHget{s}{b}$.
     We immediately have: $\mysigma \subseteq s$,
-    and, by construction of $\PHdep{i}{h}$, $\Fsem{\Fop{h}}{\mysigma}$.
+    and, by construction of $\PHdep{i}{h}$, $\Fsem{\Fop{h}}{\mysigma}$ is true.
   
   ($\Leftarrow$)
-    $\Fsem{\Fop{h}}{\mysigma}$ therefore $\Fsem{\Fop{h}}{s}$; as $\target{h} \in s$,
-    $h$ is playable in $s$.
+    $\Fsem{\Fop{h}}{\mysigma}$ is true, and therefore $\Fsem{\Fop{h}}{s}$ is true;
+    as $\target{h} \in s$, $h$ is playable in $s$.
 \end{proof}
 
 \begin{definition}[Flattening ($\PHflat$)]
   \label{def:flattening}
-  If $k \in \sNN$, $k > 1$ and $\oPH = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$ is an AAN$k$,
+  If $k \in \sN$, $k > 1$ and $\oPH = (\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}})$ is an AAN$k$,
   we denote by
   $\PHflat(\ov{\PHs}; \ov{\PHl}; \ov{\PHa}^{\angles{k}}) = (\PHs; \PHl; \PHa)$
   the \emph{flattening} of $\oPH$, where:
@@ -211,13 +252,8 @@ This construction allows to obtain the same dynamics as $\oPH$, as stated by \pr
       \PHfrappe{(\mysigma \setminus \{ \target{h} \})}{\target{h}}{\bounce{h}} \mid
       h \in \ov{\PHh} \wedge \n \geq 1 \wedge i \in \segm{1}{\n} \wedge
       \mysigma \in \PHsubl_{\PHdep{i}{h}} \wedge
-      \Fsem{\Fop{h}}{\mysigma} \}$.
+      \Fsem{\Fop{h}}{\mysigma} \text{ is true} \}$.
   \end{itemize}
-%   Given a state $s \in \PHl$, $\unflats{s} = \os$ is the corresponding state in $\ov{\PHl}$:
-%   $\forall a \in \ov{\PHs}, \PHget{\os}{a} = \PHget{s}{a}$.
-%   Conversely,
-%   given a state $\os \in \ov{\PHl}$, $\flats{\os} = s$ is the corresponding state in $\PHl$:
-%   $\forall a \in \ov{\PHs}, \PHget{s}{a} = \PHget{\os}{a}$.
 \end{definition}
 
 We note that the set of global states of an AAN$k$
