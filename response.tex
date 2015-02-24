@@ -60,6 +60,8 @@ Please find a summary of the main changes brought to the paper here, and a detai
   \item New explanations and examples have been added all over the paper,
     especially for the under-approximation (Sect.~3.2)
     and the detailed example (Sect.~5.1).
+  \item A new large-scale example has been introduced (Sect.~5.2)
+    in order to better justify this work compared to the existing approach.
   \item A section has been added (Sect.~3.5) about the extraction of a scenario
     from the graph of local causality, in the case the analysis is conclusive.
 \end{itemize}
@@ -81,18 +83,20 @@ In this revision, we finally focus on AANs, that are equivalent models,
 but better highlights the difference with the “standard” PH of [13],
 that is, PH without priorities.
 The static analysis method thus required adaptations
-that we tried to better motivate in this revision.
+that we tried to better motivate in this revision,
+especially with the new EGFR example of Sect.~5.2.
 }
 
 With respect to the workshop version, Section 4.2 has been added to present a translation of PH models with multiple priority classes (with restrictions from Section 2.3 assumed) into an "equivalent" (weakly-bisimilar) PH model with only two priority classes. Since the restrictions from Section 2.3 are already assumed for PH models with multiple priority classes, this strengthens the need for a discussion on those restrictions.
 
 \answer{
 The new AAN representation makes this difference clearer:
-the previously emphasized sub-class of PH models used for the static analysis
+the previously considered sub-class of PH models used for the static analysis
 is equivalent to AANs,
 while the whole class of PH models with any number of classes of priorities
 is equivalent to AANs with classes of priorities.
-Thus, the encoding of Sect. 4.2 actually extends the applicability
+Thus, the encoding of Sect.~4 (previously Sect.~4.2)
+actually extends the applicability
 of our static analysis; we have added some discussion to emphasize this.
 }
 
@@ -102,13 +106,18 @@ As regards the biological experiments presented in Section 5.2, this section sho
 The improvements concern the expressivity of the models tackled.
 The experiments of [13] only conclude on the reachability for dynamics
 that are not exactly those of ADNs (a.k.a.~Logical Networks).
-We have added some discussion to emphasize this.
+We have added some discussion to emphasize this,
+and a new illustration in Sect.~5.2 with the EGFR example.
 }
 
 I also point out that the comparisons with a model-checker should be actually carried out. The fact that the test you performed caused out-of-memory errors does not allow any conclusion to be drawn, even more so considering that only 2GB of RAM have been used.
 
 \answer{
 The experiment we carried with the LibDDD model-checker led us to the conclusion that the memory needs for such a method is several orders of magnitude above our method, which we would consider a sufficient result in itself.
+Indeed, LibDDD is not able to conclude on most cases with large models,
+and when it does, the computation takes several minutes,
+to be compared to less than a second for most cases with our method
+(see the new quantitative results added to Sect.~5.2).
 Furthermore, with such a memory use, one cannot expect to be able to study bigger models (say, thousands of components) while our method has a polynomial complexity in the size of the model or the construction of the saturated graph of local causality, and could thus tackle such bigger models.
 Thus, we have not performed more experiments,
 but we have added some precisions about our thoughts in the paper.
@@ -148,7 +157,7 @@ Minor comments […]
 % - $Sce|_1$ is not defined
 
 \answer{
-We these comments into account.
+We took all these comments into account.
 }
 
 
@@ -164,7 +173,7 @@ Minor language issues: […]
 % (5) In discussion the following sentence needs to be rewritten: "i.e., without an intermediate encoding; our objective being to increase the conclusiveness of the static analysis   approach".
 
 \answer{
-We took the comments about the language issues of Reviewer \#3 into account.
+We took all the comments about the language issues of Reviewer \#3 into account.
 }
 
 
@@ -176,15 +185,18 @@ We took the comments about the language issues of Reviewer \#3 into account.
 With respect to the workshop version of the paper I don't see a significant improvement that should justify a further publication of the results. In particular, there are several new theorems, but they do not add significant novelties to the already proposed ideas. On the contrary, aspects that could have been given more accurate treatment are left poorly addressed. In particular:
 
 \answer{
-The additions regarding the workshop paper are the following:
+The additions regarding the workshop paper are the following
+(some have been added for this revision):
 \begin{itemize}
-  \item In this revision, we generalised the results to Asynchronous Automata
-  Networks (AANs) which also simplies the formalism;
-  \item In this revision, we also included a new section (3.3) which give a
-  procedures to extract a witness scenario satisfying a given reachability
-  property.
+  \item We generalised the results to Asynchronous Automata
+    Networks (AANs) which also simplifies the formalism;
   \item The encoding of AANs with classes of priorities into simple AANs
-  (section 4).
+    (Sect.~4) were added.
+  \item We included a new section (Sect.~3.3)
+    which gives a procedure to extract a witness scenario
+    satisfying a given reachability property.
+  \item Sect.~5 now features a detailed application example
+    and a new large-scale application example.
 \end{itemize}
 We emphasized these in the introduction.
 }
@@ -202,11 +214,11 @@ This has been emphasized especially in Sect. 5.2.
 
 - the static analyses that are proposed are based on abstract interpretation, however there is not a formal introduction of them in this framework. In particular there are abstractions and concretizations whose domains (and their relationships in terms of Galois insertion / connection) are not clearly stated. Moreover, the overall ideas of the abstractions are lost in the heavy technical presentation. This is difficult to read and does not give sufficient intuition to grasp the concepts, which remain hidden behind the notation. 
 
-\answer{With this revision, we removed and simplies a lot a notations, and added
+\answer{With this revision, we removed and simplified a lot a notations, and added
 more explanations for the under-approximation of reachability properties in AANs
-(section 3).
+(Sect.~3).
 More details on the abstract domain (objective sequences) and their
-interconnections with concrete scenarios are given in section 3.1.
+interconnections with concrete scenarios are given in Sect.~3.1.
 The relationship of Local Causality Graphs with objective sequences is also
 better motivated (collecting semantics for the possible refinements of the
 objective sequences).
@@ -219,7 +231,7 @@ definitions.
 
 - the biological examples look interesting and appropriate, but the details that are given in the paper look not sufficient to appreciate the demonstration of the approach that they should give.
 
-We added a new and more appropriate example to emphasize the new results brought by our method.
+\answer{We added a new and more appropriate example to emphasize the new results brought by our method.}
 
 - the link to Boolean Networks and Multivalued Boolean Networks is given by a translation that is published in another paper. That is ok, but the authors mention Asynchronous Discrete Networks as an "intermediate" model between the models previously mentioned and the Process Hitting framework. This remains an obscure connection and "Asynchronous Discrete Networks" cannot be found as keyword in the literature, at least at a first general search. 
 
@@ -229,7 +241,7 @@ with discrete values of the variables,
 either Boolean or multivalued,
 and evolution functions (or, equivalently, focal parameters).
 Although the denomination “ADN” does not exist in the literature,
-there is in fact no widespread or unified term to qualify this class of models.
+there is in fact no widespread or unified term to qualify this class of logical models.
 We have detailed this choice in the paper and justified the use of this term,
 and emphasized references that also defined these kinds of models.
 }
@@ -302,6 +314,6 @@ Comments and suggestions […]
 % 
 % p 12 last paragraph the discussion on the complexity issue looks very limited considering that this is supposed to be one of the contributions of the whole work. It is mentioned that "it is possible to compute only a subset of $V \cap Sol$", how?
 
-\answer{We have taken most of these comments into account.}
+\answer{We have taken these comments into account.}
 
 \end{document}
