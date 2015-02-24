@@ -44,26 +44,29 @@
 
 \section*{Summary of the main changes}
 
-We wish thank the reviewers for their comments.
-Please find a summary of the main changes brought to the paper here, and a detailed response to all comments below.
+We wish to thank the reviewers for their comments.
+Please find below a summary of the main changes brought to the paper, and a detailed response to all comments.
 
 \begin{itemize}
   \item We have changed the main model representation from Process Hitting
     with classes of priorities (PH) to Asynchronous Automata Networks (AANs).
-    This formalism is equivalent but saves a lot of over-complicated formalism,
+    This formalism is equivalent
+    and has the advantage to avoid using too much complicated formalism,
     thus gaining in clarity.
     All sections have been revised in consequence
     (some became irrelevant and were completely removed)
     and we added a discussion about the links between PH and AAN.
   \item We have made minor changes in the static analysis to make the graph more precise,
-    and the Sect.~5.1 was revised in consequence.
+    and Sect.~5.1 was revised in consequence.
+  \item A section has been added (Sect.~3.3) about the extraction of a scenario
+    from the graph of local causality, in the case the analysis is conclusive,
+    and the successive reachability analysis (Sect.~3.4) now benefits from this.
   \item New explanations and examples have been added all over the paper,
-    especially for the under-approximation (Sect.~3.2)
-    and the detailed example (Sect.~5.1).
-  \item A new large-scale example has been introduced (Sect.~5.2)
+    especially for the under-approximation (Sect.~3)
+    for which we emphasized the Galois connection.
+  \item More explanations have also been added to the detailed example (Sect.~5.1)
+    and a new large-scale example has been introduced (Sect.~5.2)
     in order to better justify this work compared to the existing approach.
-  \item A section has been added (Sect.~3.5) about the extraction of a scenario
-    from the graph of local causality, in the case the analysis is conclusive.
 \end{itemize}
 
 
@@ -95,7 +98,7 @@ the previously considered sub-class of PH models used for the static analysis
 is equivalent to AANs,
 while the whole class of PH models with any number of classes of priorities
 is equivalent to AANs with classes of priorities.
-Thus, the encoding of Sect.~4 (previously Sect.~4.2)
+Thus, the encoding given in Sect.~4 (previously Sect.~4.2)
 actually extends the applicability
 of our static analysis; we have added some discussion to emphasize this.
 }
@@ -188,28 +191,28 @@ With respect to the workshop version of the paper I don't see a significant impr
 The additions regarding the workshop paper are the following
 (some have been added for this revision):
 \begin{itemize}
-  \item We generalised the results to Asynchronous Automata
+  \item We have generalised the results to Asynchronous Automata
     Networks (AANs) which also simplifies the formalism;
   \item The encoding of AANs with classes of priorities into simple AANs
-    (Sect.~4) were added.
-  \item We included a new section (Sect.~3.3)
+    (Sect.~4) have been added.
+  \item We have included a new section (Sect.~3.3)
     which gives a procedure to extract a witness scenario
     satisfying a given reachability property.
   \item Sect.~5 now features a detailed application example
     and a new large-scale application example.
 \end{itemize}
-We emphasized these in the introduction.
+We have emphasized these in the introduction.
 }
 
 - discussion on the computational gain acquired with the new approach is not formally addressed and very poorly discussed (end of page 12, see also comment below)
 
 \answer{
-The aim of our method was not to gain any computation time of memory,
+The aim of our method is not to gain any computation time nor memory,
 but to improve the expressivity of the PH formalism and its associated static analysis.
 We are now able to formally check Asynchronous Discrete Networks
 (also called Thomas' models)
 which was not the case before.
-This has been emphasized especially in Sect. 5.2.
+This has been emphasized especially in Sect.~5.2.
 }
 
 - the static analyses that are proposed are based on abstract interpretation, however there is not a formal introduction of them in this framework. In particular there are abstractions and concretizations whose domains (and their relationships in terms of Galois insertion / connection) are not clearly stated. Moreover, the overall ideas of the abstractions are lost in the heavy technical presentation. This is difficult to read and does not give sufficient intuition to grasp the concepts, which remain hidden behind the notation. 
