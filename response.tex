@@ -12,6 +12,12 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 
+% Citations et bibliographie style Harvard
+\usepackage[agsm,dcucite]{harvard}
+\renewcommand{\harvardand}[1]{\& }
+\renewcommand{\harvardurl}[1]{\url{#1}}
+\newcommand{\citefullname}[2]{#2 \citeasnoun{#1}}
+
 % \newcounter{pointno}
 % \setcounter{pointno}{0}
 % \def\thepoint{\arabic{pointno}}
@@ -22,7 +28,8 @@
 \newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
 %+\newcommand{\answertodo}[1]{\textcolor{red}{\textbf{À appliquer :}} \textcolor{magenta}{#1}}
 
-\newcommand{\answer}[1]{\textcolor{blue}{#1}\vspace*{1em}}
+\newcommand{\ilanswer}[1]{\textcolor{blue}{#1}}
+\newcommand{\answer}[1]{\ilanswer{#1}\vspace*{1em}}
 
 \title{Response to the reviewers --- First review of “Sufficient Conditions for Reachability in Automata Networks with Priorities”}
 \author{Maxime Folschette, Loïc Paulevé, Morgan Magnin, Olivier Roux}
@@ -60,9 +67,60 @@ Clearly, the paper is based on real applications of the system studied. It seems
 
 General: 1) somehow the system of AANs seems such that it has conection or roots or generalization by cellural automata. Obviously, CA are a more general model and AANs are a restriction, but it could be interesting to see whether can you generalize or simulate in simple manners your system with CA?
 
+\ilanswer{Indeed, The links between AANs and cellular automata could be studied more thoroughly.
+However, we are not sure that AANs consist in a restriction of cellular automata.}
+
+\ilanswer{We show in the following that an AAN can represent an Asynchronous Finite Cellular Automata (AFCA).
+An AFCA is a finite set of cells that share a same update rule (we consider no border effects).
+We consider that the transitions between each global states are asynchronous in the meaning of the “Random Independent” scheme given in \cite{cornforth_artificial_2003} and \cite{harvey_time_1997},
+that is, exactly one randomly chosen cell is updated between two states.
+Any AFCA can be represented as an AAN by considering one automaton for each cell containing two local states (corresponding to “active” and “inactive”).
+The rules are modeled by actions that represent the creation/vanishing of a cell given all possible states of its neighborhood.
+This is possible because we can create one action for each configuration of the neighborhood (for the cases where the state of the cell must change).}
+
+\ilanswer{The result is a (very repetitive) AAN that encompasses the same dynamics than the AFCA,
+with the exception of unchanged states in AFCA that are:
+\begin{itemize}
+  \item either a stable state, in which case the AAN has no next state,
+  \item or not a stable state, in which case the next state of the AAN will necessarily
+    encompass exactly one change (because we do not allow a transition with no change).
+\end{itemize}}
+
+\ilanswer{Thus, the representation of AFCA in AANs is possible with the considered updating scheme.
+However, the representation has a high complexity, and AANs are not very suited to represent this kind of repetitive patterns.
+Furthermore, it is more likely that this kind of patterns will lead to some inconclusiveness
+when studying its dynamics with the method proposed in our paper,
+especially due to the creation of cycles in the Local Causality Graphs
+(which may represent the fact that a cell has to change its state several times to allow the reaching of a given objective).}
+
+\answer{In conclusion,
+more experiments may be required in order to acknowledge how our method fits into the modeling and analysis of cellular automata,
+and some enrichments of the static analysis may be needed to obtain satisfying results.
+}
+
+\todo{Déplacer une partie dans le papier}
+
+
+
 2) Just a note: As I see it, the AANs is an interactive model of computation, and that is interesting. based on this, can you consider the reachability of state as a game in (multiplayer) game of AAN? Does  your work give a fast method for checking for winning strategy?   
- 
-Minor coments to the authors: 
+
+\answer{This question is also very interesting.
+The main problem here seems to be able to represent the given multiplayer game as an AAN ---
+in which case the analysis tools can be used straightforwardly.
+However, the notion of two players playing alternately (and not randomly) seems quite difficult
+to represent in an AAN, even with the notion of priorities.
+One way would be to introduce dynamic priorities (as opposed to static priorities as presented in the current paper) which would however require some way to translate them back into an AAN with static priorities (or without priorities at all).
+}
+
+\todo{Voir formalismes courants en théorie des jeux}
+
+\todo{Déplacer une partie dans le papier ?}
+
+
+
+Minor coments to the authors:
+
+\todo{À appliquer}
 
 page 1, authors: names are not in alphabetical order probably for a good reason, but it strikes my mathematician eye badly.
 
@@ -89,6 +147,10 @@ The applicability of the method has been demonstrated by the authors by consider
 My main concern about the paper is that it is written in a rather unclear manner. Some of the definitions are given in a very formal way; this does not help understanding the intuition behind them. On the other hand, the authors have managed to give a very good intuition in description of the running examples of the paper.
 
 In my opinion, the presentation of the material of the paper should be improved.
+
+\todo{Rajouter des explications infromelles}
+
+\todo{Simplifier les définitions formelles ?}
 
 COMMENTS TO AUTHORS
 
@@ -174,5 +236,7 @@ The sentence starting with "This consists in using Theorem 1 ..." is written in 
 
 page 29, reference [18] ---
 The year and the pages of the publication are missing.
+
+\bibliography{biblio}
 
 \end{document}
