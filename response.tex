@@ -19,8 +19,8 @@
 % \newcommand{\question}[1]{\bigskip{\it\ptno{\#1}}}
 % \def\answer{}
 
-%\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
-%\newcommand{\answertodo}[1]{\textcolor{red}{\textbf{À appliquer :}} \textcolor{magenta}{#1}}
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+%+\newcommand{\answertodo}[1]{\textcolor{red}{\textbf{À appliquer :}} \textcolor{magenta}{#1}}
 
 \newcommand{\answer}[1]{\textcolor{blue}{#1}\vspace*{1em}}
 
@@ -34,12 +34,6 @@
 
 \maketitle
 
-% \noindent
-% Légende :\\
-% \answer{Blabla} $\longleftarrow$ Réponse au reviewer\\
-% \answertodo{Blabla} $\longleftarrow$ Réponse possible sur un point encore non appliqué\\
-% \todo{Blabla} $\longleftarrow$ À faire / à décider
-
 
 
 \section*{Summary of the main changes}
@@ -48,275 +42,137 @@ We wish to thank the reviewers for their comments.
 Please find below a summary of the main changes brought to the paper, and a detailed response to all comments.
 
 \begin{itemize}
-  \item We have changed the main model representation from Process Hitting
-    with classes of priorities (PH) to Asynchronous Automata Networks (AANs).
-    This formalism is equivalent
-    and has the advantage to avoid using too much complicated formalism,
-    thus gaining in clarity.
-    All sections have been revised in consequence
-    (some became irrelevant and were completely removed)
-    and we added a discussion about the links between PH and AAN.
-  \item We have made minor changes in the static analysis to make the graph more precise,
-    and Sect.~5.1 was revised in consequence.
-  \item A section has been added (Sect.~3.3) about the extraction of a scenario
-    from the graph of local causality, in the case the analysis is conclusive,
-    and the successive reachability analysis (Sect.~3.4) now benefits from this.
-  \item New explanations and examples have been added all over the paper,
-    especially for the under-approximation (Sect.~3)
-    for which we emphasized the Galois connection.
-  \item More explanations have also been added to the detailed example (Sect.~5.1)
-    and a new large-scale example has been introduced (Sect.~5.2)
-    in order to better justify this work compared to the existing approach.
+  \item \todo{Main changes}
 \end{itemize}
 
 
 
 \section*{Comments and answers to the reviewers}
 
+\subsection*{Reviewer \#1}
+
+
+Reviewer \#1: In this article the  Asynchronous Automata Networks (AANs) are studied. An AAN is an Automata Network with synchronised transitions between automata, where each transition changes the local state of exactly one automaton, but the number of synchronazing state sis not restricted.  The AAN with priorities are also studied. 
+
+Authors build a method of efficient under-approximation for the problem of state reachability. The computational cost is lower than the cost of usual model checker methods. Also, a reduction from AANs with priorities to the AANs without priorities is given.
+
+Clearly, the paper is based on real applications of the system studied. It seems that the method and the theory are build for and from some specific applications with a interesting idea. Therefore, from the purely automata theoretical point of view,  the methods and results are not very strong nor interesting as themself. On the other hand, the method is used in two example applications in the end of the paper to support the fact that the model and the method work well in practise. This is probably the strongest part of the paper.  
+
+General: 1) somehow the system of AANs seems such that it has conection or roots or generalization by cellural automata. Obviously, CA are a more general model and AANs are a restriction, but it could be interesting to see whether can you generalize or simulate in simple manners your system with CA?
+
+2) Just a note: As I see it, the AANs is an interactive model of computation, and that is interesting. based on this, can you consider the reachability of state as a game in (multiplayer) game of AAN? Does  your work give a fast method for checking for winning strategy?   
+ 
+Minor coments to the authors: 
+
+page 1, authors: names are not in alphabetical order probably for a good reason, but it strikes my mathematician eye badly.
+
+page 3, line 13: is much straightforward. More?
+
+page 4, line 20: size, I would say length.
+
+page 8, line -5 -- -4. Index a and b for delta are a bad choise a and b are for the automata and states, and delta's subscripts are numbers.
+
+
+
 \subsection*{Reviewer \#2}
 
-[…]
-
-According to the authors, the static analysis approach presented in the paper is inspired from a previous paper ([13] Paulevé, Magnin, Roux. Static analysis of biological regulatory networks dynamics using abstract interpretation). By comparing the paper with [13], I had the impression that most of the developments in the current paper were just an exercise to borrow the techniques developed in [13] into the setting of Process Hitting with *priorities*. This is caused by the fact that in Section 2 (which introduces the PH framework to the reader) there are not enough intuitive explanations and examples to help the reader understand the concepts. (To this aim, in Section 2, a running example would be a welcome addition.)
-In particular, a weak point of the paper lies in the restrictions introduced in Sections 2.2 and 2.3, which are not motivated. Those sections should be rewritten to clearly explain why those restriction are needed, and discuss their implications with respect to the reduced modelling expressiveness which ensues (e.g. which models cannot be described anymore?).
-
-\answer{
-The intent of this paper is to adapt the static analysis methods previously developed in [13] to the case of the PH with priorities, that is, models with a new kind of dynamics and preemptions that did not exist previously.
-In this revision, we finally focus on AANs, that are equivalent models,
-but better highlights the difference with the “standard” PH of [13],
-that is, PH without priorities.
-The static analysis method thus required adaptations
-that we tried to better motivate in this revision,
-especially with the new EGFR example of Sect.~5.2.
-}
-
-With respect to the workshop version, Section 4.2 has been added to present a translation of PH models with multiple priority classes (with restrictions from Section 2.3 assumed) into an "equivalent" (weakly-bisimilar) PH model with only two priority classes. Since the restrictions from Section 2.3 are already assumed for PH models with multiple priority classes, this strengthens the need for a discussion on those restrictions.
-
-\answer{
-The new AAN representation makes this difference clearer:
-the previously considered sub-class of PH models used for the static analysis
-is equivalent to AANs,
-while the whole class of PH models with any number of classes of priorities
-is equivalent to AANs with classes of priorities.
-Thus, the encoding given in Sect.~4 (previously Sect.~4.2)
-actually extends the applicability
-of our static analysis; we have added some discussion to emphasize this.
-}
-
-As regards the biological experiments presented in Section 5.2, this section should be extended by reporting more details about the experiments carried and the results obtained. Moreover, you should compare the results with the analogous experiments from [13], in which the same model (TCR pathway) had been analysed with good results. What improvements are there?
-
-\answer{
-The improvements concern the expressivity of the models tackled.
-The experiments of [13] only conclude on the reachability for dynamics
-that are not exactly those of ADNs (a.k.a.~Logical Networks).
-We have added some discussion to emphasize this,
-and a new illustration in Sect.~5.2 with the EGFR example.
-}
-
-I also point out that the comparisons with a model-checker should be actually carried out. The fact that the test you performed caused out-of-memory errors does not allow any conclusion to be drawn, even more so considering that only 2GB of RAM have been used.
-
-\answer{
-The experiment we carried with the LibDDD model-checker led us to the conclusion that the memory needs for such a method is several orders of magnitude above our method, which we would consider a sufficient result in itself.
-Indeed, LibDDD is not able to conclude on most cases with large models,
-and when it does, the computation takes several minutes,
-to be compared to less than a second for most cases with our method
-(see the new quantitative results added to Sect.~5.2).
-Furthermore, with such a memory use, one cannot expect to be able to study bigger models (say, thousands of components) while our method has a polynomial complexity in the size of the model or the construction of the saturated graph of local causality, and could thus tackle such bigger models.
-Thus, we have not performed more experiments,
-but we have added some precisions about our thoughts in the paper.
-}
-
-Beyond the above concerns, the paper would also benefit from a reorganization, since I found it sometimes difficult to follow. This is particularly relevant for Section 4, where the translations proposed are just thrown in, without discussing their relevancy to the purpose of the paper.
-
-\answer{
-The translations could indeed be better discussed and justified,
-we have taken this comment into account.
-We also hope that the use of AANs simplifies the formalism
-and emphasizes the use of these translations.
-}
-
-Minor comments […]
-% ----------------
-% page 1
-% - abstract: "... as it is illustrated on the model-checking of a signalling network of 94 components, which is unprecedented.": I am not convinced the such application is "unprecedented", since the same model has been already analysed with good results in [13].
-% page 5
-% - do not use \ldots for the finite set of sorts
-% - for defining prio(h), the same action $h$ must not be present in two different classes (this condition is missing)
-% - Def.2: "sub-set" --> "sub-state" (twice)
-% - Def.2 (and other places in the paper): symbol $\subset$ is usually means *strict* subset. Check its use in the paper and replace it with $\subseteq$ where appropriate.
-% - Def.3: "We also extend this definition to a set of processes given that all processes are from different sorts by the override of each process" ???
-% - Def.3: what is $\widetilde{ps}$ ?
-% 
-% page 6
-% - in Figure 1 there are too many arrows that overlap which make it difficult to read
-% - the example should be completed by listing all the actions from the two priority classes
-% - Sect.2.2: "a1 and b1 to make c0 bounce to c1": you should replace "make" with "allow", since according to the semantics c0 is not forced to go to c1 asap.
-% - Sect.2.2: "one for each sub-state of the presence of processes a1 and b1": not clear
-% 
-% page 7
-% - "... instead of independent hits from a1 and b1.": not clear
-% - (also in other places) "allows to" --> "allows <someone> to"
-% - "build cooperations with no temporal shift": please clarify what you mean with "temporal shift"
-% - $Sce|_1$ is not defined
-
-\answer{
-We took all these comments into account.
-}
 
 
+Reviewer \#2: SUMMARY OF THE RESULTS
 
-\subsection*{Reviewer \#3}
+In this paper the authors introduce so-called asynchronous automata networks, which are automata networks with transitions synchronized between the automata in such a way that each transition changes the local state of exactly one automaton. There is also a generalization of asynchronous automata networks, called asynchronous automata networks with classes of priorities. This model is shown to be equivalent to the named networks without priorities.
 
-Minor language issues: […]
+The authors have developed a method of performing reachability analysis and a way of getting a valid execution path if the reachability question has a positive answer. The method of performing reachability analysis is based upon abstract interpretation, and the complexity of such an analysis is polynomial in the total number of local states and exponential in the number of local states within a single automaton.
 
-% (1) In introduction first paragraph at the sixth line there is a typo with 3 full stops ...
-% (2) Second paragraph in introduction fifth line, it should be USUALLY, rather then USUAL, please change it.
-% (3) Same paragraph: Components rarely have more "that" four levels, which should be: Components rarely have more "than" four levels.
-% (4) Please add some text around the figures 1,3, and 4 so that a non technical reader (biologist) might have some idea about the interactions in the figures.
-% (5) In discussion the following sentence needs to be rewritten: "i.e., without an intermediate encoding; our objective being to increase the conclusiveness of the static analysis   approach".
+The applicability of the method has been demonstrated by the authors by considering two large-scale biological models.
 
-\answer{
-We took all the comments about the language issues of Reviewer \#3 into account.
-}
+My main concern about the paper is that it is written in a rather unclear manner. Some of the definitions are given in a very formal way; this does not help understanding the intuition behind them. On the other hand, the authors have managed to give a very good intuition in description of the running examples of the paper.
 
+In my opinion, the presentation of the material of the paper should be improved.
 
+COMMENTS TO AUTHORS
 
-\subsection*{Reviewer \#4}
+page 1, line 49 ---
+I would reformulate the phrase "with [4,5]" somehow in different way.
 
-[…]
+page 1, line 52 ---
+Replace "behaviours" in the phrase "their usual behaviours" with "behaviour".
 
-With respect to the workshop version of the paper I don't see a significant improvement that should justify a further publication of the results. In particular, there are several new theorems, but they do not add significant novelties to the already proposed ideas. On the contrary, aspects that could have been given more accurate treatment are left poorly addressed. In particular:
+page 2, line 21 ---
+Remove the second verb "are" in the phrase "This is modelled by actions are of the form".
 
-\answer{
-The additions regarding the workshop paper are the following
-(some have been added for this revision):
-\begin{itemize}
-  \item We have generalised the results to Asynchronous Automata
-    Networks (AANs) which also simplifies the formalism;
-  \item The encoding of AANs with classes of priorities into simple AANs
-    (Sect.~4) have been added.
-  \item We have included a new section (Sect.~3.3)
-    which gives a procedure to extract a witness scenario
-    satisfying a given reachability property.
-  \item Sect.~5 now features a detailed application example
-    and a new large-scale application example.
-\end{itemize}
-We have emphasized these in the introduction.
-}
+page 2, line 27, "avoid to build" ---
+Reformulate as "avoid building".
+The same comment applies to many other places within the paper (for instance, page 5, line 51, page 3, line 43).
 
-- discussion on the computational gain acquired with the new approach is not formally addressed and very poorly discussed (end of page 12, see also comment below)
+page 7, line 29 ---
+I would replace "Subsect." with "Subsection" throughout the paper.
 
-\answer{
-The aim of our method is not to gain any computation time nor memory,
-but to improve the expressivity of the PH formalism and its associated static analysis.
-We are now able to formally check Asynchronous Discrete Networks
-(also called Thomas' models)
-which was not the case before.
-This has been emphasized especially in Sect.~5.2.
-}
+page 7, Definition 4, line 55, in the sentence "The set of all objectives is called ..." ---
+Using the logical AND operator "$\land$" is too formal and this unnecessarily complicates reading of the definition.
+I would replace "$\land$" with a word "and".
 
-- the static analyses that are proposed are based on abstract interpretation, however there is not a formal introduction of them in this framework. In particular there are abstractions and concretizations whose domains (and their relationships in terms of Galois insertion / connection) are not clearly stated. Moreover, the overall ideas of the abstractions are lost in the heavy technical presentation. This is difficult to read and does not give sufficient intuition to grasp the concepts, which remain hidden behind the notation. 
+page 8, Definition 6 ---
+The comment "($\gamma_s: OSeq \to$ ...)" in the parentheses after "Definition 6" complicates the perception of the material. This also applies to other definitions.
 
-\answer{With this revision, we removed and simplified a lot a notations, and added
-more explanations for the under-approximation of reachability properties in AANs
-(Sect.~3).
-More details on the abstract domain (objective sequences) and their
-interconnections with concrete scenarios are given in Sect.~3.1.
-The relationship of Local Causality Graphs with objective sequences is also
-better motivated (collecting semantics for the possible refinements of the
-objective sequences).
-However, the goal of this section being at building particular cases of
-scenarios, no completness of the collection is required.
-We believe that the revision of this section brings sufficient intuition to
-capture the main concepts of the analysis, while avoiding un-necessary technical
-definitions.
-}
+page 8, line 52 ---
+To which definition does the phrase "in the previous definition" refer to?
 
-- the biological examples look interesting and appropriate, but the details that are given in the paper look not sufficient to appreciate the demonstration of the approach that they should give.
+page 8, Lemma 1 ---
+I recommend changing the formulation of the lemma so that it contains at least some words.
+The comment right before the formulation of the lemma states essentially the same thing as the lemma, without any intuition.
 
-\answer{We added a new and more appropriate example to emphasize the new results brought by our method.}
+page 9, line 53 ---
+Replace "would consists" either with "would consist" or with "consists".
 
-- the link to Boolean Networks and Multivalued Boolean Networks is given by a translation that is published in another paper. That is ok, but the authors mention Asynchronous Discrete Networks as an "intermediate" model between the models previously mentioned and the Process Hitting framework. This remains an obscure connection and "Asynchronous Discrete Networks" cannot be found as keyword in the literature, at least at a first general search. 
+page 10, comment before Definition 8 ---
+First of all, I would give a shorter intuition before Definition 8 and only then this delaited explanation of the definition. The definition itself is very difficult to follow and the explanation is written in a really succinct way, that does not make it easier to get. Perhaps the authors could state how this definition is different from a similar definition in the cited work [16].
 
-\answer{
-We called Asynchronous Discrete Networks (ADN) the class of Logical Models
-with discrete values of the variables,
-either Boolean or multivalued,
-and evolution functions (or, equivalently, focal parameters).
-Although the denomination “ADN” does not exist in the literature,
-there is in fact no widespread or unified term to qualify this class of logical models.
-We have detailed this choice in the paper and justified the use of this term,
-and emphasized references that also defined these kinds of models.
-}
+page 10, line 53 ---
+In the phrase "we prove that if ..., if ..., and if ..., then" I would only leave the first "if" and remove the two others.
 
-- the overall presentation of the ideas and results are heavily technical and frankly difficult to read even for a reader that is used to formality. The most difficult aspect is the proliferation of notation, which forces the reader to continuously go back and forward to recall the meaning of the very large number of symbols. 
+page 11, line 33 ---
+Remove "we know" in the sentence "Then, we know (by induction)".
 
-\answer{
-The use of AANs instead of PH with classes of priorities
-allows to greatly simplify the whole paper
-and, we hope, increase comprehension.
-}
+page 12, lines 10-12 ---
+In the sentence "in order to reduce the number ..., and potentially removing cycles" replace "removing" with "remove".
 
-Comments and suggestions […]
+page 12, line 14 ---
+Something seems to be wrong with the phrase "would imply to enumerate".
 
-% page 2, paragraph 1: Some general references should be given here, reference papers, overviews, and so on.
-% 
-% p 2, end of paragraph 2, it is not clear if the name "Asynchronous Discrete Networks" is introduced by the authors or it is taken from [4], where multivalued Boolean Networks are discussed. 
-% 
-% p 3, line -13 what does it mean "to decide a successive reachability property"?
-% 
-% p 4, line 12 the least fix point could be greater than $x_0$; moreover, what are the hypotheses on f? It may have not a fix point at all
-% 
-% p 5, line -16 the set of all sub-sets —> the set of all sub-states 
-% 
-% p 5, l -14 a symbol like $\preceq$ or $\sqsubseteq$ would be more intuitive than $\subseteq$ for sub-states
-% 
-% p 5, l -4 can a scenario $\delta$ be empty? This may be important in the subsequent part of the paper, for instance at page 9, Lemma 3, could the empty scenario $\delta$ be selected by the $\exists$ after the main implication?
-% 
-% p 5, l -3 the fact that there is a set of scenarios implies that there is non-determinism.  Such aspect is never mentioned explicitly in the paper. It could be explicitly addressed.
-% 
-% p 6, l 4 (caption of figure 1) in drawn -> is drawn
-% 
-% p 6, last line and page 7 first line: what does it mean "one for each sub-state of the presence of processes $a_1$ and $b_1$"?
-% 
-% p 7 section 2.3 title: Restrictions may be misleading, why don't call this section "Conditions"?
-% 
-% p 7, l -2 all actions of priority 1, which —> all actions of priority 1 from s, which
-% 
-% p 8, l 6 greater than 2 -> greater than or equal to 2
-% 
-% p 8, l 8 We note $\Gamma$ —> We denote by $\Gamma$
-% 
-% p 8 Def 7 is a well-formed component if -> is a well-formed component, and so $a \in \Gamma$
-% 
-% p 8 Def 9 is a well-formed cooperative sort if -> is a well-formed cooperative sort, and so $a \in Delta$, if 
-% 
-% p 8 Def 9, condition (iv), does it require a sort of "determinism"  of cooperative encodings?
-% 
-% p 8, l -7 "represented by", in which sense?
-% 
-% p 10, -19 we note $a_i$ —> we denote by $a_i$
-% 
-% p 10, l -10 a bounce sequence on a can be abstracted into sets of all its hitters that are not in sort a (Def 16). — Is this an idea for an abstract interpretation? If yes the mechanism of abstraction / concretization, as well as the Galois connection/insertion between the abstract and concrete domains, is not clear and the whole underlying idea I could not catch by the definitions.
-% 
-% p 10, l -8 on other sots -> on other sorts
-% 
-% p 11, l 7 we denote $\gamma_\varsigma$ -> we denote by $\gamma_\varsigma$
-% 
-% p 11, l 7 the set of scenarios concretizing an objective sequence .. (Def 17) .. again the abstract interpretation is mentioned, but not fully introduced and explained.
-% 
-% p 11, l 16 the notation $\delta_{1 \ldots \Phi(n)}$ is not introduced
-% 
-% p 11, l 23 given by $maxCont_\varsigma$ -> denoted by $maxCont_\varsigma$
-% 
-% p 12, Def 20 this looks like a definition of an abstract fixpoint semantics to derive the graph of local causality. Ok, why is it not mentioned?
-% 
-% p 12, Def 20, rule (1): $\omega$ is an objective sequence , which is neither in Obj nor in Proc or Sol. It seems there is a "type mismatch" with the definition of $V^\omega_\varsigma$.
-% 
-% p 12 Def 21 it is not clear the definition of "children process"
-% 
-% p 12 last paragraph the discussion on the complexity issue looks very limited considering that this is supposed to be one of the contributions of the whole work. It is mentioned that "it is possible to compute only a subset of $V \cap Sol$", how?
+page 12, lind 18 ---
+In the sentence "from the initial state ... depicted" I would replace "depicted" to "illustrated" and actually put this word to another place within the sentence.
 
-\answer{We have taken these comments into account.}
+page 12, line 20 ---
+I think the phrase "but does not conclude regarding the reachability of $c_1$" could be rewritten in a simpler way.
+
+page 15, line 12 ---
+Put a comma before "where" in the phrase "having n+1 local states where n".
+This also concerns some other places of the paper.
+
+page 15, line 16 ---
+Remove the second period in "etc.).".
+
+page 15, line 26 ---
+I would consider using the term "transformation" instead of "translation".
+
+page 15, paragraph before Definition 10 ---
+This is a comment both to Definition 10 and Definition 11. I would try to "separate" them.
+
+page 16, line 56 ---
+Consider replacing "in the following" with "in what follows".
+This comment applies to several other places in the paper.
+
+page 19, Section 5 ---
+The phrases "this section aims at giving application examples", "we give in this section a detailed example", "we consider in the following a model of" repeat the same idea within a half of the page. I would try to restructure the introductory text to Section 5 and its Subsection 5.1.
+
+page 20, line 25 ---
+Remove the second article in "the the".
+
+page 20, line 46 ---
+The sentence starting with "This consists in using Theorem 1 ..." is written in a very sophisticated way.
+
+page 29, reference [18] ---
+The year and the pages of the publication are missing.
 
 \end{document}
