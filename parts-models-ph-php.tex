@@ -2,7 +2,7 @@
 \label{sec:flattening}
 
 In this section, we define the notion of AANs with classes of priorities,
-and give a translation from these into
+and give a transformation from these into
 AANs without priorities, as defined in \pref{sec:ph}.
 
 The idea behind AANs with classes of priorities (\pref{def:php})
@@ -119,7 +119,7 @@ which is a Boolean formula where the atoms are local states of $\ov{\PH}$.
     \item if $P$ is not an atom, then $\Fsem{P}{\mysigma}$ is evaluated in $\mysigma$
       with the classical semantics for the logic operators $\top$, $\bot$, $\neg$, $\wedge$ and $\vee$, which is recalled in \pref{fig:kleene}.
   \end{itemize}
-  Furthermore, in the following, we will use $\Fsem{\Fop{h}}{s}$ as a shorthand for
+  Furthermore, in what follows, we will use $\Fsem{\Fop{h}}{s}$ as a shorthand for
   $\Fsem{\Fop{h}}{\toset{s}}$.
 \end{definition}
 
@@ -163,7 +163,7 @@ We also have the following property for the negation of an atom:
   \neg a_i \Longleftrightarrow \bigvee_{\substack{a_j \in \ov{\PHl}_a\\a_j \neq a_i}} a_j\]
 Indeed, if a local state is not active in a state, this means that another local state of the same automaton is active.
 Moreover,
-provided that in the following we are only interested in properties that are true
+provided that in what follows we are only interested in properties that are true
 and thus we make no distinction between false and undecided results,
 playability properties can be simplified with the following result:
 \[\forall a \in \ov{\PHs}, \forall a_i, a_j \in \ov{\PHl}_a,

@@ -17,7 +17,7 @@ in order to show the scalability of our method.
 \subsection{Under-approximation of a Model with Priorities: Metazoan Segmentation}
 \label{ssec:ex-metazoan}
 
-We give in this section a detailed example of the use of classes of priorities
+We give here a detailed example of the use of classes of priorities
 in order to model a system with temporal constraints.
 This model also allows us to give a detailed example of the application of the sequential
 under-approximation proposed in \pref{ssec:ordered-ua},
@@ -26,7 +26,7 @@ which consists of several applications of the method developed in
 For this, we first have to use the flattening method presented in \pref{sec:flattening}
 because the considered model contains 2 classes of priorities.
 
-We consider in the following a model of metazoan segmentation
+Let us consider a model of metazoan segmentation
 inspired from a first translation to Process Hitting model given in~\cite{PMR10-TCSB}.
 This model was originally established in silico in~\cite{MSB:MSB4100192}
 in a differential equations framework.
@@ -54,7 +54,7 @@ In order to fix this, a high priority is affected to the actions hitting $a$
 and a low priority to the actions hitting $c$,
 in order to model the fact that the switch of $c$ has to be immediately followed by
 a switch of $a$.
-This forces the the evolution of genes $a$ and $c$
+This forces the evolution of genes $a$ and $c$
 to alternate in order not to miss a stripe;
 $a$ and $c$ thus have intertwined oscillations.
 We can thus consider that these two classes of priorities
@@ -150,9 +150,12 @@ we thus want to check the reachability of $\myp^1 = a_1$;
 then, starting from any new state obtained,
 we want to check the reachability of $\myp^2 = a_0$,
 and finally $\myp^3 = a_1$ once again to ensure that we entered a cycle.
-This consists in using \pref{th:approxinf} several times
-to check these reachabilities successively,
-by splitting it following the method given in \pref{ssec:ordered-ua}.
+%This consists in using 
+For this, we apply the method proposed in \pref{ssec:ordered-ua}:
+we consider each reachability step independently
+and we use \pref{th:approxinf} three times;
+the initial states of steps 2 and 3 are computed with the
+extraction method of \pref{ssec:concret}.
 
 We first build the local causality graph $\thisB{\myp^1}{\ctx^1}$
 related to the reachability of $\myp^1 = a_1$ from the initial state $\ctx^1$.
@@ -410,7 +413,7 @@ whose dynamics is equivalent to an AAN%
 \footnote{Files are available at
 \url{http://maxime.folschette.name/underapprox-aan.zip}.}.
 Boolean networks being a subclass of AANs, this translation is straightforward.
-In the following, we first present the Pint implementation,
+In the rest of this section, we first present the Pint implementation,
 then the two models that were used for our tests,
 and the finally summarise the quantitative results of these tests.
 

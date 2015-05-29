@@ -44,10 +44,11 @@ Successive objectives are described with objective sequences.
 \begin{definition}[Objective ($\Obj$) \& Objective Sequence ($\OS$)]
 \label{def:obj}
   If $a \in \components$, the reachability of a local state $a_j$ from a local state $a_i$ is called an \emph{objective}, noted $\PHobj{a_i}{a_j}$.
-  The set of all objectives is called $\Obj \DEF \{ \PHobj{a_i}{a_j} \mid a \in \components \wedge (a_i, a_j) \in \PHl_a \times \PHl_a \}$.
+  The set of all objectives is noted:
+  \[\Obj \DEF \{ \PHobj{a_i}{a_j} \mid a \in \components \wedge (a_i, a_j) \in \PHl_a \times \PHl_a \} \enspace.\]
   For an objective $P = \PHobj{a_i}{a_j} \in \Obj$, we define: $\PHsort(P) \DEF
-  a$, $\PHtarget(P)\DEF a_i$, $\PHbounce(P)\DEF a_j$,
-  and $P$ is said \emph{trivial} iff $a_i = a_j$.
+  a$, $\PHtarget(P)\DEF a_i$, $\PHbounce(P)\DEF a_j$.
+  Finally, $P$ is said \emph{trivial} iff $a_i = a_j$.
 
   We define an \emph{objective sequence} as a sequence of objectives in which each objective target must be equal to the previous objective bounce of the same automaton, if it exists.
   The set of all objective sequences is denoted by $\OS$.
@@ -109,17 +110,19 @@ $\w\in\OS(s)$, $\concr(\w)$ is the set of scenarios matching with $\w$:
 \}
 \enspace,
 \end{align*}
-where $\omega^\vartriangle$ refers to the objective sequence $\omega$ where
+in which $\omega^\vartriangle$ refers to the objective sequence $\omega$ where
 trivial objectives have been removed.
-The notation $\delta_{a..b}$ in the previous definition
-denotes the subsequence of $\delta$ between indexes $a$ and $b$,
+The notation $\delta_{j..k}$
+denotes the subsequence of $\delta$ between indexes $j$ and $k$,
 as defined on page \pageref{notations}.
 \end{definition}
 
-From \pref{def:ltw} and \pref{def:concr}, we derive that if 
-$\w \ltw \w'$, then $\concr(\w)\subseteq\concr(\w')$ (\pref{lem:ltw}).
+From \pref{def:ltw} and \pref{def:concr}, we derive that if
+$\w \ltw \w'$, then the scenarios matching $\w$ also match $\w'$ (\pref{lem:ltw}).
+%$\concr(\w)\subseteq\concr(\w')$ (\pref{lem:ltw}).
 \begin{lemma}\label{lem:ltw}
-$\w\ltw\w' \Longrightarrow \concr(\w)\subseteq\concr(\w')$\enspace.
+$\forall \w, \w' \in \OS, \forall s \in \PHl,
+\w\ltw\w' \Longrightarrow \concr(\w)\subseteq\concr(\w')$\enspace.
 \end{lemma}
 
 Given a non-empty set $\Delta\subseteq\Sce(s)$ of non-empty scenarios that have a common last bounce
@@ -196,7 +199,7 @@ $\forall n\in\indexes{\zeta}$, $\zeta_n = \delta_{\phi(n)}$.
 
 Given one initial objective, one could then iteratively refine the objective into objective
 sequences following its bounce sequences:
-the refinement of objective $P$ with $\zeta\in\BS(P)$ would consists in prepending to $P$ the
+the refinement of objective $P$ with $\zeta\in\BS(P)$ consists in prepending to $P$ the
 objectives leading to the hitters of the actions in $\zeta$, in the same sequential order;
 the generalization of the refinement to an objective sequence would require to consider all possible
 interleaving between the refinements \cite{PMR12-MSCS}.
@@ -299,8 +302,8 @@ that can be used to build a concrete scenario reaching $\myp$.
 Because we are focused on sufficient conditions for reachability, we do not require that all
 possible scenarios can be derived from the LCG.
 
-In this section, we prove that if the LCG has no cycle, if all its nodes in $\Obj$ have at least one
-child, and if all its nodes in $\sSol$ satisfy a
+In this section, we prove that if the LCG has no cycle, all its nodes in $\Obj$ have at least one
+child, and all its nodes in $\sSol$ satisfy a
 particular criteria, so-called independence, then from any state
 delimited by the context $\ctx$, there exists a scenario that reaches $\myp$
 (\pref{th:approxinf}).
@@ -336,9 +339,9 @@ If $\zeta = \emptyseq$ (for instance in the case when $a_i = a_j$), the recursio
 continue to the next stage.
 Otherwise, for each $n\in\indexes\zeta$,
 for each $b_i \in\PHhitter(\zeta_n)$,
-we refine the objective $\obj{b_j}{b_i}$ where $b_j$ is the state of $b$ in the current state.
+we refine the objective $\obj{b_j}{b_i}$, where $b_j$ is the state of $b$ in the current state.
 By induction, $\obj{b_j}{b_i}$ is a child of $b_i$ in the LCG of \pref{def:lcg}.
-Then, we know (by induction) that the current state of $b$ is $b_i$.
+Thus, we know that the current state of $b$ is $b_i$.
 After having repeated this procedure for each $b_i\in\PHhitter(\zeta_n)$,
 because all the nodes in $\sSol$, and in particular $\PHhitter(\zeta_n)$, are independent,
 we know that all the local states in $\PHhitter(\zeta_n)$ are in the current state.
@@ -369,21 +372,23 @@ each component usually contains a limited number of expression levels.
 
 We note furthermore that the method does not require any completeness of the bounce sequences
 $\BS$.
-Therefore, in order to reduce the number of bounce sequences to consider, and potentially removing
+Therefore, in order to reduce the number of bounce sequences to consider, and potentially remove
 cycles and non-satisfying nodes,
 one can consider only a sub-set of bounce sequences
 (and in particular: a single bounce sequence) for each objective.
-However, such an approach would imply to enumerate all possible combinations of bounce sequences
-subsets, hence being exponential in the number of objectives having at least two bounce sequences.
+However, such an approach requires to enumerate all possible combinations of bounce sequences
+subsets, hence being exponential in the number of considered bounce sequences.
+%objectives solved by at least two bounce sequences.
 
 
 
 \begin{example}
-  If we confider the AAN of \pref{fig:ph-livelock},
-  from the initial state $\PHstate{a_1, b_0, c_0}$ depicted,
-  the under-approximation given in \pref{th:approxinf}
-  concludes that $a_1$ is reachable, as well as $b_1$, but
-  does not conclude regarding the reachability of $c_1$.
+  We consider in this example the AAN of \pref{fig:ph-livelock},
+  and the initial state $\PHstate{a_1, b_0, c_0}$
+  that is also represented in this Figure.
+  The under-approximation given in \pref{th:approxinf}
+  concludes that $a_1$ is reachable from this initial state, as well as $b_1$.
+  Nevertheless, it does not conclude regarding the reachability of $c_1$.
   This is due to the fact that the node $\{ a_1, b_1 \} \in \Bv \cap \sSol$
   is not independent because of its successor $a_0$ (and $b_0$)
   as we can see in the LCG of \pref{fig:sa-livelock}.
@@ -507,7 +512,7 @@ the reachability of a given local state $\myp \in \Proc$,
 from a given initial state $s_0 \in \PHl$,
 provided that \pref{th:approxinf} answered positively
 for a context $\ctx \in \Ctx$ so that $s_0 \subset \ctx$.
-The algorithm proposed in the following relies on a traversal of the Local Causality Graph
+The algorithm proposed in what follows relies on a traversal of the Local Causality Graph
 $\cwB$ that has been used for this conclusion.
 The correctness of this extraction can be demonstrated
 in the same fashion as \pref{th:approxinf}.
@@ -614,10 +619,10 @@ because of the lack of the notion of simultaneity for more than two components.
 \subsubsection*{Sequential reachability}
 Given a sequence of local state to reach (e.g., reach $a_i$, then $b_j$, etc.),
 one can use the same approach as for sub-state reachability by introducing
-a new automaton $\reach$ having $n+1$ local states where $n$ is the size of the
+a new automaton $\reach$ having $n+1$ local states, where $n$ is the size of the
 sequence of reachability, and $n$ actions making it bounce gradually from $\reach_0$ to
 $\reach_n$ with hitters corresponding the successive local states
-(e.g., $\PHfrappes{a_i}{\reach_0}{\reach_1}$,
+(\eg $\PHfrappes{a_i}{\reach_0}{\reach_1}$,
 $\PHfrappes{b_j}{\reach_1}{\reach_2}$, etc.).
 
 An alternative approach is to use the extraction of a scenario of

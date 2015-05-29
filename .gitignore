@@ -8,13 +8,11 @@
 *.bbl
 *.out
 *.thm
-main.pdf
 *~
 *.zip
-abstract.pdf
 *.kilepr
 *.fdb_latexmk
 *.spl
 *.fls
-response.pdf
+/*.pdf
 
