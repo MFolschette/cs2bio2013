@@ -181,6 +181,7 @@ $\BS(\obj{a_0}{a_1}) = \{\PHfrappes{b_0}{a_0}{a_1}\}$.
 
 From \pref{def:bs}, we can derive that any scenario matching with an objective includes all the
 actions of one of the bounce sequences of the objective (\pref{lem:bs-concr}).
+
 \begin{lemma}
 Given a state $s\in \PHl$ and an objective $\obj{a_i}{a_j}$ with $\get{s}{a}=a_i$,
 $\forall\delta\in\concr(\obj{a_i}{a_j})$,
@@ -197,12 +198,29 @@ $\forall n\in\indexes{\zeta}$, $\zeta_n = \delta_{\phi(n)}$.
 
 \subsubsection{Local Causality Graph}
 
-Given one initial objective, one could then iteratively refine the objective into objective
-sequences following its bounce sequences:
-the refinement of objective $P$ with $\zeta\in\BS(P)$ consists in prepending to $P$ the
-objectives leading to the hitters of the actions in $\zeta$, in the same sequential order;
-the generalization of the refinement to an objective sequence would require to consider all possible
-interleaving between the refinements \cite{PMR12-MSCS}.
+\modmf{%
+The previous subsections permitted to define all the tools needed to build the Local Causality Graph (LCG), such as the on depicted in \pref{fig:sa-livelock}.
+This graph is denoted $\cwB$ where $u$ is the local state to be reached
+from the initial context $\ctx$.
+It will be the basis of our static analysis,
+as it represents the causality links between the different objectives involved
+in the solving of the reachability of $u$.
+This LCG is built recursively by considering some required local states (\eg $u$),
+linking them to objectives (\eg, $\PHobj{w}{u}$, if $w \in \ctx$),
+and locally solving these objectives in order to create new required local states
+from other automata.
+}
+
+Technically,
+one can iteratively refine a given objective into (possibly several) objective
+sequences following its bounce sequences.
+Indeed, the refinement of an objective $P$ with $\zeta\in\BS(P)$
+consists in prepending to $P$ the
+objectives leading to the activation of all hitters of the actions in $\zeta$,
+in the same sequential order.
+The generalization of this refinement to an objective sequence would
+naturally require to consider all possible
+interleaving between the refinements~\cite{PMR12-MSCS}.
 
 For example, given the AAN of \pref{fig:ph-livelock},
 in the state $\langle a_0,b_0,c_0\rangle$,
@@ -215,38 +233,48 @@ or
 $\obj{b_0}{b_1}\concat\obj{a_0}{a_1}\concat\obj{c_0}{c_1}$
 (which can then be further refined).
 
-These refinements can be summarized with a so-called Local Causality Graph (LCG).
-Given an initial context $\ctx$ and a local state $\myp\in\Proc$,
-an LCG $\cwB = (\cwV, \cwE)$
-is a digraph where $\cwV \subseteq \Proc\cup \Obj \cup \Sol \cup \sSol$ is the set of vertices
-where $\sSol=\powerset(\Proc)$ and $\Sol=\Obj\times\powerset(\sSol)$
+\medskip
+
+Formally, a Local Causality Graph (LCG)
+is a digraph where $\cwV \subseteq \Proc\cup \Obj \cup \Sol \cup \sSol$ is the set of vertices,
+with $\sSol=\powerset(\Proc)$ and $\Sol=\Obj\times\powerset(\sSol)$,
 and $\cwE \subseteq \cwV \times \cwV$ is the set of oriented edges
 (\pref{def:lcg}).
+% 
+% These refinements can be summarized with a so-called Local Causality Graph (LCG).
+% Given an initial context $\ctx$ and a local state $\myp\in\Proc$,
+% an LCG $\cwB = (\cwV, \cwE)$
+% is a digraph where $\cwV \subseteq \Proc\cup \Obj \cup \Sol \cup \sSol$ is the set of vertices
+% where $\sSol=\powerset(\Proc)$ and $\Sol=\Obj\times\powerset(\sSol)$
+% and $\cwE \subseteq \cwV \times \cwV$ is the set of oriented edges
+% (\pref{def:lcg}).
 A node in $\cwV\cap\Obj$ represents an objective to refine.
-Such a node is related to nodes in $\cwV\cap\Sol$ which represent
+Such a node is linked to nodes in $\Sol$ which represent
 sets of hitter sets extracted from a
 bounce sequence of the objective
-(that is, one for each bounce sequence in $\BS(P)$): indeed,
+(that is, one node for each bounce sequence in $\BS(P)$); thus,
 given an objective $P$, if $\zeta\in\BS(P)$
-and $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid
-n\in\indexes\zeta \}$, then $P$ is related to $\langle P, \abstr\zeta\rangle\in\Sol$
-(\pref{def:lcg}-\ref{lcg-obj-sol}).
+and $\abstr\zeta$ is the set of all hitters of $\zeta$,
+% and $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid
+% n\in\indexes\zeta \}$,
+then $P$ is linked to a node $\langle P, \abstr\zeta\rangle\in\Sol$
+(\pref{def:lcg}\nobreakdash-\ref{lcg-obj-sol}).
 For each hitter set $ps\in\abstr\zeta$,
 the node $\langle P,\abstr\zeta\rangle\in\cwV\cap\Sol$ is
-related to the node $ps\in\sSol$
-(\pref{def:lcg}-\ref{lcg-sol-sync}).
-Then, a node $ps\in\cwV\cap\sSol$ is related to each local state $a_i \in ps$ is contains
-(\pref{def:lcg}-\ref{lcg-sync-ls}).
+linked to the node $ps\in\sSol$
+(\pref{def:lcg}\nobreakdash-\ref{lcg-sol-sync}).
+Then, a node $ps\in\cwV\cap\sSol$ is linked to each local state $a_i \in ps$ is contains
+(\pref{def:lcg}\nobreakdash-\ref{lcg-sync-ls}).
 A local state node $a_i\in\cwV\cap\Proc$
-is related to each objective $\obj{a_j}{a_i} \in \Obj$, where
+is linked to each objective $\obj{a_j}{a_i} \in \Obj$, where
 $a_j$ is either in the initial context $\ctx$ or
 is a local state node in the LCG
-(\pref{def:lcg}-\ref{lcg-ls-obj}).
-Finally, given a node $\obj{a_j}{a_i}\in\cwV\cap\Obj$,
-if a local state $a_k\neq a_i$ is in its successors (given by
+(\pref{def:lcg}\nobreakdash-\ref{lcg-ls-obj}).
+Finally, given an objective node $\obj{a_j}{a_i}\in\cwV\cap\Obj$,
+if a local state $a_k\neq a_i$ is in its successors (which is given by
 $\conn_{(\cwBNodes,\cwBEdges)}(\obj{a_j}{a_i})$), then
-$\obj{a_j}{a_i}$ is related to $\obj{a_k}{a_i}$ in the LCG
-(\pref{def:lcg}-\ref{lcg-conn}).
+$\obj{a_j}{a_i}$ is linked to $\obj{a_k}{a_i}$ in the LCG
+(\pref{def:lcg}\nobreakdash-\ref{lcg-conn}).
 
 \begin{definition}
 \label{def:lcg}
@@ -292,6 +320,36 @@ $\zeta\in\BS(\obj{a_i}{a_j}) \}\subseteq\cwBEdges$
 with $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid n\in\indexes\zeta \}$.
 \end{definition}
 
+\modmf{%
+The definition of an LCG tackles two cases
+where the bounce local state of an objective may be changed.
+First,
+the addition of objectives based on the local states already mentioned anywhere in the LCG,
+as performed in \pref{def:lcg}\nobreakdash-\ref{lcg-ls-obj},
+ensures to take into account the possible changes in the active local states
+made by other objectives.
+We thus try to ensure that a required local state is reachable even when
+starting from another local state of the same automaton that may be active at some point.
+Second, \pref{def:lcg}\nobreakdash-\ref{lcg-conn},
+allows to re-target objectives whose solving changes their target local state.
+This happens if the actions allowing to activate the local processes required to solve
+an objective $P$ change the active process of $\PHsort(P)$.
+In this case, the objective changes to another objective $\PHobj{w}{\bounce{P}}$.
+Linking to all objectives of this kind ensures that all possible disturbances
+are taken into account.
+}
+
+\modmf{%
+The LCG of \pref{def:lcg} contains synchronizing nodes ($\sSol$)
+that allow to express the need for several local states simultaneously
+in order to play a given action.
+This is the main difference regarding~\cite{PMR12-MSCS}
+which tackled with Process Hitting, whose actions are limited to at most one hitter
+and did not require this kind of synchronization.
+Nevertheless, \pref{def:lcg} is equivalent to the definition of LCG
+given in~\cite{FPMR13-CS2Bio},
+although adapted for AANs which notably allowed to simplify its formalism.
+}
 
 
 \subsection{Sufficient condition for reachability of a local state}
