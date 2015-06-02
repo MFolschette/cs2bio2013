@@ -199,17 +199,17 @@ $\forall n\in\indexes{\zeta}$, $\zeta_n = \delta_{\phi(n)}$.
 \subsubsection{Local Causality Graph}
 
 \modmf{%
-The previous subsections permitted to define all the tools needed to build the Local Causality Graph (LCG), such as the on depicted in \pref{fig:sa-livelock}.
+The previous subsections permitted to define all the tools needed to build the Local Causality Graph (LCG).
 This graph is denoted $\cwB$ where $u$ is the local state to be reached
 from the initial context $\ctx$.
+and an example is depicted in \pref{fig:sa-livelock}.
 It will be the basis of our static analysis,
 as it represents the causality links between the different objectives involved
 in the solving of the reachability of $u$.
 This LCG is built recursively by considering some required local states (\eg $u$),
-linking them to objectives (\eg, $\PHobj{w}{u}$, if $w \in \ctx$),
-and locally solving these objectives in order to create new required local states
-from other automata.
-}
+linking them to objectives (\eg $\PHobj{w}{u}$, if $w \in \ctx$),
+and locally refining these objectives in order to include new required local states
+from other automata.}
 
 Technically,
 one can iteratively refine a given objective into (possibly several) objective
@@ -329,12 +329,14 @@ as performed in \pref{def:lcg}\nobreakdash-\ref{lcg-ls-obj},
 ensures to take into account the possible changes in the active local states
 made by other objectives.
 We thus try to ensure that a required local state is reachable even when
-starting from another local state of the same automaton that may be active at some point.
+starting from a local state of the same automaton that is not in the initial context,
+but that may be active at some point of the solving.
 Second, \pref{def:lcg}\nobreakdash-\ref{lcg-conn},
-allows to re-target objectives whose solving changes their target local state.
-This happens if the actions allowing to activate the local processes required to solve
-an objective $P$ change the active process of $\PHsort(P)$.
-In this case, the objective changes to another objective $\PHobj{w}{\bounce{P}}$.
+allows to re-target objectives whose own solving changes their target local state.
+This happens when playing the actions that activate the local states required to solve
+an objective $P$ also changes the active local state of $\PHsort(P)$.
+In this case, the initial objective $P$ is re-targeted to another
+objective $\PHobj{p}{\bounce{P}}$, where $p$ is the new active local state in $\PHsort(P)$.
 Linking to all objectives of this kind ensures that all possible disturbances
 are taken into account.
 }
@@ -345,10 +347,10 @@ that allow to express the need for several local states simultaneously
 in order to play a given action.
 This is the main difference regarding~\cite{PMR12-MSCS}
 which tackled with Process Hitting, whose actions are limited to at most one hitter
-and did not require this kind of synchronization.
-Nevertheless, \pref{def:lcg} is equivalent to the definition of LCG
+and thus did not require this kind of synchronization.
+However, \pref{def:lcg} is equivalent to the definition of the structure
 given in~\cite{FPMR13-CS2Bio},
-although adapted for AANs which notably allowed to simplify its formalism.
+although it was adapted for AANs which notably allowed to simplify its formalism.
 }
 
 
@@ -366,25 +368,25 @@ particular criteria, so-called independence, then from any state
 delimited by the context $\ctx$, there exists a scenario that reaches $\myp$
 (\pref{th:approxinf}).
 
-A node $x$ of the LCG in $\sSol$ is \emph{independent} (\pref{def:coherent}) if for each local state
-$a_i\in x$, none of the other local states $b_j\in x$ have in their successors a local state of automaton $a$ different
-than $a_i$.
-This criteria ensures that once a local state in $x$ has been reached, reaching another local state
-in $x$ should not require to change the first local state.
+A node $ps \in \sSol$ of the LCG is \emph{independent} (\pref{def:coherent}) if for each local state
+$a_i\in ps$, none of the other local states $b_j\in ps$ have in their successors
+a local state of automaton $a$ but that is different than $a_i$.
+This criteria ensures that once a local state in $ps$ has been reached, reaching another local state
+in $ps$ should not impact the first.
 
 \begin{definition}[Independent synchronizations]
 \label{def:coherent}
   In a LCG $\cwB = (\Bv, \Be)$,
-  a node $x \in \Bv\cap\sSol$ is \emph{independent} if and only if
-  for each $a_i\in x$,
-  for each $b_j\in x, b_j\neq a_i$,
+  a node $ps \in \Bv\cap\sSol$ is \emph{independent} if and only if
+  for each $a_i\in ps$,
+  for each $b_j\in ps, b_j\neq a_i$,
   $a_k \in\conn_{\cwB}(b_j) \cap \Proc \Rightarrow a_k = a_i$.
 \end{definition}
 
-The intuition of the under-approximation is the following.
+The intuition of the under-approximation of \pref{th:approxinf} is the following.
 Given a state $s\subseteq\ctx$, we recursively refine the initial objective
 (which is: reaching $\myp$ from the initial state) according to its children.
-As the LCG is acyclic, such a recursion always terminates, and as all the objective nodes have at
+As the LCG is acyclic, by hypothesis, such a recursion always terminates, and as all the objective nodes have at
 least one child, it never gets stuck.
 The refinement of an objective node $\obj{a_i}{a_j}$ acts as follows:
 if the node has another objective node $\obj{a_k}{a_j}$ as child, we first refine the objective
@@ -393,7 +395,7 @@ and then we refine the objective $\obj{a_k}{a_j}$.
 If the objective node has only successors in $\Sol$ (bounce sequences), one is picked arbitrarily.
 If $\langle P, pps\rangle$ is the chosen node,
 by construction there exists $\zeta\in\BS(P)$ such that $\abstr\zeta = pps \in \powerset(\sSol)$.
-If $\zeta = \emptyseq$ (for instance in the case when $a_i = a_j$), the recursion stops and we
+If $\zeta = \emptyseq$ (for instance in the case where $a_i = a_j$), the recursion stops and we
 continue to the next stage.
 Otherwise, for each $n\in\indexes\zeta$,
 for each $b_i \in\PHhitter(\zeta_n)$,
@@ -443,7 +445,7 @@ subsets, hence being exponential in the number of considered bounce sequences.
 \begin{example}
   We consider in this example the AAN of \pref{fig:ph-livelock},
   and the initial state $\PHstate{a_1, b_0, c_0}$
-  that is also represented in this Figure.
+  that is also represented.
   The under-approximation given in \pref{th:approxinf}
   concludes that $a_1$ is reachable from this initial state, as well as $b_1$.
   Nevertheless, it does not conclude regarding the reachability of $c_1$.
@@ -658,24 +660,32 @@ state reachability properties can be extended to sequential (sub)states
 reachability properties.
 
 \subsubsection*{Sub-state reachability}
-Given an AAN $\PH = (\PHs, \PHl, \PHh)$ and
-a sub-set of automata local states
-$ps = \{ a_i \in\Proc\mid a\in\PHs, a_i\in\PHl_a\}$,
-the reachability from $s\in\PHl$ of a state $s'\in\PHl$ such that
-$ps\subset s'$ is equivalent to the reachability of the local state
-$\reach_1$ from a state $s \times \{ \reach_0 \}$
-in the AAN
+Given an AAN $\PH = (\PHs, \PHl, \PHh)$,
+an initial state $s \in \PHl$ and
+a sub-set of local states
+$\total \subseteq \Proc$ % = \{ a_i \in\Proc\mid a\in\PHs, a_i\in\PHl_a\}$
+so that $\forall a \in \PHs, \card{\total \cap \PHl_a} \leq 1$,
+the reachability of a state containing all local states of $\total$
+from the initial state $s\in\PHl$
+can be tackled by our method.
+Indeed,
+consider the AAN
 $\PH' = (\PHs', \PHl', \PHh')$ with:
 $\PHs' = \PHs \cup \{ \reach \}$, $\PHl' = \PHl \times \PHl_\reach$,
 where $\PHl_\reach = \{ \reach_0, \reach_1 \}$,
-and $\PHh' = \PHh \cup \{ \PHhit{ps}{\reach_0}{\reach_1} \}$.
+and $\PHh' = \PHh \cup \{ \PHhit{\total}{\reach_0}{\reach_1} \}$.
+Obviously,
+the reachability in $\PH$
+of any state $s'\in\PHl$ such that
+$\total \subset s'$ from the initial state $s$
+is equivalent to the reachability in $\PH'$ of the local state
+$\reach_1$ from state $s \times \{ \reach_0 \}$.
 
 Such analysis was not possible with the Process Hitting framework,
 because of the lack of the notion of simultaneity for more than two components.
 
-
 \subsubsection*{Sequential reachability}
-Given a sequence of local state to reach (e.g., reach $a_i$, then $b_j$, etc.),
+Given a sequence of local states to reach (\eg reach $a_i$, then $b_j$, etc.),
 one can use the same approach as for sub-state reachability by introducing
 a new automaton $\reach$ having $n+1$ local states, where $n$ is the size of the
 sequence of reachability, and $n$ actions making it bounce gradually from $\reach_0$ to

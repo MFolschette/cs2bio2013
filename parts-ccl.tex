@@ -44,7 +44,26 @@ such a translation for generalized Interaction Graphs,
 that is, Discrete Networks without evolution functions or parameters,
 was proposed in~\cite{PMR10-TCSB}.
 
-Further work can be derived from what have been presented in this paper.
+\modmf{%
+The static analysis method proposed in this paper can theoretically be applied to other
+kinds of formalisms that are not mentioned in the rest of this paper.
+For example, AANs are expressive enough to represent Asynchronous Finite Cellular Automata,
+that is, randomly updated and thus completely asynchronous Finite Cellular Automata.
+Another possibility is to represent multiplayer games, which is possible
+in AANs with 3 classes of priorities, with the addition of several automata
+to tackle the rules of the game, and especially the sequentiality of the turns of each player.
+In both cases, the considered formalism can be represented as an AAN,
+making the application of our analysis method possible in theory.
+However, in practice, the conclusiveness on such “unusual” models
+can be potentially lowered, as the static analysis is not specifically tailored for them.
+Indeed, some particular structures may create loops or non-independent nodes
+in the Local Causality Graph,
+making the whole method inconclusive.
+However, more study and experiments are required to evaluate
+the effectiveness of our method on these kinds of models.
+}
+
+Further work can be directly derived to improve the method presented in this paper.
 The over-approximation on Process Hitting models without priorities proposed in~\cite{PMR12-MSCS}
 and that was used in this work
 is still accurate on AANs (by over-approximating dynamics)
@@ -55,7 +74,9 @@ A specific search of key processes or cut sets \cite{PAK13-CAV} may especially b
 %and mode precisely the class of models studied in this paper.
 Furthermore, we are investigating alternative under-approximations that can be
 applied directly to the whole class of AANs or Process Hitting models with priorities,
-and not only to a sub-class with only one class of priority or particular restrictions;
-such improvement may allow to increase the conclusiveness of the static analysis
+and not only to a sub-class with particular restrictions;
+such improvement may permit to increase the conclusiveness of the static analysis
 while allowing to analyse any model without the need of a translation.
 Finally, in order to take into account quantitative data in transition delays, the overall approximation method could be extended to handle evolutions that are chronometric instead of only chronologic.
+This may require the addition of information such as time delays in the model,
+that would be exploited during the solving.
