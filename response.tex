@@ -49,6 +49,8 @@ We wish to thank the reviewers for their comments.
 Please find below a summary of the main changes brought to the paper, and a detailed response to all comments.
 
 \begin{itemize}
+  \item We added a paragraph in the conclusion to briefly tackle the questions raised by reviewer \#1;
+  \item We added several paragraphs of informal explanations around Def. 8 after the comments of reviewer \#2.
   \item \todo{Main changes}
 \end{itemize}
 
@@ -115,21 +117,37 @@ and some enrichments of the static analysis may be needed to obtain satisfying r
     The reachability problem is then equivalent to finding a winning strategy with the cooperation of all players to reach a given state.
     Although changing the reachability problem into a winning strategy problem is theoretically possible,
     \textbf{it misses the point to provide efficient tools} to find this strategy,
-    as this method would rely on the available tools of game theory, with their inherent complexity.
+    as this method would rely on the available tools of game theory,
+    that is usually based on the state-transition graph, which we want to avoid to compute because of its inherent complexity.
   \item “Is it possible to represent multiplayer games as AANs?”
     This question is the most interesting to us, as it would allow to use the static analysis methods on the provided game.
     The main issue here is the ability to represent the given multiplayer game as an AAN ---
     in which case the analysis tools can be used straightforwardly.
     Such a representation is theoretically possible but unfortunately not really straightforward in AANs.
-    To grasp the idea, it requires additional automata: one “turn” automaton to tell the player's current turn, and as many “update” automata as there are players' moves, in order to synchronize the play of each move with a change of the active local state of the “turn” automaton.
-    The easiest way to model this is with an AAN with 3 classes of priorities,
-    which can be translated into an AAN without priorities with a transformation given in this paper.
-    However, this transformation into an AAN without priorities (besides having a high complexity)
-    potentially creates actions with a lot of hitters.
-    Although complexity of the static analysis method we presented in this paper does not suffer from the many additional “update” automata required (as it is polynomial in the number of automata, and these “update” automata only have 2 local states),
-    the particular form of these “update” automata may create cycles in the Local Causality Graph,
-    and the presence of actions with many hitter is likely to make a lot of $\mathbf{Sync}$ nodes non-independent.
-    Both facts may decrease the conclusiveness of our method, although it is hard to say to which extent with no additional study or experiments.
+    The multiple hitters of the actions in an AAN are fine enough to permit to represent
+    kinds of “play sets” that delimit which player can move in each (global) state,
+    as defined in \cite{gradel_infinite_2002} for example.
+    It is also possible to model the fact that the players can move alternately
+    with additional automata: one “turn” automaton to tell the player's current turn,
+    and as many “update” automata as there are players' moves,
+    in order to synchronize the play of each move with a change of the active local state of the “turn” automaton.
+    This has to be modelled with an AAN with 3 classes of priorities,
+    which can be translated into an AAN without priorities with the transformation given in this paper.
+    In the end, both solutions contain actions with a lot of hitters.
+    Although complexity of the static analysis method we presented in this paper does not suffer from the many additional automata required (as it is polynomial in the number of automata),
+    the presence of actions with many hitters is likely to make a lot of $\mathbf{Sync}$ nodes non-independent,
+    which may decrease the conclusiveness of our method
+    It is however hard to say to which extent.
+%     To grasp the idea, it requires additional automata: one “turn” automaton to tell the player's current turn, and as many “update” automata as there are players' moves, in order to synchronize the play of each move with a change of the active local state of the “turn” automaton.
+%     The easiest way to model this is with an AAN with 3 classes of priorities,
+%     which can be translated into an AAN without priorities with the transformation given in this paper.
+%     However, this transformation into an AAN without priorities (besides having a high complexity)
+%     potentially creates actions with a lot of hitters.
+%     Although complexity of the static analysis method we presented in this paper does not suffer from the many additional “update” automata required (as it is polynomial in the number of automata, and these “update” automata only have 2 local states),
+%     the particular form of these “update” automata may create cycles in the Local Causality Graph,
+%     and the presence of actions with many hitters is likely to make a lot of $\mathbf{Sync}$ nodes non-independent.
+%     Both facts may decrease the conclusiveness of our method, although it is hard to say to which extent with no additional study or experiments.
+%     
 %     To grasp the idea, let us consider an Turn AAN that divides the set of actions into $n$ “player” sets (one for each player) and that includes a “turn” variable (telling which player's turn it currently is).
 %     In this Turn AAN, an action can be played only if the “player” set it belongs to matches the value of the “turn” variable.
 %     Furthermore, playing an action automatically changes the “turn” variable to the next player.
