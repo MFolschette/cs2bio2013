@@ -3,9 +3,10 @@
 
 We present a static analysis that takes as input an AAN
 $\PH = (\PHs; \PHl; \PHa)$,
-an initial state, and a local state of an automaton in $\PHs$, for identifying sufficient conditions
-that ensure the existence of a scenario starting from the initial state and leading to a state
-where the given local state is present.
+an initial state in $\PHl$, and a local state in $\Proc$.
+Its objective it to identify sufficient conditions
+that ensure the existence of a scenario starting from the initial state,
+and leading to a state where the given local state is present.
 
 A classical approach for determining if a local state of an automaton can be
 reached from a given initial state is to build sequences of transitions from the initial state
@@ -90,7 +91,7 @@ $\forall n\in\indexes{\w'}, \bounce{\w'_n}=\bounce{\w_{\phi(n)}}$.
 An objective sequence can be seen as an abstract representation of a set of scenarios that describe
 (part of) the successive state changes of the automata.
 We denote by $\concr(\w)$ (\pref{def:concr}) the set of scenarios matching with an objective sequence
-$\w$ in the state $s\in\PHs$.
+$\w$ in the state $s\in\PHl$.
 It is essentially all the scenarios for which there exists a mapping from the bounces of each
 objective to the bounce of an action in the scenario which preserve the sequential ordering.
 
@@ -201,19 +202,20 @@ $\forall n\in\indexes{\zeta}$, $\zeta_n = \delta_{\phi(n)}$.
 \modmf{%
 The previous subsections permitted to define all the tools needed to build the Local Causality Graph (LCG).
 This graph is denoted $\cwB$ where $u$ is the local state to be reached
-from the initial context $\ctx$.
-and an example is depicted in \pref{fig:sa-livelock}.
+from the initial state $s$.
 It will be the basis of our static analysis,
 as it represents the causality links between the different objectives involved
 in the solving of the reachability of $u$.
 This LCG is built recursively by considering some required local states (\eg $u$),
-linking them to objectives (\eg $\PHobj{w}{u}$, if $w \in \ctx$),
+linking them to objectives (\eg $\PHobj{t}{u}$, if $t \in s$),
 and locally refining these objectives in order to include new required local states
-from other automata.}
+from other automata.
+An example of LCG is depicted in \pref{fig:sa-livelock}.
+}
 
 Technically,
 one can iteratively refine a given objective into (possibly several) objective
-sequences following its bounce sequences.
+sequences extracted from its bounce sequences.
 Indeed, the refinement of an objective $P$ with $\zeta\in\BS(P)$
 consists in prepending to $P$ the
 objectives leading to the activation of all hitters of the actions in $\zeta$,
@@ -242,7 +244,7 @@ and $\cwE \subseteq \cwV \times \cwV$ is the set of oriented edges
 (\pref{def:lcg}).
 % 
 % These refinements can be summarized with a so-called Local Causality Graph (LCG).
-% Given an initial context $\ctx$ and a local state $\myp\in\Proc$,
+% Given an initial context $s$ and a local state $\myp\in\Proc$,
 % an LCG $\cwB = (\cwV, \cwE)$
 % is a digraph where $\cwV \subseteq \Proc\cup \Obj \cup \Sol \cup \sSol$ is the set of vertices
 % where $\sSol=\powerset(\Proc)$ and $\Sol=\Obj\times\powerset(\sSol)$
@@ -267,7 +269,7 @@ Then, a node $ps\in\cwV\cap\sSol$ is linked to each local state $a_i \in ps$ is 
 (\pref{def:lcg}\nobreakdash-\ref{lcg-sync-ls}).
 A local state node $a_i\in\cwV\cap\Proc$
 is linked to each objective $\obj{a_j}{a_i} \in \Obj$, where
-$a_j$ is either in the initial context $\ctx$ or
+$a_j$ is either in the initial state $s$ or
 is a local state node in the LCG
 (\pref{def:lcg}\nobreakdash-\ref{lcg-ls-obj}).
 Finally, given an objective node $\obj{a_j}{a_i}\in\cwV\cap\Obj$,
@@ -278,9 +280,9 @@ $\obj{a_j}{a_i}$ is linked to $\obj{a_k}{a_i}$ in the LCG
 
 \begin{definition}
 \label{def:lcg}
-Given a context $\ctx$ and a local state $\myp\in \Proc$,
+Given a state $s \in \PHl$ and a local state $\myp\in \Proc$,
 the Local Causality Graph (LCG) for reachability under-approximation
-$\cwB \DEF (\Bv, \Be)$
+$\cwB \DEF (\Bv, \Be)$,
 with
 $\cwBNodes \subseteq \Proc \cup \Obj \cup \NSol \cup \sSol$
 and
@@ -291,7 +293,7 @@ is the smallest graph such that:
 $\myp \in \cwBNodes$
 \item
 $a_i\in\cwBNodes\cap\Proc \Leftrightarrow \{ (a_i,\obj{a_j}{a_i}) \mid
-a_j \neq \myp \wedge (a_j\in\ctx \vee a_j\in\cwBNodes\cap\Proc)
+a_j \neq \myp \wedge (a_j\in s \vee a_j\in\cwBNodes\cap\Proc)
 \}\subseteq\cwBEdges$
 \label{lcg-ls-obj}
 \item
@@ -322,19 +324,19 @@ with $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid n\in\indexes\zeta \}$.
 
 \modmf{%
 The definition of an LCG tackles two cases
-where the bounce local state of an objective may be changed.
+where the target of an objective may be changed.
 First,
 the addition of objectives based on the local states already mentioned anywhere in the LCG,
 as performed in \pref{def:lcg}\nobreakdash-\ref{lcg-ls-obj},
 ensures to take into account the possible changes in the active local states
 made by other objectives.
 We thus try to ensure that a required local state is reachable even when
-starting from a local state of the same automaton that is not in the initial context,
+starting from a local state of the same automaton that is not in the initial state,
 but that may be active at some point of the solving.
 Second, \pref{def:lcg}\nobreakdash-\ref{lcg-conn},
-allows to re-target objectives whose own solving changes their target local state.
+allows to “re-target” objectives whose own solving changes their target.
 This happens when playing the actions that activate the local states required to solve
-an objective $P$ also changes the active local state of $\PHsort(P)$.
+an objective $P$ also changes the active local state of automaton $\PHsort(P)$.
 In this case, the initial objective $P$ is re-targeted to another
 objective $\PHobj{p}{\bounce{P}}$, where $p$ is the new active local state in $\PHsort(P)$.
 Linking to all objectives of this kind ensures that all possible disturbances
@@ -342,7 +344,8 @@ are taken into account.
 }
 
 \modmf{%
-The LCG of \pref{def:lcg} contains synchronizing nodes ($\sSol$)
+Finally, we note that
+the LCG of \pref{def:lcg} contains synchronizing nodes ($\sSol$)
 that allow to express the need for several local states simultaneously
 in order to play a given action.
 This is the main difference regarding~\cite{PMR12-MSCS}
@@ -357,16 +360,15 @@ although it was adapted for AANs which notably allowed to simplify its formalism
 \subsection{Sufficient condition for reachability of a local state}
 \label{ssec:ua}
 
-Given a context $\ctx$ and a local state $\myp\in\Proc$, the LCG $\cwB$ contains a set of objectives
+Given a state $s \in \PHl$ and a local state $\myp\in\Proc$, the LCG $\cwB$ contains a set of objectives
 that can be used to build a concrete scenario reaching $\myp$.
 Because we are focused on sufficient conditions for reachability, we do not require that all
 possible scenarios can be derived from the LCG.
 
 In this section, we prove that if the LCG has no cycle, all its nodes in $\Obj$ have at least one
 child, and all its nodes in $\sSol$ satisfy a
-particular criteria, so-called independence, then from any state
-delimited by the context $\ctx$, there exists a scenario that reaches $\myp$
-(\pref{th:approxinf}).
+particular criteria, so-called independence,
+then there exists a scenario that reaches $\myp$ from state $s$ (\pref{th:approxinf}).
 
 A node $ps \in \sSol$ of the LCG is \emph{independent} (\pref{def:coherent}) if for each local state
 $a_i\in ps$, none of the other local states $b_j\in ps$ have in their successors
@@ -384,7 +386,7 @@ in $ps$ should not impact the first.
 \end{definition}
 
 The intuition of the under-approximation of \pref{th:approxinf} is the following.
-Given a state $s\subseteq\ctx$, we recursively refine the initial objective
+Given the initial state $s$, we recursively refine the initial objective
 (which is: reaching $\myp$ from the initial state) according to its children.
 As the LCG is acyclic, by hypothesis, such a recursion always terminates, and as all the objective nodes have at
 least one child, it never gets stuck.
@@ -409,17 +411,16 @@ In addition, we know that the state of automaton $a$ has remained unchanged, oth
 $\obj{a_i}{a_j}$ would have an objective child.
 Hence, the action $\zeta_n$ is playable in the current state.
 We can thus apply this action, modifying the state of $a$ to $a_j$ and continue to the next stage.
-In the end, this recursive procedures builds a scenario from $s\subseteq\ctx$ to a state containing $\myp$.
+In the end, this recursive procedures builds a scenario from $s$ to a state containing $\myp$.
 
 \begin{theorem}[Under-approximation]
 \label{th:approxinf}
   Given an AAN $(\PHs; \PHl; \PHa)$,
-  a context $\ctx$ and an objective sequence $\w$,
+  a state $s$ and local state $\myp$,
   if the LCG $\cwB$ contains no cycle,
   all nodes in $\Obj$ have at least one child,
   and all nodes in $\sSol$ are independent,
-  then for any state $s\in\PHl$ such that $s\subseteq\ctx$,
-  there exists a scenario $\delta\in\Sce$ with $\myp\in s\play\delta$.
+  then there exists a scenario $\delta\in\Sce$ such as $\myp\in s\play\delta$.
 \end{theorem}
 
 Regarding the complexity of the method,
@@ -435,7 +436,7 @@ $\BS$.
 Therefore, in order to reduce the number of bounce sequences to consider, and potentially remove
 cycles and non-satisfying nodes,
 one can consider only a sub-set of bounce sequences
-(and in particular: a single bounce sequence) for each objective.
+(and in particular: a unique bounce sequence) for each objective.
 However, such an approach requires to enumerate all possible combinations of bounce sequences
 subsets, hence being exponential in the number of considered bounce sequences.
 %objectives solved by at least two bounce sequences.
@@ -549,7 +550,7 @@ subsets, hence being exponential in the number of considered bounce sequences.
   \label{fig:sa-livelock}
     The local causality graph $\cwB$ on the AAN in \pref{fig:ph-livelock}
     for the reachability of $\myp = c_1$
-    from the initial context $\ctx = \PHstate{a_1, b_0, c_0}$.
+    from the initial state $s = \PHstate{a_1, b_0, c_0}$.
     Elements in $\Proc$ are represented by rectangular nodes,
     elements in $\Sol$ are represented by small circles,
     and elements in $\sSol$ and $\Obj$ are the remaining borderless nodes.
@@ -570,10 +571,9 @@ subsets, hence being exponential in the number of considered bounce sequences.
 This section gives a recursive method to find a scenario that concretizes
 the reachability of a given local state $\myp \in \Proc$,
 from a given initial state $s_0 \in \PHl$,
-provided that \pref{th:approxinf} answered positively
-for a context $\ctx \in \Ctx$ so that $s_0 \subset \ctx$.
+provided that \pref{th:approxinf} answered positively on this couple of inputs.
 The algorithm proposed in what follows relies on a traversal of the Local Causality Graph
-$\cwB$ that has been used for this conclusion.
+$\cwBz$ that has been used for this conclusion.
 The correctness of this extraction can be demonstrated
 in the same fashion as \pref{th:approxinf}.
 
@@ -639,8 +639,8 @@ and the initial output is the empty sequence $\emptyseq$.
 \end{itemize}
 
 The execution of such a traversal outputs a scenario from $s_0$.
-In the following, we denote by $\Delta(\cwB)$ the set of all scenarios extracted from the
-local causality graph $\cwB$.
+In the following, we denote by $\Delta(\cwBz)$ the set of all scenarios extracted from the
+local causality graph $\cwBz$.
 Indeed, several scenarios may exist for a same graph,
 generated by the arbitrary choices that exist in this algorithm.
 An example of such a traversal is given on a small example

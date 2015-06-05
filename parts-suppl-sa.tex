@@ -1,16 +1,32 @@
 \section{Proof of Under-approximation (\pref{ssec:ua})}
 \label{suppl:demoapproxinf}
 
-In the following, we denote:
+We introduce for this proof the notion of context (\pref{def:context}),
+which extends the notion of state to a set of possible initial states:
+to each automaton in the model, a context maps a set of local states in this automaton.
+\begin{definition}[Context]
+\label{def:context}
+  A \emph{context} $\varsigma$ associates to each automaton in $\PHs$ a non-empty subset of its local states:
+  $\forall a \in \PHs, \varsigma(a) \subseteq \PHl_a \wedge \varsigma(a) \neq \emptyset$.
+%  $\Ctx$ is the set of all contexts.
+\end{definition}
+
+For a given context $\varsigma$,
+%we note $a_i \in \varsigma$ if and only if $a_i \in \varsigma(a)$,
+and for all state $s \in \PHl$,
+we note $s \subseteq \varsigma$ if and only if $\forall a_i \in s, a_i \in \varsigma(a)$.
+
+In the following, we also denote:
 $\Bee{X}{Y} = \Be \cap (X \times Y)$, with $X, Y$
 amongst $\PHproc$, $\Obj$, $\sSol$ and $\Sol$.
 
 \newproof{proofapproxinf}{Proof of \pref{th:approxinf}}
 \begin{proofapproxinf}
 Given the LCG $\cwB=(\cwV,\cwE)$,
-we note $max\ctx = \{a\mapsto \cwV\cap\PHl_a \mid a\in\PHs\}$ the context supported by $\cwB$.
+we note $\varsigma = \{a\mapsto \cwV\cap\PHl_a \mid a\in\PHs\}$ the context supported by $\cwB$.
 
 Let $ps \in \Bv \cap \sSol$ be a set of hitters
+that is a node in the LCG,
 and suppose all of its successors are concretizable.
 We first want to demonstrate that
 there exists a scenario that activates all the local states it contains.
@@ -19,7 +35,7 @@ Let us prove by induction that for all $n \in \{ 0 \} \cup \indexes{ps}$,
 there exists a scenario $\delta_n$ so that:
 $\forall i \in \segm{1}{n}, \PHget{(s \PHplay \delta_n)}{\PHsort(p_i)} = p_i$.
 \begin{itemize}
-  \item It is straightforward for $\delta_0 = \varepsilon$.
+  \item It is straightforward that $\varepsilon$ is a valid value for $\delta_0$.
   \item Suppose such $\delta_n$ exists and let $q = \PHget{(s \PHplay \delta_n)}{\PHsort(p_{n+1})}$.
     By construction, $p_{n+1} \in \Bv \cap \Proc$ is a child of $ps$.
     Furthermore, by hypothesis, $ps$ is independent (see \pref{def:coherent}).
@@ -36,7 +52,7 @@ Therefore, $\delta = \delta_{\card{ps}}$ exists, and given its properties, we ha
 $\forall i \in \segm{1}{\card{ps}}, \PHget{(s \PHplay \delta)}{\PHsort(p_{i})} = p_{i}$.
 
 As there is no cycle in $\cwB$, we show by induction in the following that
-$\forall s\in \PHl, s\subseteq max\ctx, \forall P \in \Bv \cap \Obj,
+$\forall s\in \PHl$ so that $s\subseteq \varsigma$ and $\forall P \in \Bv \cap \Obj,
 \PHtarget(P) \in s \Longrightarrow \exists \delta \in \mconcr_s(P)$.
 \begin{itemize}
   \item If $(P, \langle P, \{ \emptyset \} \rangle) \in \Bee{\Obj}{\Sol}$,
@@ -63,6 +79,6 @@ $\forall s\in \PHl, s\subseteq max\ctx, \forall P \in \Bv \cap \Obj,
         Therefore, $\zeta_n$ is playable in $s \play \delta_n \PHplay \delta'$,
         and $\delta_{n+1} = \delta_n \concat \delta' \concat \zeta_n$.
       \end{itemize}
-      Thus, $\delta_{|\zeta|} \in \mconcr_s(P)$. % and $\ceil(\delta) \subseteq max\ctx$.
+      Thus, $\delta_{|\zeta|} \in \mconcr_s(P)$. % and $\ceil(\delta) \subseteq maxs$.
 \end{itemize}
 \end{proofapproxinf}

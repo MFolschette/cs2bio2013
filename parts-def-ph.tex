@@ -139,19 +139,6 @@ and if $A\subseteq\PHproc$, $A\subseteq s \Leftrightarrow \forall a_i\in A, \PHg
 
 \end{example}
 
-A context (\pref{def:context}) extends the notion of state to a set of possible initial states:
-to each automaton in the model, a context maps a set of local states in this automaton.
-\begin{definition}[Context ($\Ctx$)]
-\label{def:context}
-  A \emph{context} $\ctx$ associates to each automaton in $\PHs$ a non-empty subset of its local states:
-  $\forall a \in \PHs, \PHget{\ctx}{a} \subseteq \PHl_a \wedge \PHget{\ctx}{a} \neq \emptyset$.
-  $\Ctx$ is the set of all contexts.
-\end{definition}
-
-\paragraph{Notations}
-For a given context $\ctx$, we note $a_i \in \ctx$ if and only if $a_i \in \PHget{\ctx}{a}$,
-and for all $ps \in \powerset(\PHproc)$ or $ps \in \PHl$, $ps \subseteq \ctx \Leftrightarrow \forall a_i \in ps, a_i \in \ctx$.
-
 
 
 \begin{remark}[Comparison with the Process Hitting]

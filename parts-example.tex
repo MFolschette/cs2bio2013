@@ -145,7 +145,7 @@ in order to model the preemption of the actions in $\ov{\PHh}^{(1)}$.
 At this point, the static analysis results presented in
 \pref{ssec:ua} can be used to check if the model is functional,
 \ie if gene $a$ can oscillate, thus leading to the formation of stripes.
-Starting from context $\ctx^1 = \PHstate{f_1, a_0, c_0}$,
+Starting from state $s^1 = \PHstate{f_1, a_0, c_0}$,
 we thus want to check the reachability of $\myp^1 = a_1$;
 then, starting from any new state obtained,
 we want to check the reachability of $\myp^2 = a_0$,
@@ -157,8 +157,8 @@ and we use \pref{th:approxinf} three times;
 the initial states of steps 2 and 3 are computed with the
 extraction method of \pref{ssec:concret}.
 
-We first build the local causality graph $\thisB{\myp^1}{\ctx^1}$
-related to the reachability of $\myp^1 = a_1$ from the initial state $\ctx^1$.
+We first build the local causality graph $\thisB{\myp^1}{s^1}$
+related to the reachability of $\myp^1 = a_1$ from the initial state $s^1$.
 This graph is depicted in \pref{fig:metazoan-sa}(left).
 \pref{th:approxinf} allows to conclude that this reachability is true.
 One can thus extract a concretizing scenario from this local causality graph
@@ -171,28 +171,28 @@ would consist in visiting node $f_1$ before node $c_0$
 when first descending from node $\{ c_0, f_1 \}$;
 however, the same scenario would be extracted.
 As there exists no other traversal, we thus have in this case:
-$\Delta(\thisB{\myp^1}{\ctx^1}) = \{ \PHfrappes{c_0, f_1}{a_0}{a_1} \}$.
+$\Delta(\thisB{\myp^1}{s^1}) = \{ \PHfrappes{c_0, f_1}{a_0}{a_1} \}$.
 
 We denote in the following:
-$\ctx^2 = \PHstate{f_1, a_0, c_0} \play \PHfrappes{c_0, f_1}{a_0}{a_1} =
+$s^2 = \PHstate{f_1, a_0, c_0} \play \PHfrappes{c_0, f_1}{a_0}{a_1} =
 \PHstate{f_1, a_1, c_0}$
 the state resulting from the play of the scenario concretizing
-$\myp^1$ in $\ctx^1$.
+$\myp^1$ in $s^1$.
 As explained in \pref{ssec:ordered-ua},
 one can use this resulting state in order to carry on with another
 successive reachability,
 such as the reachability of $\myp^2 = a_0$ in our case.
 The local causality graph used to check the reachability of $\myp^2$
-from $\ctx^2$ is given in \pref{fig:metazoan-sa}(middle).
+from $s^2$ is given in \pref{fig:metazoan-sa}(middle).
 The same reasoning allows to conclude that this reachability is true, and
 to extract the following set containing only one concretizing scenario:
-$\Delta(\thisB{\myp^2}{\ctx^2}) =
+$\Delta(\thisB{\myp^2}{s^2}) =
 \{ \PHfrappes{a_1, f_1}{c_0}{c_1} \concat \PHfrappes{c_1}{a_1}{a_0} \}$.
 We note that once again, two traversals are possible
 (by visiting node $a_1$ before or after note $f_1$)
 but both output the same scenario, and therefore end up in the same sate
-$\ctx^3 = \PHstate{f_1, a_0, c_1}$.
-Finally, the last local causality graph $\thisB{\myp^3}{\ctx^3}$,
+$s^3 = \PHstate{f_1, a_0, c_1}$.
+Finally, the last local causality graph $\thisB{\myp^3}{s^3}$,
 depicted in \pref{fig:metazoan-sa}(right),
 allows to conclude that this final reachability is true.
 
@@ -335,14 +335,14 @@ because they have the same dynamics (given \pref{th:bisimPHP}).
     The three successive saturated graphs of local causality
     of the AAN in \pref{fig:metazoan-ph}
     for the successive reachability of $a_0$, $a_1$ and $a_0$
-    from the initial context
-    $\ctx = \PHstate{f_1, a_0, c_0}$.
+    from the initial state
+    $s = \PHstate{f_1, a_0, c_0}$.
     The (left) graph allows to check the reachability of $a_1$
-    from the initial context $\ctx$.
+    from the initial state $s$.
     The (middle) graph is for the reachability of $a_0$
-    and the context $\PHstate{f_1, a_1, c_0}$.
+    and the state $\PHstate{f_1, a_1, c_0}$.
     The (right) graph is for the last reachability, $a_1$,
-    and the context $\PHstate{f_1, a_0, c_1}$.
+    and the state $\PHstate{f_1, a_0, c_1}$.
   }
 \end{figure}
 

@@ -61,7 +61,10 @@
 \def\supp{\f{support}}
 \def\w{\omega}
 \def\W{\Omega}
-\def\ctx{\varsigma}
+% \def\ctx{\varsigma}
+%\def\ctx{{\textcolor{green}{s}}}
+% \def\ctx{s}
+% \def\Ctx{\mathbf{Ctx}}
 \def\Ctx{\mathbf{Ctx}}
 \def\mconcr{\gamma}
 \def\concr{\mconcr_s}
@@ -118,8 +121,11 @@
 %\def\sat#1{\lceil #1\rceil}
 \newcommand{\thisB}[2]{\sat{\aB_{#2}^{#1}}}
 \newcommand{\myp}{u}
-\def\cwB{\thisB{\myp}{\ctx}}
+%\def\cwB{\thisB{\myp}{\ctx}}
+\def\cwB{\thisB{\myp}{s}}
 %\def\cwB{\sat{\aB_\ctx^\w}}
+%\def\cwBz{\thisB{\myp}{\ctx_0}}
+\def\cwBz{\thisB{\myp}{s_0}}
 \def\mycwB#1#2{\sat{\aB_{#1}^{#2}}}
 \def\Bsol{\sat{\Sol^\w_\ctx}}
 \def\Breq{\sat{\Req^\w_\ctx}}
@@ -134,8 +140,10 @@
 
 \newcommand{\V}{V}
 \newcommand{\E}{E}
-\newcommand{\cwV}{\V_\ctx^\myp}
-\newcommand{\cwE}{\E_\ctx^\myp}
+\newcommand{\cwV}{\V_s^\myp}
+\newcommand{\cwE}{\E_s^\myp}
+% \newcommand{\cwV}{\V_\ctx^\myp}
+% \newcommand{\cwE}{\E_\ctx^\myp}
 %\newcommand{\VProc}{\textcolor{red}{\V_\PHproc}}
 %\newcommand{\VObj}{\textcolor{red}{\V_\Obj}}
 %\newcommand{\VSol}{\V_{Sol}}
