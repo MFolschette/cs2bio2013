@@ -46,12 +46,14 @@
 \section*{Summary of the main changes}
 
 We wish to thank the reviewers for their comments.
-Please find below a summary of the main changes brought to the paper, and a detailed response to all comments.
+Please find below a brief summary of the main changes brought to the paper.
+A detailed response to all comments follows.
 
 \begin{itemize}
-  \item We added a paragraph in the conclusion to briefly tackle the questions raised by reviewer \#1;
-  \item We added several paragraphs of informal explanations around Def. 8 after the comments of reviewer \#2.
-  \item \todo{Main changes}
+%   \item We have added a paragraph in the conclusion to briefly tackle the questions raised by reviewer~\#1;
+  \item We have added several paragraphs of informal explanations around Def.~7 (previously Def.~8) after the comments of reviewer~\#2.
+  \item The notion of context has been removed from the body of the paper,
+    without weakening our results.
 \end{itemize}
 
 
@@ -59,7 +61,6 @@ Please find below a summary of the main changes brought to the paper, and a deta
 \section*{Comments and answers to the reviewers}
 
 \subsection*{Reviewer \#1}
-
 
 Reviewer \#1: In this article the  Asynchronous Automata Networks (AANs) are studied. An AAN is an Automata Network with synchronised transitions between automata, where each transition changes the local state of exactly one automaton, but the number of synchronazing state sis not restricted.  The AAN with priorities are also studied. 
 
@@ -69,118 +70,135 @@ Clearly, the paper is based on real applications of the system studied. It seems
 
 General: 1) somehow the system of AANs seems such that it has conection or roots or generalization by cellural automata. Obviously, CA are a more general model and AANs are a restriction, but it could be interesting to see whether can you generalize or simulate in simple manners your system with CA?
 
-\ilanswer{Indeed, The links between AANs and cellular automata could be studied more thoroughly.
-The main difference between both however, is that each component in an AAN has particular incoming interactions, while all cells of a cellular automata share the same unique rule.
-On the other hand, we do not tackle “infinite” AANs while cellular automata can be infinite.}
-
-\ilanswer{We show in the following that an AAN can represent an Asynchronous Finite Cellular Automata (AFCA).
-An AFCA is a finite set of cells that share a same update rule (we consider no border effects).
-We consider that the transitions between each global states are asynchronous in the meaning of the “Random Independent” scheme given in \cite{cornforth_artificial_2003} and \cite{harvey_time_1997},
-that is, exactly one randomly chosen cell is updated between two states.
-Any AFCA can be represented as an AAN by considering one automaton containing two local states (corresponding to “active” and “inactive”) for each cell.
-The rules are modelled by actions that represent the creation/vanishing of a cell given all possible states of its neighbourhood.
-This is possible because we can create one action for each configuration of the neighbourhood (and no action is required if the state of a cell does not change).}
-
-\ilanswer{The result is a (very repetitive) AAN that encompasses the same dynamics than the AFCA,
-with the exception of unchanged states in AFCA (a state that is identical because the updated cell remains unchanged) that are not visible in the dynamics of the AAN.}
-% \begin{itemize}
-%   \item either a stable state, in which case the AAN has no next state,
-%   \item or not a stable state, in which case the next state of the AAN will necessarily
-%     encompass exactly one change (because we do not allow a transition with no change).
-% \end{itemize}}
-
-\ilanswer{Thus, the representation of AFCA in AANs is possible with the considered updating scheme.
-% However, this representation has a high complexity, and AANs are not very suited to represent this kind of repetitive patterns.
-However, as the AANs are not really suited to this kind of representations,
-it is possible that this kind of patterns will lead to some inconclusiveness
-when studying its dynamics with the method proposed in our paper.
-This would be especially due to the creation of cycles in the Local Causality Graphs,
-because the approximation of the dynamics is not well tailored to analyse “pumping” cases
-(where an automaton has to swap its state several times to allow the reaching of a given objective).}
-
-\answer{In conclusion,
-more experiments may be required in order to acknowledge how our method fits into the modeling and analysis of cellular automata,
-and some enrichments of the static analysis may be needed to obtain satisfying results.
-}
-
-\todo{Déplacer une partie dans le papier}
+% \ilanswer{Indeed, The links between AANs and cellular automata could be studied more thoroughly.
+% The main difference between both however, is that each component in an AAN has particular incoming interactions, while all cells of a cellular automata share the same unique rule.
+% On the other hand, we do not tackle “infinite” AANs while cellular automata can be infinite.}
+% 
+% \ilanswer{We show in the following that an AAN can represent what we will call Asynchronous Finite Cellular Automata (AFCA) in the following.
+% An AFCA is a finite set of cells that share a same update rule (except on the border).
+% We consider that the transitions between each global states are asynchronous in the meaning of the “Random Independent” scheme given in \cite{cornforth_artificial_2003} and \cite{harvey_time_1997},
+% that is, exactly one randomly chosen cell is updated between two states.
+% Any AFCA can be represented as an AAN by considering one automaton containing two local states (corresponding to “active” and “inactive”) for each cell.
+% The rules are modelled by actions that represent the creation/vanishing of a cell given all possible states of its neighbourhood.
+% This is possible because we can create one action for each configuration of the neighbourhood (and no action is required if the state of a cell does not change).}
+% 
+% \ilanswer{The result is a (very repetitive) AAN that encompasses the same dynamics than the AFCA,
+% at the exception of unchanged states in AFCA.
+% %that are not visible in the dynamics of the AAN
+% Indeed, an unchanged state is a that that is identical to the previous one because the cell selected for update remains unchanged.
+% This cannot be represented in an AAN because it is mandatory that an action is played between two states.}
+% % \begin{itemize}
+% %   \item either a stable state, in which case the AAN has no next state,
+% %   \item or not a stable state, in which case the next state of the AAN will necessarily
+% %     encompass exactly one change (because we do not allow a transition with no change).
+% % \end{itemize}}
+% 
+% \ilanswer{Thus, the representation of AFCA in AANs is possible with the considered updating scheme and by ignoring unchanged states.
+% % However, this representation has a high complexity, and AANs are not very suited to represent this kind of repetitive patterns.
+% However, as the AANs are not really suited to this kind of representations,
+% it is possible that this kind of patterns will lead to some inconclusiveness
+% when studying its dynamics with the method proposed in our paper.
+% This would be especially due to the creation of cycles in the Local Causality Graphs,
+% because the approximation of the dynamics is not well tailored to analyse “pumping” cases
+% (where an automaton has to swap its state several times to allow the reaching of a given objective).}
+% 
+% \answer{In conclusion,
+% more experiments may be required in order to acknowledge how our method fits into the modeling and analysis of cellular automata,
+% and some enrichments of the static analysis may be needed to obtain satisfying results.
+% }
 
 
 
 2) Just a note: As I see it, the AANs is an interactive model of computation, and that is interesting. based on this, can you consider the reachability of state as a game in (multiplayer) game of AAN? Does  your work give a fast method for checking for winning strategy?   
 
-\ilanswer{There are two ways we understand this questions and we are not sure which one the reviewer really meant. Therefore we will try to briefly answer both here.
-\begin{itemize}
-  \item “Is it possible to use game theory to solve a reachability problem?”
-    An AAN may be considered as a game where each automaton is a player with its own set of possible moves (modelled by actions).
-    The semantics would simply require that each player can pass (or play when desired).
-    The reachability problem is then equivalent to finding a winning strategy with the cooperation of all players to reach a given state.
-    Although changing the reachability problem into a winning strategy problem is theoretically possible,
-    \textbf{it misses the point to provide efficient tools} to find this strategy,
-    as this method would rely on the available tools of game theory,
-    that is usually based on the state-transition graph, which we want to avoid to compute because of its inherent complexity.
-  \item “Is it possible to represent multiplayer games as AANs?”
-    This question is the most interesting to us, as it would allow to use the static analysis methods on the provided game.
-    The main issue here is the ability to represent the given multiplayer game as an AAN ---
-    in which case the analysis tools can be used straightforwardly.
-    Such a representation is theoretically possible but unfortunately not really straightforward in AANs.
-    The multiple hitters of the actions in an AAN are fine enough to permit to represent
-    kinds of “play sets” that delimit which player can move in each (global) state,
-    as defined in \cite{gradel_infinite_2002} for example.
-    It is also possible to model the fact that the players can move alternately
-    with additional automata: one “turn” automaton to tell the player's current turn,
-    and as many “update” automata as there are players' moves,
-    in order to synchronize the play of each move with a change of the active local state of the “turn” automaton.
-    This has to be modelled with an AAN with 3 classes of priorities,
-    which can be translated into an AAN without priorities with the transformation given in this paper.
-    In the end, both solutions contain actions with a lot of hitters.
-    Although complexity of the static analysis method we presented in this paper does not suffer from the many additional automata required (as it is polynomial in the number of automata),
-    the presence of actions with many hitters is likely to make a lot of $\mathbf{Sync}$ nodes non-independent,
-    which may decrease the conclusiveness of our method
-    It is however hard to say to which extent.
-%     To grasp the idea, it requires additional automata: one “turn” automaton to tell the player's current turn, and as many “update” automata as there are players' moves, in order to synchronize the play of each move with a change of the active local state of the “turn” automaton.
-%     The easiest way to model this is with an AAN with 3 classes of priorities,
+% \ilanswer{There are two ways we understand this questions and we are not sure which one the reviewer really meant. Therefore we will try to briefly answer both here.
+% \begin{itemize}
+%   \item “Is it possible to use game theory to solve a reachability problem?”
+%     An AAN may be considered as a game where each automaton is a player with its own set of possible moves (modelled by actions).
+%     The semantics would simply require that each player can pass (or play when desired).
+%     The reachability problem is then equivalent to finding a winning strategy with the cooperation of all players to reach a given state.
+%     Although changing the reachability problem into a winning strategy problem is theoretically possible,
+%     it misses the point to provide efficient tools to find this strategy.
+%     Indeed, this method would rely on the available tools of game theory,
+%     that are usually based on the state-transition graph, which we want to avoid to compute because of its inherent complexity.
+%   \item “Is it possible to represent multiplayer games as AANs?”
+%     This question is the most interesting to us, as it would allow to use the static analysis methods on the provided game.
+%     The main issue here is the ability to represent the given multiplayer game as an AAN ---
+%     in which case the analysis tools can be used straightforwardly.
+%     Such a representation is theoretically possible but unfortunately not really straightforward in AANs.
+%     The multiple hitters of the actions in an AAN are fine enough to permit to represent
+%     kinds of “play sets” that delimit which player can move in each (global) state,
+%     as defined in \cite{gradel_infinite_2002} for example.
+%     It is also possible to model the fact that the players can move alternately
+%     with additional automata: one “turn” automaton to tell the player's current turn,
+%     and as many “update” automata as there are players' moves,
+%     in order to synchronize the play of each move with a change of the active local state of the “turn” automaton.
+%     This has to be modelled with an AAN with 3 classes of priorities,
 %     which can be translated into an AAN without priorities with the transformation given in this paper.
-%     However, this transformation into an AAN without priorities (besides having a high complexity)
-%     potentially creates actions with a lot of hitters.
-%     Although complexity of the static analysis method we presented in this paper does not suffer from the many additional “update” automata required (as it is polynomial in the number of automata, and these “update” automata only have 2 local states),
-%     the particular form of these “update” automata may create cycles in the Local Causality Graph,
-%     and the presence of actions with many hitters is likely to make a lot of $\mathbf{Sync}$ nodes non-independent.
-%     Both facts may decrease the conclusiveness of our method, although it is hard to say to which extent with no additional study or experiments.
-%     
-%     To grasp the idea, let us consider an Turn AAN that divides the set of actions into $n$ “player” sets (one for each player) and that includes a “turn” variable (telling which player's turn it currently is).
-%     In this Turn AAN, an action can be played only if the “player” set it belongs to matches the value of the “turn” variable.
-%     Furthermore, playing an action automatically changes the “turn” variable to the next player.
-%     This modelling represents a game where players play alternatively (we could also add the possibility to pass, etc.).
-%     In fact, such Turn AAN can be translated into an AAN with 3 classes of priorities,
-%     but at the price of introducing a “turn” automaton modelling the “turn” variable,
-%     and as many “change” automata as there are actions in the Turn AAN,
-%     in order to synchronize the play of each action (changing the active local state of one automaton) and the changes in the “turn” automaton.
-%     Note that each “change” automaton contains two local states, requires two actions of priority 1 and one of priority 2.
-% %     (Note that these “change” automata may not have any meaning biologically speaking.)
-%     One first drawback is that this AAN3 has to be translated into an AAN (without priorities)
-%     despite the numerous high priority actions it will contain that will make this transformation very complex.
-%     On the other hand, the efficiency of the static analysis we proposed in this paper should not suffer from these new numerous automata, as it is polynomial in the number of automata,
-%     and the “change” automata are very small.
-%     Nevertheless, its conclusiveness may be compromised by the high number of hitters in each
-%     action of the final model, which are more likely to create loops or non-independent synchronizations in the Local Causality Graph.
-    \textbf{In a nutshell, although it is theoretically feasible, more analyses are required in order to judge if the conclusiveness is satisfying enough.}
-\end{itemize}
+%     In the end, both solutions contain actions with a lot of hitters.
+%     Although complexity of the static analysis method we presented in this paper does not suffer from the many additional automata required by the second solution (as it is polynomial in the number of automata),
+%     the presence of actions with many hitters is likely to make a lot of $\mathbf{Sync}$ nodes non-independent,
+%     which may decrease the conclusiveness of our method.
+%     It is however hard to say to which extent.
+% %     To grasp the idea, it requires additional automata: one “turn” automaton to tell the player's current turn, and as many “update” automata as there are players' moves, in order to synchronize the play of each move with a change of the active local state of the “turn” automaton.
+% %     The easiest way to model this is with an AAN with 3 classes of priorities,
+% %     which can be translated into an AAN without priorities with the transformation given in this paper.
+% %     However, this transformation into an AAN without priorities (besides having a high complexity)
+% %     potentially creates actions with a lot of hitters.
+% %     Although complexity of the static analysis method we presented in this paper does not suffer from the many additional “update” automata required (as it is polynomial in the number of automata, and these “update” automata only have 2 local states),
+% %     the particular form of these “update” automata may create cycles in the Local Causality Graph,
+% %     and the presence of actions with many hitters is likely to make a lot of $\mathbf{Sync}$ nodes non-independent.
+% %     Both facts may decrease the conclusiveness of our method, although it is hard to say to which extent with no additional study or experiments.
+% %     
+% %     To grasp the idea, let us consider an Turn AAN that divides the set of actions into $n$ “player” sets (one for each player) and that includes a “turn” variable (telling which player's turn it currently is).
+% %     In this Turn AAN, an action can be played only if the “player” set it belongs to matches the value of the “turn” variable.
+% %     Furthermore, playing an action automatically changes the “turn” variable to the next player.
+% %     This modelling represents a game where players play alternatively (we could also add the possibility to pass, etc.).
+% %     In fact, such Turn AAN can be translated into an AAN with 3 classes of priorities,
+% %     but at the price of introducing a “turn” automaton modelling the “turn” variable,
+% %     and as many “change” automata as there are actions in the Turn AAN,
+% %     in order to synchronize the play of each action (changing the active local state of one automaton) and the changes in the “turn” automaton.
+% %     Note that each “change” automaton contains two local states, requires two actions of priority 1 and one of priority 2.
+% % %     (Note that these “change” automata may not have any meaning biologically speaking.)
+% %     One first drawback is that this AAN3 has to be translated into an AAN (without priorities)
+% %     despite the numerous high priority actions it will contain that will make this transformation very complex.
+% %     On the other hand, the efficiency of the static analysis we proposed in this paper should not suffer from these new numerous automata, as it is polynomial in the number of automata,
+% %     and the “change” automata are very small.
+% %     Nevertheless, its conclusiveness may be compromised by the high number of hitters in each
+% %     action of the final model, which are more likely to create loops or non-independent synchronizations in the Local Causality Graph.
+%     In a nutshell, although it is theoretically feasible, more analyses are required in order to judge if the conclusiveness is satisfying enough.
+% \end{itemize}
+% }
+
+\ilanswer{
+1) Contrary to cellular automata, the neighbourhoods in AANs are not regular
+(each component has its own regulation rules).
+One can thus straightforwardly encode finite cellular automata
+with an asynchronous semantics into AANs.
 }
 
-\todo{Voir formalismes courants en théorie des jeux}
+\ilanswer{
+2) Our analysis focuses on finding sufficient conditions for achieving a
+reachability goal, but does not account for an “opposing player” which would
+try to prevent the concerned reachability to occur.
+Therefore our analysis is not directly applicable in such a game theory setting.
+However, it can be used to solve cooperation games
+(where all players cooperate in reaching the goal).
+}
 
-\todo{Déplacer une partie dans le papier ?}
+\answer{
+We have added a word about these subjects in the conclusion of the article.
+}
 
 
 
 Minor coments to the authors:
 
+\answer{Except the comment below, we have taken all minor comments into account.}
+
 page 1, authors: names are not in alphabetical order probably for a good reason, but it strikes my mathematician eye badly.
 
 \answer{We willingly chose the order of the authors' names related to the individual participation of each one.}
-
-\answer{We have taken the other minor comments into account.}
 
 %page 3, line 13: is much straightforward. More?
 
@@ -191,8 +209,6 @@ page 1, authors: names are not in alphabetical order probably for a good reason,
 
 
 \subsection*{Reviewer \#2}
-
-
 
 Reviewer \#2: SUMMARY OF THE RESULTS
 
@@ -206,98 +222,28 @@ My main concern about the paper is that it is written in a rather unclear manner
 
 In my opinion, the presentation of the material of the paper should be improved.
 
-\todo{Rajouter des explications infromelles}
-
-\todo{Simplifier les définitions formelles ?}
+\answer{Our aim was to achieve a double understanding from the reader,
+by presenting our definitions and results both in an informal and intuitive manner,
+so that readers can easily understand the background idea,
+and in a formal way in order to avoid any ambiguities.
+Therefore, we prefer not to make the definitions and theorems less formal.
+However, we added several paragraphs of explanations around the definition of the Local Causality Graph (Def. 7; previously Def. 8) to ease its understanding.
+Furthermore, we have removed the notion of context from the body of the paper,
+which allows a bit of simplification
+(this does not weaken the results as several tests can replace the use of a context).
+}
 
 COMMENTS TO AUTHORS
 
-page 1, line 49 ---
-I would reformulate the phrase "with [4,5]" somehow in different way.
-
-page 1, line 52 ---
-Replace "behaviours" in the phrase "their usual behaviours" with "behaviour".
-
-page 2, line 21 ---
-Remove the second verb "are" in the phrase "This is modelled by actions are of the form".
-
-page 2, line 27, "avoid to build" ---
-Reformulate as "avoid building".
-The same comment applies to many other places within the paper (for instance, page 5, line 51, page 3, line 43).
-
-page 7, line 29 ---
-I would replace "Subsect." with "Subsection" throughout the paper.
+\answer{Except the comment below, we have taken all comments to authors into account.}
 
 page 7, Definition 4, line 55, in the sentence "The set of all objectives is called ..." ---
 Using the logical AND operator "$\land$" is too formal and this unnecessarily complicates reading of the definition.
 I would replace "$\land$" with a word "and".
 
-\answer{In a general fashion, we tied to use formal symbols as much as possible in all definitions.
-However, we changed the paging \& formulation in order to make this definition clearer.}
+\answer{In a general fashion, we tried to use formal symbols as much as possible in all definitions.
+However, we changed the paging and formulation in order to make this definition more readable.}
 
-page 8, Definition 6 ---
-The comment "($\gamma_s: OSeq \to$ ...)" in the parentheses after "Definition 6" complicates the perception of the material. This also applies to other definitions.
-
-page 8, line 52 ---
-To which definition does the phrase "in the previous definition" refer to?
-
-page 8, Lemma 1 ---
-I recommend changing the formulation of the lemma so that it contains at least some words.
-The comment right before the formulation of the lemma states essentially the same thing as the lemma, without any intuition.
-
-page 9, line 53 ---
-Replace "would consists" either with "would consist" or with "consists".
-
-page 10, comment before Definition 8 ---
-First of all, I would give a shorter intuition before Definition 8 and only then this delaited explanation of the definition. The definition itself is very difficult to follow and the explanation is written in a really succinct way, that does not make it easier to get. Perhaps the authors could state how this definition is different from a similar definition in the cited work [16].
-
-page 10, line 53 ---
-In the phrase "we prove that if ..., if ..., and if ..., then" I would only leave the first "if" and remove the two others.
-
-page 11, line 33 ---
-Remove "we know" in the sentence "Then, we know (by induction)".
-
-page 12, lines 10-12 ---
-In the sentence "in order to reduce the number ..., and potentially removing cycles" replace "removing" with "remove".
-
-page 12, line 14 ---
-Something seems to be wrong with the phrase "would imply to enumerate".
-
-page 12, lind 18 ---
-In the sentence "from the initial state ... depicted" I would replace "depicted" to "illustrated" and actually put this word to another place within the sentence.
-
-page 12, line 20 ---
-I think the phrase "but does not conclude regarding the reachability of $c_1$" could be rewritten in a simpler way.
-
-page 15, line 12 ---
-Put a comma before "where" in the phrase "having n+1 local states where n".
-This also concerns some other places of the paper.
-
-page 15, line 16 ---
-Remove the second period in "etc.).".
-
-page 15, line 26 ---
-I would consider using the term "transformation" instead of "translation".
-
-page 15, paragraph before Definition 10 ---
-This is a comment both to Definition 10 and Definition 11. I would try to "separate" them.
-
-page 16, line 56 ---
-Consider replacing "in the following" with "in what follows".
-This comment applies to several other places in the paper.
-
-page 19, Section 5 ---
-The phrases "this section aims at giving application examples", "we give in this section a detailed example", "we consider in the following a model of" repeat the same idea within a half of the page. I would try to restructure the introductory text to Section 5 and its Subsection 5.1.
-
-page 20, line 25 ---
-Remove the second article in "the the".
-
-page 20, line 46 ---
-The sentence starting with "This consists in using Theorem 1 ..." is written in a very sophisticated way.
-
-page 29, reference [18] ---
-The year and the pages of the publication are missing.
-
-\bibliography{biblio}
+%\bibliography{biblio}
 
 \end{document}

@@ -43,34 +43,41 @@ For example,
 such a translation for generalized Interaction Graphs,
 that is, Discrete Networks without evolution functions or parameters,
 was proposed in~\cite{PMR10-TCSB}.
-
 \modmf{%
-The static analysis method proposed in this paper can theoretically be applied to other
-kinds of formalisms that are not mentioned in the rest of this paper.
-For example, AANs are expressive enough to represent Asynchronous Finite Cellular Automata,
-that is, randomly updated and thus completely asynchronous Finite Cellular Automata
-\cite{cornforth_artificial_2003,harvey_time_1997}.
-Another possibility is to represent turn-based multiplayer games,
-such as arena \cite{gradel_infinite_2002}
-where a specific player can move in each state,
-or games in which players move alternately,
-with the use of classes of priorities and special automata to model these rules.
-% in AANs with 3 classes of priorities, with the addition of several automata
-% to tackle the rules of the game, that is, the sequentiality of the turns of each player.
-In each case, the considered formalism can be represented as an AAN,
-making the application of our analysis method possible in theory.
-Furthermore, the addition of new automata does not significantly impact its overall complexity.
-However, more study and experiments are required to evaluate
-the effectiveness of our method on these kinds of models,
-especially regarding its conclusiveness, given their particular form.
-% However, in practice, the conclusiveness on such “unusual” models
-% can be potentially lowered, as the static analysis is not specifically tailored for them.
-% Indeed, some particular structures may create loops or non-independent nodes
-% in the Local Causality Graph,
-% making the whole method inconclusive.
-% Therefore, more study and experiments are required to evaluate
-% the effectiveness of our method on these kinds of models.
+AANs can also be used to represent sub-sets of
+cellular automata \cite{cornforth_artificial_2003}
+or multiplayer games \cite{gradel_infinite_2002},
+although more experiments would be required to evaluate
+the conclusiveness of our static analysis method on models of such particular forms.
 }
+
+% \modmf{%
+% The static analysis method proposed in this paper can theoretically be applied to other
+% kinds of formalisms that are not mentioned in the rest of this paper.
+% For example, AANs are expressive enough to represent Asynchronous Finite Cellular Automata,
+% that is, randomly updated and thus completely asynchronous Finite Cellular Automata
+% \cite{cornforth_artificial_2003,harvey_time_1997}.
+% Another possibility is to represent turn-based multiplayer games,
+% such as arena \cite{gradel_infinite_2002}
+% where a specific player can move in each state,
+% or games in which players move alternately,
+% with the use of classes of priorities and special automata to model these rules.
+% % in AANs with 3 classes of priorities, with the addition of several automata
+% % to tackle the rules of the game, that is, the sequentiality of the turns of each player.
+% In each case, the considered formalism can be represented as an AAN,
+% making the application of our analysis method possible in theory.
+% Furthermore, the addition of new automata does not significantly impact its overall complexity.
+% However, more study and experiments are required to evaluate
+% the effectiveness of our method on these kinds of models,
+% especially regarding its conclusiveness, given their particular form.
+% % However, in practice, the conclusiveness on such “unusual” models
+% % can be potentially lowered, as the static analysis is not specifically tailored for them.
+% % Indeed, some particular structures may create loops or non-independent nodes
+% % in the Local Causality Graph,
+% % making the whole method inconclusive.
+% % Therefore, more study and experiments are required to evaluate
+% % the effectiveness of our method on these kinds of models.
+% }
 
 Further work can also be directly derived to improve the method presented in this paper.
 The over-approximation on Process Hitting models without priorities proposed in~\cite{PMR12-MSCS}
