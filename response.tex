@@ -18,11 +18,11 @@
 \renewcommand{\harvardurl}[1]{\url{#1}}
 \newcommand{\citefullname}[2]{#2 \citeasnoun{#1}}
 
-% \newcounter{pointno}
-% \setcounter{pointno}{0}
-% \def\thepoint{\arabic{pointno}}
-% \newcommand{\ptno}[1]{\textcolor{blue}{\refstepcounter{pointno} \thepoint. \#1}}
-% \newcommand{\question}[1]{\bigskip{\it\ptno{\#1}}}
+\newcounter{pointno}
+\setcounter{pointno}{0}
+\def\thepoint{\arabic{pointno}}
+\newcommand{\ptno}[1]{\textcolor{blue}{\refstepcounter{pointno} \thepoint. \#1}}
+\newcommand{\question}[1]{\bigskip{\it\ptno{\#1}}}
 % \def\answer{}
 
 \newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
@@ -43,32 +43,26 @@
 
 
 
-\section*{Summary of the main changes}
-
 We wish to thank the reviewers for their comments.
-Please find below a brief summary of the main changes brought to the paper.
-A detailed response to all comments follows.
-
-\begin{itemize}
-%   \item We have added a paragraph in the conclusion to briefly tackle the questions raised by reviewer~\#1;
-  \item We have added several paragraphs of informal explanations around Def.~7 (previously Def.~8) after the comments of reviewer~\#2.
-  \item The notion of context has been removed from the body of the paper,
-    without weakening our results.
-\end{itemize}
-
-
+Following reviewers comments,
+with this revision
+we added
+  several paragraphs of informal explanations to give more intuition 
+  for technical definitions (in particular in section 3);
+  and simplified a few notations.
 
 \section*{Comments and answers to the reviewers}
 
 \subsection*{Reviewer \#1}
 
-Reviewer \#1: In this article the  Asynchronous Automata Networks (AANs) are studied. An AAN is an Automata Network with synchronised transitions between automata, where each transition changes the local state of exactly one automaton, but the number of synchronazing state sis not restricted.  The AAN with priorities are also studied. 
+1) somehow the system of AANs seems such that it has conection or roots or generalization by cellural automata. Obviously, CA are a more general model and AANs are a restriction, but it could be interesting to see whether can you generalize or simulate in simple manners your system with CA?
 
-Authors build a method of efficient under-approximation for the problem of state reachability. The computational cost is lower than the cost of usual model checker methods. Also, a reduction from AANs with priorities to the AANs without priorities is given.
-
-Clearly, the paper is based on real applications of the system studied. It seems that the method and the theory are build for and from some specific applications with a interesting idea. Therefore, from the purely automata theoretical point of view,  the methods and results are not very strong nor interesting as themself. On the other hand, the method is used in two example applications in the end of the paper to support the fact that the model and the method work well in practise. This is probably the strongest part of the paper.  
-
-General: 1) somehow the system of AANs seems such that it has conection or roots or generalization by cellural automata. Obviously, CA are a more general model and AANs are a restriction, but it could be interesting to see whether can you generalize or simulate in simple manners your system with CA?
+\ilanswer{
+Contrary to cellular automata, the neighbourhoods in AANs are not regular
+(each component has its own regulation rules).
+One can thus straightforwardly encode finite cellular automata
+with an asynchronous semantics into AANs.
+}
 
 % \ilanswer{Indeed, The links between AANs and cellular automata could be studied more thoroughly.
 % The main difference between both however, is that each component in an AAN has particular incoming interactions, while all cells of a cellular automata share the same unique rule.
@@ -108,7 +102,9 @@ General: 1) somehow the system of AANs seems such that it has conection or roots
 % }
 
 
+\medskip
 
+\noindent
 2) Just a note: As I see it, the AANs is an interactive model of computation, and that is interesting. based on this, can you consider the reachability of state as a game in (multiplayer) game of AAN? Does  your work give a fast method for checking for winning strategy?   
 
 % \ilanswer{There are two ways we understand this questions and we are not sure which one the reviewer really meant. Therefore we will try to briefly answer both here.
@@ -171,14 +167,7 @@ General: 1) somehow the system of AANs seems such that it has conection or roots
 % }
 
 \ilanswer{
-1) Contrary to cellular automata, the neighbourhoods in AANs are not regular
-(each component has its own regulation rules).
-One can thus straightforwardly encode finite cellular automata
-with an asynchronous semantics into AANs.
-}
-
-\ilanswer{
-2) Our analysis focuses on finding sufficient conditions for achieving a
+Our analysis focuses on finding sufficient conditions for achieving a
 reachability goal, but does not account for an “opposing player” which would
 try to prevent the concerned reachability to occur.
 Therefore our analysis is not directly applicable in such a game theory setting.
@@ -192,13 +181,16 @@ We have added a word about these subjects in the conclusion of the article.
 
 
 
+\noindent
 Minor coments to the authors:
 
 \answer{Except the comment below, we have taken all minor comments into account.}
 
+\noindent
 page 1, authors: names are not in alphabetical order probably for a good reason, but it strikes my mathematician eye badly.
 
-\answer{We willingly chose the order of the authors' names related to the individual participation of each one.}
+\answer{We willingly chose the order of the authors' names related to the individual participation
+of each one (following the common practice in computational systems biology community).}
 
 %page 3, line 13: is much straightforward. More?
 
@@ -209,14 +201,6 @@ page 1, authors: names are not in alphabetical order probably for a good reason,
 
 
 \subsection*{Reviewer \#2}
-
-Reviewer \#2: SUMMARY OF THE RESULTS
-
-In this paper the authors introduce so-called asynchronous automata networks, which are automata networks with transitions synchronized between the automata in such a way that each transition changes the local state of exactly one automaton. There is also a generalization of asynchronous automata networks, called asynchronous automata networks with classes of priorities. This model is shown to be equivalent to the named networks without priorities.
-
-The authors have developed a method of performing reachability analysis and a way of getting a valid execution path if the reachability question has a positive answer. The method of performing reachability analysis is based upon abstract interpretation, and the complexity of such an analysis is polynomial in the total number of local states and exponential in the number of local states within a single automaton.
-
-The applicability of the method has been demonstrated by the authors by considering two large-scale biological models.
 
 My main concern about the paper is that it is written in a rather unclear manner. Some of the definitions are given in a very formal way; this does not help understanding the intuition behind them. On the other hand, the authors have managed to give a very good intuition in description of the running examples of the paper.
 
@@ -229,14 +213,15 @@ and in a formal way in order to avoid any ambiguities.
 Therefore, we prefer not to make the definitions and theorems less formal.
 However, we added several paragraphs of explanations around the definition of the Local Causality Graph (Def. 7; previously Def. 8) to ease its understanding.
 Furthermore, we have removed the notion of context from the body of the paper,
-which allows a bit of simplification
-(this does not weaken the results as several tests can replace the use of a context).
+which allows some notation simplification without weakening the presented results.
 }
 
+\noindent
 COMMENTS TO AUTHORS
 
 \answer{Except the comment below, we have taken all comments to authors into account.}
 
+\noindent
 page 7, Definition 4, line 55, in the sentence "The set of all objectives is called ..." ---
 Using the logical AND operator "$\land$" is too formal and this unnecessarily complicates reading of the definition.
 I would replace "$\land$" with a word "and".
