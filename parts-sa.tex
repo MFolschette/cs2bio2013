@@ -199,9 +199,8 @@ $\forall n\in\indexes{\zeta}$, $\zeta_n = \delta_{\phi(n)}$.
 
 \subsubsection{Local Causality Graph}
 
-\modmf{%
-The previous subsections \modLP{introduced the necessary definitions to build the
-so-called} Local Causality Graph (LCG).
+The previous subsections introduced the necessary definitions to build the
+so-called Local Causality Graph (LCG).
 This graph is denoted $\cwB$ where $u$ is the local state to be reached
 from the initial state $s$.
 It will be the basis of our static analysis,
@@ -212,7 +211,6 @@ linking them to objectives (\eg $\PHobj{t}{u}$, if $t \in s$),
 and locally refining these objectives in order to include new required local states
 from other automata.
 An example of LCG is depicted in \pref{fig:sa-livelock}.
-}
 
 Technically,
 one can iteratively refine a given objective into (possibly several) objective
@@ -323,7 +321,6 @@ $\zeta\in\BS(\obj{a_i}{a_j}) \}\subseteq\cwBEdges$
 with $\abstr\zeta \DEF \{\PHhitter(\zeta_n) \mid n\in\indexes\zeta \}$.
 \end{definition}
 
-\modmf{%
 The definition of an LCG tackles two cases
 where the target of an objective may be changed.
 First,
@@ -342,9 +339,7 @@ In this case, the initial objective $P$ is re-targeted to another
 objective $\PHobj{p}{\bounce{P}}$, where $p$ is the new active local state in $\PHsort(P)$.
 Linking to all objectives of this kind ensures that all possible disturbances
 are taken into account.
-}
 
-\modmf{%
 Finally, we note that
 the LCG of \pref{def:lcg} contains synchronizing nodes ($\sSol$)
 that allow to express the need for several local states simultaneously
@@ -352,10 +347,6 @@ in order to play a given action.
 This is the main difference regarding~\cite{PMR12-MSCS,FPMR13-CS2Bio}
 which tackled with Process Hitting, whose actions are limited to at most one hitter
 and thus did not require this kind of synchronization.
-}
-%However, \pref{def:lcg} is equivalent to the definition of the structure
-%given in~\cite{FPMR13-CS2Bio},
-%although it was adapted for AANs which notably allowed to simplify its formalism.
 
 
 \subsection{Sufficient condition for reachability of a local state}
